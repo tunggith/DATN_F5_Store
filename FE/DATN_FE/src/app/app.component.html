@@ -1,0 +1,132 @@
+<div class="main-content">
+  <div class="content-top">
+    <div class="section">
+      <h2>Thêm Sản Phẩm</h2>
+      <div class="form-group">
+        <label>Mã sản phẩm:</label>
+        <input type="text" placeholder="Nhập mã sản phẩm">
+      </div>
+      <div class="form-group">
+        <label>Tên sản phẩm:</label>
+        <input type="text" placeholder="Nhập tên sản phẩm">
+      </div>
+      <div class="form__group">
+        <label>Trạng thái:</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="status" value="option1" checked>Còn hàng
+          </label>
+          <label>
+            <input type="radio" name="status" value="option2"> Hết hàng
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <button class="btn-add" onclick="showSuccessToast();">Thêm</button>
+        <button class="btn-add-details" onclick="navigateTo('SanPhamChiTiet.html')">Chi tiết sản phẩm</button>
+        <button class="btn-update" onclick="showSuccessToast();">Cập nhật</button>
+      </div>
+    </div>
+    <div class="section-right">
+      <h2>Sản phẩm</h2>
+      <div class="filter">
+        <input type="text" placeholder="Nhập tên sản phẩm...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+      <app-san-pham></app-san-pham>
+      <div class="pagination">
+        <button class="page-btn">Prev</button>
+        <button class="page-btn">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn">Next</button>
+      </div>
+    </div>
+  </div>
+  <div class="section-details">
+    <div class="filter-product">
+      <div class="filter-content">
+        <input type="text" placeholder="Nhập tên sản phẩm...">
+        <button><i class="fas fa-search"></i></button>
+      </div>
+      <div class="filter-content">
+        <label for="filterSelect" class="filter-label">Màu sắc:</label>
+        <select id="filterSelect" class="filter-select">
+          <option value="">All--</option>
+          <option value="option1">Tùy chọn 1</option>
+          <option value="option2">Tùy chọn 2</option>
+          <option value="option3">Tùy chọn 3</option>
+        </select>
+      </div>
+      <div class="filter-content">
+        <label for="filterSelect" class="filter-label">Chất liệu:</label>
+        <select id="filterSelect" class="filter-select">
+          <option value="">All--</option>
+          <option value="option1">Tùy chọn 1</option>
+          <option value="option2">Tùy chọn 2</option>
+          <option value="option3">Tùy chọn 3</option>
+        </select>
+      </div>
+      <div class="filter-content">
+        <label for="filterSelect" class="filter-label">Size:</label>
+        <select id="filterSelect" class="filter-select">
+          <option value="">All--</option>
+          <option value="option1">Tùy chọn 1</option>
+          <option value="option2">Tùy chọn 2</option>
+          <option value="option3">Tùy chọn 3</option>
+        </select>
+      </div>
+      <div class="filter-content">
+        <label for="filterSelect" class="filter-label">xuất xứ:</label>
+        <select id="filterSelect" class="filter-select">
+          <option value="">All--</option>
+          <option value="option1">Tùy chọn 1</option>
+          <option value="option2">Tùy chọn 2</option>
+          <option value="option3">Tùy chọn 3</option>
+        </select>
+      </div>
+      <button id="filterButton" class="filter-button">Áp dụng</button>
+    </div>
+    <h2>Chi tiết Sản Phẩm</h2>
+    <table class="product-detail-table">
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Mã Sản Phẩm</th>
+          <th>Tên Sản Phẩm</th>
+          <th>Màu sắc</th>
+          <th>Chất liệu</th>
+          <th>Size</th>
+          <th>Thương Hiệu</th>
+          <th>Xuất xứ</th>
+          <th>Giá bán</th>
+          <th>Số lượng</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>SP01</td>
+          <td>Sản phẩm 01</td>
+          <td>Đen</td>
+          <td>Vải</td>
+          <td>M</td>
+          <td>VI</td>
+          <td>Việt Nam</td>
+          <td>1999.0</td>
+          <td>100</td>
+          <td>Còn hàng</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="pagination">
+      <button class="page-btn">Prev</button>
+      <button class="page-btn">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">Next</button>
+    </div>
+  </div>
+</div>
