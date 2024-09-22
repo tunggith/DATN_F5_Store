@@ -22,11 +22,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
 public class SanPhamServiceImpl implements SanPhamService {
+
+    // Inject các repository cần thiết cho sản phẩm, xuất xứ, thương hiệu và chất liệu.
     @Autowired
     private ISanPhamRepository sanPhamRepo;
     @Autowired
@@ -35,13 +37,15 @@ public class SanPhamServiceImpl implements SanPhamService {
     private IThuongHieuRepository thuongHieuRepo;
     @Autowired
     private IChatLieuRepository chatLieuRepo;
+
+    // Phương thức để lấy tất cả sản phẩm với phân trang
     @Override
     public Page<SanPhamDto> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<SanPhamEntity> sanPhamPage = sanPhamRepo.findAll(pageable);
 
-        // Sử dụng phương thức map của Page để chuyển đổi từ SanPhamEntity sang SanPhamDto
-        Page<SanPhamDto> sanPhamDtos = sanPhamPage.map(entity -> new SanPhamDto(
+        // Chuyển đổi từ SanPhamEntity sang SanPhamDto sử dụng phương thức map của Page.
+        return sanPhamPage.map(entity -> new SanPhamDto(
                 entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
@@ -50,19 +54,24 @@ public class SanPhamServiceImpl implements SanPhamService {
                 entity.getChatLieu(),
                 entity.getTrangThai()
         ));
-        return sanPhamDtos;
     }
 
+    // Phương thức tìm sản phẩm theo tên hoặc mã với phân trang
     @Override
-    public Page<SanPhamDto> findByTenOrMa(int page, int size,String ten, String ma) {
-        Pageable pageable = PageRequest.of(page,size);
+    public Page<SanPhamDto> findByTenOrMa(int page, int size, String ten, String ma) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<SanPhamEntity> sanPhamPage;
-        if(ten==null&&ma==null) {
+
+        // Nếu cả tên và mã đều null, lấy tất cả sản phẩm
+        if (ten == null && ma == null) {
             sanPhamPage = sanPhamRepo.findAll(pageable);
-        }else {
+        } else {
+            // Nếu có tên hoặc mã, tìm theo tên hoặc mã
             sanPhamPage = sanPhamRepo.getByTenContainingOrMaContaining(ten, ma, pageable);
         }
-        Page<SanPhamDto> sanPhamDtos = sanPhamPage.map(entity -> new SanPhamDto(
+
+        // Chuyển đổi từ SanPhamEntity sang SanPhamDto
+        return sanPhamPage.map(entity -> new SanPhamDto(
                 entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
@@ -71,56 +80,134 @@ public class SanPhamServiceImpl implements SanPhamService {
                 entity.getChatLieu(),
                 entity.getTrangThai()
         ));
-        return sanPhamDtos;
-    }
-    @Override
-    public DataResponse create(SanPhamRequest sanPhamRequest) {
-        return this.saveOfUpdate(new SanPhamEntity(),sanPhamRequest);
-    }
-    @Override
-    public DataResponse update(SanPhamRequest sanPhamRequest, Integer id) {
-        SanPhamEntity sanPham = sanPhamRepo.findById(id).orElse(null);
-        if(sanPham==null){
-            return new DataResponse(false,new ResultModel<>(null,"sản phẩm không tồn tại"));
-        }
-        return this.saveOfUpdate(sanPham,sanPhamRequest);
     }
 
-    private DataResponse saveOfUpdate(SanPhamEntity entity,SanPhamRequest request){
-        try {
-            this.convertSanPham(entity, request);
-            sanPhamRepo.save(entity);
-            return new DataResponse(true, new ResultModel<>(null, "create of update succesfully!"));
-        }catch (Exception e) {
-            e.printStackTrace();
-            return new DataResponse(false,new ResultModel<>(null,"create of update exception"));
+    // Phương thức tạo mới sản phẩm
+    @Override
+    public DataResponse create(SanPhamRequest request) {
+        // Kiểm tra dữ liệu đầu vào
+        if (!this.checkSanPham(request)) {
+            // Kiểm tra trùng lặp mã sản phẩm
+            if (!this.checkDupicate(request)) {
+                // Lưu hoặc cập nhật sản phẩm
+                return this.saveOfUpdate(new SanPhamEntity(), request);
+            } else {
+                return new DataResponse(false, new ResultModel<>(null, "Mã Sản phẩm đã tồn tại!"));
+            }
+        } else {
+            return new DataResponse(false, new ResultModel<>(null, "Dữ liệu đầu vào lỗi!"));
         }
     }
-    private void convertSanPham(SanPhamEntity entity,SanPhamRequest request){
+
+    // Phương thức cập nhật sản phẩm
+    @Override
+    public DataResponse update(SanPhamRequest request, Integer id) {
+        // Kiểm tra dữ liệu đầu vào
+        if (!this.checkSanPham(request)) {
+            // Tìm sản phẩm theo id
+            SanPhamEntity sanPham = sanPhamRepo.findById(id).orElse(null);
+            if (sanPham == null) {
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm không tồn tại"));
+            }
+            // Lưu hoặc cập nhật sản phẩm
+            return this.saveOfUpdate(sanPham, request);
+        } else {
+            return new DataResponse(false, new ResultModel<>(null, "Lỗi dữ liệu đầu vào!"));
+        }
+    }
+
+    // Phương thức lưu hoặc cập nhật sản phẩm
+    private DataResponse saveOfUpdate(SanPhamEntity entity, SanPhamRequest request) {
+        try {
+            // Lưu sản phẩm vào database
+            this.convertSanPham(entity,request);
+            sanPhamRepo.save(entity);
+            return new DataResponse(true, new ResultModel<>(null, "Thành công!"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new DataResponse(false, new ResultModel<>(null, "Lỗi trong quá trình lưu/cập nhật"));
+        }
+    }
+
+    // Phương thức kiểm tra dữ liệu đầu vào sản phẩm
+    private boolean checkSanPham(SanPhamRequest request) {
+        boolean check = false;
+        // Kiểm tra mã sản phẩm
+        if (request.getMa() == null || request.getMa().isEmpty()) {
+            check = true;
+        }
+        // Kiểm tra tên sản phẩm
+        if (request.getTen() == null || request.getTen().isEmpty()) {
+            check = true;
+        }
+        // Kiểm tra xuất xứ sản phẩm
+        if (request.getXuatXu().getId() == null) {
+            check = true;
+        }
+        // Kiểm tra thương hiệu sản phẩm
+        if (request.getThuongHieu().getId() == null) {
+            check = true;
+        }
+        // Kiểm tra chất liệu sản phẩm
+        if (request.getChatLieu().getId() == null) {
+            check = true;
+        }
+        return check;
+    }
+
+    // Phương thức kiểm tra trùng lặp mã sản phẩm
+    private boolean checkDupicate(SanPhamRequest request) {
+        boolean check = false;
+        List<SanPhamEntity> sanPham = sanPhamRepo.findAll();
+        // Kiểm tra mã sản phẩm có trùng lặp không
+        for (SanPhamEntity x : sanPham) {
+            if (x.getMa().equals(request.getMa())) {
+                return true;
+            }
+        }
+        return check;
+    }
+
+    // Phương thức chuyển đổi dữ liệu từ request sang entity của sản phẩm
+    private void convertSanPham(SanPhamEntity entity, SanPhamRequest request) {
         entity.setId(request.getId());
         entity.setMa(request.getMa());
         entity.setTen(request.getTen());
+
+        // Tìm và set xuất xứ
         XuatXuEntity xuatXu = xuatXuRepo.findById(request.getXuatXu().getId()).orElse(null);
         entity.setXuatXu(xuatXu);
+
+        // Tìm và set thương hiệu
         ThuongHieuEntity thuongHieu = thuongHieuRepo.findById(request.getThuongHieu().getId()).orElse(null);
         entity.setThuongHieu(thuongHieu);
+
+        // Tìm và set chất liệu
         ChatLieuEntity chatLieu = chatLieuRepo.findById(request.getChatLieu().getId()).orElse(null);
         entity.setChatLieu(chatLieu);
+        entity.setTrangThai(request.getTrangThai());
     }
-    private void convertXuatXu(XuatXuEntity entity,XuatXuRequest request){
+
+    // Phương thức chuyển đổi dữ liệu từ request sang entity của xuất xứ
+    private void convertXuatXu(XuatXuEntity entity, XuatXuRequest request) {
         entity.setId(request.getId());
         entity.setMa(request.getMa());
         entity.setTen(request.getTen());
     }
-    private void convertThuongHieu(ThuongHieuEntity entity, ThuongHieuRequest request){
+
+    // Phương thức chuyển đổi dữ liệu từ request sang entity của thương hiệu
+    private void convertThuongHieu(ThuongHieuEntity entity, ThuongHieuRequest request) {
         entity.setId(request.getId());
         entity.setMa(request.getMa());
         entity.setTen(request.getTen());
     }
-    private void convertChatLieu(ChatLieuEntity entity, ChatLieuRequest request){
+
+    // Phương thức chuyển đổi dữ liệu từ request sang entity của chất liệu
+    private void convertChatLieu(ChatLieuEntity entity, ChatLieuRequest request) {
         entity.setId(request.getId());
         entity.setMa(request.getMa());
         entity.setTen(request.getTen());
     }
 
 }
+
