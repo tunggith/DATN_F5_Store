@@ -184,7 +184,7 @@ VALUES
 (1, 2, N'Hoạt động'),
 (2, 3, N'Không hoạt động'),
 (2, 4, N'Hoạt động'),
-(3, 5, N'Không hoạt động'),
+(3, 5, N'Không hoạt động');
 
 
 
@@ -197,7 +197,7 @@ INSERT INTO GIO_HANG (ID_KHACH_HANG, THOI_GIAN_TAO) VALUES
 (5, GETDATE());
 
 
-INSERT INTO CHI_TIET_GIO_HANG (ID_KHACH_HANG, ID_GIO_HANG, SO_LUONG) VALUES
+INSERT INTO CHI_TIET_GIO_HANG (ID_CHI_TIET_SAN_PHAM, ID_GIO_HANG, SO_LUONG) VALUES
 (1, 1, 2),
 (2, 2, 1),
 (3, 3, 3),

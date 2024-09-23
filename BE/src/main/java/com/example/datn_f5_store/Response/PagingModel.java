@@ -1,4 +1,4 @@
-package com.example.datn_f5_store.Response;
+package com.example.datn_f5_store.response;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
