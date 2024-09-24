@@ -1,7 +1,5 @@
 package com.example.datn_f5_store.service.impl;
 
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
 import com.example.datn_f5_store.dto.SanPhamDto;
 import com.example.datn_f5_store.entity.ChatLieuEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
@@ -15,6 +13,8 @@ import com.example.datn_f5_store.request.ChatLieuRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.request.ThuongHieuRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.SanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
