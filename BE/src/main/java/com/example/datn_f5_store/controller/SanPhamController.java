@@ -4,7 +4,7 @@ import com.example.datn_f5_store.Response.DataResponse;
 import com.example.datn_f5_store.Response.PagingModel;
 import com.example.datn_f5_store.Response.ResultModel;
 import com.example.datn_f5_store.request.SanPhamRequest;
-import com.example.datn_f5_store.service.SanPhamService;
+import com.example.datn_f5_store.service.ISanPhamService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SanPhamController {
 
     @Autowired
-    private SanPhamService sanPhamService; // Tự động tiêm (inject) SanPhamService để sử dụng các chức năng liên quan đến sản phẩm
+    private ISanPhamService sanPhamService; // Tự động tiêm (inject) SanPhamService để sử dụng các chức năng liên quan đến sản phẩm
 
     /**
      * API để lấy danh sách tất cả các sản phẩm với tính năng phân trang.
@@ -71,6 +71,14 @@ public class SanPhamController {
                 ) // Đặt kết quả vào response với thông tin phân trang
         );
         return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
+    }
+    @GetMapping("/details/{id}")
+    private ResponseEntity<?> detail(@Parameter(name = "id") @PathVariable Integer id){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var sanPham = sanPhamService.findById(id);
+        dataResponse.setResult(new ResultModel<>(null,sanPham));
+        return ResponseEntity.ok(dataResponse);
     }
 
     /**

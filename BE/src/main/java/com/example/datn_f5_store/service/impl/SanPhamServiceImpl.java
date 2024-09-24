@@ -15,18 +15,21 @@ import com.example.datn_f5_store.request.ChatLieuRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.request.ThuongHieuRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
-import com.example.datn_f5_store.service.SanPhamService;
+import com.example.datn_f5_store.service.ISanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
-public class SanPhamServiceImpl implements SanPhamService {
+public class SanPhamServiceImpl implements ISanPhamService {
 
     // Inject các repository cần thiết cho sản phẩm, xuất xứ, thương hiệu và chất liệu.
     @Autowired
@@ -81,6 +84,32 @@ public class SanPhamServiceImpl implements SanPhamService {
                 entity.getTrangThai()
         ));
     }
+    @Override
+    public List<SanPhamDto> findById(Integer id) {
+        // Tìm kiếm entity theo id, kiểm tra nếu tồn tại
+        Optional<SanPhamEntity> optionalEntity = sanPhamRepo.findById(id);
+
+        // Nếu entity tồn tại, tạo danh sách và thêm vào
+        if (optionalEntity.isPresent()) {
+            SanPhamEntity entity = optionalEntity.get();
+            // Tạo đối tượng SanPhamDto từ entity
+            SanPhamDto dto = new SanPhamDto(
+                    entity.getId(),
+                    entity.getMa(),
+                    entity.getTen(),
+                    entity.getXuatXu(),
+                    entity.getThuongHieu(),
+                    entity.getChatLieu(),
+                    entity.getTrangThai()
+            );
+            // Trả về danh sách chứa một phần tử duy nhất
+            return Collections.singletonList(dto);
+        } else {
+            // Nếu không tìm thấy entity, trả về danh sách rỗng hoặc ném ngoại lệ
+            return new ArrayList<>(); // Hoặc ném ngoại lệ nếu cần thiết
+        }
+    }
+
 
     // Phương thức tạo mới sản phẩm
     @Override
@@ -115,6 +144,8 @@ public class SanPhamServiceImpl implements SanPhamService {
             return new DataResponse(false, new ResultModel<>(null, "Lỗi dữ liệu đầu vào!"));
         }
     }
+
+
 
     // Phương thức lưu hoặc cập nhật sản phẩm
     private DataResponse saveOfUpdate(SanPhamEntity entity, SanPhamRequest request) {

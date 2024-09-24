@@ -1,41 +1,10 @@
-export class XuatXu {
-    id: number;
-    ma: string;
-    ten: string;
+import { ChatLieu } from "./chat-lieu";
+import { ThuongHieu } from "./thuong-hieu";
+import { XuatXu } from "./xuat-xu";
 
-    constructor(id: number, ma: string, ten: string) {
-        this.id = id;
-        this.ma = ma;
-        this.ten = ten;
-    }
-}
-
-export class ThuongHieu {
-    id: number;
-    ma: string;
-    ten: string;
-
-    constructor(id: number, ma: string, ten: string) {
-        this.id = id;
-        this.ma = ma;
-        this.ten = ten;
-    }
-}
-
-export class ChatLieu {
-    id: number;
-    ma: string;
-    ten: string;
-
-    constructor(id: number, ma: string, ten: string) {
-        this.id = id;
-        this.ma = ma;
-        this.ten = ten;
-    }
-}
 
 export class SanPham {
-    id: number;
+    id?: number;
     ma: string;
     ten: string;
     xuatXu: XuatXu;
@@ -52,4 +21,13 @@ export class SanPham {
         this.chatLieu = chatLieu;
         this.trangThai = trangThai;
     }
+}
+export interface SanPham {
+    id?: number;
+    ma: string;
+    ten: string;
+    xuatXu: XuatXu;
+    thuongHieu: ThuongHieu;
+    chatLieu: ChatLieu;
+    trangThai: string;
 }
