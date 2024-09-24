@@ -39,7 +39,7 @@ public class VoucherController {
     IVoucherRepository iVoucherRepository;
 
     // api find Voucher đã được phân trang với 5 phần tử
-    @GetMapping("")
+    @GetMapping("/getAll")
     public ResponseEntity<Object> getVoucher(@RequestParam(name = "page",defaultValue = "0") Integer page,
                                              @RequestParam(name = "size",  defaultValue = "5") Integer size){
         DataResponse dataResponse = new DataResponse();
@@ -53,7 +53,7 @@ public class VoucherController {
     }
 
     // api Thêm mới Voucher
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createVoucher(@Validated @RequestBody VoucherRequest voucher, BindingResult bindingResult){
         try {
                 if(bindingResult.hasErrors()){
@@ -70,7 +70,7 @@ public class VoucherController {
     }
 
     // api sửa Voucher theo id
-    @PutMapping("")
+    @PutMapping("/update")
     public ResponseEntity<?> updateVoucher(@PathParam("id") Integer id,@Validated @RequestBody VoucherRequest voucher, BindingResult bindingResult){
         try {
             if (bindingResult.hasErrors()) {

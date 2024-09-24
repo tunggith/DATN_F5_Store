@@ -351,28 +351,16 @@ body {
         width: 0;
     }
 }
-
-.content-top{
-    display: flex;
-    margin-top: 0px;
-}
 .section{
-    width: 40%;
+    width: 100%;
+    display: flex;
     border: 1px solid gray;
     padding: 10px;
-    border-radius: 5%;
 }
-.section h2{
-    text-align: center;
+.section-content{
+    margin-left: 30px;
 }
-.section-right{
-    padding: 10px;
-    margin-left: 20px;
-    border: 1px solid gray;
-    width: 60%;
-    border-radius: 5%;
-}
-.section-right h2{
+.content-top h2{
     text-align: center;
 }
 .section-details{
@@ -454,9 +442,16 @@ body {
   }
   
   /* Detail Button */
-  .btn-detail, .btn-add-detail {
+  .btn-detail{
     padding: 5px 10px;
     background-color: #f0ad4e;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-add-detail {
+    padding: 5px 10px;
+    background-color: #c5a38d;
     color: white;
     border: none;
     cursor: pointer;
@@ -494,7 +489,7 @@ body {
   
   .filter input {
     padding: 8px;
-    width: 200px;
+    width: 300px;
     border: 1px solid #ddd;
     margin-right: 10px;
   }
@@ -528,6 +523,7 @@ body {
 
 .filter-select {
     padding: 10px;
+    width: 200px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
