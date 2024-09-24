@@ -240,5 +240,11 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setTen(request.getTen());
     }
 
+
+
+
+
+
+
 }
 
