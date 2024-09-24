@@ -9,7 +9,6 @@ import lombok.*;
 @ToString
 public class KhachHangReponse {
 
-
     private Integer id;
 
     private String ma;
