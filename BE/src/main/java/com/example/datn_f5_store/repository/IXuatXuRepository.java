@@ -7,4 +7,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Repository
 public interface IXuatXuRepository extends JpaRepository<XuatXuEntity,Integer> {
+    boolean existsByMaOrTen(String ma,String ten);
 }

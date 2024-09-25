@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ISizeRepository extends JpaRepository<SizeEntity, Integer> {
-
+    boolean existsByMaOrTen(String ma,String ten);
 }

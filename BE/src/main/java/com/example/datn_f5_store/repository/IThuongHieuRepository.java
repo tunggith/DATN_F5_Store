@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IThuongHieuRepository extends JpaRepository<ThuongHieuEntity,Integer> {
+    boolean existsByMaOrTen(String ma,String ten);
 }

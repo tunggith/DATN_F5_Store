@@ -138,6 +138,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
             if (sanPham == null) {
                 return new DataResponse(false, new ResultModel<>(null, "Sản phẩm không tồn tại"));
             }
+            request.setId(id);
             // Lưu hoặc cập nhật sản phẩm
             return this.saveOfUpdate(sanPham, request);
         } else {
@@ -226,12 +227,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setTen(request.getTen());
     }
 
-    // Phương thức chuyển đổi dữ liệu từ request sang entity của thương hiệu
-    private void convertThuongHieu(ThuongHieuEntity entity, ThuongHieuRequest request) {
-        entity.setId(request.getId());
-        entity.setMa(request.getMa());
-        entity.setTen(request.getTen());
-    }
+
 
     // Phương thức chuyển đổi dữ liệu từ request sang entity của chất liệu
     private void convertTheLoai(TheLoaiEntity entity, TheLoaiRequest request) {
