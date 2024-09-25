@@ -8,8 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface KhachHangService {
-    Page<KhachHangDto> getAllKhachHang(int page,int size);
+    Page<KhachHangDto> getAllKhachHang(int page,int size, String search);
     public Boolean addKhachHang(KhachHangRequest khachHangRequest);
     public Boolean updateKhachHang(Integer id,KhachHangRequest khachHangRequest);
-    List<KhachHangEntity> searchKhachHangByName(String name);
 }
