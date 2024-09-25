@@ -70,23 +70,24 @@ VALUES
 
 
 
-INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_CHAT_LIEU, MA, TEN, TRANG_THAI) VALUES
+INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_THE_LOAI, MA, TEN, TRANG_THAI) VALUES
 (1, 1, 1, 'SP001', N'Áo thun Nike', N'Còn hàng'),
-(2, 2, 2, 'SP002', N'Quần short Adidas', N'Còn hàng'),
-(3, 3, 3, 'SP003', N'Áo khoác Puma', N'Hết hàng'),
-(4, 4, 4, 'SP004', N'Áo sơ mi Gucci', N'Còn hàng'),
-(5, 5, 5, 'SP005', N'Váy Louis Vuitton', N'Hết hàng'),
-(6, 6, 6, 'SP006', N'Quần jean H&M', N'Còn hàng'),
-(7, 7, 7, 'SP007', N'Áo khoác ZARA', N'Còn hàng'),
-(8, 8, 8, 'SP008', N'Áo len Uniqlo', N'Hết hàng'),
-(9, 9, 9, 'SP009', N'Quần âu Calvin Klein', N'Còn hàng'),
-(10, 10, 10, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Còn hàng');
+(2, 2, 1, 'SP002', N'Quần short Adidas', N'Còn hàng'),
+(3, 3, 1, 'SP003', N'Áo khoác Puma', N'Hết hàng'),
+(4, 4, 1, 'SP004', N'Áo sơ mi Gucci', N'Còn hàng'),
+(5, 5, 2, 'SP005', N'Váy Louis Vuitton', N'Hết hàng'),
+(6, 6, 2, 'SP006', N'Quần jean H&M', N'Còn hàng'),
+(7, 7, 1, 'SP007', N'Áo khoác ZARA', N'Còn hàng'),
+(8, 8, 1, 'SP008', N'Áo len Uniqlo', N'Hết hàng'),
+(9, 9, 1, 'SP009', N'Quần âu Calvin Klein', N'Còn hàng'),
+(10, 10, 1, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Còn hàng');
+select*from SAN_PHAM
 
 
 INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, TEN, DON_GIA, SO_LUONG, TRANG_THAI) VALUES
-(1, 1, 1, 'CTSP001', N'Áo thun Nike - Đỏ - XS', 200000, 100, N'Còn hàng'),
-(2, 2, 2, 'CTSP002', N'Quần short Adidas - Xanh - S', 300000, 50, N'Còn hàng'),
-(3, 3, 3, 'CTSP003', N'Áo khoác Puma - Xanh lá - M', 500000, 30, N'Hết hàng'),
+(11, 1, 1, 'CTSP001', N'Áo thun Nike - Đỏ - XS', 200000, 100, N'Còn hàng'),
+(12, 2, 2, 'CTSP002', N'Quần short Adidas - Xanh - S', 300000, 50, N'Còn hàng'),
+(13, 3, 3, 'CTSP003', N'Áo khoác Puma - Xanh lá - M', 500000, 30, N'Hết hàng'),
 (4, 4, 4, 'CTSP004', N'Áo sơ mi Gucci - Đen - L', 800000, 20, N'Còn hàng'),
 (5, 5, 5, 'CTSP005', N'Váy Louis Vuitton - Trắng - XL', 1200000, 10, N'Hết hàng'),
 (6, 6, 6, 'CTSP006', N'Quần jean H&M - Xanh dương - XXL', 600000, 15, N'Còn hàng'),
@@ -133,12 +134,12 @@ INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, D
 ('NV005', 'Nguyen Van J', 1, '1995-10-10', N'nguyenvanj@example.com', '0988990011', N'654 Tôn Đức Thắng, Quận 7, TP. Hồ Chí Minh', 'anhnv5.jpg', N'nguyenvanj', 'pass555', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động');
 
 
-INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, SO_TIEN_HOA_DON_TOI_THIEU, GIA_TRI_GIAM_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
-('VC001', 'Voucher Giảm 10%', 10, '%', GETDATE(), 500000, 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC002', 'Voucher Giảm 50.000 VNĐ', 50000, '$', GETDATE(), 200000, 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC003', 'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 200000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC004', 'Voucher Giảm 100.000 VNĐ', 100000, '$', GETDATE(), 500000, 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VNĐ cho đơn hàng trên 500.000 VNĐ', 80, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC005', 'Voucher Giảm 5%', 5, '%', GETDATE(), 300000, 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VNĐ', 150, N'Admin', GETDATE(), N'Admin', N'Hoạt động');
+INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA_TRI_GIAM_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
+('VC001', 'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC002', 'Voucher Giảm 50.000 VNĐ', 50000, '$', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC003', 'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC004', 'Voucher Giảm 100.000 VNĐ', 100000, '$', GETDATE(), 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VNĐ cho đơn hàng trên 500.000 VNĐ', 80, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC005', 'Voucher Giảm 5%', 5, '%', GETDATE(), 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VNĐ', 150, N'Admin', GETDATE(), N'Admin', N'Hoạt động');
 
 INSERT INTO HOA_DON (ID_NHAN_VIEN, ID_KHACH_HANG, ID_VOUCHER, ID_THANH_TOAN, MA, TONG_TIEN_BAN_DAU, TONG_TIEN_SAU_VOUCHER, TEN_NGUOI_NHAN, SDT_NGUOI_NHAN, EMAIL_NGUOI_NHAN, DIA_CHI_NHAN_HANG, NGAY_NHAN_DU_KIEN, THOI_GIAN_TAO, GI_CHU, TRANG_THAI) 
 VALUES
@@ -199,7 +200,7 @@ INSERT INTO CHI_TIET_GIO_HANG (ID_CHI_TIET_SAN_PHAM, ID_GIO_HANG, SO_LUONG) VALU
 
 SELECT * FROM XUAT_XU;
 SELECT * FROM THUONG_HIEU;
-SELECT * FROM CHAT_LIEU;
+SELECT * FROM THE_LOAI;
 SELECT * FROM [SIZE];
 SELECT * FROM MAU_SAC;
 SELECT * FROM THANH_TOAN;
