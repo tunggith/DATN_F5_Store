@@ -83,17 +83,17 @@ INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_CHAT_LIEU, MA, TEN, TRANG_T
 (10, 10, 10, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Còn hàng');
 
 
-INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, TEN, DON_GIA, SO_LUONG, NGAY_NHAP, TRANG_THAI) VALUES
-(1, 1, 1, 'CTSP001', N'Áo thun Nike - Đỏ - XS', 200000, 100, GETDATE(), N'Còn hàng'),
-(2, 2, 2, 'CTSP002', N'Quần short Adidas - Xanh - S', 300000, 50, GETDATE(), N'Còn hàng'),
-(3, 3, 3, 'CTSP003', N'Áo khoác Puma - Xanh lá - M', 500000, 30, GETDATE(), N'Hết hàng'),
-(4, 4, 4, 'CTSP004', N'Áo sơ mi Gucci - Đen - L', 800000, 20, GETDATE(), N'Còn hàng'),
-(5, 5, 5, 'CTSP005', N'Váy Louis Vuitton - Trắng - XL', 1200000, 10, GETDATE(), N'Hết hàng'),
-(6, 6, 6, 'CTSP006', N'Quần jean H&M - Xanh dương - XXL', 600000, 15, GETDATE(), N'Còn hàng'),
-(7, 7, 7, 'CTSP007', N'Áo khoác ZARA - Đỏ - 3XL', 700000, 40, GETDATE(), N'Còn hàng'),
-(8, 8, 8, 'CTSP008', N'Áo len Uniqlo - Xanh dương - S', 400000, 25, GETDATE(), N'Hết hàng'),
-(9, 9, 9, 'CTSP009', N'Quần âu Calvin Klein - Đen - L', 550000, 50, GETDATE(), N'Còn hàng'),
-(10, 10, 10, 'CTSP010', N'Áo sơ mi Dolce & Gabbana - Trắng - M', 950000, 30, GETDATE(), N'Còn hàng');
+INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, TEN, DON_GIA, SO_LUONG, TRANG_THAI) VALUES
+(1, 1, 1, 'CTSP001', N'Áo thun Nike - Đỏ - XS', 200000, 100, N'Còn hàng'),
+(2, 2, 2, 'CTSP002', N'Quần short Adidas - Xanh - S', 300000, 50, N'Còn hàng'),
+(3, 3, 3, 'CTSP003', N'Áo khoác Puma - Xanh lá - M', 500000, 30, N'Hết hàng'),
+(4, 4, 4, 'CTSP004', N'Áo sơ mi Gucci - Đen - L', 800000, 20, N'Còn hàng'),
+(5, 5, 5, 'CTSP005', N'Váy Louis Vuitton - Trắng - XL', 1200000, 10, N'Hết hàng'),
+(6, 6, 6, 'CTSP006', N'Quần jean H&M - Xanh dương - XXL', 600000, 15, N'Còn hàng'),
+(7, 7, 7, 'CTSP007', N'Áo khoác ZARA - Đỏ - 3XL', 700000, 40, N'Còn hàng'),
+(8, 8, 8, 'CTSP008', N'Áo len Uniqlo - Xanh dương - S', 400000, 25, N'Hết hàng'),
+(9, 9, 9, 'CTSP009', N'Quần âu Calvin Klein - Đen - L', 550000, 50, N'Còn hàng'),
+(10, 10, 10, 'CTSP010', N'Áo sơ mi Dolce & Gabbana - Trắng - M', 950000, 30, N'Còn hàng');
 
 
 INSERT INTO ANH_CHI_TIET_SAN_PHAM (ID_CHI_TIET_SAN_PHAM, URL_ANH) VALUES
