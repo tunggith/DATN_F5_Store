@@ -25,17 +25,9 @@ INSERT INTO THUONG_HIEU (MA, TEN) VALUES
 ('DG', N'Dolce & Gabbana');
 
 
-INSERT INTO CHAT_LIEU (MA, TEN) VALUES
-('COT', N'Cotton'),
-('POLY', N'Polyester'),
-('DEN', N'Denim'),
-('SILK', N'Lụa'),
-('LIN', N'Vải lanh'),
-('WOOL', N'Len'),
-('NYL', N'Nylon'),
-('LEA', N'Da'),
-('RAY', N'Rayon'),
-('SPA', N'Spandex');
+INSERT INTO THE_LOAI (TEN) VALUES
+(N'Nam'),
+(N'Nữ')
 
 
 INSERT INTO [SIZE] (MA, TEN) VALUES
