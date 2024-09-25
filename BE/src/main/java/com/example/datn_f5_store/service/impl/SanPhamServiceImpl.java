@@ -1,15 +1,15 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.SanPhamDto;
-import com.example.datn_f5_store.entity.ChatLieuEntity;
+import com.example.datn_f5_store.entity.TheLoaiEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.entity.ThuongHieuEntity;
 import com.example.datn_f5_store.entity.XuatXuEntity;
-import com.example.datn_f5_store.repository.IChatLieuRepository;
+import com.example.datn_f5_store.repository.ITheLoaiRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.IThuongHieuRepository;
 import com.example.datn_f5_store.repository.IXuatXuRepository;
-import com.example.datn_f5_store.request.ChatLieuRequest;
+import com.example.datn_f5_store.request.TheLoaiRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.request.ThuongHieuRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
@@ -39,7 +39,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
     @Autowired
     private IThuongHieuRepository thuongHieuRepo;
     @Autowired
-    private IChatLieuRepository chatLieuRepo;
+    private ITheLoaiRepository theLoaiRepo;
 
     // Phương thức để lấy tất cả sản phẩm với phân trang
     @Override
@@ -54,7 +54,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getChatLieu(),
+                entity.getTheLoai(),
                 entity.getTrangThai()
         ));
     }
@@ -80,7 +80,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getChatLieu(),
+                entity.getTheLoai(),
                 entity.getTrangThai()
         ));
     }
@@ -99,7 +99,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                     entity.getTen(),
                     entity.getXuatXu(),
                     entity.getThuongHieu(),
-                    entity.getChatLieu(),
+                    entity.getTheLoai(),
                     entity.getTrangThai()
             );
             // Trả về danh sách chứa một phần tử duy nhất
@@ -180,7 +180,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
             check = true;
         }
         // Kiểm tra chất liệu sản phẩm
-        if (request.getChatLieu().getId() == null) {
+        if (request.getTheLoai().getId() == null) {
             check = true;
         }
         return check;
@@ -214,8 +214,8 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setThuongHieu(thuongHieu);
 
         // Tìm và set chất liệu
-        ChatLieuEntity chatLieu = chatLieuRepo.findById(request.getChatLieu().getId()).orElse(null);
-        entity.setChatLieu(chatLieu);
+        TheLoaiEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
+        entity.setTheLoai(theLoai);
         entity.setTrangThai(request.getTrangThai());
     }
 
@@ -234,17 +234,9 @@ public class SanPhamServiceImpl implements ISanPhamService {
     }
 
     // Phương thức chuyển đổi dữ liệu từ request sang entity của chất liệu
-    private void convertChatLieu(ChatLieuEntity entity, ChatLieuRequest request) {
+    private void convertTheLoai(TheLoaiEntity entity, TheLoaiRequest request) {
         entity.setId(request.getId());
-        entity.setMa(request.getMa());
         entity.setTen(request.getTen());
     }
-
-
-
-
-
-
-
 }
 

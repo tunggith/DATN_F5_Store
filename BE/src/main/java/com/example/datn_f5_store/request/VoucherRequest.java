@@ -31,10 +31,6 @@ public class VoucherRequest {
     @NotEmpty(message = "Kiểu giảm giá không được để trống.")
     private String kieuGiamGia;
 
-    @NotNull(message = "Số tiền hóa đơn tối thiểu không được để trống.")
-    private Double soTienHoaDonToiThieu;
-
-
     private Integer giaTriGiamToiDa;
 
 

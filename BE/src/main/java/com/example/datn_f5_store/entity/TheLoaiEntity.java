@@ -16,13 +16,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "CHAT_LIEU")
-public class ChatLieuEntity {
+@Table(name = "THE_LOAI")
+public class TheLoaiEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "MA")
-    private String ma;
     @Column(name = "TEN")
     private String ten;
 }

@@ -1,16 +1,12 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.VoucherDto;
-import com.example.datn_f5_store.entity.Voucher;
+import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IVoucherRepository;
 import com.example.datn_f5_store.request.VoucherRequest;
 import com.example.datn_f5_store.service.VoucherService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataLocationNotFoundException;
-import org.springframework.boot.context.config.ConfigDataNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class VoucherServicelImpl implements VoucherService {
+public class VoucherServicelmpl implements VoucherService {
     @Autowired
     private  IVoucherRepository iVoucherRepository;
 
@@ -31,7 +26,7 @@ public class VoucherServicelImpl implements VoucherService {
     @Override
     public Page<VoucherDto> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<Voucher> voucher = iVoucherRepository.findAll(pageable);
+        Page<VoucherEntity> voucher = iVoucherRepository.findAll(pageable);
 
         Page<VoucherDto> voucherDtos = voucher.map(entity -> new VoucherDto(
                 entity.getId(),
@@ -39,7 +34,6 @@ public class VoucherServicelImpl implements VoucherService {
                 entity.getTen(),
                 entity.getGiaTriVoucher(),
                 entity.getKieuGiamGia(),
-                entity.getSoTienHoaDonToiThieu(),
                 entity.getGiaTriGiamToiDa(),
                 entity.getGiaTriGiamToiThieu(),
                 entity.getThoiGianBatDau(),
@@ -58,7 +52,7 @@ public class VoucherServicelImpl implements VoucherService {
     // hàm thêm mới Voucher
     @Override
     public Boolean createVoucher(VoucherRequest voucher){
-              Voucher voucher1 = new Voucher();
+              VoucherEntity voucher1 = new VoucherEntity();
               try {
                   if (checkTrungMaVoucher(voucher.getMa())){
                   voucher1.setMa(voucher.getMa());
@@ -67,7 +61,6 @@ public class VoucherServicelImpl implements VoucherService {
                   voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
                   voucher1.setGiaTriGiamToiThieu(voucher.getGiaTriGiamToiThieu());
                   voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                  voucher1.setSoTienHoaDonToiThieu(voucher.getSoTienHoaDonToiThieu());
                   voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                   voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
                   voucher1.setSoLuong(voucher.getSoLuong());
@@ -89,7 +82,7 @@ public class VoucherServicelImpl implements VoucherService {
     // hàm Update Voucher theo id
     @Override
     public Boolean updateVoucher(Integer id, VoucherRequest voucher) throws DataNotFoundException {
-            Voucher voucher1 = iVoucherRepository.findById(id).orElseThrow(()
+            VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(()
             -> new DataNotFoundException("Không thể sửa Voucher với id : "+ voucher.getId()));
             if (voucher1 != null){
 
@@ -99,7 +92,6 @@ public class VoucherServicelImpl implements VoucherService {
                 voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
                 voucher1.setGiaTriGiamToiThieu(voucher.getGiaTriGiamToiThieu());
                 voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                voucher1.setSoTienHoaDonToiThieu(voucher.getSoTienHoaDonToiThieu());
                 voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                 voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
                 voucher1.setSoLuong(voucher.getSoLuong());
@@ -119,7 +111,7 @@ public class VoucherServicelImpl implements VoucherService {
 
     // hàm find Voucher theo id
     @Override
-    public Voucher finById(Integer id) throws DataNotFoundException {
+    public VoucherEntity finById(Integer id) throws DataNotFoundException {
         return iVoucherRepository.findById(id).orElseThrow(()
                 -> new DataNotFoundException("Không thể Tìm Voucher với id : "+ id));
     }
@@ -127,7 +119,7 @@ public class VoucherServicelImpl implements VoucherService {
     // hàm cập nhập trạng thái Voucher
     @Override
     public Boolean CapNhapTrangThaiVoucher(Integer id) throws DataNotFoundException{
-        Voucher voucher1 = iVoucherRepository.findById(id).orElseThrow(
+        VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Không thể cập nhập trạng thái với id : "+ id)
         );
         if (voucher1 != null){
@@ -155,8 +147,8 @@ public class VoucherServicelImpl implements VoucherService {
     public void CapNhapTrangThaiVoucherDhh() {
         try {
             Date currentDate = new Date();
-            List<Voucher> vouchers = iVoucherRepository.findAll();
-            for (Voucher voucher : vouchers) {
+            List<VoucherEntity> vouchers = iVoucherRepository.findAll();
+            for (VoucherEntity voucher : vouchers) {
                 if (voucher.getThoiGianKetThuc() != null && voucher.getThoiGianKetThuc().before(currentDate)) {
                     voucher.setTrangThai("Đã hết hạn");
                     iVoucherRepository.save(voucher);

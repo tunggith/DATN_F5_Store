@@ -11,6 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatLieuDto {
     private Integer id;
-    private String ma;
     private String ten;
 }

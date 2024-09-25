@@ -27,8 +27,6 @@ public class VoucherDto {
 
     private String kieuGiamGia;
 
-    private Double soTienHoaDonToiThieu;
-
     private Integer giaTriGiamToiDa;
 
     private Integer giaTriGiamToiThieu;

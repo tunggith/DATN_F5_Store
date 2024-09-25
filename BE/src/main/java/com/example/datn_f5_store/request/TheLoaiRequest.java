@@ -9,8 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatLieuRequest {
+public class TheLoaiRequest {
     private Integer id;
-    private String ma;
     private String ten;
 }

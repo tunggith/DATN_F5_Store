@@ -19,7 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "VOUCHER")
-public class Voucher {
+public class VoucherEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,8 +31,6 @@ public class Voucher {
     private Integer giaTriVoucher;
     @Column(name = "KIEU_GIAM_GIA")
     private String kieuGiamGia;
-    @Column(name = "SO_TIEN_HOA_DON_TOI_THIEU")
-    private Double soTienHoaDonToiThieu;
     @Column(name = "GIA_TRI_GIAM_TOI_DA")
     private Integer giaTriGiamToiDa;
     @Column(name = "GIA_TRI_GIAM_TOI_THIEU")
