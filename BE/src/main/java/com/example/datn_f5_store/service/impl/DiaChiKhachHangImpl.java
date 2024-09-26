@@ -24,7 +24,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         Pageable pageable = PageRequest.of(page, size);
         Page<DiaChiKhachHangEntity> diaChiKhachHangEntities;
 
-        if (searchTerm != null && !searchTerm.isEmpty()) {
+        if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             diaChiKhachHangEntities = diaChiKhachHangRepository.findBySearchTerm(searchTerm, pageable);
         } else {
             diaChiKhachHangEntities = diaChiKhachHangRepository.findAll(pageable);
