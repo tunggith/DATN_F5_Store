@@ -1,17 +1,14 @@
-package com.example.datn_f5_store.response;
+package com.example.datn_f5_store.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChiTietSanPhamReponse {
-
+@ToString
+public class ChiTietSanPhamDto {
 
     private Integer id;
 
@@ -29,5 +26,8 @@ public class ChiTietSanPhamReponse {
 
     private Integer soLuong;
 
+//    private Date ngayNhap;
+
     private String trangThai;
+
 }

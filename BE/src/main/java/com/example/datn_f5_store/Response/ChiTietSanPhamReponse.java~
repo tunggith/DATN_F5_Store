@@ -28,6 +28,6 @@ public class ChiTietSanPhamReponse {
     private Double donGia;
 
     private Integer soLuong;
-
+    
     private String trangThai;
 }

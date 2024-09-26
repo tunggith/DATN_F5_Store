@@ -22,11 +22,19 @@ public class KhachHangServiceImpl implements KhachHangService {
     private IKhachHangRepository khachHangRepository;
 
     @Override
-    public Page<KhachHangDto> getAllKhachHang(int page, int size) {
+    public Page<KhachHangDto> getAllKhachHang(int page, int size, String search) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<KhachHangEntity> khachHangPage = khachHangRepository.findAll(pageable);
+        Page<KhachHangEntity> khachHangPage;
 
-        Page<KhachHangDto> khachHangDtos = khachHangPage.map(khachHangEntity -> new KhachHangDto(
+        // Tìm kiếm khách hàng theo tên, số điện thoại, email, hoặc mã
+        if (search != null && !search.trim().isEmpty()) {
+            khachHangPage = khachHangRepository.findBySearch(search, pageable);
+        } else {
+            khachHangPage = khachHangRepository.findAll(pageable);
+        }
+
+        // Chuyển đổi từ Page<KhachHangEntity> sang Page<KhachHangDto>
+        return khachHangPage.map(khachHangEntity -> new KhachHangDto(
                 khachHangEntity.getId(),
                 khachHangEntity.getDiaChiKhachHang(),
                 khachHangEntity.getMa(),
@@ -40,9 +48,7 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getPassword(),
                 khachHangEntity.getTrangThai()
         ));
-        return khachHangDtos;
     }
-
     @Override
     public Boolean addKhachHang(KhachHangRequest khachHangRequest) {
         KhachHangEntity khachHang = new KhachHangEntity();
@@ -137,16 +143,5 @@ public class KhachHangServiceImpl implements KhachHangService {
             // Nếu không tìm thấy khách hàng theo ID, trả về false
             return false;
         }
-    }
-
-    @Override
-    public List<KhachHangEntity> searchKhachHangByName(String name) {
-        // Kiểm tra xem tên tìm kiếm có hợp lệ không (không null hoặc rỗng)
-        if (name == null || name.trim().isEmpty()) {
-            return new ArrayList<>(); // Trả về danh sách rỗng nếu tên không hợp lệ
-        }
-
-        // Gọi repository để tìm kiếm khách hàng theo tên
-        return khachHangRepository.findByTenContainingIgnoreCase(name);
     }
 }
