@@ -24,6 +24,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
        ctsp.ten,
        ctsp.donGia,
        ctsp.soLuong,
+       ctsp.ngayNhap,
        ctsp.trangThai
       ) from ChiTietSanPhamEntity ctsp 
   """)
