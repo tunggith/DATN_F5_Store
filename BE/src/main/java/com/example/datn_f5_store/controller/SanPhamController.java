@@ -24,7 +24,7 @@ public class SanPhamController {
             @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
             @Parameter(name = "size") @RequestParam(defaultValue = "3") Integer size
     ) {
-        DataResponse dataResponse = new DataResponse();
+        DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var responseList = sanPhamService.getAll(page, size);
         dataResponse.setResult(new ResultModel<>(null, responseList));
