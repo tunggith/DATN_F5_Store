@@ -9,10 +9,10 @@ import lombok.*;
 @ToString
 public class SanPhamRequest {
     private Integer id;
-    private Integer xuatXu;
-    private Integer thuongHieu;
-    private Integer chatLieu;
+    private XuatXuRequest xuatXu;
+    private ThuongHieuRequest thuongHieu;
+    private TheLoaiRequest theLoai;
     private String ma;
     private String ten;
-    private Integer trangThai;
+    private String trangThai;
 }

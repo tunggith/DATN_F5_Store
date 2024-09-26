@@ -1,12 +1,9 @@
 package com.example.datn_f5_store.controller;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
-import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
-import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
-import com.example.datn_f5_store.entity.SizeEntity;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IMauSacRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
@@ -14,18 +11,13 @@ import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
 import com.example.datn_f5_store.service.impl.ChiTietSanPhamImpl;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -44,6 +36,12 @@ public class ChiTietSanPhamController
     @Autowired
     ChiTietSanPhamImpl ctsp_Sevice;
 
+    @GetMapping("/find")
+    public List<SanPhamEntity> getalls(){
+        return repo_sanPham.findAll();
+    }
+
+
     @GetMapping("/getAll")
     public List<ChiTietSanPhamReponse> getall(){
         return repo_ctsp.getAllCTSP();
@@ -54,8 +52,6 @@ public class ChiTietSanPhamController
             @RequestParam(value = "currentPage" , defaultValue = "0") Integer curentPage
 
     ){
-
-
         DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var responseList = ctsp_Sevice.getallPhanTrang(curentPage);

@@ -47,7 +47,7 @@ public class NhanVienEntity {
     @Column(name = ConfigContanst.NhanVien.NGUOI_SUA)
     private String nguoiSua;
     @Column(name = ConfigContanst.NhanVien.THOI_GIAN_SUA)
-    private String thoiGianSua;
+    private Date thoiGianSua;
     @Column(name = ConfigContanst.NhanVien.TRANG_THAI)
     private String trangThai;
 }

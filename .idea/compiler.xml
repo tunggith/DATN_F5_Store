@@ -9,9 +9,6 @@
         <module name="DATN_F5_Store" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="DATN_F5_Store" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

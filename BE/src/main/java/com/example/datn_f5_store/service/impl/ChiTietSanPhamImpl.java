@@ -1,8 +1,6 @@
 package com.example.datn_f5_store.service.impl;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
@@ -12,7 +10,6 @@ import com.example.datn_f5_store.repository.IMauSacRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,12 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service

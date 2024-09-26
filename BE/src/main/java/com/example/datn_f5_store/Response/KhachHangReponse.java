@@ -1,4 +1,4 @@
-package com.example.datn_f5_store.Response;
+package com.example.datn_f5_store.response;
 
 import lombok.*;
 
@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class KhachHangReponse {
-
 
     private Integer id;
 

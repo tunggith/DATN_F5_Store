@@ -40,9 +40,6 @@ public class ChiTietSanphamRequest {
     @NotNull(message = "Số lượng không được để trống.")
     private Integer soLuong;
 
-    @NotNull(message = "Ngày nhập không được để trống.")
-    private Date ngayNhap;
-
     @NotBlank(message = "Trạng thái không được để trống.")
     private String trangThai; // Nếu cần để là String
 }
