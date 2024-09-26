@@ -55,18 +55,10 @@ INSERT INTO MAU_SAC (MA, TEN) VALUES
 ('GRY', N'Xám');
 
 
-INSERT INTO THANH_TOAN (TEN_PHUONG_THUC, TEN, THOI_GIAN_THANH_TOAN, TRANG_THAI) 
+INSERT INTO THANH_TOAN (TEN_PHUONG_THUC, TRANG_THAI) 
 VALUES
-(N'COD', N'Thanh toán khi nhận hàng', GETDATE(), N'Hoạt động'),
-(N'CARD', N'Thẻ tín dụng', GETDATE(), N'Hoạt động'),
-(N'PAYPAL', N'Thanh toán qua PayPal', GETDATE(), N'Hoạt động'),
-(N'MOMO', N'Thanh toán qua MoMo', GETDATE(), N'Không hoạt động'),
-(N'ZALO', N'Thanh toán qua ZaloPay', GETDATE(), N'Không hoạt động'),
-(N'VNPAY', N'Thanh toán qua VNPay', GETDATE(), N'Hoạt động'),
-(N'BANK', N'Thanh toán qua chuyển khoản ngân hàng', GETDATE(), N'Hoạt động'),
-(N'CRYPTO', N'Thanh toán bằng tiền mã hóa', GETDATE(), N'Không hoạt động'),
-(N'QR', N'Thanh toán qua mã QR', GETDATE(), N'Hoạt động'),
-(N'OTHER', N'Phương thức khác', GETDATE(), N'Không hoạt động');
+(N'Chuyển Khoản', N'Hoạt động'),
+(N'Tiền mặt', N'Hoạt động')
 
 
 
@@ -136,7 +128,7 @@ INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, D
 ('NV005', 'Nguyen Van J', 1, '1995-10-10', N'nguyenvanj@example.com', '0988990011', N'654 Tôn Đức Thắng, Quận 7, TP. Hồ Chí Minh', 'anhnv5.jpg', N'nguyenvanj', 'pass555', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động');
 
 
-INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA_TRI_GIAM_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
+INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA_TRI_HOA_DON_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
 ('VC001', 'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
 ('VC002', 'Voucher Giảm 50.000 VNĐ', 50000, '$', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
 ('VC003', 'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
@@ -146,10 +138,10 @@ INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA
 INSERT INTO HOA_DON (ID_NHAN_VIEN, ID_KHACH_HANG, ID_VOUCHER, ID_THANH_TOAN, MA, TONG_TIEN_BAN_DAU, TONG_TIEN_SAU_VOUCHER, TEN_NGUOI_NHAN, SDT_NGUOI_NHAN, EMAIL_NGUOI_NHAN, DIA_CHI_NHAN_HANG, NGAY_NHAN_DU_KIEN, THOI_GIAN_TAO, GI_CHU, TRANG_THAI) 
 VALUES
 (1, 1, 1, 1, N'HD001', 500000, 450000, N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'Số 1, Đường ABC, Quận 1, TP.HCM', '2024-09-30', GETDATE(), N'Giao hàng trước 12h', N'chưa thanh toán'),
-(2, 2, 2, 2, N'HD002', 1000000, 900000, N'Trần Thị B', '0987654321', 'tranthib@gmail.com', N'Số 10, Đường XYZ, Quận 2, TP.HCM', '2024-09-25', GETDATE(), N'Giao hàng nhanh', N'đã thanh toán'),
-(3, 3, 3, 3, N'HD003', 750000, 700000, N'Phạm Văn C', '0909123456', 'phamvanc@gmail.com', N'Số 5, Đường LMN, Quận 3, TP.HCM', '2024-10-01', GETDATE(), N'Không yêu cầu đặc biệt', N'đã thanh toán'),
-(4, 4, 4, 4, N'HD004', 1500000, 1350000, N'Vũ Thị D', '0934567890', 'vuthid@gmail.com', N'Số 20, Đường OPQ, Quận 4, TP.HCM', '2024-09-27', GETDATE(), N'Giao hàng sau 18h', N'chưa thanh toán'),
-(5, 5, 5, 5, N'HD005', 2000000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(), N'Yêu cầu liên lạc trước', N'chưa thanh toán');
+(2, 2, 2, 1, N'HD002', 1000000, 900000, N'Trần Thị B', '0987654321', 'tranthib@gmail.com', N'Số 10, Đường XYZ, Quận 2, TP.HCM', '2024-09-25', GETDATE(), N'Giao hàng nhanh', N'đã thanh toán'),
+(3, 3, 3, 2, N'HD003', 750000, 700000, N'Phạm Văn C', '0909123456', 'phamvanc@gmail.com', N'Số 5, Đường LMN, Quận 3, TP.HCM', '2024-10-01', GETDATE(), N'Không yêu cầu đặc biệt', N'đã thanh toán'),
+(4, 4, 4, 1, N'HD004', 1500000, 1350000, N'Vũ Thị D', '0934567890', 'vuthid@gmail.com', N'Số 20, Đường OPQ, Quận 4, TP.HCM', '2024-09-27', GETDATE(), N'Giao hàng sau 18h', N'chưa thanh toán'),
+(5, 5, 5, 1, N'HD005', 2000000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(), N'Yêu cầu liên lạc trước', N'chưa thanh toán');
 
 
 INSERT INTO LICH_SU_HOA_DON (ID_HOA_DON, ID_NHAN_VIEN, GI_CHU, THOI_GIAN_THUC_HIEN, TRANG_THAI_CU, TRANG_THAI_MOI, LOAI_THAY_DOI) VALUES

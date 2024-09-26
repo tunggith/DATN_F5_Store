@@ -33,8 +33,8 @@ public class VoucherEntity {
     private String kieuGiamGia;
     @Column(name = "GIA_TRI_GIAM_TOI_DA")
     private Integer giaTriGiamToiDa;
-    @Column(name = "GIA_TRI_GIAM_TOI_THIEU")
-    private Integer giaTriGiamToiThieu;
+    @Column(name = "GIA_TRI_HOA_DON_TOI_THIEU")
+    private Integer giaTriHoaDonToiThieu;
     @Column(name = "THOI_GIAN_BAT_DAU")
     private Date thoiGianBatDau;
     @Column(name = "THOI_GIAN_KET_THUC")

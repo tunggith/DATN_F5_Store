@@ -35,7 +35,7 @@ public class VoucherServicelmpl implements VoucherService {
                 entity.getGiaTriVoucher(),
                 entity.getKieuGiamGia(),
                 entity.getGiaTriGiamToiDa(),
-                entity.getGiaTriGiamToiThieu(),
+                entity.getGiaTriHoaDonToiThieu(),
                 entity.getThoiGianBatDau(),
                 entity.getThoiGianKetThuc(),
                 entity.getMoTa(),
@@ -59,7 +59,7 @@ public class VoucherServicelmpl implements VoucherService {
                   voucher1.setTen(voucher.getTen());
                   voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
                   voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                  voucher1.setGiaTriGiamToiThieu(voucher.getGiaTriGiamToiThieu());
+                  voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                   voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
                   voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                   voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
@@ -90,7 +90,7 @@ public class VoucherServicelmpl implements VoucherService {
                 voucher1.setTen(voucher.getTen());
                 voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
                 voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                voucher1.setGiaTriGiamToiThieu(voucher.getGiaTriGiamToiThieu());
+                voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                 voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
                 voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                 voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());

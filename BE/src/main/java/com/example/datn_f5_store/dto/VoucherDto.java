@@ -29,7 +29,7 @@ public class VoucherDto {
 
     private Integer giaTriGiamToiDa;
 
-    private Integer giaTriGiamToiThieu;
+    private Integer giaTriHoaDonToiThieu;
 
     private Date thoiGianBatDau;
 
