@@ -3,7 +3,6 @@ package com.example.datn_f5_store.service.impl;
 import com.example.datn_f5_store.dto.ThanhToanDto;
 import com.example.datn_f5_store.entity.ThanhToanEntity;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
-import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.service.IThanhToanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class ThanhToanServiceImpl implements IThanhToanService {
         return thanhToan.stream().map(entity->new ThanhToanDto(
                 entity.getId(),
                 entity.getTenPhuongThuc(),
-                entity.getThoiGianThanhToan(),
                 entity.getTrangThai()
         )).collect(Collectors.toList());
     }

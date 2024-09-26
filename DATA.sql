@@ -160,12 +160,12 @@ INSERT INTO CHI_TIET_HOA_DON (ID_HOA_DON, ID_CHI_TIET_SAN_PHAM, MA, SO_LUONG, GI
 (5, 5, 5, 4, 100000, N'Còn hàng');
 
 
-INSERT INTO KHUYEN_MAI (MA, TEN, GIA_TRI_VOUCHER, KIEU_KHUYEN_MAI, MOTA, SO_LUONG, LOAI_KHUYEN_MAI, GIA_TRI_KHUYEN_MAI, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, THOI_GIAN_TAO, THOI_GIAN_SUA, NGUOI_TAO, NGUOI_SUA, TRANG_THAI) VALUES
-('KM001', N'Khuyến mãi Giảm 10%', 10, '%', N'Giảm giá 10% cho tất cả sản phẩm', 100, N'Giảm giá trực tiếp', 10, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
-('KM002', N'Khuyến mãi Giảm 50.000 VNĐ', 50000, '$', N'Giảm 50.000 VNĐ cho đơn hàng trên 300.000 VNĐ', 200, N'Giảm giá theo giá trị', 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
-('KM003', N'Khuyến mãi Mua 1 Tặng 1', 1, '%', N'Mua 1 sản phẩm, tặng 1 sản phẩm cùng loại', 50, N'Khuyến mãi theo sản phẩm', NULL, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
-('KM004', N'Khuyến mãi Giảm 20%', 20, '%', N'Giảm giá 20% cho đơn hàng trên 500.000 VNĐ', 150, N'Giảm giá theo phần trăm', 20, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
-('KM005', N'Khuyến mãi Giảm 100.000 VNĐ', 100000, '$', N'Giảm 100.000 VNĐ cho đơn hàng trên 1.000.000 VNĐ', 75, N'Giảm giá theo giá trị', 100000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động');
+INSERT INTO KHUYEN_MAI (MA, TEN, KIEU_KHUYEN_MAI, MOTA, SO_LUONG, LOAI_KHUYEN_MAI, GIA_TRI_KHUYEN_MAI, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, THOI_GIAN_TAO, THOI_GIAN_SUA, NGUOI_TAO, NGUOI_SUA, TRANG_THAI) VALUES
+('KM001', N'Khuyến mãi Giảm 10%', '%', N'Giảm giá 10% cho tất cả sản phẩm', 100, N'Giảm giá trực tiếp', 10, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
+('KM002', N'Khuyến mãi Giảm 50.000 VNĐ', '$', N'Giảm 50.000 VNĐ cho đơn hàng trên 300.000 VNĐ', 200, N'Giảm giá theo giá trị', 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
+('KM003', N'Khuyến mãi Mua 1 Tặng 1', '%', N'Mua 1 sản phẩm, tặng 1 sản phẩm cùng loại', 50, N'Khuyến mãi theo sản phẩm', NULL, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
+('KM004', N'Khuyến mãi Giảm 20%', '%', N'Giảm giá 20% cho đơn hàng trên 500.000 VNĐ', 150, N'Giảm giá theo phần trăm', 20, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động'),
+('KM005', N'Khuyến mãi Giảm 100.000 VNĐ','$', N'Giảm 100.000 VNĐ cho đơn hàng trên 1.000.000 VNĐ', 75, N'Giảm giá theo giá trị', 100000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Hoạt động');
 INSERT INTO KHUYEN_MAI_CHI_TIET_SAN_PHAM (ID_KHUYEN_MAI, ID_CHI_TIET_SAN_PHAM, TRANG_THAI) 
 VALUES
 (1, 1, N'Hoạt động'),

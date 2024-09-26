@@ -16,6 +16,5 @@ import java.util.Date;
 public class ThanhToanDto {
     private Integer id;
     private String tenPhuongThuc;
-    private Date thoiGianThanhToan;
     private String trangThai;
 }
