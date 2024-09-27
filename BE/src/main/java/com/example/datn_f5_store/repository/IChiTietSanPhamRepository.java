@@ -23,7 +23,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                  ctsp.ten,
                  ctsp.donGia,
                  ctsp.soLuong,
-                 ctsp.ngayNhap,
                  ctsp.trangThai
                 ) from ChiTietSanPhamEntity ctsp 
             """)
@@ -40,7 +39,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                  ctsp.ten,
                  ctsp.donGia,
                  ctsp.soLuong,
-                 ctsp.ngayNhap,
                  ctsp.trangThai
                 ) from ChiTietSanPhamEntity ctsp 
             """)
@@ -56,7 +54,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                  ctsp.ten,
                  ctsp.donGia,
                  ctsp.soLuong,
-                 ctsp.ngayNhap,
                  ctsp.trangThai
                 ) from ChiTietSanPhamEntity ctsp where ctsp.sanPham.id = :id
             """)
@@ -89,7 +86,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                     ctsp.ten,
                     ctsp.donGia,
                     ctsp.soLuong,
-                    ctsp.ngayNhap,
                     ctsp.trangThai
                 ) from ChiTietSanPhamEntity ctsp 
                 where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
@@ -108,7 +104,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                     ctsp.ten,
                     ctsp.donGia,
                     ctsp.soLuong,
-                    ctsp.ngayNhap,
                     ctsp.trangThai
                 ) 
                 from ChiTietSanPhamEntity ctsp 
