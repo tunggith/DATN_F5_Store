@@ -50,7 +50,7 @@ public class ChiTietSanPhamController
         DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var responseList = ctsp_Sevice.getallPhanTrang(curentPage);
-        dataResponse.setResult(new ResultModel<>(null, responseList));
+        dataResponse.setResult(new ResultModel<>(null,responseList));
         return ResponseEntity.ok(dataResponse);
     }
 

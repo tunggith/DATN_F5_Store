@@ -11,7 +11,6 @@ import com.example.datn_f5_store.repository.IThuongHieuRepository;
 import com.example.datn_f5_store.repository.IXuatXuRepository;
 import com.example.datn_f5_store.request.TheLoaiRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
-import com.example.datn_f5_store.request.ThuongHieuRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
