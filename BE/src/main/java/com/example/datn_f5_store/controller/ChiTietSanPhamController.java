@@ -1,8 +1,8 @@
 package com.example.datn_f5_store.controller;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
@@ -59,7 +59,7 @@ public class ChiTietSanPhamController
         DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var responseList = ctsp_Sevice.getallPhanTrang(curentPage);
-        dataResponse.setResult(new ResultModel<>(null, responseList));
+        dataResponse.setResult(new ResultModel<>(null,responseList));
         return ResponseEntity.ok(dataResponse);
     }
 

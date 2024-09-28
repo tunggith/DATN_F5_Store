@@ -1,6 +1,6 @@
 package com.example.datn_f5_store.repository;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ import java.util.List;
 public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamEntity, Integer>
 {
   @Query("""
-      select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
+      select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
        ctsp.id,
        ctsp.sanPham.ten,
        ctsp.mauSac.ten,
@@ -33,7 +33,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
 
   @Query("""
-      select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
+      select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
        ctsp.id,
        ctsp.sanPham.ten,
        ctsp.mauSac.ten,
@@ -48,7 +48,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
   """)
   Page<ChiTietSanPhamReponse> getALLPhanTrang(Pageable pageable);
   @Query("""
-      select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
+      select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
        ctsp.id,
        ctsp.sanPham.ten,
        ctsp.mauSac.ten,
@@ -83,7 +83,7 @@ FROM ChiTietSanPhamEntity ctsp
 
 
   @Query("""
-    select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
+    select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
         ctsp.id,
         ctsp.sanPham.ten,
         ctsp.mauSac.ten,
@@ -103,7 +103,7 @@ FROM ChiTietSanPhamEntity ctsp
 
 
   @Query("""
-    select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
+    select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
         ctsp.id,
         ctsp.sanPham.ten,
         ctsp.mauSac.ten,

@@ -1,4 +1,4 @@
-package com.example.datn_f5_store.Response;
+package com.example.datn_f5_store.response;
 
 import com.example.datn_f5_store.contanst.ConfigContanst;
 import com.example.datn_f5_store.entity.MauSacEntity;

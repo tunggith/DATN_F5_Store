@@ -1,7 +1,7 @@
 package com.example.datn_f5_store.controller;
 
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.SanPhamService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;

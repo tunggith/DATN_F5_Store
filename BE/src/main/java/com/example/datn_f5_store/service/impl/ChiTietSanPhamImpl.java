@@ -1,8 +1,8 @@
 package com.example.datn_f5_store.service.impl;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
-import com.example.datn_f5_store.Response.DataResponse;
-import com.example.datn_f5_store.Response.ResultModel;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
