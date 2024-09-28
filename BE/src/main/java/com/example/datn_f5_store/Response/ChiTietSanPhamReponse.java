@@ -1,5 +1,5 @@
-package com.example.datn_f5_store.response;
 
+package com.example.datn_f5_store.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -60,7 +60,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
   """)
   Page<ChiTietSanPhamReponse> getALLByIDSPCTPhanTrang(@Param("id") Integer id, Pageable pageable);
 
-
     @Query("""
             SELECT COUNT(ctsp) > 0 
             FROM ChiTietSanPhamEntity ctsp
@@ -78,6 +77,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
   @Query("""
     select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+
         ctsp.id,
         ctsp.sanPham.ten,
         ctsp.mauSac.ten,
@@ -86,6 +86,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
         ctsp.ten,
         ctsp.donGia,
         ctsp.soLuong,
+
         ctsp.trangThai
     ) from ChiTietSanPhamEntity ctsp 
     where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
@@ -95,6 +96,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
   @Query("""
     select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+
         ctsp.id,
         ctsp.sanPham.ten,
         ctsp.mauSac.ten,
@@ -111,4 +113,5 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
   Page<ChiTietSanPhamReponse> filterByPrice(@Param("minPrice") Double minPrice,
                                             @Param("maxPrice") Double maxPrice,
                                             Pageable pageable);
+
 }

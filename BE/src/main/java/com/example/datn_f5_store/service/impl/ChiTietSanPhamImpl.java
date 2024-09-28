@@ -18,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,6 @@ public class ChiTietSanPhamImpl {
     ISizeRepository repo_size;
     @Autowired
     ISanPhamRepository repo_sanPham;
-
 
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
@@ -111,7 +109,6 @@ public class ChiTietSanPhamImpl {
         return ResponseEntity.status(201).body("Lưu chi tiết sản phẩm thành công!");
     }
 
-
     public ResponseEntity<?> updateChiTietSanPham(Integer id,
                                                   ChiTietSanphamRequest ctspRequest, BindingResult result,
                                                   Integer idSanpham,
@@ -155,7 +152,6 @@ public class ChiTietSanPhamImpl {
         // Trả về thông báo thành công kèm theo HTTP 200 OK
         return ResponseEntity.ok("Cập nhật chi tiết sản phẩm thành công!");
     }
-
 
     public Page<ChiTietSanPhamReponse> searchByTenOrMa(String keyword, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

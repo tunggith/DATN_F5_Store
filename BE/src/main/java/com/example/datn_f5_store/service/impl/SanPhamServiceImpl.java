@@ -57,7 +57,6 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTrangThai()
         ));
     }
-
     // Phương thức tìm sản phẩm theo tên hoặc mã với phân trang
     @Override
     public Page<SanPhamDto> findByTenOrMa(int page, int size, String ten, String ma) {
