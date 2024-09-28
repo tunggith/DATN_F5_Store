@@ -5,6 +5,8 @@ import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.ILichSuHoaDonService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +28,13 @@ public class LichSuHoaDonController {
     private ResponseEntity<Object> getAllLichSuHoaDon(
             @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
             @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size,
-            @Parameter(name = "startDate") @RequestParam(required = false) Date startDate, // Thêm tham số startDate
-            @Parameter(name = "endDate") @RequestParam(required = false) Date endDate // Thêm tham số endDate
+            @Parameter(name = "startDate") @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+            @Parameter(name = "endDate") @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
     ) {
         DataResponse dataResponse = new DataResponse();
-        dataResponse.setStatus(true); // set trạng thái phản hồi là true cho biết là đã xử lý thành công
+        dataResponse.setStatus(true); // Trạng thái phản hồi
 
         // Gọi dịch vụ để lấy danh sách lịch sử hóa đơn với phân trang và khoảng thời gian
         var responseList = lichSuHoaDonService.getAllLichSuHoaDon(page, size, startDate, endDate);
@@ -38,4 +42,31 @@ public class LichSuHoaDonController {
 
         return ResponseEntity.ok(dataResponse);
     }
+
+
+    //    @GetMapping("/export-excel")
+//    public ResponseEntity<byte[]> exportLichSuHoaDonToExcel(
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+//
+//        // Log lại giá trị startDate và endDate để kiểm tra
+//        System.out.println("Start Date: " + startDate);
+//        System.out.println("End Date: " + endDate);
+//
+//        // Gọi dịch vụ để lấy danh sách hóa đơn
+//        List<LichSuHoaDonDto> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDon(0, Integer.MAX_VALUE, startDate, endDate).getContent();
+//
+//        // Xuất file Excel
+//        ByteArrayOutputStream excelStream = lichSuHoaDonService.exportLichSuHoaDonToExcel(lichSuHoaDonList);
+//
+//        byte[] excelBytes = excelStream.toByteArray();
+//
+//        // Thiết lập header cho response
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lich_su_hoa_don.xlsx");
+//        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//
+//        return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
+//    }
+
 }

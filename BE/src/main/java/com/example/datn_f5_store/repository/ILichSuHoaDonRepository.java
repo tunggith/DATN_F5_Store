@@ -11,5 +11,12 @@ import java.util.Date;
 
 public interface ILichSuHoaDonRepository extends JpaRepository<LichSuHoaDonEntity, Integer> {
     @Query("SELECT l FROM LichSuHoaDonEntity l WHERE l.thoiGianThucHien BETWEEN :startDate AND :endDate")
-    Page<LichSuHoaDonEntity> findByThoiGianThucHienBetween(@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageable);
+    Page<LichSuHoaDonEntity> findByThoiGianThucHienBetween(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate,
+            Pageable pageable
+    );
+
+    // Tìm tất cả nếu không có điều kiện
+    Page<LichSuHoaDonEntity> findAll(Pageable pageable);
 }

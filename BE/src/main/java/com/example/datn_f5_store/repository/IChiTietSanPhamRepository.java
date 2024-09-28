@@ -93,8 +93,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 """)
   Page<ChiTietSanPhamReponse> searchByTenOrMa(@Param("keyword") String keyword, Pageable pageable);
 
-
-
   @Query("""
     select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
         ctsp.id,

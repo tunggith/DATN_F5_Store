@@ -38,6 +38,8 @@ public class ChiTietSanPhamEntity {
     private Double donGia;
     @Column(name = ConfigContanst.ChiTietSanPham.SO_LUONG)
     private Integer soLuong;
+    @Column(name = ConfigContanst.ChiTietSanPham.NGAY_NHAP)
+    private Date ngayNhap;
     @Column(name = ConfigContanst.ChiTietSanPham.TRANG_THAI)
     private String trangThai;
 }
