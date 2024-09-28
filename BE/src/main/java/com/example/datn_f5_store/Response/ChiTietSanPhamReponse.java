@@ -29,7 +29,5 @@ public class ChiTietSanPhamReponse {
 
     private Integer soLuong;
 
-    private Date ngayNhap;
-
     private String trangThai;
 }

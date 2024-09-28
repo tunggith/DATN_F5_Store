@@ -57,7 +57,7 @@ public class ConfigContanst {
         public static final String ID_KHACH_HANG = "ID_KHACH_HANG";
         public static final String ID_NHAN_VIEN = "ID_NHAN_VIEN";
         public static final String ID_VOUCHER = "ID_VOUCHER";
-        public static final String ID_THANH_TOAN = "ID_THANH_TOAN";
+        public static final String ID_THANH_TOAN = "ID_PHUONG_THUC_THANH_TOAN";
         public static final String MA = "MA";
         public static final String TONG_TIEN_BAN_DAU = "TONG_TIEN_BAN_DAU";
         public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_SAU_VOUCHER";
@@ -88,7 +88,6 @@ public class ConfigContanst {
         public static final String TABLE = "KHUYEN_MAI";
         public static final String MA = "MA";
         public static final String TEN = "TEN";
-        public static final String GIA_TRI_VOUCHER = "GIA_TRI_VOUCHER";
         public static final String KIEU_KHUYEN_MAI = "KIEU_KHUYEN_MAI";
         public static final String MO_TA = "MOTA";
         public static final String SO_LUONG = "SO_LUONG";
@@ -140,10 +139,8 @@ public class ConfigContanst {
         public static final String TEN = "TEN";
     }
     public static class ThanhToan{
-        public static final String TABLE = "THANH_TOAN";
+        public static final String TABLE = "PHUONG_THUC_THANH_TOAN";
         public static final String TEN_PHUONG_THUC = "TEN_PHUONG_THUC";
-        public static final String TEN = "TEN";
-        public static final String THOI_GIAN_THANH_TOAN = "THOI_GIAN_THANH_TOAN";
         public static final String TRANG_THAI = "TRANG_THAI";
     }
 

@@ -1,26 +1,27 @@
-package com.example.datn_f5_store.request;
+package com.example.datn_f5_store.dto;
 
-import com.example.datn_f5_store.contanst.ConfigContanst;
 import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.entity.ThanhToanEntity;
+import com.example.datn_f5_store.entity.VoucherEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class HoaDonRequest {
+public class HoaDonDto {
     private Integer id;
-    private Integer idKhachHang;
-    private Integer idNhanVien;
-    private Integer idVoucher;
-    private Integer idThanhToan;
+    private KhachHangEntity khachHang;
+    private NhanVienEntity nhanVien;
+    private VoucherEntity voucher;
+    private ThanhToanEntity thanhToan;
     private String ma;
     private Double tongTienBanDau;
     private Double tongTienSauVoucher;

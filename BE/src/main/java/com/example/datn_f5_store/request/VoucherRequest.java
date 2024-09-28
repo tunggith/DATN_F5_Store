@@ -26,7 +26,7 @@ public class VoucherRequest {
     private String ten;
 
     @NotNull(message = "Giá trị voucher không được để trống.")
-    private Integer giaTriVoucher;
+    private Double giaTriVoucher;
 
     @NotEmpty(message = "Kiểu giảm giá không được để trống.")
     private String kieuGiamGia;

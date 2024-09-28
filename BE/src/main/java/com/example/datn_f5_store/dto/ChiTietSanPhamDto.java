@@ -26,8 +26,6 @@ public class ChiTietSanPhamDto {
 
     private Integer soLuong;
 
-    private Date ngayNhap;
-
     private String trangThai;
 
 }
