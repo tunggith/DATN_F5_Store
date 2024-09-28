@@ -32,7 +32,6 @@ public class VoucherServicelmpl implements VoucherService {
                 entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
-                entity.getGiaTriVoucher(),
                 entity.getKieuGiamGia(),
                 entity.getGiaTriGiamToiDa(),
                 entity.getGiaTriHoaDonToiThieu(),

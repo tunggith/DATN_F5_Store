@@ -41,10 +41,29 @@ public class KhachHangController {
     ) {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = khachHangService.getAllKhachHang(page, size);
+        var responseList = khachHangService.getAllKhachHang(page, size,null);
         dataResponse.setResult(new ResultModel<>(null, responseList));
         return ResponseEntity.ok(dataResponse);
     }
+
+
+    @GetMapping("/getAllKhachHang_PhanTrang_TimKiem")
+    private ResponseEntity<Object> getAllKhachHang(
+            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size,
+            @Parameter(name = "search") @RequestParam(required = false) String search // Thêm tham số tìm kiếm
+    ) {
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+
+        // Gọi dịch vụ để lấy danh sách khách hàng với phân trang và tìm kiếm
+        var responseList = khachHangService.getAllKhachHang(page, size,search);
+        dataResponse.setResult(new ResultModel<>(null, responseList));
+
+        return ResponseEntity.ok(dataResponse);
+    }
+
+
 
     @PostMapping("/addKhachHang")
     public ResponseEntity<?> addKhachHang(@RequestBody @Valid KhachHangRequest khachHangRequest,
@@ -102,6 +121,7 @@ public class KhachHangController {
         }
     }
 
+
     @GetMapping("/searchKhachHang")
     public ResponseEntity<?> searchKhachHangByName(@RequestParam String name) {
         HashMap<String, Object> response = new HashMap<>();
@@ -118,6 +138,24 @@ public class KhachHangController {
             return ResponseEntity.ok(response);
         }
     }
+
+//    @GetMapping("/searchKhachHang")
+//    public ResponseEntity<?> searchKhachHangByName(@RequestParam String name) {
+//        HashMap<String, Object> response = new HashMap<>();
+//
+//        // Gọi service để tìm kiếm khách hàng theo tên
+//        List<KhachHangEntity> khachHangList = khachHangService.searchKhachHangByName(name);
+//
+//        if (khachHangList.isEmpty()) {
+//            response.put("message", "Không tìm thấy khách hàng nào với tên đã cho.");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+//        } else {
+//            response.put("message", "Tìm kiếm thành công!");
+//            response.put("data", khachHangList);
+//            return ResponseEntity.ok(response);
+//        }
+//    }
+
 
 
 }

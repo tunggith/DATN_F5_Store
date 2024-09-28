@@ -1,7 +1,6 @@
 package com.example.datn_f5_store.request;
 
-import com.example.datn_f5_store.contanst.ConfigContanst;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +13,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThanhToanRequest {
-    private Integer id;
-    private String tenPhuongThuc;
-    private Date thoiGianThanhToan;
-    private String trangThai;
+
+    private Integer id; // ID của phương thức thanh toán
+
+    @NotEmpty(message = "Tên phương thức không được để trống.")
+    private String tenPhuongThuc; // Tên của phương thức thanh toán
+
+    private Date thoiGianThanhToan; // Thời gian thanh toán (uncomment nếu cần thiết)
+
+    @NotEmpty(message = "Trạng thái không được để trống.")
+    private String trangThai; // Trạng thái của phương thức thanh toán
+
+
 }

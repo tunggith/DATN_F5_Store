@@ -20,8 +20,8 @@ public class ThanhToanEntity {
     private Integer id;
     @Column(name = ConfigContanst.ThanhToan.TEN_PHUONG_THUC)
     private String tenPhuongThuc;
-    @Column(name = ConfigContanst.ThanhToan.THOI_GIAN_THANH_TOAN)
-    private Date thoiGianThanhToan;
+//    @Column(name = ConfigContanst.ThanhToan.)
+//    private Date thoiGianThanhToan;
     @Column(name = ConfigContanst.ThanhToan.TRANG_THAI)
     private String trangThai;
 }

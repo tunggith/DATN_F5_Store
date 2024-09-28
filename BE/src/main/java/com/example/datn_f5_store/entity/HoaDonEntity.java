@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.entity;
 
 import com.example.datn_f5_store.contanst.ConfigContanst;
+import com.example.datn_f5_store.request.VoucherRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +29,7 @@ public class HoaDonEntity {
     private NhanVienEntity nhanVien;
     @ManyToOne
     @JoinColumn(name = ConfigContanst.HoaDon.ID_VOUCHER)
-    private KhuyenMaiEntity khuyenMai;
+    private VoucherEntity voucher;
     @ManyToOne
     @JoinColumn(name = ConfigContanst.HoaDon.ID_THANH_TOAN)
     private ThanhToanEntity thanhToan;

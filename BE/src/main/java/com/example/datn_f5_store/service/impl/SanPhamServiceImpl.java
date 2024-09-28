@@ -11,7 +11,6 @@ import com.example.datn_f5_store.repository.IThuongHieuRepository;
 import com.example.datn_f5_store.repository.IXuatXuRepository;
 import com.example.datn_f5_store.request.TheLoaiRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
-import com.example.datn_f5_store.request.ThuongHieuRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
@@ -27,17 +26,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class SanPhamServiceImpl implements ISanPhamService {
 
-    // Inject các repository cần thiết cho sản phẩm, xuất xứ, thương hiệu và chất liệu.
+    // Inject các repository cần thiết cho sản phẩm, xuất xứ, thương hiệu và thể loại.
     @Autowired
     private ISanPhamRepository sanPhamRepo;
+
     @Autowired
     private IXuatXuRepository xuatXuRepo;
+
     @Autowired
     private IThuongHieuRepository thuongHieuRepo;
+
     @Autowired
     private ITheLoaiRepository theLoaiRepo;
 
@@ -47,7 +48,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
         Pageable pageable = PageRequest.of(page, size);
         Page<SanPhamEntity> sanPhamPage = sanPhamRepo.findAll(pageable);
 
-        // Chuyển đổi từ SanPhamEntity sang SanPhamDto sử dụng phương thức map của Page.
+        // Chuyển đổi từ SanPhamEntity sang SanPhamDto
         return sanPhamPage.map(entity -> new SanPhamDto(
                 entity.getId(),
                 entity.getMa(),
@@ -84,9 +85,10 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTrangThai()
         ));
     }
+
     @Override
     public List<SanPhamDto> findById(Integer id) {
-        // Tìm kiếm entity theo id, kiểm tra nếu tồn tại
+        // Tìm kiếm entity theo id
         Optional<SanPhamEntity> optionalEntity = sanPhamRepo.findById(id);
 
         // Nếu entity tồn tại, tạo danh sách và thêm vào
@@ -105,11 +107,10 @@ public class SanPhamServiceImpl implements ISanPhamService {
             // Trả về danh sách chứa một phần tử duy nhất
             return Collections.singletonList(dto);
         } else {
-            // Nếu không tìm thấy entity, trả về danh sách rỗng hoặc ném ngoại lệ
+            // Nếu không tìm thấy entity, trả về danh sách rỗng
             return new ArrayList<>(); // Hoặc ném ngoại lệ nếu cần thiết
         }
     }
-
 
     // Phương thức tạo mới sản phẩm
     @Override
@@ -146,13 +147,11 @@ public class SanPhamServiceImpl implements ISanPhamService {
         }
     }
 
-
-
     // Phương thức lưu hoặc cập nhật sản phẩm
     private DataResponse saveOfUpdate(SanPhamEntity entity, SanPhamRequest request) {
         try {
             // Lưu sản phẩm vào database
-            this.convertSanPham(entity,request);
+            this.convertSanPham(entity, request);
             sanPhamRepo.save(entity);
             return new DataResponse(true, new ResultModel<>(null, "Thành công!"));
         } catch (Exception e) {
@@ -180,7 +179,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
         if (request.getThuongHieu().getId() == null) {
             check = true;
         }
-        // Kiểm tra chất liệu sản phẩm
+        // Kiểm tra thể loại sản phẩm
         if (request.getTheLoai().getId() == null) {
             check = true;
         }
@@ -214,7 +213,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
         ThuongHieuEntity thuongHieu = thuongHieuRepo.findById(request.getThuongHieu().getId()).orElse(null);
         entity.setThuongHieu(thuongHieu);
 
-        // Tìm và set chất liệu
+        // Tìm và set thể loại
         TheLoaiEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
         entity.setTheLoai(theLoai);
         entity.setTrangThai(request.getTrangThai());
@@ -227,12 +226,9 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setTen(request.getTen());
     }
 
-
-
-    // Phương thức chuyển đổi dữ liệu từ request sang entity của chất liệu
+    // Phương thức chuyển đổi dữ liệu từ request sang entity của thể loại
     private void convertTheLoai(TheLoaiEntity entity, TheLoaiRequest request) {
         entity.setId(request.getId());
         entity.setTen(request.getTen());
     }
 }
-

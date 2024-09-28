@@ -22,16 +22,12 @@ public class KhuyenMaiEntity {
     private String ma;
     @Column(name = ConfigContanst.KhuyenMai.TEN)
     private String ten;
-    @Column(name = ConfigContanst.KhuyenMai.GIA_TRI_VOUCHER)
-    private Integer giaTriVoucher;
     @Column(name = ConfigContanst.KhuyenMai.KIEU_KHUYEN_MAI)
     private String kieuKhuyenMai;
     @Column(name = ConfigContanst.KhuyenMai.MO_TA)
     private String moTa;
     @Column(name = ConfigContanst.KhuyenMai.SO_LUONG)
     private Integer soLuong;
-    @Column(name = ConfigContanst.KhuyenMai.LOAI_KHUYEN_MAI)
-    private String loaiKhuyenMai;
     @Column(name = ConfigContanst.KhuyenMai.GIA_TRI_KHUYEN_MAI)
     private Integer giaTriKhuyenMai;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_BAT_DAU)

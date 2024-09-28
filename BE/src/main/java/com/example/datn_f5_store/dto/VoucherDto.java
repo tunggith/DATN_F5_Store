@@ -23,8 +23,7 @@ public class VoucherDto {
 
     private String ten;
 
-    private Integer giaTriVoucher;
-
+//    private Integer giaTriVoucher;
     private String kieuGiamGia;
 
     private Integer giaTriGiamToiDa;
