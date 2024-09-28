@@ -34,9 +34,8 @@ public class ChiTietSanPhamImpl {
     ISanPhamRepository repo_sanPham;
 
 
-
     public ResponseEntity<?> getallPhanTrang(
-                         Integer currentPage
+            Integer currentPage
     ) {
         int size = 5;
         Pageable pageable = PageRequest.of(currentPage, size);
@@ -57,7 +56,7 @@ public class ChiTietSanPhamImpl {
         Pageable pageable = PageRequest.of(currentPage, size);
 
         // Lấy kết quả phân trang từ repository
-        var pageResult = repo_ctsp.getALLByIDSPCTPhanTrang(id,pageable);
+        var pageResult = repo_ctsp.getALLByIDSPCTPhanTrang(id, pageable);
 
         // Trả về danh sách kết quả
         return ResponseEntity.ok(pageResult.getContent());
@@ -113,11 +112,11 @@ public class ChiTietSanPhamImpl {
     }
 
 
-    public ResponseEntity<?> updateChiTietSanPham( Integer id,
-                                                   ChiTietSanphamRequest ctspRequest, BindingResult result,
-                                                   Integer idSanpham,
-                                                   Integer idMau,
-                                                   Integer idSize) {
+    public ResponseEntity<?> updateChiTietSanPham(Integer id,
+                                                  ChiTietSanphamRequest ctspRequest, BindingResult result,
+                                                  Integer idSanpham,
+                                                  Integer idMau,
+                                                  Integer idSize) {
 
         // Kiểm tra nếu có lỗi
         if (result.hasErrors()) {
@@ -156,7 +155,6 @@ public class ChiTietSanPhamImpl {
         // Trả về thông báo thành công kèm theo HTTP 200 OK
         return ResponseEntity.ok("Cập nhật chi tiết sản phẩm thành công!");
     }
-
 
 
     public Page<ChiTietSanPhamReponse> searchByTenOrMa(String keyword, int page, int size) {

@@ -295,7 +295,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
                 chiTietHoaDon.setChiTietSanPham(chiTietSanPham);
                 chiTietHoaDon.setGiaSpctHienTai(chiTietSanPham.getDonGia() * request.getSoLuong());
-                chiTietHoaDon.setSoLuong(request.getSoLuong();
+                chiTietHoaDon.setSoLuong(request.getSoLuong());
                 chiTietHoaDonRepository.save(chiTietHoaDon);
                 chiTietHoaDonDetail.add(chiTietHoaDon);
             }

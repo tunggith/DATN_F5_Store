@@ -61,23 +61,20 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
   Page<ChiTietSanPhamReponse> getALLByIDSPCTPhanTrang(@Param("id") Integer id, Pageable pageable);
 
 
-  @Query("""
-SELECT COUNT(ctsp) > 0 
-FROM ChiTietSanPhamEntity ctsp
- WHERE ctsp.sanPham.id = :idSanPham 
- AND ctsp.mauSac.id = :idMauSac 
- AND ctsp.size.id = :idSize 
- AND ctsp.ma = :ma 
- AND ctsp.ten = :ten
-""")
-  boolean checkTrung(@Param("idSanPham") Integer idSanPham,
-                                                     @Param("idMauSac") Integer idMauSac,
-                                                     @Param("idSize") Integer idSize,
-                                                     @Param("ma") String ma,
-                                                     @Param("ten") String ten);
-
-
-
+    @Query("""
+            SELECT COUNT(ctsp) > 0 
+            FROM ChiTietSanPhamEntity ctsp
+             WHERE ctsp.sanPham.id = :idSanPham 
+             AND ctsp.mauSac.id = :idMauSac 
+             AND ctsp.size.id = :idSize 
+             AND ctsp.ma = :ma 
+             AND ctsp.ten = :ten
+            """)
+    boolean checkTrung(@Param("idSanPham") Integer idSanPham,
+                       @Param("idMauSac") Integer idMauSac,
+                       @Param("idSize") Integer idSize,
+                       @Param("ma") String ma,
+                       @Param("ten") String ten);
 
   @Query("""
     select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
@@ -116,6 +113,4 @@ FROM ChiTietSanPhamEntity ctsp
   Page<ChiTietSanPhamReponse> filterByPrice(@Param("minPrice") Double minPrice,
                                             @Param("maxPrice") Double maxPrice,
                                             Pageable pageable);
-
-
 }
