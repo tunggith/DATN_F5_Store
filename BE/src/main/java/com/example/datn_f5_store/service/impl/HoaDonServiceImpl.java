@@ -6,6 +6,7 @@ import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.KhachHangEntity;
+import com.example.datn_f5_store.entity.LichSuHoaDonEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.entity.ThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
@@ -13,6 +14,7 @@ import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
 import com.example.datn_f5_store.repository.IKhachHangRepository;
+import com.example.datn_f5_store.repository.ILichSuHoaDonRepository;
 import com.example.datn_f5_store.repository.INhanVienRepository;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -21,6 +23,7 @@ import com.example.datn_f5_store.request.HoaDonRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IHoaDonService;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
@@ -53,6 +56,8 @@ public class HoaDonServiceImpl implements IHoaDonService {
     private IChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
     private IChiTietSanPhamRepository chiTietSanPhamRepository;
+    @Autowired
+    private ILichSuHoaDonRepository lichSuHoaDonRepository;
 
     @Override
     public List<HoaDonDto> getAll() {
@@ -83,7 +88,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
                             ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(chiTietHoaDon.getChiTietSanPham().getId()).orElse(null);
                             chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + chiTietHoaDon.getSoLuong());
                             chiTietSanPhamRepository.save(chiTietSanPham);
+                            chiTietHoaDon.setTrangThai("đã hủy");
+                            chiTietHoaDonRepository.save(chiTietHoaDon);
                         }
+                        LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(entity);
+                        lichSuHoaDon.setThoiGianThucHien(new Date());
+                        lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+                        lichSuHoaDon.setTrangThaiMoi("đã hủy");
+                        lichSuHoaDon.setLoaiThayDoi("hủy hóa đơn hết hạn");
+                        lichSuHoaDonRepository.save(lichSuHoaDon);
                     }
 
                     List<HoaDonEntity> currentDangThanhToan = hoaDonRepository.findByTrangThai("đang thanh toán");
@@ -119,7 +132,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse craete(HoaDonRequest request) {
+    public DataResponse craete(HoaDonRequest request){
         if (this.isNullHoaDon(request)) {
             String maHoaDon = this.generateMaHoaDon();
 
@@ -128,22 +141,51 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 maHoaDon = this.generateMaHoaDon();
             }
             request.setMa(maHoaDon);
+
+            // Set giá trị mặc định cho khách hàng và thanh toán
             if (request.getIdKhachHang() == null || request.getIdKhachHang() == 0) {
                 request.setIdKhachHang(1);
             }
             request.setIdThanhToan(1);
             request.setTongTienBanDau(0.0);
             request.setThoiGianTao(new Date());
+
+            // Kiểm tra số lượng hóa đơn "đang thanh toán"
             if (hoaDonRepository.findByTrangThai("đang thanh toán").size() >= 5) {
                 request.setTrangThai("chờ thanh toán");
             } else {
                 request.setTrangThai("đang thanh toán");
             }
-            return this.saveOrUpdate(new HoaDonEntity(), request);
+
+            // Tạo và lưu hóa đơn, nhận DataResponse
+            HoaDonEntity hoaDon = this.saveOrUpdate(new HoaDonEntity(), request);
+
+            // Kiểm tra nếu việc lưu hóa đơn thành công
+            if (hoaDon!=null) {
+                // Tạo lịch sử hóa đơn và gán hóa đơn vừa tạo
+                LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
+                lichSuHoaDon.setHoaDon(hoaDon);
+                lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
+                lichSuHoaDon.setTrangThaiCu(null);
+                lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
+                lichSuHoaDon.setThoiGianThucHien(hoaDon.getThoiGianTao());
+                lichSuHoaDon.setLoaiThayDoi("tạo hóa đơn");
+                // Lưu lịch sử hóa đơn vào cơ sở dữ liệu
+                lichSuHoaDonRepository.save(lichSuHoaDon);
+
+                // Trả về DataResponse với thông báo thành công
+                return new DataResponse(true, new ResultModel<>(null,"tạo hóa đơn thành công"));
+            } else {
+                // Trả về thông báo lỗi nếu việc tạo hóa đơn thất bại
+                return new DataResponse(false, new ResultModel<>(null, "Không thể tạo hóa đơn"));
+            }
         } else {
-            return new DataResponse(false, new ResultModel<>(null, "dữ liệu không hợp lệ"));
+            // Trả về thông báo lỗi nếu dữ liệu không hợp lệ
+            return new DataResponse(false, new ResultModel<>(null, "Dữ liệu không hợp lệ"));
         }
     }
+
+
 
     @Override
     public DataResponse update(HoaDonRequest request, Integer id) {
@@ -201,8 +243,18 @@ public class HoaDonServiceImpl implements IHoaDonService {
             if (hoaDon.getThanhToan().getId().equals(1)) {
                 request.setIdThanhToan(1);
             }
+            LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(hoaDon);
+            lichSuHoaDon.setThoiGianThucHien(new Date());
+            lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+            lichSuHoaDon.setTrangThaiMoi("đã thanh toán");
+            lichSuHoaDon.setLoaiThayDoi("thanh toán");
+            lichSuHoaDonRepository.save(lichSuHoaDon);
+            ChiTietHoaDonEntity chiTietHoaDon = chiTietHoaDonRepository.findByHoaDon(hoaDon);
+            chiTietHoaDon.setTrangThai("đã thanh toán");
+            chiTietHoaDonRepository.save(chiTietHoaDon);
             // Cập nhật hóa đơn mà không thay đổi ID
-            return this.saveOrUpdate(hoaDon, request);
+            this.saveOrUpdate(hoaDon, request);
+            return new DataResponse(false, new ResultModel<>(null, "Thanh toán thành công"));
         } else {
             return new DataResponse(false, new ResultModel<>(null, "Dữ liệu không hợp lệ"));
         }
@@ -226,6 +278,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
         hoaDon.setTrangThai("đã hủy");
         hoaDonRepository.save(hoaDon);
+        LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(hoaDon);
+        lichSuHoaDon.setThoiGianThucHien(new Date());
+        lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+        lichSuHoaDon.setTrangThaiMoi("đã hủy");
+        lichSuHoaDon.setLoaiThayDoi("hủy hóa đơn");
+        lichSuHoaDonRepository.save(lichSuHoaDon);
         return new DataResponse(true, new ResultModel<>(null, "hủy hóa đơn thành công"));
     }
 
@@ -268,13 +326,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
         // Tìm chi tiết hóa đơn theo hóa đơn
         List<ChiTietHoaDonEntity> chiTietHoaDonDetail = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
 
+        // Tạo mới chi tiết hóa đơn
+        ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
         // Xử lý nếu chi tiết hóa đơn chưa tồn tại hoặc đã tồn tại
         if (chiTietHoaDonDetail == null) {
-            // Tạo mới chi tiết hóa đơn
-            ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
             chiTietHoaDon.setChiTietSanPham(chiTietSanPham);
             chiTietHoaDon.setGiaSpctHienTai(chiTietSanPham.getDonGia() * request.getSoLuong());
             chiTietHoaDon.setSoLuong(request.getSoLuong());
+            chiTietHoaDon.setMa(hoaDon.getMa());
+            chiTietHoaDon.setTrangThai(hoaDon.getTrangThai());
             chiTietHoaDonRepository.save(chiTietHoaDon);
         } else {
             boolean updated = false;
@@ -292,10 +352,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
             // Nếu không cập nhật chi tiết hóa đơn (sản phẩm mới)
             if (!updated) {
-                ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
                 chiTietHoaDon.setChiTietSanPham(chiTietSanPham);
                 chiTietHoaDon.setGiaSpctHienTai(chiTietSanPham.getDonGia() * request.getSoLuong());
                 chiTietHoaDon.setSoLuong(request.getSoLuong());
+                chiTietHoaDon.setMa(hoaDon.getMa());
+                chiTietHoaDon.setTrangThai(hoaDon.getTrangThai());
                 chiTietHoaDonRepository.save(chiTietHoaDon);
                 chiTietHoaDonDetail.add(chiTietHoaDon);
             }
@@ -351,14 +412,13 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 .toLocalDate();
     }
 
-    private DataResponse saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
+    private HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
         try {
             this.convertHoaDon(entity, request);
-            hoaDonRepository.save(entity);
-            return new DataResponse(false, new ResultModel<>(null, "create or update successfully!"));
+            return hoaDonRepository.save(entity);
         } catch (Exception e) {
             e.printStackTrace();
-            return new DataResponse(false, new ResultModel<>(null, "create or update exception"));
+            return null;
         }
     }
 

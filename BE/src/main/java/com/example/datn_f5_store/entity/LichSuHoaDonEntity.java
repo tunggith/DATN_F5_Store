@@ -31,7 +31,7 @@ public class LichSuHoaDonEntity {
     @ManyToOne
     @JoinColumn(name = "ID_NHAN_VIEN")
     private NhanVienEntity nhanVien;
-    @Column(name = "GHI_CHU")
+    @Column(name = "GI_CHU")
     private String ghiChu;
     @Column(name = "THOI_GIAN_THUC_HIEN")
     private Date thoiGianThucHien;
