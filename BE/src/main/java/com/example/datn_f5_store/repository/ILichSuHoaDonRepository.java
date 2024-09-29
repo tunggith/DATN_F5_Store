@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.repository;
 
+import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.LichSuHoaDonEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface ILichSuHoaDonRepository extends JpaRepository<LichSuHoaDonEntit
             @Param("endDate") Date endDate,
             Pageable pageable
     );
-
+    LichSuHoaDonEntity findByHoaDon(HoaDonEntity hoaDon);
     // Tìm tất cả nếu không có điều kiện
     Page<LichSuHoaDonEntity> findAll(Pageable pageable);
 }

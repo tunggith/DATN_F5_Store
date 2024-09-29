@@ -1,9 +1,5 @@
 package com.example.datn_f5_store.request;
 
-import com.example.datn_f5_store.entity.KhachHangEntity;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
-import com.example.datn_f5_store.entity.NhanVienEntity;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

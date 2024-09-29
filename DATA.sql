@@ -54,12 +54,7 @@ INSERT INTO MAU_SAC (MA, TEN) VALUES
 ('ORG', N'Cam'),
 ('GRY', N'Xám');
 
-
-<<<<<<< HEAD
-INSERT INTO THANH_TOAN (TEN_PHUONG_THUC, TRANG_THAI) 
-=======
 INSERT INTO PHUONG_THUC_THANH_TOAN (TEN_PHUONG_THUC, TRANG_THAI) 
->>>>>>> cb9a48c9d6052a4166abfbe79940db7746300b21
 VALUES
 (N'Chuyển Khoản', N'Hoạt động'),
 (N'Tiền mặt', N'Hoạt động')
@@ -117,7 +112,7 @@ INSERT INTO DIA_CHI_KHACH_HANG (HO_TEN, SDT, SO_NHA, DUONG, PHUONG_XA, QUAN_HUYE
 
 
 INSERT INTO KHACH_HANG (ID_DIA_CHI, MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT, USERNAME, [PASSWORD], TRANG_THAI) VALUES
-(1, 'KH001', 'Nguyen Van A', 1, '1990-01-01', N'nguyenvana@example.com', 'anh1.jpg', '0912345678', N'nguyenvana', 'password123', N'Hoạt động'),
+(null, 'KH001', 'Khách vãng lai', null, null, null, null, null,null ,null,null),
 (2, 'KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@example.com', 'anh2.jpg', '0987654321', N'tranthib', 'password456', N'Hoạt động'),
 (3, 'KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@example.com', 'anh3.jpg', '0909123456', N'phamvanc', 'password789', N'Hoạt động'),
 (4, 'KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@example.com', 'anh4.jpg', '0911223344', N'lethid', 'password101', N'Hoạt động'),
@@ -148,7 +143,7 @@ VALUES
 (5, 5, 5, 1, N'HD005', 2000000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(), N'Yêu cầu liên lạc trước', N'chưa thanh toán');
 
 
-INSERT INTO LICH_SU_HOA_DON (ID_HOA_DON, ID_NHAN_VIEN, GI_CHU, THOI_GIAN_THUC_HIEN, TRANG_THAI_CU, TRANG_THAI_MOI, LOAI_THAY_DOI) VALUES
+INSERT INTO LICH_SU_HOA_DON (ID_HOA_DON, ID_NHAN_VIEN, GHI_CHU, THOI_GIAN_THUC_HIEN, TRANG_THAI_CU, TRANG_THAI_MOI, LOAI_THAY_DOI) VALUES
 (1, 1, N'Xác nhận đơn hàng', GETDATE(), N'Chưa xử lý', N'Đang xử lý', N'Chuyển trạng thái'),
 (2, 2, N'Cập nhật thông tin khách hàng', GETDATE(), N'Chưa xử lý', N'Đang xử lý', N'Chỉnh sửa thông tin'),
 (3, 3, N'Áp dụng voucher', GETDATE(), N'Chưa xử lý', N'Đã xử lý', N'Áp dụng giảm giá'),

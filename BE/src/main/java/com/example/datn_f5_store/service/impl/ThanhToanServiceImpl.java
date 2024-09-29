@@ -1,9 +1,8 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.ThanhToanDto;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
+import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
-import com.example.datn_f5_store.response.DataResponse; // Thêm import cho DataResponse
 import com.example.datn_f5_store.service.IThanhToanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class ThanhToanServiceImpl implements IThanhToanService {
     @Override
     public List<ThanhToanDto> getAll() {
         // Lấy tất cả các thực thể thanh toán từ repository
-        List<ThanhToanEntity> thanhToan = thanhToanRepository.findAll();
+        List<PhuongThucThanhToanEntity> thanhToan = thanhToanRepository.findAll();
 
         // Chuyển đổi danh sách các thực thể thành danh sách DTO
         return thanhToan.stream().map(entity -> new ThanhToanDto(
