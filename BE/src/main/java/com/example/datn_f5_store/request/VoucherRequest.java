@@ -27,7 +27,7 @@ public class VoucherRequest {
     private String ten;
 
     @NotNull(message = "Giá trị voucher không được để trống.")
-    private Double giaTriVoucher;  // or Integer depending on your business logic
+    private Integer giaTriVoucher;  // or Integer depending on your business logic
 
     @NotEmpty(message = "Kiểu giảm giá không được để trống.")
     private String kieuGiamGia;

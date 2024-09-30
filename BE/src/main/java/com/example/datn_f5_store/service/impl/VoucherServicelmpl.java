@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.VoucherDto;
+import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -12,9 +13,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 @Service
 public class VoucherServicelmpl implements VoucherService {
@@ -32,6 +39,7 @@ public class VoucherServicelmpl implements VoucherService {
                 entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
+                entity.getGiaTriVoucher(),
                 entity.getKieuGiamGia(),
                 entity.getGiaTriGiamToiDa(),
                 entity.getGiaTriHoaDonToiThieu(),
@@ -50,62 +58,68 @@ public class VoucherServicelmpl implements VoucherService {
 
     // hàm thêm mới Voucher
     @Override
-    public Boolean createVoucher(VoucherRequest voucher){
-              VoucherEntity voucher1 = new VoucherEntity();
-              try {
-                  if (checkTrungMaVoucher(voucher.getMa())){
-                  voucher1.setMa(voucher.getMa());
-                  voucher1.setTen(voucher.getTen());
-                  voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
-                  voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                  voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
-                  voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                  voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
-                  voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
-                  voucher1.setSoLuong(voucher.getSoLuong());
-                  voucher1.setNguoiTao(voucher.getNguoiTao());
-                  voucher1.setThoiGianTao(voucher.getThoiGianTao());
-                  voucher1.setThoiGianSua(voucher.getThoiGianSua());
-                  voucher1.setNguoiSua(voucher.getNguoiSua());
-                  voucher1.setMoTa(voucher.getMoTa());
-                  voucher1.setTrangThai(voucher.getTrangThai());
-                  iVoucherRepository.save(voucher1);
-                  return true;
-                  }
-                  return false;
-              }catch (Exception e){
-                 return  false;
-              }
+    public DataResponse createVoucher(VoucherRequest voucher){
+        Date ngayHienTai = new Date();
+        VoucherEntity voucher1 = new VoucherEntity();
+        try {
+            if (CheckVoucher(voucher)) {
+                if (checkTrungMaVoucher(voucher.getMa())) {
+                    voucher1.setMa(voucher.getMa());
+                    voucher1.setTen(voucher.getTen());
+                    voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
+                    voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
+                    voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
+                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
+                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
+                    voucher1.setSoLuong(voucher.getSoLuong());
+                    voucher1.setNguoiTao(voucher.getNguoiTao());
+                    voucher1.setThoiGianTao(ngayHienTai);
+                    voucher1.setNguoiSua(voucher.getNguoiSua());
+                    voucher1.setMoTa(voucher.getMoTa());
+                    voucher1.setTrangThai(voucher.getTrangThai());
+                    iVoucherRepository.save(voucher1);
+                    return new DataResponse(true, new ResultModel<>(null, "Thêm Voucher thành công"));
+                }
+                return new DataResponse(false, new ResultModel<>(null, "Mã Voucher đã tồn tại"));
+            }
+            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
+        }catch (Exception e){
+            return new DataResponse(false, new ResultModel<>(null, "Thêm thất bại do lỗi : " + e));
+        }
     }
+
 
     // hàm Update Voucher theo id
     @Override
-    public Boolean updateVoucher(Integer id, VoucherRequest voucher) throws DataNotFoundException {
-            VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(()
-            -> new DataNotFoundException("Không thể sửa Voucher với id : "+ voucher.getId()));
-            if (voucher1 != null){
-
-                voucher1.setMa(voucher.getMa());
-                voucher1.setTen(voucher.getTen());
-                voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
-                voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
-                voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
-                voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
-                voucher1.setSoLuong(voucher.getSoLuong());
-                voucher1.setNguoiTao(voucher.getNguoiTao());
-                voucher1.setThoiGianTao(voucher.getThoiGianTao());
-                voucher1.setThoiGianSua(voucher.getThoiGianSua());
-                voucher1.setNguoiSua(voucher.getNguoiSua());
-                voucher1.setMoTa(voucher.getMoTa());
-                voucher1.setTrangThai(voucher.getTrangThai());
-                iVoucherRepository.save(voucher1);
-                return true;
-            }else {
-               return false;
+    public DataResponse updateVoucher(Integer id, VoucherRequest voucher) throws DataNotFoundException {
+        Date ngayHienTai = new Date();
+        VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(()
+                -> new DataNotFoundException("Không thể sửa Voucher với id : "+ voucher.getId()));
+        try {
+            if (voucher1 != null) {
+                if (CheckVoucher(voucher)) {
+                    voucher1.setMa(voucher.getMa());
+                    voucher1.setTen(voucher.getTen());
+                    voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
+                    voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
+                    voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
+                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
+                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
+                    voucher1.setSoLuong(voucher.getSoLuong());
+                    voucher1.setNguoiTao(voucher.getNguoiTao());
+                    voucher1.setThoiGianSua(ngayHienTai);
+                    voucher1.setNguoiSua(voucher.getNguoiSua());
+                    voucher1.setMoTa(voucher.getMoTa());
+                    voucher1.setTrangThai(voucher.getTrangThai());
+                    iVoucherRepository.save(voucher1);
+                    return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
+                }
+                return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được bỏ trống hoặc giá trị phải > 0"));
             }
-
+            return new DataResponse(false, new ResultModel<>(null, "Không tìm thay voucher với id là : "+ id));
+        }catch (Exception e){
+            return new DataResponse(false, new ResultModel<>(null, "Sửa voucher thất bại với lỗi : "+ e));
+        }
     }
 
     // hàm find Voucher theo id
@@ -157,4 +171,123 @@ public class VoucherServicelmpl implements VoucherService {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Page<VoucherDto> findVoucherByDate(int page, int size, Date ngayBatDau, Date ngayKetThuc) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VoucherEntity> voucherEntities;
+
+        // Chuyển đổi Date sang LocalDate
+        LocalDate startDate = ngayBatDau != null ? ngayBatDau.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+        LocalDate endDate = ngayKetThuc != null ? ngayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+
+        if (startDate == null && endDate == null) {
+            // Nếu ngày bắt đầu và ngày kết thúc đều null, thì tìm tất cả Voucher
+            voucherEntities = iVoucherRepository.findAll(pageable);
+        } else if (startDate != null && endDate != null) {
+            // Nếu cả hai không null, tìm Voucher theo khoảng thời gian
+            voucherEntities = iVoucherRepository
+                    .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            Date.from(endDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+        } else if (startDate != null) {
+            // Nếu chỉ có Ngày bắt đầu , tìm Voucher bắt đầu từ ngày đó trở đi
+            voucherEntities = iVoucherRepository
+                    .findAllByThoiGianBatDauGreaterThanEqual(Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+        } else {
+            // Nếu chỉ có Ngày kết thúc, tìm voucher kết thúc trước hoặc bằng ngày đó
+            voucherEntities = iVoucherRepository
+                    .findAllByThoiGianKetThucLessThanEqual(Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+        }
+        return voucherEntities.map(entity -> new VoucherDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getGiaTriVoucher(),
+                entity.getKieuGiamGia(),
+                entity.getGiaTriGiamToiDa(),
+                entity.getGiaTriHoaDonToiThieu(),
+                entity.getThoiGianBatDau(),
+                entity.getThoiGianKetThuc(),
+                entity.getMoTa(),
+                entity.getSoLuong(),
+                entity.getNguoiTao(),
+                entity.getThoiGianTao(),
+                entity.getNguoiSua(),
+                entity.getThoiGianSua(),
+                entity.getTrangThai()
+        ));
+    }
+
+    @Override
+    public Page<VoucherDto> findByTenOrMa(int page, int size, String tim) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VoucherEntity> voucherEntities;
+
+        if (tim == null && tim.trim().isEmpty()) {
+            voucherEntities = iVoucherRepository.findAll(pageable);
+        } else {
+            voucherEntities = iVoucherRepository.getByTenContainingOrMaContaining(tim, tim, pageable);
+        }
+        return voucherEntities.map(entity -> new VoucherDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getGiaTriVoucher(),
+                entity.getKieuGiamGia(),
+                entity.getGiaTriGiamToiDa(),
+                entity.getGiaTriHoaDonToiThieu(),
+                entity.getThoiGianBatDau(),
+                entity.getThoiGianKetThuc(),
+                entity.getMoTa(),
+                entity.getSoLuong(),
+                entity.getNguoiTao(),
+                entity.getThoiGianTao(),
+                entity.getNguoiSua(),
+                entity.getThoiGianSua(),
+                entity.getTrangThai()
+        ));
+    }
+
+
+    // hàm validate VoucherRequest
+    public Boolean CheckVoucher(VoucherRequest voucherRequest) {
+        if (voucherRequest.getMa() == null || voucherRequest.getMa().trim().isEmpty()) {
+            return false;
+        }
+        if (voucherRequest.getTen() == null || voucherRequest.getTen().trim().isEmpty()) {
+            return false;
+        }
+        if (voucherRequest.getGiaTriVoucher() == null || voucherRequest.getGiaTriVoucher() <= 0) {
+            return false;
+        }
+        if (voucherRequest.getGiaTriGiamToiDa() == null || voucherRequest.getGiaTriGiamToiDa() <= 0) {
+            return false;
+        }
+        if (voucherRequest.getKieuGiamGia() == null || voucherRequest.getKieuGiamGia().trim().isEmpty()) {
+            return false;
+        }
+        if (voucherRequest.getThoiGianBatDau() == null) {
+            return false;
+        }
+        if (voucherRequest.getThoiGianKetThuc() == null) {
+            return false;
+        }
+        if (voucherRequest.getSoLuong() == null || voucherRequest.getSoLuong() <= 0) {
+            return false;
+        }
+        if (voucherRequest.getNguoiTao() == null || voucherRequest.getNguoiTao().trim().isEmpty()) {
+            return false;
+        }
+        if (voucherRequest.getTrangThai() == null || voucherRequest.getTrangThai().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+
+
+
 }

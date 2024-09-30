@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResultModel<T> {
-    private PagingModel pagination;
+    private com.example.datn_f5_store.response.PagingModel pagination;
     private T content;
 }
 

@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.controller;
 
 
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
@@ -42,6 +43,9 @@ public class ChiTietSanPhamController
     ISanPhamRepository repo_sanPham;
     @Autowired
     ChiTietSanPhamImpl ctsp_Sevice;
+
+    @Autowired
+    IChiTietSanPhamRepository chiTietSanPhamRepository;
 
     @GetMapping("/find")
     public List<SanPhamEntity> getalls(){
@@ -137,5 +141,8 @@ public class ChiTietSanPhamController
         Page<ChiTietSanPhamReponse> result = ctsp_Sevice.filterByPrice(minPrice, maxPrice, page, size);
         return ResponseEntity.ok(result);
     }
-
+    @GetMapping("/getAllKm")
+    public List<ChiTietSanPhamEntity> getallkm(){
+        return chiTietSanPhamRepository.findAll();
+    }
 }

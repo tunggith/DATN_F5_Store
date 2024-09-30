@@ -84,15 +84,15 @@ public class ConfigContanst {
         public static final String PASSWORD = "PASSWORD";
         public static final String TRANG_THAI = "trang_thai";
     }
-    public static class KhuyenMai{
+   public static class KhuyenMai{
         public static final String TABLE = "KHUYEN_MAI";
         public static final String MA = "MA";
         public static final String TEN = "TEN";
         public static final String KIEU_KHUYEN_MAI = "KIEU_KHUYEN_MAI";
         public static final String MO_TA = "MOTA";
         public static final String SO_LUONG = "SO_LUONG";
-        public static final String LOAI_KHUYEN_MAI = "LOAI_KHUYEN_MAI";
         public static final String GIA_TRI_KHUYEN_MAI = "GIA_TRI_KHUYEN_MAI";
+
         public static final String THOI_GIAN_BAT_DAU = "THOI_GIAN_BAT_DAU";
         public static final String THOI_GIAN_KET_THUC = "THOI_GIAN_KET_THUC";
         public static final String THOI_GIAN_TAO = "THOI_GIAN_TAO";

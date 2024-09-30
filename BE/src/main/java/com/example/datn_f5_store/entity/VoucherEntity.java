@@ -28,7 +28,7 @@ public class VoucherEntity {
     @Column(name = "TEN")
     private String ten;
     @Column(name = "GIA_TRI_VOUCHER")
-    private Double giaTriVoucher;
+    private Integer giaTriVoucher;
     @Column(name = "KIEU_GIAM_GIA")
     private String kieuGiamGia;
     @Column(name = "GIA_TRI_GIAM_TOI_DA")

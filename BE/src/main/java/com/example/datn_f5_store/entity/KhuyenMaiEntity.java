@@ -28,6 +28,7 @@ public class KhuyenMaiEntity {
     private String moTa;
     @Column(name = ConfigContanst.KhuyenMai.SO_LUONG)
     private Integer soLuong;
+
     @Column(name = ConfigContanst.KhuyenMai.GIA_TRI_KHUYEN_MAI)
     private Integer giaTriKhuyenMai;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_BAT_DAU)
