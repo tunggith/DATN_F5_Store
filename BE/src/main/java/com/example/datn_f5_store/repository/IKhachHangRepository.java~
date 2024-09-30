@@ -19,5 +19,8 @@ public interface IKhachHangRepository extends JpaRepository<KhachHangEntity,Inte
     Boolean existsByEmail(String email); // Kiểm tra trùng email
     Boolean existsByUserName(String userName); // Kiểm tra trùng username
 
+    @Query("SELECT k FROM KhachHangEntity k WHERE k.ten NOT LIKE %:vangLai% AND (k.ten LIKE %:search% OR :search IS NULL)")
+    Page<KhachHangEntity> findBySearchExcludingVangLai(@Param("search") String search, String s, Pageable pageable);
+
 
 }

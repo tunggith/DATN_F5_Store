@@ -7,14 +7,14 @@ import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
+import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
 import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.example.datn_f5_store.repository.INhanVienRepository;
-import com.example.datn_f5_store.repository.IThanhToanRepository;
+import com.example.datn_f5_store.repository.IPhuongThucThanhToanRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
 import com.example.datn_f5_store.request.ChiTietHoaDonRequest;
 import com.example.datn_f5_store.request.HoaDonRequest;
@@ -46,7 +46,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
     @Autowired
     private IVoucherRepository voucherRepository;
     @Autowired
-    private IThanhToanRepository thanhToanRepository;
+    private IPhuongThucThanhToanRepository thanhToanRepository;
     @Autowired
     private IChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
@@ -386,7 +386,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setNhanVien(nhanVien);
         VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
         entity.setVoucher(voucher);
-        ThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
+        PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
         entity.setThanhToan(thanhToan);
         entity.setMa(request.getMa());
         entity.setTongTienBanDau(request.getTongTienBanDau());

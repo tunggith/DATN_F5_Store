@@ -1,7 +1,6 @@
 package com.example.datn_f5_store.dto;
 
 import com.example.datn_f5_store.entity.KhachHangEntity;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.entity.ThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;

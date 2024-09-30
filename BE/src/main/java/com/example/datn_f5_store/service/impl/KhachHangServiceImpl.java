@@ -11,8 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,21 +31,21 @@ public class KhachHangServiceImpl implements KhachHangService {
             khachHangPage = khachHangRepository.findAll(pageable);
         }
 
-        // Chuyển đổi từ Page<KhachHangEntity> sang Page<KhachHangDto>
+        // Chuyển đổi từ Page<KhachHangEntity> sang Page<KhachHangDto> và kiểm tra khách hàng có id = 1
         return khachHangPage.map(khachHangEntity -> new KhachHangDto(
-                khachHangEntity.getId(),
-                khachHangEntity.getDiaChiKhachHang(),
-                khachHangEntity.getMa(),
-                khachHangEntity.getTen(),
-                khachHangEntity.getGioiTinh(),
-                khachHangEntity.getNgayThangNamSinh(),
-                khachHangEntity.getEmail(),
-                khachHangEntity.getAnh(),
-                khachHangEntity.getSdt(),
-                khachHangEntity.getUserName(),
-                khachHangEntity.getPassword(),
-                khachHangEntity.getTrangThai()
-        ));
+                    khachHangEntity.getId(),
+                    khachHangEntity.getDiaChiKhachHang(),
+                    khachHangEntity.getMa(),
+                    khachHangEntity.getTen(),
+                    khachHangEntity.getGioiTinh(),
+                    khachHangEntity.getNgayThangNamSinh(),
+                    khachHangEntity.getEmail(),
+                    khachHangEntity.getAnh(),
+                    khachHangEntity.getSdt(),
+                    khachHangEntity.getUserName(),
+                    khachHangEntity.getPassword(),
+                    khachHangEntity.getTrangThai()
+            ));
     }
     @Override
     public Boolean addKhachHang(KhachHangRequest khachHangRequest) {

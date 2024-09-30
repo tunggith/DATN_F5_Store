@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.controller;
 
+import com.example.datn_f5_store.dto.KhachHangDto;
 import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.response.DataResponse;
@@ -8,6 +9,7 @@ import com.example.datn_f5_store.service.KhachHangService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -49,6 +51,8 @@ public class KhachHangController {
 
         return ResponseEntity.ok(dataResponse);
     }
+
+
 
 
     @PostMapping("/addKhachHang")
