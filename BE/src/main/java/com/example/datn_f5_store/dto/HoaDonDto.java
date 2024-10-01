@@ -23,6 +23,7 @@ public class HoaDonDto {
     private PhuongThucThanhToanEntity thanhToan;
     private String ma;
     private Double tongTienBanDau;
+    private Double phiShip;
     private Double tongTienSauVoucher;
     private String tenNguoiNhan;
     private String sdtNguoiNhan;
@@ -30,6 +31,7 @@ public class HoaDonDto {
     private String diaChiNhanHang;
     private Date ngayNhanDuKien;
     private Date thoiGianTao;
+    private Integer giaoHang;
     private String ghiChu;
     private String trangThai;
 }

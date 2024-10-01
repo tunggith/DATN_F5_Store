@@ -1,15 +1,15 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.SanPhamDto;
-import com.example.datn_f5_store.entity.TheLoaiEntity;
+import com.example.datn_f5_store.entity.GioiTinhEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.entity.ThuongHieuEntity;
 import com.example.datn_f5_store.entity.XuatXuEntity;
-import com.example.datn_f5_store.repository.ITheLoaiRepository;
+import com.example.datn_f5_store.repository.IGioiTinhRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.IThuongHieuRepository;
 import com.example.datn_f5_store.repository.IXuatXuRepository;
-import com.example.datn_f5_store.request.TheLoaiRequest;
+import com.example.datn_f5_store.request.GioiTinhRequest;
 import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.request.XuatXuRequest;
 import com.example.datn_f5_store.response.DataResponse;
@@ -40,7 +40,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
     private IThuongHieuRepository thuongHieuRepo;
 
     @Autowired
-    private ITheLoaiRepository theLoaiRepo;
+    private IGioiTinhRepository theLoaiRepo;
 
     // Phương thức để lấy tất cả sản phẩm với phân trang
     @Override
@@ -214,7 +214,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setThuongHieu(thuongHieu);
 
         // Tìm và set thể loại
-        TheLoaiEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
+        GioiTinhEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
         entity.setTheLoai(theLoai);
         entity.setTrangThai(request.getTrangThai());
     }
@@ -227,7 +227,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
     }
 
     // Phương thức chuyển đổi dữ liệu từ request sang entity của thể loại
-    private void convertTheLoai(TheLoaiEntity entity, TheLoaiRequest request) {
+    private void convertTheLoai(GioiTinhEntity entity, GioiTinhRequest request) {
         entity.setId(request.getId());
         entity.setTen(request.getTen());
     }

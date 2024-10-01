@@ -115,6 +115,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getThanhToan(),
                         entity.getMa(),
                         entity.getTongTienBanDau(),
+                        entity.getPhiShip(),
                         entity.getTongTienSauVoucher(),
                         entity.getTenNguoiNhan(),
                         entity.getSdtNguoiNhan(),
@@ -122,6 +123,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getDiaChiNhanHang(),
                         entity.getNgayNhanDuKien(),
                         entity.getThoiGianTao(),
+                        entity.getGiaoHang(),
                         entity.getGhiChu(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
@@ -243,11 +245,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
             LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(hoaDon);
             lichSuHoaDon.setThoiGianThucHien(new Date());
             lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
-            lichSuHoaDon.setTrangThaiMoi("đã thanh toán");
+            lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
             lichSuHoaDon.setLoaiThayDoi("thanh toán");
             lichSuHoaDonRepository.save(lichSuHoaDon);
             ChiTietHoaDonEntity chiTietHoaDon = chiTietHoaDonRepository.findByHoaDon(hoaDon);
-            chiTietHoaDon.setTrangThai("đã thanh toán");
+            chiTietHoaDon.setTrangThai(hoaDon.getTrangThai());
             chiTietHoaDonRepository.save(chiTietHoaDon);
             // Cập nhật hóa đơn mà không thay đổi ID
             this.saveOrUpdate(hoaDon, request);

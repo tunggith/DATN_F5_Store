@@ -36,6 +36,8 @@ public class HoaDonEntity {
     private String ma;
     @Column(name = ConfigContanst.HoaDon.TONG_TIEN_BAN_DAU)
     private Double tongTienBanDau;
+    @Column(name = "PHI_SHIP")
+    private Double phiShip;
     @Column(name = ConfigContanst.HoaDon.TONG_TIEN_SAU_VOUCHER)
     private Double tongTienSauVoucher;
     @Column(name = ConfigContanst.HoaDon.TEN_NGUOI_NHAN)
@@ -50,6 +52,8 @@ public class HoaDonEntity {
     private Date ngayNhanDuKien;
     @Column(name = ConfigContanst.HoaDon.THOI_GIAN_TAO)
     private Date thoiGianTao;
+    @Column(name = "GIAO_HANG")
+    private Integer giaoHang;
     @Column(name = ConfigContanst.HoaDon.GHI_CHU)
     private String ghiChu;
     @Column(name = ConfigContanst.HoaDon.TRANG_THAI)

@@ -25,7 +25,7 @@ public class SanPhamEntity {
     private ThuongHieuEntity thuongHieu;
     @ManyToOne
     @JoinColumn(name = ConfigContanst.SanPham.ID_THE_LOAI)
-    private TheLoaiEntity theLoai;
+    private GioiTinhEntity theLoai;
     @Column(name = ConfigContanst.SanPham.MA)
     private String ma;
     @Column(name = ConfigContanst.SanPham.TEN)
