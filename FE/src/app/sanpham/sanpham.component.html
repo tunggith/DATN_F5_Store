@@ -1,0 +1,186 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Phần quản lý sản phẩm -->
+      <div class="col-sm-12 col-md-6">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">Quản lý sản phẩm</h4>
+            <p class="card-category">Cập nhật thông tin sản phẩm</p>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-group">
+                    <label for="productName">Mã sản phẩm</label>
+                    <input type="text" id="productName" class="form-control" placeholder="Mã sản phẩm" required>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-group">
+                    <label for="productCode">Tên sản phẩm</label>
+                    <input type="text" id="productCode" class="form-control" placeholder="Tên sản phẩm" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-group">
+                    <label for="xuatXu">Xuất xứ</label>
+                    <select id="xuatXu" class="form-control select2" required>
+                      <option value="">Chọn xuất xứ</option>
+                      <option value="vn">Việt Nam</option>
+                      <option value="jp">Nhật Bản</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                  <div class="form-group">
+                    <label for="thuongHieu">Thương Hiệu</label>
+                    <select id="thuongHieu" class="form-control select2" required>
+                      <option value="">Chọn thương hiệu</option>
+                      <option value="nike">Nike</option>
+                      <option value="adidas">Adidas</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-12 col-md-4">
+                  <div class="form-group">
+                    <label for="theLoai">Thể loại</label>
+                    <select id="theLoai" class="form-control select2" required>
+                      <option value="">Chọn thể loại</option>
+                      <option value="ao">Áo</option>
+                      <option value="quan">Quần</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                  <div class="form-group">
+                    <label for="imageFile">Chọn ảnh sản phẩm</label>
+                    <input type="file" id="imageFile" class="form-control" accept="image/*" required>
+                    <small class="form-text text-muted">Vui lòng chọn ảnh sản phẩm (JPG, PNG, GIF).</small>
+                    <i class="fas fa-image" style="font-size: 24px; margin-top: 8px;"></i>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-danger pull-right">Cập nhật sản phẩm</button>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phần thông tin sản phẩm -->
+      <div class="col-sm-12 col-md-6">
+        <div class="card">
+          <div class="card-header card-header-danger">
+            <h4 class="card-title">Thông tin sản phẩm</h4>
+            <p class="card-category">Thông tin chi tiết về sản phẩm</p>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead class="text-primary">
+                <tr>
+                  <th>Tên sản phẩm</th>
+                  <th>Mã sản phẩm</th>
+                  <th>Xuất xứ</th>
+                  <th>Thương hiệu</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sanpham of sanPhamList">
+                  <td>{{ sanpham.ten }}</td>
+                  <td>{{ sanpham.ma }}</td>
+                  <td>{{ sanpham.xuatXu.ten }}</td>
+                  <td>{{ sanpham.thuongHieu.ten }}</td>
+                  <td>{{ sanpham.trangThai }}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-round">Xem chi tiết</a>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-round">Chọn</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li class="page-item" [class.disabled]="pageDanhSach === 0">
+                  <a class="page-link" (click)="changePageDanhSach(pageDanhSach - 1)">Trước</a>
+                </li>
+                <li class="page-item" *ngFor="let p of [].constructor(totalPagesDanhSach); let i = index" [class.active]="i === pageDanhSach">
+                  <a class="page-link" (click)="changePageDanhSach(i)">{{ i + 1 }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="pageDanhSach === totalPagesDanhSach - 1">
+                  <a class="page-link" (click)="changePageDanhSach(pageDanhSach + 1)">Sau</a>
+                </li>
+              </ul>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng danh sách sản phẩm -->
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header card-header-info">
+            <h4 class="card-title">Danh sách sản phẩm</h4>
+            <p class="card-category">Thông tin tất cả sản phẩm</p>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-striped">
+              <thead class="text-primary">
+                <tr>
+                  <th>Tên sản phẩm</th>
+                  <th>Mã sản phẩm</th>
+                  <th>Xuất xứ</th>
+                  <th>Thương hiệu</th>
+                  <th>Trạng thái</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sanpham of sanPhamList">
+                  <td>{{ sanpham.ten }}</td>
+                  <td>{{ sanpham.ma }}</td>
+                  <td>{{ sanpham.xuatXu.ten }}</td>
+                  <td>{{ sanpham.thuongHieu.ten }}</td>
+                  <td>{{ sanpham.trangThai }}</td>
+                  <td>
+                    <a href="javascript:void(0)" class="btn btn-danger btn-round">Xem chi tiết</a>
+                    <a href="javascript:void(0)" class="btn btn-primary btn-round">Chọn</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+
+            <!-- Phân trang -->
+            <!-- <nav aria-label="Page navigation">
+              <ul class="pagination">
+                <li class="page-item" [class.disabled]="page === 0">
+                  <a class="page-link" (click)="changePage(page - 1)">Trước</a>
+                </li>
+                <li class="page-item" *ngFor="let p of [].constructor(totalPages); let i = index" [class.active]="i === page">
+                  <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                </li>
+                <li class="page-item" [class.disabled]="page === totalPages - 1">
+                  <a class="page-link" (click)="changePage(page + 1)">Sau</a>
+                </li>
+              </ul>
+            </nav> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
