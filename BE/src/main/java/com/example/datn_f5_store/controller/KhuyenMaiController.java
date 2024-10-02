@@ -50,7 +50,7 @@ public class KhuyenMaiController {
     private ResponseEntity<Object> findByTenorMa(
             @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
             @Parameter(name = "size") @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
-            @Parameter(name = "tim") @RequestParam String tim // Tên Khuyen mai hoac Mã Khuyến mai can tim
+            @RequestParam(required = false)  String tim // Tên Khuyen mai hoac Mã Khuyến mai can tim
 
     ) {
         DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu

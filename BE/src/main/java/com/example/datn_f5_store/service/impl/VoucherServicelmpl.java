@@ -223,7 +223,7 @@ public class VoucherServicelmpl implements VoucherService {
         Pageable pageable = PageRequest.of(page, size);
         Page<VoucherEntity> voucherEntities;
 
-        if (tim == null && tim.trim().isEmpty()) {
+        if (tim == null || tim.trim().isEmpty()) {
             voucherEntities = iVoucherRepository.findAll(pageable);
         } else {
             voucherEntities = iVoucherRepository.getByTenContainingOrMaContaining(tim, tim, pageable);

@@ -78,7 +78,7 @@ public class VoucherController {
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
             @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
-            @RequestParam()  String tim) {
+            @RequestParam(required = false)  String tim) {
         try {
             // Gọi service để tìm Voucher theo tên or mã
             Page<VoucherDto> responseList = voucherService.findByTenOrMa(page, size, tim);

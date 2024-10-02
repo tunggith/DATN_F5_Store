@@ -58,7 +58,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
         Pageable pageable = PageRequest.of(page, size);
         Page<KhuyenMaiEntity> khuyenMaiEntities;
 
-        if (tim == null && tim.trim().isEmpty()) {
+        if (tim == null || tim.trim().isEmpty()) {
             khuyenMaiEntities = khuyenMaiRepository.findAll(pageable);
         } else {
             khuyenMaiEntities = khuyenMaiRepository.getByTenContainingOrMaContaining(tim, tim, pageable);
