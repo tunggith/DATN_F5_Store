@@ -1,0 +1,118 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="hoa-don-create">
+                <div class="craete-invoice">
+                    <div class="create-order">
+                        <i class="material-icons">add</i>
+                        <a>Tạo hóa đơn</a>
+                    </div>
+                    <div class="create-client">
+                        <i class="material-icons">person_add</i>
+                        <a>Chọn khách hàng</a>
+                    </div>
+                    <div class="profile-client">
+                        <span>Tên khách hàng:</span>
+                    </div>
+                </div>
+                <div class="order-list" id="order-list">
+                    <div class="order-item active" data-id="HD15030034" onclick="setActive(this)">
+                        <a href="#">HD15030034</a>
+                        <span class="close" onclick="removeOrder(this)">x</span>
+                    </div>
+                    <div class="order-item" data-id="HD15030032" onclick="setActive(this)">
+                        <a href="#">HD15030032</a>
+                        <span class="close" onclick="removeOrder(this)">x</span>
+                    </div>
+                    <div class="order-item" data-id="HD15030028" onclick="setActive(this)">
+                        <a href="#">HD15030028</a>
+                        <span class="close" onclick="removeOrder(this)">x</span>
+                    </div>
+                </div>
+                <div class="cart">
+                    <i class="material-icons">production_quantity_limits</i>
+                    <p>Chưa có sản phẩm</p>
+                </div>
+                <div class="profile-pay">
+                    <div>
+                        <div class="cash">
+                            <div>
+                                <span>Tổng tiền: </span>
+                            </div>
+                            <div>
+                                <span>Tiền khách đưa: </span>
+                                <input type="text" class="cash-client">
+                            </div>
+                            <div>
+                                <span>Tổng tiền phải thanh toán: </span>
+                            </div>
+                            <div>
+                                <span>tiền trả lại: </span>
+                            </div>
+                            <div class="payment">
+                                <button><i class="material-icons">payments</i>Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="voucher">
+                        <label for="">Chọn voucher</label>
+                        <input type="text">
+                        <button>
+                            <i class="material-icons">add_task</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-warning">
+                        <h4 class="card-title">Sản phẩm</h4> 
+                        <input type="text" placeholder="Nhập tên sản phẩm or mã...">
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-warning">
+                                <th>Stt</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Xuất xứ</th>
+                                <th>Thương hiệu</th>
+                                <th>Thể loại</th>
+                                <th>Size</th>
+                                <th>số lượng</th>
+                                <th>Thao tác</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Dakota Rice</td>
+                                    <td>$36,738</td>
+                                    <td>Niger</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Minerva Hooper</td>
+                                    <td>$23,789</td>
+                                    <td>Curaçao</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Sage Rodriguez</td>
+                                    <td>$56,142</td>
+                                    <td>Netherlands</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Philip Chaney</td>
+                                    <td>$38,735</td>
+                                    <td>Korea, South</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

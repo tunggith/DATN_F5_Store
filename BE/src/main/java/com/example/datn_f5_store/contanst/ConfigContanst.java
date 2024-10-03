@@ -60,7 +60,7 @@ public class ConfigContanst {
         public static final String ID_THANH_TOAN = "ID_PHUONG_THUC_THANH_TOAN";
         public static final String MA = "MA";
         public static final String TONG_TIEN_BAN_DAU = "TONG_TIEN_BAN_DAU";
-        public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_SAU_VOUCHER";
+        public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_THANH_TOAN";
         public static final String TEN_NGUOI_NHAN = "TEN_NGUOI_NHAN";
         public static final String SDT_NGUOI_NHAN = "SDT_NGUOI_NHAN";
         public static final String EMAIL_NGUOI_NHAN = "EMAIL_NGUOI_NHAN";
