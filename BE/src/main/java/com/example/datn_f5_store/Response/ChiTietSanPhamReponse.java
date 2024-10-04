@@ -4,6 +4,7 @@ package com.example.datn_f5_store.response;
 
 
 
+import com.example.datn_f5_store.entity.SanPhamEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class ChiTietSanPhamReponse {
 
     private Integer id;
 
-    private String Ten_san_pham;
+    private SanPhamEntity San_pham;
 
     private String  mauSac;
 

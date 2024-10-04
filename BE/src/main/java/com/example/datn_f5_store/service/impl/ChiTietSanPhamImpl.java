@@ -163,4 +163,30 @@ public class ChiTietSanPhamImpl {
         Pageable pageable = PageRequest.of(page, size);
         return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
     }
+
+    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size,String ten, String ma) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ChiTietSanPhamEntity> chiTietSanPham;
+        if(ten==null&&ten.isEmpty()&&ma==null&&ma.isEmpty()) {
+            chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("còn hàng", "đang hoạt động",pageable);
+        }else {
+            chiTietSanPham = repo_ctsp.getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
+                    "còn hàng",
+                    "đang hoạt động",
+                    ten,
+                    ma,
+                    pageable);
+        }
+        return chiTietSanPham.map(entity -> new ChiTietSanPhamReponse(
+                entity.getId(),
+                entity.getSanPham(),
+                entity.getMauSac().getTen(),
+                entity.getSize().getTen(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getDonGia(),
+                entity.getSoLuong(),
+                entity.getTrangThai()
+                ));
+    }
 }

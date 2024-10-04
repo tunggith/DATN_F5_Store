@@ -67,6 +67,12 @@
     gap: 15px;
     margin-bottom: 20px;
 }
+.order-list i{
+    font-size: 100px;
+    text-align: center;
+    margin-left: 45%;
+    color: grey;
+}
 .order-item {
     position: relative;
     display: inline-block;
@@ -75,15 +81,18 @@
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     width: 120px;
-    height: 25px;
+    height: 30px;
 }
 .order-item.active {
     border-bottom: none;
 }
-.order-item.active a {
+.order-item.active button {
     color: #3498db;
 }
-.order-item a {
+.order-item button {
+    border-top-left-radius: 10px;
+    border: none;
+    background-color: #ffff;
     text-decoration: none;
     color: black;
     text-align: center;
@@ -156,8 +165,10 @@
     height: 150px;
 }
 .voucher {
-    margin-left: 500px;
-    margin-top: 50px;
+    width: 50%;
+    text-align: center;
+    margin-top: 20px;
+    padding-left: 0;
 }
 .voucher input {
     margin-left: 10px;
@@ -176,8 +187,16 @@
     justify-content: center;
     color: #fff;
 }
+.voucher select{
+    width: 250px;
+    height: 30px;
+    border: 0.5px solid gray;
+    border-radius: 10px;
+    margin-left: -17px;
+}
 .cash-client {
     border: none;
+    width: 200px;
     border-bottom: 0.3px solid gray;
 }
 .card-header{
@@ -189,6 +208,93 @@
     background-color: rgb(214, 206, 206);
     margin-left: 70%;
     width: 200px;
+}
+.select-product{
+    border: none;
+    background-color: #ffff;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.select-product button:hover{
+    color: rgba(0, 0, 0, 0.075);
+}
+.select-product i:hover{
+    font-size: 30px;
+}
+.select-invoice{
+    border: none;
+    background-color: #ffff;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+}
+.select-invoice i{
+    font-size: 20px;
+}
+.select-invoice i:hover{
+    font-size: 25px;
+}
+.pagination{
+    justify-content: center;
+}
+.pagination button{
+    border: none;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    padding: 0 5px;
+}
+.pagination button i:hover{
+    font-size: 25px;
+    color: gray;
+}
+.thanh-toan{
+    width: 50%;
+}
+.error-border {
+    border-bottom: 1px solid red;
+    background-color: #ffe6e6;
+}
+
+.error-text {
+    color: red;
+    font-size: 12px;
+}
+.combo-box {
+    margin: 20px -10px;
+    width: 100%;
+}
+input {
+    padding: 5px;
+    width: 250px;
+}
+datalist {
+    display: none; /* Ẩn datalist mặc định */
+}
+.form-control{
+    width: 30px;
+}
+.input-group button i{
+    font-size: 15px;
+}
+.input-group button i:hover{
+    font-size: 20px;
+}
+.material-icons {
+    cursor: pointer;
+}
+.giao-hang{
+    margin-left: 173px;
+    margin-top: 10px;
+}
+.giao-hang span{
+    display: flex;
+}
+.giao-hang i {
+    margin-left: 10px;
+    font-size: 30px;
+    background-color: #ffff;
 }
 
 /* Media Queries cho màn hình điện thoại */
@@ -224,14 +330,6 @@
         flex-direction: column;
         justify-content: center;
     }
-
-    .voucher {
-        width: 100%;
-        margin-left: 0;
-        text-align: center;
-        margin-top: 20px;
-    }
-
     .actions {
         flex-direction: column;
         gap: 10px;

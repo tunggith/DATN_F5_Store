@@ -6,6 +6,7 @@ import com.example.datn_f5_store.entity.SanPhamEntity;
 
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 
 
@@ -16,6 +17,7 @@ import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
 import com.example.datn_f5_store.service.impl.ChiTietSanPhamImpl;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,9 +27,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
 public class ChiTietSanPhamController
@@ -144,5 +143,20 @@ public class ChiTietSanPhamController
     @GetMapping("/getAllKm")
     public List<ChiTietSanPhamEntity> getallkm(){
         return chiTietSanPhamRepository.findAll();
+    }
+    @GetMapping("/get-by-trang-thai")
+    public ResponseEntity<Object> getByTrangThai(
+            @Parameter(name = "size")@RequestParam(defaultValue = "0")Integer size,
+            @Parameter(name = "page")@RequestParam(defaultValue = "5")Integer page,
+            @Parameter(name = "ten")@RequestParam(required = false) String ten,
+            @Parameter(name = "ma")@RequestParam(required = false) String ma
+    ){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,ten,ma);
+        dataResponse.setResult(new ResultModel<>(
+                new PagingModel(page,size,listSanPham.getTotalElements(),listSanPham.getTotalPages()),listSanPham
+        ));
+        return ResponseEntity.ok(dataResponse);
     }
 }

@@ -57,6 +57,12 @@ public class HoaDonController {
                                                @Parameter(name = "idSanPham") @PathVariable Integer idSanPham){
         return new ResponseEntity<>(hoaDonService.chonSanPham(request,idSanPham),HttpStatus.OK);
     }
+    @PutMapping("/delete-single-san-pham/{idHdct}")
+    private  ResponseEntity<Object> deleteSingleSanPham(
+            @Parameter(name = "idHdct")@PathVariable Integer idHdct
+    ){
+        return new ResponseEntity<>(hoaDonService.giamSoLuongSanPham(idHdct),HttpStatus.OK);
+    }
     @DeleteMapping("/delete-hoa-don-chi-tiet/{id}")
     private ResponseEntity<Object> xoaHoaDonChiTiet(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(hoaDonService.deleteHoaDonChiTiet(id),HttpStatus.OK);
