@@ -47,7 +47,7 @@ export class BanHangService {
   thanhToanHoaDOn(idHoaDon:number,hoaDonData:any):Observable<any>{
     return this.http.put(`${this.hoaDonUrl}/thanh-toan/${idHoaDon}`,hoaDonData);
   }
-  getKhachHang(pageSize:number,pageNumber:number,search?:String):Observable<any>{
+  getKhachHang(pageNumber:number,pageSize:number,search?:String):Observable<any>{
     return this.http.get(`${this.khachHangUrl}/getAllKhachHang_PhanTrang_TimKiem?page=${pageNumber}&size=${pageSize}&ten=${search}`);
   }
 }

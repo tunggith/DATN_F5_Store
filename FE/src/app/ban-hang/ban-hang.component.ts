@@ -28,6 +28,7 @@ export class BanHangComponent implements OnInit {
   selectedVoucherId: number | null = null;
   idThanhToan: number = 0;
   idGiaoHang: number = 0;
+  popup: boolean=false;
 
   hoaDonMoi: any = {
     idKhachHang: 0,
@@ -373,7 +374,13 @@ export class BanHangComponent implements OnInit {
     );
   }
 
-
+  //==================đóng mở popup khách hàng=============
+  openPopup(){
+    this.popup = true;
+  }
+  closePopup(){
+    this.popup = false;
+  }
 
   // ================= Xử lý lỗi =================
 

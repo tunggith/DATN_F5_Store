@@ -1,0 +1,42 @@
+<div class="popup">
+    <div class="popup-content">
+        <span class="close" (click)="close()">×</span>
+        <h2>Khách Hàng</h2>
+        <select class="form-select" aria-label="Default select example" (change)="onSelectChange($event)">
+            <option selected disabled>---chọn khách hàng</option>
+            <option *ngFor="let khachHang of khachHang" [value]="khachHang.id">{{khachHang.ten}}</option>
+        </select>
+        <form class="add-customer">
+            <div>
+                <label>Họ tên</label>
+                <input type="text">
+            </div>
+            <div class="check-input">
+                <label>Giới tính:</label>
+                <div class="input-radio">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                        value="option1" checked>
+                    <label class="form-check-label" for="inlineRadio1">Nam</label>
+                </div>
+                <div class="input-radio">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                        value="option2">
+                    <label class="form-check-label" for="inlineRadio2">Nữ</label>
+                </div>
+            </div>
+            <div>
+                <label>Ngày tháng năm sinh</label>
+                <input type="date">
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="text">
+            </div>
+            <div>
+                <label>Số điện thoại</label>
+                <input type="text">
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm</button>
+        </form>
+    </div>
+</div>

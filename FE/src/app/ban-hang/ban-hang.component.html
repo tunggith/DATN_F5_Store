@@ -13,8 +13,9 @@
                     </div>
                     <div class="create-client">
                         <i class="material-icons">person_add</i>
-                        <a>Chọn khách hàng</a>
+                        <a (click)="openPopup()">Chọn khách hàng</a>
                     </div>
+                    <app-customer-popup *ngIf="popup" (closePopup)="closePopup()"></app-customer-popup>
                     <div class="profile-client">
                         <span>Tên khách hàng:{{tenKhachHang}}</span>
                     </div>
