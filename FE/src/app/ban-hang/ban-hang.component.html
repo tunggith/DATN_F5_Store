@@ -15,7 +15,8 @@
                         <i class="material-icons">person_add</i>
                         <a (click)="openPopup()">Chọn khách hàng</a>
                     </div>
-                    <app-customer-popup *ngIf="popup" (closePopup)="closePopup()"></app-customer-popup>
+                    <app-customer-popup *ngIf="popup" (closePopup)="closePopup()"
+                        (customerSelected)="onCustomerSelected($event)"></app-customer-popup>
                     <div class="profile-client">
                         <span>Tên khách hàng:{{tenKhachHang}}</span>
                     </div>
@@ -95,7 +96,7 @@
                                 <div *ngIf="tienKhachDuaInvalid">
                                     <span class="error-text">Dữ liệu không hợp lệ!</span>
                                 </div>
-                            </div>  
+                            </div>
                             <div>
                                 <span>Tổng tiền phải thanh toán: {{tongTienSauVoucher | currency:'VND'}}</span>
                             </div>
@@ -111,7 +112,7 @@
                     <div class="voucher">
                         <select class="form-select" (change)="getIdThanhToan($event.target.value)">
                             <option selected disabled>---chọn phương thức thanh toán</option>
-                            <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id" >
+                            <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
                                 {{phuongThuc.tenPhuongThuc}}</option>
                         </select>
                         <div class="giao-hang">

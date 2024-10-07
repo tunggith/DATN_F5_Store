@@ -28,7 +28,8 @@ export class BanHangComponent implements OnInit {
   selectedVoucherId: number | null = null;
   idThanhToan: number = 0;
   idGiaoHang: number = 0;
-  popup: boolean=false;
+  popup: boolean = false;
+  idKhachHang: number = 1;
 
   hoaDonMoi: any = {
     idKhachHang: 0,
@@ -56,7 +57,7 @@ export class BanHangComponent implements OnInit {
 
   toggleIcon() {
     this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
-    this.idGiaoHang = this.icon === 'toggle_on'?1:0;
+    this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
   }
 
   // ====================== Lấy dữ liệu bán hàng ====================
@@ -332,6 +333,19 @@ export class BanHangComponent implements OnInit {
       )
     }
   }
+  //==================đóng mở popup khách hàng=============
+  openPopup() {
+    this.popup = true;
+  }
+  closePopup() {
+    this.popup = false;
+  }
+  onCustomerSelected(customer: any) {
+    if (customer) {
+      this.tenKhachHang = customer.ten;
+      this.idKhachHang = customer.id;
+    }
+  }
   //==================Thanh toán hóa đơn==================
   thanhtoanHoaDon(idHoaDon: number): void {
     if (this.tienKhachDua < this.tongTienSauVoucher) {
@@ -341,7 +355,7 @@ export class BanHangComponent implements OnInit {
     console.log(this.idGiaoHang);
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
-      idKhachHang: 0, // Cập nhật giá trị thực tế của khách hàng
+      idKhachHang: this.idKhachHang, // Cập nhật giá trị thực tế của khách hàng
       idNhanVien: 1, // Cập nhật giá trị thực tế của nhân viên
       idVoucher: this.selectedVoucherId || null,
       idThanhToan: this.idThanhToan || 0, // Phương thức thanh toán mặc định
@@ -372,14 +386,6 @@ export class BanHangComponent implements OnInit {
         this.showErrorMessage('Thanh toán thất bại! Vui lòng thử lại.');
       }
     );
-  }
-
-  //==================đóng mở popup khách hàng=============
-  openPopup(){
-    this.popup = true;
-  }
-  closePopup(){
-    this.popup = false;
   }
 
   // ================= Xử lý lỗi =================

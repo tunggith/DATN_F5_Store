@@ -50,5 +50,8 @@ export class BanHangService {
   getKhachHang(pageNumber:number,pageSize:number,search?:String):Observable<any>{
     return this.http.get(`${this.khachHangUrl}/getAllKhachHang_PhanTrang_TimKiem?page=${pageNumber}&size=${pageSize}&ten=${search}`);
   }
+  addKhachHang(customer: any):Observable<any>{
+    return this.http.post(`${this.khachHangUrl}/addKhachHang`,customer);
+  }
 }
                                                                
