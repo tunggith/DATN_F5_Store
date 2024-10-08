@@ -1,27 +1,34 @@
 <div class="popup">
     <div class="popup-content">
-        <span class="close" (click)="close()">×</span>
-        <h2>Khách Hàng</h2>
-        <select class="form-select" aria-label="Default select example" (change)="onSelectChange($event)">
-            <option selected disabled>---chọn khách hàng</option>
-            <option *ngFor="let khachHang of khachHang" [value]="khachHang.id">{{khachHang.ten}}</option>
-        </select>
         <form class="add-customer">
+            <span class="close" (click)="close()">×</span>
+            <h2>Khách Hàng</h2>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Nhập tên, email, số điện thoại..."
+                    [(ngModel)]="search" (input)="filterCustomers()" />
+                <select class="form-select mt-2" aria-label="Chọn khách hàng" [(ngModel)]="selectedCustomerId"
+                    (change)="onSelectChange($event)">
+                    <option *ngIf="!filteredCustomers.length" disabled>Không có khách hàng nào</option>
+                    <option *ngFor="let khachHang of filteredCustomers" [value]="khachHang.id">
+                        {{khachHang.ten}}
+                    </option>
+                </select>
+            </div>
             <div>
                 <label>Họ tên</label>
-                <input type="text">
+                <input type="text" [(ngModel)]="customer.ten" name="ten">
             </div>
             <div class="check-input">
                 <label>Giới tính:</label>
                 <div class="input-radio">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                        value="option1" checked>
-                    <label class="form-check-label" for="inlineRadio1">Nam</label>
+                    <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh"
+                        value="Nam">
+                    <label class="form-check-label">Nam</label>
                 </div>
                 <div class="input-radio">
-                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                        value="option2">
-                    <label class="form-check-label" for="inlineRadio2">Nữ</label>
+                    <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh"
+                        value="Nữ">
+                    <label class="form-check-label">Nữ</label>
                 </div>
             </div>
             <div>
@@ -30,13 +37,13 @@
             </div>
             <div>
                 <label>Email</label>
-                <input type="text">
+                <input type="text" [(ngModel)]="customer.email" name="email">
             </div>
             <div>
                 <label>Số điện thoại</label>
-                <input type="text">
+                <input type="text" [(ngModel)]="customer.sdt" name="sdt">
             </div>
-            <button type="submit" class="btn btn-primary">Thêm</button>
+            <button type="submit" (click)="addCustomer()" class="btn btn-primary">Thêm</button>
         </form>
     </div>
 </div>

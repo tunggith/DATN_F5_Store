@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BanHangService } from 'app/ban-hang.service';
+import { response } from 'express';
+import { data } from 'jquery';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -28,8 +30,10 @@ export class BanHangComponent implements OnInit {
   selectedVoucherId: number | null = null;
   idThanhToan: number = 0;
   idGiaoHang: number = 0;
-  popup: boolean=false;
-
+  popup: boolean = false;
+  idKhachHang: number = 1;
+  activeTab: string = 'taoMoi';
+ 
   hoaDonMoi: any = {
     idKhachHang: 0,
     idNhanVien: 0
@@ -53,10 +57,13 @@ export class BanHangComponent implements OnInit {
     this.getPhuongThucThanhToan();
     this.toggleIcon();
   }
-
+  //chuyển tab
+  selectTab(tabName: string){
+    this.activeTab= tabName;
+  }
   toggleIcon() {
     this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
-    this.idGiaoHang = this.icon === 'toggle_on'?1:0;
+    this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
   }
 
   // ====================== Lấy dữ liệu bán hàng ====================
@@ -81,6 +88,7 @@ export class BanHangComponent implements OnInit {
         this.hoaDon = data.result.content;
         if (this.hoaDon.length > 0) {
           this.getChiTietHoaDon(this.hoaDon[0].id);
+          this.tenKhachHang = this.hoaDon[0].id;
           this.checkHoaDon = false;
         } else {
           this.checkHoaDon = true;
@@ -332,16 +340,32 @@ export class BanHangComponent implements OnInit {
       )
     }
   }
+  //==================đóng mở popup khách hàng=============
+  openPopup() {
+    this.popup = true;
+  }
+  closePopup() {
+    this.popup = false;
+  }
+  onCustomerSelected(customer: any) {
+    if (customer) {
+      this.tenKhachHang = customer.ten;
+      this.idKhachHang = customer.id;
+      this.updateKhachHang(this.activeInvoidID,this.idKhachHang)
+    }
+  }
+  updateKhachHang(idHoaDon: number,idKhachHang:number){
+    this.banHangService.updateKhachHang(idHoaDon,idKhachHang).subscribe();
+  }
   //==================Thanh toán hóa đơn==================
   thanhtoanHoaDon(idHoaDon: number): void {
     if (this.tienKhachDua < this.tongTienSauVoucher) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
-    console.log(this.idGiaoHang);
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
-      idKhachHang: 0, // Cập nhật giá trị thực tế của khách hàng
+      idKhachHang: this.idKhachHang, // Cập nhật giá trị thực tế của khách hàng
       idNhanVien: 1, // Cập nhật giá trị thực tế của nhân viên
       idVoucher: this.selectedVoucherId || null,
       idThanhToan: this.idThanhToan || 0, // Phương thức thanh toán mặc định
@@ -373,15 +397,14 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
-
-  //==================đóng mở popup khách hàng=============
-  openPopup(){
-    this.popup = true;
+  //================== danh sách hóa đơn ==================
+  getByTrangThai():void{
+    this.banHangService.getByTrangThai().subscribe(
+      data => {
+        this.hoaDon = data.result.content;
+      }
+    )
   }
-  closePopup(){
-    this.popup = false;
-  }
-
   // ================= Xử lý lỗi =================
 
   handleError(error: any): void {

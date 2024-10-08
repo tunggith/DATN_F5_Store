@@ -50,5 +50,14 @@ export class BanHangService {
   getKhachHang(pageNumber:number,pageSize:number,search?:String):Observable<any>{
     return this.http.get(`${this.khachHangUrl}/getAllKhachHang_PhanTrang_TimKiem?page=${pageNumber}&size=${pageSize}&ten=${search}`);
   }
+  addKhachHang(customer: any):Observable<any>{
+    return this.http.post(`${this.khachHangUrl}/addKhachHang`,customer);
+  }
+  updateKhachHang(idHoaDon:number,idKhachHang:number):Observable<any>{
+    return this.http.put(`${this.hoaDonUrl}/update-khach-hang/${idHoaDon}?idKhachHang=${idKhachHang}`,{});
+  }
+  getByTrangThai():Observable<any>{
+    return this.http.get(`${this.hoaDonUrl}/find-by-trang-thai`);
+  }
 }
                                                                

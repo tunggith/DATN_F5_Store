@@ -8,15 +8,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99999999999999999999;
+  z-index: 9999;
   /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
 
 .popup-content {
   background-color: white;
-  padding: 20px;
+  padding: 0;
   border-radius: 5px;
-  width: 600px;
+  width: 450px;
   text-align: center;
   position: relative;
   /* Để định vị nút đóng chính xác */
