@@ -2,8 +2,8 @@
     <div class="container-fluid">
         <div class="tab">
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
-            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
-                đơn</a>
+            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa đơn</a>
+
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
