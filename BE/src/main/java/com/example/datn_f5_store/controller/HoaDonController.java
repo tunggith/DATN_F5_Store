@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -66,5 +67,19 @@ public class HoaDonController {
     @DeleteMapping("/delete-hoa-don-chi-tiet/{id}")
     private ResponseEntity<Object> xoaHoaDonChiTiet(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(hoaDonService.deleteHoaDonChiTiet(id),HttpStatus.OK);
+    }
+    @PutMapping("/update-khach-hang/{idHoaDon}")
+    private ResponseEntity<Object> updateKhachHang(
+            @Parameter(name = "idHoaDon")@PathVariable Integer idHoaDon,
+            @RequestParam(name = "idKhachHang")@PathVariable Integer idKhachHang
+    ){
+        return new ResponseEntity<>(hoaDonService.updateKhachhang(idHoaDon,idKhachHang),HttpStatus.OK);
+    }
+    @GetMapping("/find-by-trang-thai")
+    private ResponseEntity<Object> findByTrangThai(){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        dataResponse.setResult(new ResultModel<>(null,hoaDonService.getByTrangThai()));
+        return ResponseEntity.ok(dataResponse);
     }
 }

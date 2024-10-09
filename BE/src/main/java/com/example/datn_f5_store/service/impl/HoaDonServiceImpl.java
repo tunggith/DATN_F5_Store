@@ -404,6 +404,41 @@ public class HoaDonServiceImpl implements IHoaDonService {
         return new DataResponse(true,new ResultModel<>(null,"giảm thành công"));
     }
 
+    @Override
+    public DataResponse updateKhachhang(Integer idHoaDon,Integer idKhachHang) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(idHoaDon).orElse(null);
+        KhachHangEntity khachHang = khachHangRepository.findById(idKhachHang).orElse(null);
+        hoaDon.setKhachHang(khachHang);
+        hoaDonRepository.save(hoaDon);
+        return new DataResponse(true,new ResultModel<>(null,"cập nhật khách hàng thành công"));
+    }
+
+    @Override
+    public List<HoaDonDto> getByTrangThai() {
+        List<HoaDonEntity> hoaDon = hoaDonRepository.findByTrangThai("chờ xác nhận");
+        return hoaDon.stream()
+                .map(entity->new HoaDonDto(
+                        entity.getId(),
+                        entity.getKhachHang(),
+                        entity.getNhanVien(),
+                        entity.getVoucher(),
+                        entity.getThanhToan(),
+                        entity.getMa(),
+                        entity.getTongTienBanDau(),
+                        entity.getPhiShip(),
+                        entity.getTongTienSauVoucher(),
+                        entity.getTenNguoiNhan(),
+                        entity.getSdtNguoiNhan(),
+                        entity.getEmailNguoiNhan(),
+                        entity.getDiaChiNhanHang(),
+                        entity.getNgayNhanDuKien(),
+                        entity.getThoiGianTao(),
+                        entity.getGiaoHang(),
+                        entity.getGhiChu(),
+                        entity.getTrangThai()
+                )).collect(Collectors.toList());
+    }
+
 
     @Override
     public DataResponse deleteHoaDonChiTiet(Integer idHoaDonCt) {

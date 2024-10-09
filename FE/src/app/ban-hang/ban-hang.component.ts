@@ -33,7 +33,11 @@ export class BanHangComponent implements OnInit {
   popup: boolean = false;
   idKhachHang: number = 1;
   activeTab: string = 'taoMoi';
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> e9a5145334df11968b47e86e310370039c93c49b
   hoaDonMoi: any = {
     idKhachHang: 0,
     idNhanVien: 0

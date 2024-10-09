@@ -2,7 +2,12 @@
     <div class="container-fluid">
         <div class="tab">
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
+<<<<<<< HEAD
             <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa đơn</a>
+=======
+            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
+                đơn</a>
+>>>>>>> e9a5145334df11968b47e86e310370039c93c49b
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
@@ -222,6 +227,7 @@
                 </table>
             </div>
             <div class="row">
+<<<<<<< HEAD
                 <h4>Thông tin đơn hàng</h4>
                 <div>
                     <p-timeline [value]="1" layout="horizontal" align="top">
@@ -234,3 +240,61 @@
         </div>
     </div>
 </div>
+=======
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>Thông tin đơn hàng</h1>
+                    </div>
+                    <div style="display:inline-block;width:100%;overflow-y:auto;">
+                        <div class="main-timeline10">
+                            <div class="col-md-3 col-sm-6 timeline">
+                                <div class="timeline-inner">
+                                    <h4>Chờ xác nhận</h4>
+                                    <p class="description">
+                                        2024-10-08T01:25:52.060+00:00
+                                    </p>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-exclamation"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 timeline">
+                                <div class="timeline-inner">
+                                    <h4>Đã xác nhận</h4>
+                                    <p class="description">
+                                        2024-10-08T01:25:52.060+00:00
+                                    </p>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 timeline">
+                                <div class="timeline-inner">
+                                    <h4>Đang giao hàng</h4>
+                                    <p class="description">
+                                        2024-10-08T01:25:52.060+00:00
+                                    </p>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-truck"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-6 timeline">
+                                <div class="timeline-inner">
+                                    <h4>Hoàn thành</h4>
+                                    <p class="description">
+                                        2024-10-08T01:25:52.060+00:00
+                                    </p>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-regular fa-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> e9a5145334df11968b47e86e310370039c93c49b
