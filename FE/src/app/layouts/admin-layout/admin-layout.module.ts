@@ -18,6 +18,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { CustomerPopupComponent } from 'app/customer-popup/customer-popup.component';
+import { TimelineModule } from 'primeng/timeline';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { CustomerPopupComponent } from 'app/customer-popup/customer-popup.compon
     MatInputModule,
     MatSelectModule,
     MatTooltipModule,
+    TimelineModule,
   ],
   declarations: [
     BanHangComponent,

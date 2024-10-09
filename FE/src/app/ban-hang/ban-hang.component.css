@@ -296,7 +296,16 @@ datalist {
     font-size: 30px;
     background-color: #ffff;
 }
-
+.danh-sach-hoa-don{
+    background-color: #fff;
+    padding: 10px;
+}
+.button-select{
+    font-size: 20px;
+}
+.button-select:hover{
+    font-size: 25px;
+}
 /* Media Queries cho màn hình điện thoại */
 @media (max-width: 768px) {
     .tab {

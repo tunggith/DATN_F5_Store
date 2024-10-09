@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BanHangService } from 'app/ban-hang.service';
+import { response } from 'express';
+import { data } from 'jquery';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -30,6 +32,7 @@ export class BanHangComponent implements OnInit {
   idGiaoHang: number = 0;
   popup: boolean = false;
   idKhachHang: number = 1;
+  activeTab: string = 'taoMoi';
 
   hoaDonMoi: any = {
     idKhachHang: 0,
@@ -54,7 +57,10 @@ export class BanHangComponent implements OnInit {
     this.getPhuongThucThanhToan();
     this.toggleIcon();
   }
-
+  //chuyển tab
+  selectTab(tabName: string){
+    this.activeTab= tabName;
+  }
   toggleIcon() {
     this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
@@ -82,6 +88,7 @@ export class BanHangComponent implements OnInit {
         this.hoaDon = data.result.content;
         if (this.hoaDon.length > 0) {
           this.getChiTietHoaDon(this.hoaDon[0].id);
+          this.tenKhachHang = this.hoaDon[0].id;
           this.checkHoaDon = false;
         } else {
           this.checkHoaDon = true;
@@ -344,7 +351,11 @@ export class BanHangComponent implements OnInit {
     if (customer) {
       this.tenKhachHang = customer.ten;
       this.idKhachHang = customer.id;
+      this.updateKhachHang(this.activeInvoidID,this.idKhachHang)
     }
+  }
+  updateKhachHang(idHoaDon: number,idKhachHang:number){
+    this.banHangService.updateKhachHang(idHoaDon,idKhachHang).subscribe();
   }
   //==================Thanh toán hóa đơn==================
   thanhtoanHoaDon(idHoaDon: number): void {
@@ -352,7 +363,6 @@ export class BanHangComponent implements OnInit {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
-    console.log(this.idGiaoHang);
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
       idKhachHang: this.idKhachHang, // Cập nhật giá trị thực tế của khách hàng
@@ -387,7 +397,14 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
-
+  //================== danh sách hóa đơn ==================
+  getByTrangThai():void{
+    this.banHangService.getByTrangThai().subscribe(
+      data => {
+        this.hoaDon = data.result.content;
+      }
+    )
+  }
   // ================= Xử lý lỗi =================
 
   handleError(error: any): void {
