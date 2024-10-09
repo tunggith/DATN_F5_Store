@@ -128,11 +128,11 @@ INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, D
 
 
 INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA_TRI_HOA_DON_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
-('VC001', 'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC002', 'Voucher Giảm 50.000 VNĐ', 50000, '$', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC003', 'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC004', 'Voucher Giảm 100.000 VNĐ', 100000, '$', GETDATE(), 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VNĐ cho đơn hàng trên 500.000 VNĐ', 80, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('VC005', 'Voucher Giảm 5%', 5, '%', GETDATE(), 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VNĐ', 150, N'Admin', GETDATE(), N'Admin', N'Hoạt động');
+('VC001', N'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC002', N'Voucher Giảm 50.000 VNĐ', 50000, '$', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC003', N'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC004', N'Voucher Giảm 100.000 VNĐ', 100000, '$', GETDATE(), 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VNĐ cho đơn hàng trên 500.000 VNĐ', 80, N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('VC005', N'Voucher Giảm 5%', 5, '%', GETDATE(), 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VNĐ', 150, N'Admin', GETDATE(), N'Admin', N'Hoạt động');
 
 INSERT INTO HOA_DON (ID_NHAN_VIEN, ID_KHACH_HANG, ID_VOUCHER, ID_PHUONG_THUC_THANH_TOAN, MA, TONG_TIEN_BAN_DAU,PHI_SHIP, TONG_TIEN_THANH_TOAN, TEN_NGUOI_NHAN, SDT_NGUOI_NHAN, EMAIL_NGUOI_NHAN, DIA_CHI_NHAN_HANG, NGAY_NHAN_DU_KIEN, THOI_GIAN_TAO,GIAO_HANG, GHI_CHU, TRANG_THAI) 
 VALUES
