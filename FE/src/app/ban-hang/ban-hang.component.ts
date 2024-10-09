@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BanHangService } from 'app/ban-hang.service';
+import { error } from 'console';
 import { response } from 'express';
 import { data } from 'jquery';
 import Swal from 'sweetalert2';
@@ -33,6 +34,10 @@ export class BanHangComponent implements OnInit {
   popup: boolean = false;
   idKhachHang: number = 1;
   activeTab: string = 'taoMoi';
+  hoaDonCho: any[] = [];
+  hoaDonChoId: number = 0;
+  trangThaiHoaDon: string = '';
+  maHoaDonCho: string = '';
  
   hoaDonMoi: any = {
     idKhachHang: 0,
@@ -56,10 +61,11 @@ export class BanHangComponent implements OnInit {
     this.getVoucher();
     this.getPhuongThucThanhToan();
     this.toggleIcon();
+    this.getByTrangThai();
   }
   //chuyển tab
-  selectTab(tabName: string){
-    this.activeTab= tabName;
+  selectTab(tabName: string) {
+    this.activeTab = tabName;
   }
   toggleIcon() {
     this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
@@ -103,18 +109,23 @@ export class BanHangComponent implements OnInit {
       data => {
         this.chitietHoaDon = data.result.content;
         this.activeInvoidID = id;
+
         if (this.chitietHoaDon.length > 0) {
           const hoaDonData = data.result.content[0].hoaDon;
           this.tongTienBanDau = hoaDonData.tongTienBanDau;
           this.tongTienSauVoucher = hoaDonData.tongTienBanDau;
           this.tienKhachDua = this.tongTienSauVoucher;
           this.tenKhachHang = hoaDonData.khachHang.ten;
-          this.hasError = false;
+          this.hasError = false;  // Có sản phẩm, không có lỗi
         } else {
           this.resetHoaDonData();
+          this.hasError = true;  // Không có sản phẩm, báo lỗi
         }
       },
-      this.handleError
+      error => {
+        this.handleError(error);
+        this.hasError = true;  // Nếu có lỗi xảy ra khi gọi API, báo lỗi
+      }
     );
   }
 
@@ -351,11 +362,11 @@ export class BanHangComponent implements OnInit {
     if (customer) {
       this.tenKhachHang = customer.ten;
       this.idKhachHang = customer.id;
-      this.updateKhachHang(this.activeInvoidID,this.idKhachHang)
+      this.updateKhachHang(this.activeInvoidID, this.idKhachHang)
     }
   }
-  updateKhachHang(idHoaDon: number,idKhachHang:number){
-    this.banHangService.updateKhachHang(idHoaDon,idKhachHang).subscribe();
+  updateKhachHang(idHoaDon: number, idKhachHang: number) {
+    this.banHangService.updateKhachHang(idHoaDon, idKhachHang).subscribe();
   }
   //==================Thanh toán hóa đơn==================
   thanhtoanHoaDon(idHoaDon: number): void {
@@ -390,6 +401,7 @@ export class BanHangComponent implements OnInit {
         this.showSuccessMessage('Thanh toán hóa đơn thành công!');
         this.getHoaDon(); // Cập nhật lại danh sách hóa đơn sau khi thanh toán
         this.getSanPham(); // Cập nhật lại danh sách sản phẩm
+        this.getByTrangThai();
       },
       error => {
         this.handleError(error); // Xử lý lỗi nếu có
@@ -398,17 +410,54 @@ export class BanHangComponent implements OnInit {
     );
   }
   //================== danh sách hóa đơn ==================
-  getByTrangThai():void{
+  getByTrangThai(): void {
     this.banHangService.getByTrangThai().subscribe(
       data => {
-        this.hoaDon = data.result.content;
+        this.hoaDonCho = data.result.content;
       }
     )
   }
+  //================= chi tiết thông tin đơn hàng==================
+  getIdThongTinDonHang(id: number): void {
+    this.banHangService.getDetailHoaDonCho(id).subscribe(
+      data => {
+        this.trangThaiHoaDon = data.result.content.trangThai;
+        this.idGiaoHang = data.result.content.giaoHang;
+        this.hoaDonChoId = data.result.content.id;
+        this.maHoaDonCho = data.result.content.ma;
+        console.log(this.trangThaiHoaDon);
+      }
+    )
+  }
+  updateTrangThaiHoaDon(id: number): void {
+    this.banHangService.updateTrangThaiHoaDon(id).subscribe(
+      response => {
+        this.showSuccessMessage('cập nhật thành công!');
+        this.activeTab = 'danhSachHoaDon';
+        this.getIdThongTinDonHang(this.hoaDonChoId);
+      }
+    )
+  }
+  //==============export hóa đơn=================
+  downloadPdf() { // ID của PDF bạn muốn tải về
+    this.banHangService.downloadPdf(this.hoaDonChoId).subscribe(blob => {
+      // Tạo URL từ Blob
+      const url = window.URL.createObjectURL(blob);
+      // Tạo link để tải xuống
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `hoa_don_${this.hoaDonChoId}.pdf`; // Tên tệp bạn muốn
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url); // Giải phóng URL
+    }, error => {
+      console.error('Error downloading PDF', error);
+    });
+  } ownloadHoaDon
   // ================= Xử lý lỗi =================
 
   handleError(error: any): void {
-    console.error('Error occurred', error);
     this.showErrorMessage('Có lỗi xảy ra. Vui lòng thử lại!');
   }
 

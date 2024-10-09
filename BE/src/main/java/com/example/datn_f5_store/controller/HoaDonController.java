@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.example.datn_f5_store.response.PagingModel;
 
 @RestController
 @RequestMapping("/api/v1/hoa-don")
@@ -80,6 +81,36 @@ public class HoaDonController {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         dataResponse.setResult(new ResultModel<>(null,hoaDonService.getByTrangThai()));
+        return ResponseEntity.ok(dataResponse);
+    }
+    @GetMapping("/detail-hoa-don-cho/{id}")
+    private ResponseEntity<Object> findDetailHoaDonCho(
+            @Parameter(name = "id")@PathVariable Integer id
+    ){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        dataResponse.setResult(new ResultModel<>(null,hoaDonService.getDetailHoaDonCho(id)));
+        return ResponseEntity.ok(dataResponse);
+    }
+    @PutMapping("/update-trang-thai-don-hang/{id}")
+    private ResponseEntity<Object> updateTrangThaiDonHang(
+            @Parameter(name = "id")@PathVariable Integer id
+    ){
+        return new ResponseEntity<>(hoaDonService.updateTrangThaiHoaDon(id),HttpStatus.OK);
+    }
+    @GetMapping("/get-trang-thai-hoan-thanh")
+    private ResponseEntity<Object> getTrangThaiHoanThanh(
+            @Parameter(name = "page")@RequestParam(defaultValue = "0")Integer page,
+            @Parameter(name = "size")@RequestParam(defaultValue = "5")Integer size,
+            @Parameter(name = "keyWord")@RequestParam(required = false)String keyWord
+    ){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var dataList = hoaDonService.getByTrangThaiHoanThanh(page,size,keyWord);
+        dataResponse.setResult(
+                new ResultModel<>(
+                        new PagingModel(page,size,dataList.getTotalElements(),dataList.getTotalPages()),dataList
+                ));
         return ResponseEntity.ok(dataResponse);
     }
 }

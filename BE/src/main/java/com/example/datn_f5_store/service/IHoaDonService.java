@@ -7,6 +7,7 @@ import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.request.ChiTietHoaDonRequest;
 import com.example.datn_f5_store.request.HoaDonRequest;
 import com.example.datn_f5_store.response.DataResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -21,4 +22,7 @@ public interface IHoaDonService {
     DataResponse giamSoLuongSanPham(Integer idHdct);
     DataResponse updateKhachhang(Integer idHoaDon,Integer idKhachHang);
     List<HoaDonDto> getByTrangThai();
+    HoaDonEntity getDetailHoaDonCho(Integer id);
+    DataResponse updateTrangThaiHoaDon(Integer id);
+    Page<HoaDonDto> getByTrangThaiHoanThanh(Integer page, Integer size,String keyWord);
 }

@@ -25,13 +25,19 @@ import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IHoaDonService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -415,9 +421,14 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
     @Override
     public List<HoaDonDto> getByTrangThai() {
-        List<HoaDonEntity> hoaDon = hoaDonRepository.findByTrangThai("chờ xác nhận");
+        List<String> trangThaiList = Arrays.asList("chờ xác nhận", "đã xác nhận", "đang giao hàng", "hoàn thành");
+
+        List<HoaDonEntity> hoaDon = hoaDonRepository.findByTrangThaiIn(trangThaiList);
+
+        // Sắp xếp theo thời gian tạo giảm dần (mới nhất trước)
         return hoaDon.stream()
-                .map(entity->new HoaDonDto(
+                .sorted(Comparator.comparing(HoaDonEntity::getThoiGianTao).reversed()) // Sắp xếp giảm dần
+                .map(entity -> new HoaDonDto(
                         entity.getId(),
                         entity.getKhachHang(),
                         entity.getNhanVien(),
@@ -438,6 +449,69 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
     }
+
+
+
+    @Override
+    public HoaDonEntity getDetailHoaDonCho(Integer id) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
+        return hoaDon;
+    }
+
+    @Override
+    public DataResponse updateTrangThaiHoaDon(Integer id) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
+        if(hoaDon.getTrangThai().equals("chờ xác nhận")) {
+            hoaDon.setTrangThai("đã xác nhận");
+        }else if(hoaDon.getTrangThai().equals("đã xác nhận")&&hoaDon.getGiaoHang()==1){
+            hoaDon.setTrangThai("đang giao hàng");
+        }else if(hoaDon.getTrangThai().equals("đã xác nhận")&&hoaDon.getGiaoHang()==0){
+            hoaDon.setTrangThai("hoàn thành");
+        }else if(hoaDon.getTrangThai().equals("đang giao hàng")){
+            hoaDon.setTrangThai("hoàn thành");
+        }
+        hoaDonRepository.save(hoaDon);
+        return new DataResponse(true,new ResultModel<>(null,"chuyển đổi thành công!") );
+    }
+
+    @Override
+    public Page<HoaDonDto> getByTrangThaiHoanThanh(Integer page, Integer size,String keyWord) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        // Tạo danh sách các trạng thái muốn tìm kiếm
+        List<String> trangThais = Arrays.asList("hoàn thành", "đã hủy");
+
+        // Sử dụng phương thức repository mới để tìm kiếm các hóa đơn có trạng thái trong danh sách
+        Page<HoaDonEntity> hoaDon;
+        if(keyWord==null||keyWord.isEmpty()) {
+            hoaDon = hoaDonRepository.findByTrangThaiIn(trangThais, pageable);
+        }else {
+            hoaDon = hoaDonRepository.searchByKeywordAndTrangThai(keyWord,trangThais,pageable);
+        }
+
+        // Chuyển đổi Page<HoaDonEntity> thành Page<HoaDonDto>
+        return hoaDon.map(entity -> new HoaDonDto(
+                entity.getId(),
+                entity.getKhachHang(),
+                entity.getNhanVien(),
+                entity.getVoucher(),
+                entity.getThanhToan(),
+                entity.getMa(),
+                entity.getTongTienBanDau(),
+                entity.getPhiShip(),
+                entity.getTongTienSauVoucher(),
+                entity.getTenNguoiNhan(),
+                entity.getSdtNguoiNhan(),
+                entity.getEmailNguoiNhan(),
+                entity.getDiaChiNhanHang(),
+                entity.getNgayNhanDuKien(),
+                entity.getThoiGianTao(),
+                entity.getGiaoHang(),
+                entity.getGhiChu(),
+                entity.getTrangThai()
+        ));
+    }
+
 
 
     @Override

@@ -11,6 +11,7 @@ export class BanHangService {
   public voucherUrl = 'http://localhost:8080/api/v1/voucher';
   public thanhToanUrl = 'http://localhost:8080/api/v1/phuong-thuc-thanh-toan';
   public khachHangUrl = 'http://localhost:8080/api/v1/khach-hang';
+  private exportHoaDonUrl = 'http://localhost:8080/api/v1/pdf/download';
 
   constructor(private http: HttpClient) { }
   //phương thức gọi api lấy danh sách sản phẩm
@@ -58,6 +59,15 @@ export class BanHangService {
   }
   getByTrangThai():Observable<any>{
     return this.http.get(`${this.hoaDonUrl}/find-by-trang-thai`);
+  }
+  getDetailHoaDonCho(id: number):Observable<any>{
+    return this.http.get(`${this.hoaDonUrl}/detail-hoa-don-cho/${id}`);
+  }
+  updateTrangThaiHoaDon(id:number):Observable<any>{
+    return this.http.put(`${this.hoaDonUrl}/update-trang-thai-don-hang/${id}`,{});
+  }
+  downloadPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.exportHoaDonUrl}?id=${id}`, { responseType: 'blob' });
   }
 }
                                                                

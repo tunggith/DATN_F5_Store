@@ -583,7 +583,27 @@ datalist {
         left: 0
     }
 }
+.timeline .timeline-inner {
+    opacity: 0;
+    /* Tạo hiệu ứng mờ cho các trạng thái chưa hoàn thành */
+}
 
+.timeline.active .timeline-inner {
+    opacity: 1;
+    /* Làm sáng các trạng thái đã hoàn thành hoặc trạng thái hiện tại */
+}
+.timeline-inner h4{
+    margin-left: 100px;
+}
+.page-header button{
+    border: 0.5px solid gray;
+}
+.page-header button i{
+    font-size: 20px;
+}
+.page-header button i:hover{
+    font-size: 27px;
+}
 /* Media Queries cho màn hình điện thoại */
 @media (max-width: 768px) {
     .tab {
