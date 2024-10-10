@@ -1,3 +1,5 @@
+import { AnhChiTietSanPhamComponent } from './../../anh-chi-tiet-san-pham/anh-chi-tiet-san-pham.component';
+import { LichSuHoaDonComponent } from './../../lich-su-hoa-don/lich-su-hoa-don.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -9,6 +11,7 @@ import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
+import { DiaChiKhachHangComponent } from '../../dia-chi-khach-hang/dia-chi-khach-hang.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import {MatButtonModule} from '@angular/material/button';
@@ -40,6 +43,9 @@ import {MatSelectModule} from '@angular/material/select';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    DiaChiKhachHangComponent,
+    LichSuHoaDonComponent,
+    AnhChiTietSanPhamComponent,
   ]
 })
 

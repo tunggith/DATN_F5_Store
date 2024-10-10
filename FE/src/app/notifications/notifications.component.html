@@ -1,123 +1,207 @@
 <div class="main-content">
-  <div class="container-fluid">
-      <div class="card">
-          <div class="card-header card-header-danger">
-              <h3 class="card-title">Notifications</h3>
-              <p class="card-category">Handcrafted by our friend
-                  <a target="_blank" href="https://github.com/mouse0270">Robert McIntosh</a>. Please checkout the
-                  <a href="http://bootstrap-notify.remabledesigns.com/" target="_blank">full documentation.</a>
-              </p>
-          </div>
-          <div class="card-body">
-              <div class="row">
-                  <div class="col-md-6">
-                      <h4 class="card-title">Notifications Style</h4>
-                      <div class="alert alert-info">
-                          <span>This is a plain notification</span>
-                      </div>
-                      <div class="alert alert-info">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>This is a notification with close button.</span>
-                      </div>
-                      <div class="alert alert-info alert-with-icon" data-notify="container">
-                          <i class="material-icons" data-notify="icon">add_alert</i>
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span data-notify="message">This is a notification with close button and icon.</span>
-                      </div>
-                      <div class="alert alert-info alert-with-icon" data-notify="container">
-                          <i class="material-icons" data-notify="icon">add_alert</i>
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span data-notify="message">This is a notification with close button and icon and have many lines. You can see that the icon and the close button are always vertically aligned. This is a beautiful notification. So you don't have to worry about the style.</span>
-                      </div>
-                  </div>
-                  <div class="col-md-6">
-                      <h4 class="card-title">Notification states</h4>
-                      <div class="alert alert-info">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>
-                              <b> Info - </b> This is a regular notification made with ".alert-info"</span>
-                      </div>
-                      <div class="alert alert-success">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>
-                              <b> Success - </b> This is a regular notification made with ".alert-success"</span>
-                      </div>
-                      <div class="alert alert-warning">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>
-                              <b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
-                      </div>
-                      <div class="alert alert-danger">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>
-                              <b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
-                      </div>
-                      <div class="alert alert-primary">
-                          <button mat-button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                              <i class="material-icons">close</i>
-                          </button>
-                          <span>
-                              <b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-12">
-              <div class="places-buttons">
-                  <div class="row">
-                      <div class="col-md-6 ml-auto mr-auto text-center">
-                          <h4 class="card-title">
-                              Notifications Places
-                              <p class="category">Click to view notifications</p>
-                          </h4>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-lg-8 col-md-10 ml-auto mr-auto">
-                          <div class="row">
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('top','left')">Top Left</button>
-                              </div>
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('top','center')">Top Center</button>
-                              </div>
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('top','right')">Top Right</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="row">
-                      <div class="col-lg-8 col-md-10 ml-auto mr-auto">
-                          <div class="row">
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('bottom','left')">Bottom Left</button>
-                              </div>
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('bottom','center')">Bottom Center</button>
-                              </div>
-                              <div class="col-md-4">
-                                  <button mat-raised-button class="btn btn-danger btn-block" (click)="showNotification('bottom','right')">Bottom Right</button>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title"><i class="material-icons">group_add</i> Quản lý khách hàng</h3>
+            </div>
+            <div class="card-body">
+                <form id="customerForm" (ngSubmit)="createKhachHang()" #customerForm="ngForm">
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label">Tên khách hàng</label>
+                            <input type="text" class="form-control" placeholder="Nhập tên khách hàng" name="ten"
+                                required [(ngModel)]="newKhachHang.ten">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Giới tính:</label>
+                            <div>
+
+                                <input style="margin-right: 12px;" type="radio" id="gioiTinhNam"
+                                    [(ngModel)]="newKhachHang.gioiTinh" name="gioiTinh" value="0" required>
+                                <label for="gioiTinhNam" style="margin-right: 20px;">Nam</label>
+                            </div>
+                            <div>
+                                <input style="margin-right: 12px;" type="radio" id="gioiTinhNu"
+                                    [(ngModel)]="newKhachHang.gioiTinh" name="gioiTinh" value="1">
+                                <label for="gioiTinhNu">Nữ</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="" for="ngayThangNamSinh">Ngày Sinh:</label>
+                            <input type="date" class="form-control" id="ngayThangNamSinh"
+                                [(ngModel)]="newKhachHang.ngayThangNamSinh" name="ngayThangNamSinh" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="Nhập email" required
+                                [(ngModel)]="newKhachHang.email">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label for="anh">
+                                <i class="material-icons">upload_file</i>Upload Ảnh
+                            </label>
+                            <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)" required>
+                            <img *ngIf="newKhachHang.anh" [src]="newKhachHang.anh" alt="Ảnh khách hàng"
+                                class="img-thumbnail" width="70">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" name="sdt" placeholder="Nhập số điện thoại" required
+                                [(ngModel)]="newKhachHang.sdt">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" name="userName" placeholder="Nhập username" required
+                                [(ngModel)]="newKhachHang.userName">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="Nhập password"
+                                required [(ngModel)]="newKhachHang.password">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12">
+                            <label class="form-label">Trạng thái</label>
+                            <div>
+                                <input style="margin-right: 12px;" type="radio" id="trangThaiHoatDong"
+                                    [(ngModel)]="newKhachHang.trangThai" name="trangThai" value="Đang hoạt động"
+                                    required>
+                                <label for="trangThaiHoatDong" style="margin-right: 20px;">Đang hoạt động</label>
+                            </div>
+                            <div>
+                                <input style="margin-right: 12px;" type="radio" id="trangThaiKhongHoatDong"
+                                    [(ngModel)]="newKhachHang.trangThai" name="trangThai" value="Không hoạt động">
+                                <label for="trangThaiKhongHoatDong">Không hoạt động</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-end">
+                            <div class="text-center">
+                                <div style="display: inline-block; margin-right: 10px;">
+                                    <button type="submit" class="btn-submit">
+                                        <i class="material-icons">person_add</i> Thêm Khách Hàng
+                                    </button>
+                                </div>
+                                <div style="display: inline-block;">
+                                    <button (click)="updateKhachHang(updateKhachHangData.id)" class="btn-submit"
+                                        type="submit" [disabled]="!updateKhachHangData.id">
+                                        <i class="material-icons">update</i> Cập Nhật Khách Hàng
+                                    </button>
+                                </div>
+                                <div style="display: inline-block;margin-left: 10px;">
+                                    <button type="reset" class="btn-submit"> <i class="material-icons"
+                                            (click)="resetForm()">refresh</i> Làm mới</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                <!-- Dùng keyup là không cần nút button  -->
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="search-container">
+                            <input type="text" [(ngModel)]="searchKeyword" (keyup)="searchKhachHang()"
+                                placeholder="Nhập tên, mã, số điện thoại, email" class="search-input">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- Table hiển thị dữ liệu khách hàng -->
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th class="text-center" style="white-space: nowrap;">Mã khách hàng</th>
+                                    <th class="text-center" style="white-space: nowrap;">Tên khách hàng</th>
+                                    <th class="text-center" style="white-space: nowrap;">Giới tính</th>
+                                    <th class="text-center" style="white-space: nowrap;">Năm sinh</th>
+                                    <th class="text-center">Email</th>
+                                    <th class="text-center">Ảnh</th>
+                                    <th style="white-space: nowrap;">Số điện thoại</th>
+                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Password</th>
+                                    <th class="text-center" style="white-space: nowrap;">Trạng thái</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let customer of customers; let i = index">
+                                    <!-- Ẩn thằng khách hàng 001 đi nó là khách vãng lai -->
+                                    <ng-container *ngIf="customer.ma !== 'KH001'">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ customer.ma }}</td>
+                                        <td>{{ customer.ten }}</td>
+                                        <td>{{ customer.gioiTinh === '0' ? 'Nam' : 'Nữ' }}</td>
+                                        <td>{{ formatDate(customer.ngayThangNamSinh) }}</td>
+                                        <td>{{ customer.email }}</td>
+                                        <td> <img *ngIf="customer.anh" [src]="customer.anh" alt=""
+                                                style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                        <td>{{ customer.sdt }}</td>
+                                        <td>{{ customer.userName }}</td>
+                                        <td>{{ customer.password }}</td>
+                                        <td style="white-space: nowrap;">{{ customer.trangThai === 'Đang hoạt động' ?
+                                            'Đang hoạt động' : 'Không hoạt
+                                            động' }}</td>
+                                        <td style="width: 220px;">
+                                            <button (click)="showDetail(customer)" class="btn btn-info"
+                                                style="white-space: nowrap;">
+                                                <i class="material-icons" style="white-space: nowrap;">visibility</i>
+                                                <span class="btn-text" style="white-space: nowrap;"></span>
+                                            </button>
+                                            <button (click)="toggleStatus(customer.id)" class="btn btn-toggle">
+                                                <i class="material-icons">swap_horiz</i>
+                                                <span class="btn-text"></span>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phân trang -->
+                <nav aria-label="Page navigation">
+                    <div class="pagination">
+                        <!-- Nút về trang trước, nếu là trang đầu tiên thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === 0"
+                            (click)="goToPage(currentPage - 1)">
+                            <i class="material-icons">skip_previous</i>Trang Trước
+                        </button>
+                        <!-- &lt;!&ndash; Hiển thị số trang &ndash;&gt; -->
+                        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                            <button class="btn btn-primary" [class.active]="i === currentPage" (click)="goToPage(i)">
+                                {{ i + 1 }}
+                            </button>
+                        </ng-container>
+
+                        <!-- Nút về trang sau, nếu là trang cuối thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === totalPages"
+                            (click)="goToPage(currentPage + 1)">
+                            Trang sau<i class="material-icons">skip_next</i>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
 </div>

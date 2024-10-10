@@ -15,7 +15,10 @@ export const ROUTES: RouteInfo[] = [
     { path: '/icons', title: 'Khuyến mãi',  icon:'confirmation_number', class: '' },
     { path: '/maps', title: 'Nhân viên',  icon:'person', class: '' },
     { path: '/notifications', title: 'Khách hàng',  icon:'groups', class: '' },
-];
+    { path: '/dia-chi-khach-hang', title: 'Địa chỉ khách hàng',  icon:'local_library', class: '' },   
+    { path: '/anh-chi-tiet-san-pham', title: 'Ảnh chi tiết sản phẩm',  icon:'image', class: '' },   
+    { path: '/lich-su-hoa-don', title: 'Lịch sử hóa đơn',  icon:'history', class: '' },   
+  ];
 
 @Component({
   selector: 'app-sidebar',
