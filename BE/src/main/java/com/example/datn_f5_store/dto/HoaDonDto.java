@@ -1,9 +1,8 @@
 package com.example.datn_f5_store.dto;
 
 import com.example.datn_f5_store.entity.KhachHangEntity;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
+import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +20,10 @@ public class HoaDonDto {
     private KhachHangEntity khachHang;
     private NhanVienEntity nhanVien;
     private VoucherEntity voucher;
-    private ThanhToanEntity thanhToan;
+    private PhuongThucThanhToanEntity thanhToan;
     private String ma;
     private Double tongTienBanDau;
+    private Double phiShip;
     private Double tongTienSauVoucher;
     private String tenNguoiNhan;
     private String sdtNguoiNhan;
@@ -31,6 +31,7 @@ public class HoaDonDto {
     private String diaChiNhanHang;
     private Date ngayNhanDuKien;
     private Date thoiGianTao;
+    private Integer giaoHang;
     private String ghiChu;
     private String trangThai;
 }

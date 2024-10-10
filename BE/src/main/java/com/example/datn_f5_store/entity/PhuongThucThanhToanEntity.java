@@ -9,12 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @Table(name = ConfigContanst.ThanhToan.TABLE)
 @Entity
-public class ThanhToanEntity {
+public class PhuongThucThanhToanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

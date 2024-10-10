@@ -17,21 +17,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/chi_tiet_gio_hang")
 public class ChiTietGioHangController {
 
-        @Autowired
-        private IChiTietGioHangRepository repo_ctgh;
+    @Autowired
+    private IChiTietGioHangRepository repo_ctgh;
 
     @Autowired
     private IGioHangRepository repogh;
 
     @Autowired
     private IChiTietSanPhamRepository repoctsp;
-        @Autowired
-        private ChiTietGioHangIplm seviceGh;
+    @Autowired
+    private ChiTietGioHangIplm seviceGh;
+
     @GetMapping("/getall-phan_trang")
     public ResponseEntity<?> getallPhanTrang(
-            @RequestParam(value = "currentPage" , defaultValue = "0") Integer curentPage
+            @RequestParam(value = "currentPage", defaultValue = "0") Integer curentPage
 
-    ){
+    ) {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var responseList = seviceGh.getAllPhanTrang(curentPage);
@@ -42,12 +43,12 @@ public class ChiTietGioHangController {
 
     @GetMapping("/searchByTenSanPham")
     public ResponseEntity<?> timkiem(
-            @RequestParam(value = "currentPage" , defaultValue = "0") Integer curentPage
-            ,@RequestParam("tenSanPham") String tenSanPham
-    ){
+            @RequestParam(value = "currentPage", defaultValue = "0") Integer curentPage
+            , @RequestParam("tenSanPham") String tenSanPham
+    ) {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = seviceGh.searchByTenSanPham(curentPage,tenSanPham);
+        var responseList = seviceGh.searchByTenSanPham(curentPage, tenSanPham);
         dataResponse.setResult(new ResultModel<>(null, responseList));
         return ResponseEntity.ok(dataResponse);
     }

@@ -16,8 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "THE_LOAI")
-public class TheLoaiEntity {
+@Table(name = "GIOI_TINH")
+public class GioiTinhEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

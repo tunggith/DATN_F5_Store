@@ -10,5 +10,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DataResponse {
     private boolean status;
-    private ResultModel<?> result;
+    private com.example.datn_f5_store.response.ResultModel<?> result;
 }

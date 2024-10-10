@@ -1,9 +1,5 @@
 package com.example.datn_f5_store.request;
 
-import com.example.datn_f5_store.entity.KhachHangEntity;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
-import com.example.datn_f5_store.entity.NhanVienEntity;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +28,7 @@ public class HoaDonRequest {
     private String ma; // Mã của hóa đơn
 
     private Double tongTienBanDau; // Tổng tiền ban đầu trước khi áp dụng voucher
+    private Double phiShip;
 
     private Double tongTienSauVoucher; // Tổng tiền sau khi áp dụng voucher
 
@@ -46,6 +43,7 @@ public class HoaDonRequest {
     private Date ngayNhanDuKien; // Ngày nhận hàng dự kiến
 
     private Date thoiGianTao; // Thời gian tạo hóa đơn
+    private Integer giaoHang;
 
     private String ghiChu; // Ghi chú thêm
 

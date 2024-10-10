@@ -1,6 +1,6 @@
 package com.example.datn_f5_store.dto;
 
-import com.example.datn_f5_store.entity.TheLoaiEntity;
+import com.example.datn_f5_store.entity.GioiTinhEntity;
 import com.example.datn_f5_store.entity.ThuongHieuEntity;
 import com.example.datn_f5_store.entity.XuatXuEntity;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,6 @@ public class SanPhamDto {
     private String ten;
     private XuatXuEntity xuatXu;
     private ThuongHieuEntity thuongHieu;
-    private TheLoaiEntity theLoai;
+    private GioiTinhEntity gioiTinh;
     private String trangThai;
 }

@@ -1,4 +1,4 @@
-package com.example.datn_f5_store.request;
+package com.example.datn_f5_store.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TheLoaiRequest {
+public class GioiTinhDto {
     private Integer id;
     private String ten;
 }

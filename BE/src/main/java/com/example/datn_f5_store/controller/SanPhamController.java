@@ -27,13 +27,17 @@ public class SanPhamController {
     @Autowired
     private ISanPhamService sanPhamService; // Tự động tiêm (inject) SanPhamService để sử dụng các chức năng liên quan đến sản phẩm
 
-    /**
-     * API để lấy danh sách tất cả các sản phẩm với tính năng phân trang.
-     *
-     * @param page Số trang bắt đầu từ 0 (mặc định là 0)
-     * @param size Kích thước trang, số lượng sản phẩm hiển thị mỗi trang (mặc định là 3)
-     * @return ResponseEntity chứa danh sách các sản phẩm và thông tin phân trang
-     */
+
+
+    @GetMapping("/getfull")
+    private ResponseEntity<Object> getFull(
+    ) {
+        DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+        dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+        var responseList = sanPhamService.getFull(); // Lấy danh sách sản phẩm với phân trang
+        dataResponse.setResult(new ResultModel<>(null, responseList)); // Đặt kết quả vào response
+        return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
+    }
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(
             @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại

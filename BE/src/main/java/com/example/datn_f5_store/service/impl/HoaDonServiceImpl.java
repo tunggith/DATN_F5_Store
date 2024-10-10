@@ -6,13 +6,15 @@ import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.KhachHangEntity;
+import com.example.datn_f5_store.entity.LichSuHoaDonEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
-import com.example.datn_f5_store.entity.ThanhToanEntity;
+import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
 import com.example.datn_f5_store.repository.IKhachHangRepository;
+import com.example.datn_f5_store.repository.ILichSuHoaDonRepository;
 import com.example.datn_f5_store.repository.INhanVienRepository;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -23,14 +25,12 @@ import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IHoaDonService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +53,8 @@ public class HoaDonServiceImpl implements IHoaDonService {
     private IChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
     private IChiTietSanPhamRepository chiTietSanPhamRepository;
+    @Autowired
+    private ILichSuHoaDonRepository lichSuHoaDonRepository;
 
     @Override
     public List<HoaDonDto> getAll() {
@@ -83,7 +85,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
                             ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(chiTietHoaDon.getChiTietSanPham().getId()).orElse(null);
                             chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + chiTietHoaDon.getSoLuong());
                             chiTietSanPhamRepository.save(chiTietSanPham);
+                            chiTietHoaDon.setTrangThai("đã hủy");
+                            chiTietHoaDonRepository.save(chiTietHoaDon);
                         }
+                        LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(entity);
+                        lichSuHoaDon.setThoiGianThucHien(new Date());
+                        lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+                        lichSuHoaDon.setTrangThaiMoi("đã hủy");
+                        lichSuHoaDon.setLoaiThayDoi("hủy hóa đơn hết hạn");
+                        lichSuHoaDonRepository.save(lichSuHoaDon);
                     }
 
                     List<HoaDonEntity> currentDangThanhToan = hoaDonRepository.findByTrangThai("đang thanh toán");
@@ -105,6 +115,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getThanhToan(),
                         entity.getMa(),
                         entity.getTongTienBanDau(),
+                        entity.getPhiShip(),
                         entity.getTongTienSauVoucher(),
                         entity.getTenNguoiNhan(),
                         entity.getSdtNguoiNhan(),
@@ -112,6 +123,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getDiaChiNhanHang(),
                         entity.getNgayNhanDuKien(),
                         entity.getThoiGianTao(),
+                        entity.getGiaoHang(),
                         entity.getGhiChu(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
@@ -128,22 +140,50 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 maHoaDon = this.generateMaHoaDon();
             }
             request.setMa(maHoaDon);
+
+            // Set giá trị mặc định cho khách hàng và thanh toán
             if (request.getIdKhachHang() == null || request.getIdKhachHang() == 0) {
                 request.setIdKhachHang(1);
             }
             request.setIdThanhToan(1);
             request.setTongTienBanDau(0.0);
             request.setThoiGianTao(new Date());
+
+            // Kiểm tra số lượng hóa đơn "đang thanh toán"
             if (hoaDonRepository.findByTrangThai("đang thanh toán").size() >= 5) {
                 request.setTrangThai("chờ thanh toán");
             } else {
                 request.setTrangThai("đang thanh toán");
             }
-            return this.saveOrUpdate(new HoaDonEntity(), request);
+
+            // Tạo và lưu hóa đơn, nhận DataResponse
+            HoaDonEntity hoaDon = this.saveOrUpdate(new HoaDonEntity(), request);
+
+            // Kiểm tra nếu việc lưu hóa đơn thành công
+            if (hoaDon != null) {
+                // Tạo lịch sử hóa đơn và gán hóa đơn vừa tạo
+                LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
+                lichSuHoaDon.setHoaDon(hoaDon);
+                lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
+                lichSuHoaDon.setTrangThaiCu(null);
+                lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
+                lichSuHoaDon.setThoiGianThucHien(hoaDon.getThoiGianTao());
+                lichSuHoaDon.setLoaiThayDoi("tạo hóa đơn");
+                // Lưu lịch sử hóa đơn vào cơ sở dữ liệu
+                lichSuHoaDonRepository.save(lichSuHoaDon);
+
+                // Trả về DataResponse với thông báo thành công
+                return new DataResponse(true, new ResultModel<>(null, "tạo hóa đơn thành công"));
+            } else {
+                // Trả về thông báo lỗi nếu việc tạo hóa đơn thất bại
+                return new DataResponse(false, new ResultModel<>(null, "Không thể tạo hóa đơn"));
+            }
         } else {
-            return new DataResponse(false, new ResultModel<>(null, "dữ liệu không hợp lệ"));
+            // Trả về thông báo lỗi nếu dữ liệu không hợp lệ
+            return new DataResponse(false, new ResultModel<>(null, "Dữ liệu không hợp lệ"));
         }
     }
+
 
     @Override
     public DataResponse update(HoaDonRequest request, Integer id) {
@@ -154,35 +194,39 @@ public class HoaDonServiceImpl implements IHoaDonService {
                     .orElseThrow(() -> new RuntimeException("Hoá đơn không tồn tại"));
 
             request.setId(hoaDon.getId());
-            VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher())
-                    .orElseThrow(() -> new EntityNotFoundException("voucher không tồn tại!"));
-            double giaTriVoucher = 0.0;
-            if (voucher.getKieuGiamGia().equals("%")) {
-                System.out.println(hoaDon.getTongTienBanDau());
-                System.out.println(voucher.getGiaTriVoucher());
-                giaTriVoucher = hoaDon.getTongTienBanDau() * (voucher.getGiaTriVoucher() / 100.0);
-                System.out.println(giaTriVoucher);
-            } else {
-                giaTriVoucher = voucher.getGiaTriVoucher();
+            if(request.getIdVoucher()!=null){
+                VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
+                double giaTriVoucher = 0.0;
+                if (voucher.getKieuGiamGia().equals("%")) {
+                    System.out.println(hoaDon.getTongTienBanDau());
+                    System.out.println(voucher.getGiaTriVoucher());
+                    giaTriVoucher = hoaDon.getTongTienBanDau() * (voucher.getGiaTriVoucher() / 100.0);
+                    System.out.println(giaTriVoucher);
+                } else {
+                    giaTriVoucher = voucher.getGiaTriVoucher();
+                }
+                double voucherMoney = Math.min(giaTriVoucher, voucher.getGiaTriGiamToiDa());
+                if (hoaDon.getTongTienBanDau() >= voucher.getGiaTriHoaDonToiThieu()) {
+                    request.setTongTienSauVoucher(hoaDon.getTongTienBanDau() - voucherMoney);
+                } else {
+                    return new DataResponse(false, new ResultModel<>(null, "hóa đơn không hợp lệ để dùng voucher này"));
+                }
             }
-            double voucherMoney = Math.min(giaTriVoucher, voucher.getGiaTriGiamToiDa());
-            if (hoaDon.getTongTienBanDau() >= voucher.getGiaTriHoaDonToiThieu()) {
-                request.setTongTienSauVoucher(hoaDon.getTongTienBanDau() - voucherMoney);
-            } else {
-                return new DataResponse(false, new ResultModel<>(null, "hóa đơn không hợp lệ để dùng voucher này"));
-            }
-            if (voucher == null) {
-                request.setTongTienSauVoucher(request.getTongTienBanDau());
-            }
+            request.setTongTienSauVoucher(request.getTongTienBanDau());
             // Kiểm tra tổng tiền sau khi áp dụng voucher
             if (request.getTongTienSauVoucher() == 0) {
                 return new DataResponse(false, new ResultModel<>(null, "Không thể thanh toán hóa đơn 0đ"));
             }
             // Cập nhật trạng thái của hóa đơn
-            request.setTrangThai("đã thanh toán");
+            request.setTrangThai("chờ xác nhận");
             request.setMa(hoaDon.getMa());
             request.setIdNhanVien(hoaDon.getNhanVien().getId());
             request.setTongTienBanDau(hoaDon.getTongTienBanDau());
+            request.setThoiGianTao(hoaDon.getThoiGianTao());
+            request.setGhiChu(hoaDon.getGhiChu());
+            if (request.getGiaoHang() == 0) {
+                request.setPhiShip(0.0);
+            }
             if (!hoaDon.getKhachHang().getId().equals(1)) {
                 String diaChiNhanHang = hoaDon.getKhachHang().getDiaChiKhachHang().getSoNha() + ","
                         + hoaDon.getKhachHang().getDiaChiKhachHang().getDuong() + ","
@@ -193,16 +237,23 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 request.setEmailNguoiNhan(hoaDon.getKhachHang().getEmail());
                 request.setSdtNguoiNhan(hoaDon.getKhachHang().getSdt());
                 request.setTenNguoiNhan(hoaDon.getKhachHang().getTen());
-                request.setThoiGianTao(hoaDon.getThoiGianTao());
-                request.setGhiChu(hoaDon.getGhiChu());
             } else {
                 request.setIdKhachHang(1);
             }
-            if (hoaDon.getThanhToan().getId().equals(1)) {
-                request.setIdThanhToan(1);
+            LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(hoaDon);
+            lichSuHoaDon.setThoiGianThucHien(new Date());
+            lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+            lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
+            lichSuHoaDon.setLoaiThayDoi("thanh toán");
+            lichSuHoaDonRepository.save(lichSuHoaDon);
+            List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
+            for(ChiTietHoaDonEntity x: chiTietHoaDon) {
+                x.setTrangThai(hoaDon.getTrangThai());
+                chiTietHoaDonRepository.save(x);
             }
             // Cập nhật hóa đơn mà không thay đổi ID
-            return this.saveOrUpdate(hoaDon, request);
+            this.saveOrUpdate(hoaDon, request);
+            return new DataResponse(false, new ResultModel<>(null, "Thanh toán thành công"));
         } else {
             return new DataResponse(false, new ResultModel<>(null, "Dữ liệu không hợp lệ"));
         }
@@ -226,6 +277,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
         hoaDon.setTrangThai("đã hủy");
         hoaDonRepository.save(hoaDon);
+        LichSuHoaDonEntity lichSuHoaDon = lichSuHoaDonRepository.findByHoaDon(hoaDon);
+        lichSuHoaDon.setThoiGianThucHien(new Date());
+        lichSuHoaDon.setTrangThaiCu(lichSuHoaDon.getTrangThaiMoi());
+        lichSuHoaDon.setTrangThaiMoi("đã hủy");
+        lichSuHoaDon.setLoaiThayDoi("hủy hóa đơn");
+        lichSuHoaDonRepository.save(lichSuHoaDon);
         return new DataResponse(true, new ResultModel<>(null, "hủy hóa đơn thành công"));
     }
 
@@ -268,13 +325,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
         // Tìm chi tiết hóa đơn theo hóa đơn
         List<ChiTietHoaDonEntity> chiTietHoaDonDetail = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
 
+        // Tạo mới chi tiết hóa đơn
+        ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
         // Xử lý nếu chi tiết hóa đơn chưa tồn tại hoặc đã tồn tại
         if (chiTietHoaDonDetail == null) {
-            // Tạo mới chi tiết hóa đơn
-            ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
             chiTietHoaDon.setChiTietSanPham(chiTietSanPham);
             chiTietHoaDon.setGiaSpctHienTai(chiTietSanPham.getDonGia() * request.getSoLuong());
             chiTietHoaDon.setSoLuong(request.getSoLuong());
+            chiTietHoaDon.setMa(hoaDon.getMa());
+            chiTietHoaDon.setTrangThai(hoaDon.getTrangThai());
             chiTietHoaDonRepository.save(chiTietHoaDon);
         } else {
             boolean updated = false;
@@ -292,10 +351,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
             // Nếu không cập nhật chi tiết hóa đơn (sản phẩm mới)
             if (!updated) {
-                ChiTietHoaDonEntity chiTietHoaDon = this.convertChiTietHoaDon(new ChiTietHoaDonEntity(), request);
                 chiTietHoaDon.setChiTietSanPham(chiTietSanPham);
                 chiTietHoaDon.setGiaSpctHienTai(chiTietSanPham.getDonGia() * request.getSoLuong());
                 chiTietHoaDon.setSoLuong(request.getSoLuong());
+                chiTietHoaDon.setMa(hoaDon.getMa());
+                chiTietHoaDon.setTrangThai(hoaDon.getTrangThai());
                 chiTietHoaDonRepository.save(chiTietHoaDon);
                 chiTietHoaDonDetail.add(chiTietHoaDon);
             }
@@ -313,6 +373,35 @@ public class HoaDonServiceImpl implements IHoaDonService {
         chiTietSanPhamRepository.save(chiTietSanPham);
 
         return new DataResponse(true, new ResultModel<>(null, "Chọn thành công"));
+    }
+
+    @Override
+    public DataResponse giamSoLuongSanPham(Integer idHdct) {
+        ChiTietHoaDonEntity chiTietHoaDon = chiTietHoaDonRepository.findById(idHdct)
+                .orElseThrow(() -> new EntityNotFoundException("chi tiết hóa đơn không tồn tại"));
+        ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(chiTietHoaDon.getChiTietSanPham().getId())
+                .orElseThrow(() -> new EntityNotFoundException("chi tiết sản phẩm không tồn tại"));
+        HoaDonEntity hoaDon = hoaDonRepository.findById(chiTietHoaDon.getHoaDon().getId())
+                .orElseThrow(()->new EntityNotFoundException("hóa đơn không tồn tại"));
+        chiTietHoaDon.setGiaSpctHienTai(chiTietHoaDon.getGiaSpctHienTai()-chiTietSanPham.getDonGia());
+        List<ChiTietHoaDonEntity> chitietHoaDonDetail = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
+        if(chiTietHoaDon.getSoLuong()>0) {
+            chiTietHoaDon.setSoLuong(chiTietHoaDon.getSoLuong() - 1);
+            chiTietHoaDonRepository.save(chiTietHoaDon);
+        }else {
+            throw new RuntimeException("số lượng đã hết");
+        }
+        chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + 1);
+        chiTietSanPhamRepository.save(chiTietSanPham);
+        double tongTien = 0.0;
+        for (ChiTietHoaDonEntity x : chitietHoaDonDetail) {
+            if (x.getHoaDon().equals(hoaDon)) {
+                tongTien += x.getGiaSpctHienTai();
+            }
+        }
+        hoaDon.setTongTienBanDau(tongTien);
+        hoaDonRepository.save(hoaDon);
+        return new DataResponse(true,new ResultModel<>(null,"giảm thành công"));
     }
 
 
@@ -351,29 +440,19 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 .toLocalDate();
     }
 
-    private DataResponse saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
+    private HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
         try {
             this.convertHoaDon(entity, request);
-            hoaDonRepository.save(entity);
-            return new DataResponse(false, new ResultModel<>(null, "create or update successfully!"));
+            return hoaDonRepository.save(entity);
         } catch (Exception e) {
             e.printStackTrace();
-            return new DataResponse(false, new ResultModel<>(null, "create or update exception"));
+            return null;
         }
     }
 
     private Boolean isNullHoaDon(HoaDonRequest request) {
         if (request.getIdNhanVien() == null) {
             return new DataResponse(false, new ResultModel<>(null, "nhân viên không được null")).isStatus();
-        }
-        if (request.getIdThanhToan() == null) {
-            return new DataResponse(false, new ResultModel<>(null, "phuong thức thanh toán không được null")).isStatus();
-        }
-        if (request.getMa() == null || request.getMa().isEmpty()) {
-            return new DataResponse(false, new ResultModel<>(null, "mã không được null")).isStatus();
-        }
-        if (request.getTongTienBanDau() == null) {
-            return new DataResponse(false, new ResultModel<>(null, "tổng tiền sau bán không được null")).isStatus();
         }
         return true;
     }
@@ -386,9 +465,13 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setKhachHang(khachHang);
         NhanVienEntity nhanVien = nhanVienRepository.findById(request.getIdNhanVien()).orElse(null);
         entity.setNhanVien(nhanVien);
-        VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
-        entity.setVoucher(voucher);
-        ThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
+        if(request.getIdVoucher()!=null) {
+            VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
+            entity.setVoucher(voucher);
+        }else {
+            entity.setVoucher(null);
+        }
+        PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
         entity.setThanhToan(thanhToan);
         entity.setMa(request.getMa());
         entity.setTongTienBanDau(request.getTongTienBanDau());
@@ -401,6 +484,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setThoiGianTao(request.getThoiGianTao());
         entity.setGhiChu(request.getGhiChu());
         entity.setGhiChu(request.getGhiChu());
+        entity.setGiaoHang(request.getGiaoHang());
         entity.setTrangThai(request.getTrangThai());
         return entity;
     }

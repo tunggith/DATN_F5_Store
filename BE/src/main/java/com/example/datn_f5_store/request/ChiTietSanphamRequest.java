@@ -20,13 +20,13 @@ public class ChiTietSanphamRequest {
     private Integer id;
 
     @NotNull(message = "Sản phẩm không được để trống.")
-    private Integer idSanPham;
+    private SanPhamEntity idSanPham;
 
     @NotNull(message = "Màu sắc không được để trống.")
-    private Integer idMauSac;
+    private MauSacEntity idMauSac;
 
     @NotNull(message = "Kích thước không được để trống.")
-    private Integer idSize;
+    private SizeEntity idSize;
 
     @NotBlank(message = "Mã không được để trống.")
     private String ma;

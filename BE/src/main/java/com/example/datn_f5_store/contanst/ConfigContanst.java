@@ -60,7 +60,7 @@ public class ConfigContanst {
         public static final String ID_THANH_TOAN = "ID_PHUONG_THUC_THANH_TOAN";
         public static final String MA = "MA";
         public static final String TONG_TIEN_BAN_DAU = "TONG_TIEN_BAN_DAU";
-        public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_SAU_VOUCHER";
+        public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_THANH_TOAN";
         public static final String TEN_NGUOI_NHAN = "TEN_NGUOI_NHAN";
         public static final String SDT_NGUOI_NHAN = "SDT_NGUOI_NHAN";
         public static final String EMAIL_NGUOI_NHAN = "EMAIL_NGUOI_NHAN";
@@ -84,15 +84,15 @@ public class ConfigContanst {
         public static final String PASSWORD = "PASSWORD";
         public static final String TRANG_THAI = "trang_thai";
     }
-    public static class KhuyenMai{
+   public static class KhuyenMai{
         public static final String TABLE = "KHUYEN_MAI";
         public static final String MA = "MA";
         public static final String TEN = "TEN";
         public static final String KIEU_KHUYEN_MAI = "KIEU_KHUYEN_MAI";
         public static final String MO_TA = "MOTA";
         public static final String SO_LUONG = "SO_LUONG";
-        public static final String LOAI_KHUYEN_MAI = "LOAI_KHUYEN_MAI";
         public static final String GIA_TRI_KHUYEN_MAI = "GIA_TRI_KHUYEN_MAI";
+
         public static final String THOI_GIAN_BAT_DAU = "THOI_GIAN_BAT_DAU";
         public static final String THOI_GIAN_KET_THUC = "THOI_GIAN_KET_THUC";
         public static final String THOI_GIAN_TAO = "THOI_GIAN_TAO";
@@ -128,7 +128,7 @@ public class ConfigContanst {
         public static final String TABLE = "SAN_PHAM";
         public static final String ID_XUAT_XU = "ID_XUAT_XU";
         public static final String ID_THUONG_HIEU = "ID_THUONG_HIEU";
-        public static final String ID_THE_LOAI = "ID_THE_LOAI";
+        public static final String ID_GIOI_TINH = "ID_GIOI_TINH";
         public static final String MA = "MA";
         public static final String TEN = "TEN";
         public static final String TRANG_THAI = "TRANG_THAI";

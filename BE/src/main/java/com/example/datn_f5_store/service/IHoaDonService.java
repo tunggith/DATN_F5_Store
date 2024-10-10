@@ -18,4 +18,5 @@ public interface IHoaDonService {
     List<ChiTietHoaDonDto> getChiTietHoaDon(Integer id);
     DataResponse chonSanPham(ChiTietHoaDonRequest request,Integer idSanPham);
     DataResponse deleteHoaDonChiTiet(Integer idHoaDonCt);
+    DataResponse giamSoLuongSanPham(Integer idHdct);
 }
