@@ -114,7 +114,7 @@ public class PdfExportService {
                         .setTextAlignment(TextAlignment.CENTER));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getMauSac().getTen())))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getTheLoai().getTen())))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getGioiTinh().getTen())))
                         .setTextAlignment(TextAlignment.CENTER));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getSoLuong())))
                         .setTextAlignment(TextAlignment.CENTER));

@@ -5,9 +5,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { BanHangComponent } from '../../ban-hang/./ban-hang.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
-import { TableListComponent } from '../../table-list/table-list.component';
+import { TableListComponent } from '../../hoaDon/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
-import { IconsComponent } from '../../icons/icons.component';
+import { IconsComponent } from '../../khuyenMai/icons.component';
+import { VoucherComponent } from '../../voucher/voucher.component';
+import { KhuyenMaiChiTietSanPhamComponent } from '../../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
@@ -40,6 +42,8 @@ import {MatSelectModule} from '@angular/material/select';
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    VoucherComponent,
+    KhuyenMaiChiTietSanPhamComponent,
   ]
 })
 

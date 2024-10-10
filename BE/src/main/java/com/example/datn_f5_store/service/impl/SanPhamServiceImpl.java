@@ -55,7 +55,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getTheLoai(),
+                entity.getGioiTinh(),
                 entity.getTrangThai()
         ));
     }
@@ -81,7 +81,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getTheLoai(),
+                entity.getGioiTinh(),
                 entity.getTrangThai()
         ));
     }
@@ -101,7 +101,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                     entity.getTen(),
                     entity.getXuatXu(),
                     entity.getThuongHieu(),
-                    entity.getTheLoai(),
+                    entity.getGioiTinh(),
                     entity.getTrangThai()
             );
             // Trả về danh sách chứa một phần tử duy nhất
@@ -215,7 +215,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
 
         // Tìm và set thể loại
         GioiTinhEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
-        entity.setTheLoai(theLoai);
+        entity.setGioiTinh(theLoai);
         entity.setTrangThai(request.getTrangThai());
     }
 

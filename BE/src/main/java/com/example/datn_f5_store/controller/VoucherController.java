@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.controller;
 
 
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.dto.VoucherDto;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -8,6 +9,7 @@ import com.example.datn_f5_store.request.VoucherRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.VoucherService;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -62,7 +64,7 @@ public class VoucherController {
     }
 
     // api sửa trạng thái voucher theo id
-    @PostMapping("/capNhapTrangThai")
+    @PutMapping("/capNhapTrangThai")
     public ResponseEntity<?> CapNhapTrangThaiVoucher(@PathParam("id") Integer id){
         try {
             voucherService.CapNhapTrangThaiVoucher(id);
@@ -77,7 +79,7 @@ public class VoucherController {
     @GetMapping("/searchByTenOrMa")
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
-            @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
+            @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
             @RequestParam(required = false)  String tim) {
         try {
             // Gọi service để tìm Voucher theo tên or mã
@@ -100,7 +102,7 @@ public class VoucherController {
     @GetMapping("/find-by-date")
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
-            @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
+            @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayBatDau, // Ngày bắt đầu
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayKetThuc // Ngày kết thúc
     ) {
@@ -120,6 +122,25 @@ public class VoucherController {
                     new ResultModel<>(null, "Đã xảy ra lỗi: " + e.getMessage()));
             return ResponseEntity.badRequest().body(errorResponse);
         }
+    }
+
+    @GetMapping("/find-by-trangThai")
+    public ResponseEntity<Object> findByTrangThai(
+            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
+            @RequestParam(required = false) String trangThai
+    ) {
+        DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+        dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+        Page<VoucherDto> responseList = voucherService.findByTrangThai(page, size, trangThai);
+
+        dataResponse.setResult(
+                new ResultModel<>(
+                        new com.example.datn_f5_store.response.PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()),
+                        responseList.getContent() // Lấy danh sách các đối tượng VoucherDto từ trang hiện tại
+                )
+        );
+        return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
     }
 
 

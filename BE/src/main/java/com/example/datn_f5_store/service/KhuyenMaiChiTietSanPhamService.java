@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public interface KhuyenMaiChiTietSanPhamService {
     Page<KhuyenMaiChiTietSanPhamDto> getAll(int page, int size);
     DataResponse createKhuyenMaictsp(KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest);
-    DataResponse capNhapTrangThaiKhuyenMaiSpct(Integer id);
     DataResponse XoaKhuyenMaictsp(Integer id);
-    void CapNhapTrangThaiKhuyenMaiCtSpDhh();
+    void upDateTrangThaiKhuyenMaiCtSp();
+    Page<KhuyenMaiChiTietSanPhamDto> getByKhuyenMai(int page, int size,int id);
 }

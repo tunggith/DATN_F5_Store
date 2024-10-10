@@ -1,0 +1,233 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Quản Lý Voucher</h2>
+
+  <!-- Phần lọc voucher -->
+  <form [formGroup]="searchForm" class="search-form mb-4">
+    <div class="border rounded p-4 mb-4">
+      <h4 class="mb-3">Lọc Voucher</h4>
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tìm theo tên hoặc mã"
+            formControlName="searchKey"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="trangThai">Trạng thái</label>
+          <select id="trangThai" class="form-control" formControlName="trangThai">
+            <option value="">Tất cả</option>
+            <option value="Đang diễn ra">Đang diễn ra</option>
+            <option value="Không hoạt động">Không hoạt động</option>
+            <option value="Đã hết hạn">Đã hết hạn</option>
+            <option value="Sắp diễn ra">Sắp diễn ra</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="fromDate">Từ ngày</label>
+          <input type="date" class="form-control" formControlName="fromDate" required />
+        </div>
+        <div class="col-md-6">
+          <label for="toDate">Đến ngày</label>
+          <input type="date" class="form-control" formControlName="toDate" required />
+        </div>
+      </div>
+    </div>
+  </form> 
+
+  <!-- Form thêm/sửa voucher -->
+
+<div class="border rounded p-4 mb-4">
+  <h4 class="mb-3">Thêm/Sửa Voucher</h4>
+  <form [formGroup]="voucherForm" (ngSubmit)="createOrUpdateVoucher()">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="ma">Mã Voucher</label>
+          <input type="text" id="ma" class="form-control" required formControlName="ma" 
+          [ngClass]="{'error-message': voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)}">
+        </div>
+        <div *ngIf="voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)">
+          <span class="error-message">Mã không hợp lệ</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="ten">Tên Voucher</label>
+          <input type="text" id="ten" class="form-control" required formControlName="ten" 
+          [ngClass]="{'error-message': voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)}">
+        </div>
+        <div *ngIf="voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)">
+          <span class="error-message">Tên không hợp lệ</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="kieuGiamGia">Kiểu Giảm Giá</label>
+          <select id="kieuGiamGia" class="form-control" required formControlName="kieuGiamGia">
+            <option value="$">$</option>
+            <option value="%">%</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="moTa">Mô Tả</label>
+          <input type="text" id="moTa" class="form-control" formControlName="moTa" />
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="soLuong">Số Lượng</label>
+          <input type="number" id="soLuong" class="form-control" required formControlName="soLuong" 
+          [ngClass]="{'error-message': voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)}" />
+        </div>
+        <div *ngIf="voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)">
+          <span class="error-message">Số lượng không hợp lệ</span>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="giaTriVoucher">Giá Trị Voucher</label>
+          <input type="number" id="giaTriVoucher" class="form-control" required formControlName="giaTriVoucher" 
+          [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}" />
+        </div>
+        <div *ngIf="voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)">
+          <span class="error-message">Giá trị không hợp lệ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="giaTriGiamToiDa">Giá Trị Giảm Tối Đa</label>
+          <input type="number" id="giaTriGiamToiDa" class="form-control" required formControlName="giaTriGiamToiDa" 
+          [ngClass]="{'error-message': voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)}" />
+        </div>
+        <div *ngIf="voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)">
+          <span class="error-message">Giá trị giảm tối đa không hợp lệ</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="giaTriHoaDonToiThieu">Giá Trị Hóa Đơn Tối Thiểu</label>
+          <input type="number" id="giaTriHoaDonToiThieu" class="form-control" required formControlName="giaTriHoaDonToiThieu" 
+          [ngClass]="{'error-message': voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)}" />
+        </div>
+        <div *ngIf="voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)">
+          <span class="error-message">Giá trị hóa đơn tối thiểu không hợp lệ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
+          <input type="date" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau" 
+          [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" 
+          />
+        </div>
+        <div *ngIf="voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)">
+          <span class="error-message">Thời gian bắt đầu không hợp lệ</span>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
+          <input type="date" id="thoiGianKetThuc" class="form-control" required formControlName="thoiGianKetThuc" 
+          [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
+        </div>
+        <div *ngIf="voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)">
+          <span class="error-message">Thời gian kết thúc không hợp lệ</span>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100" [disabled]="voucherForm.invalid">
+      <i class="material-icons" style="vertical-align: middle;">add</i>
+      {{ currentVoucher ? 'Cập nhật' : 'Thêm' }}
+    </button>
+    <button type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
+      <i class="material-icons" style="vertical-align: middle;">cancel</i>
+      Hủy
+    </button>
+  </form>
+</div>
+
+
+  <hr />
+
+  <table class="table table-bordered voucher-table">
+    <thead>
+      <tr>
+        <th>Mã Voucher</th>
+        <th>Tên Voucher</th>
+        <th>Giá trị voucher</th>
+        <th>Kiểu giảm giá</th>
+        <th>Giá trị giảm tối đa</th>
+        <th>Giá trị hóa đơn tối thiểu</th>
+        <th>Số lượng</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Mô tả</th>
+        <th>Trạng thái</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let voucher of vouchers">
+        <td>{{ voucher.ma }}</td>
+        <td>{{ voucher.ten }}</td>
+        <td>{{ voucher.giaTriVoucher }}</td>
+        <td>{{ voucher.kieuGiamGia }}</td>
+        <td>{{ voucher.giaTriGiamToiDa }}</td>
+        <td>{{ voucher.giaTriHoaDonToiThieu }}</td>
+        <td>{{ voucher.soLuong }}</td>
+        <td>{{ voucher.thoiGianBatDau | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ voucher.thoiGianKetThuc | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ voucher.moTa }}</td>
+        <td>{{ voucher.trangThai }}</td>
+        <td>
+          <button class="btn btn-edit" (click)="editVoucher(voucher)">
+            <i class="material-icons">edit</i> Sửa
+          </button>
+          <button class="btn btn-update" (click)="capNhap(voucher.id)"
+          [disabled]="voucher.trangThai === 'Đã hết hạn'">
+            <i class="material-icons">swap_horiz</i> Đổi trạng thái
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+
+
+  <div class="pagination">
+    <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-secondary">
+      <i class="material-icons">chevron_left</i>
+    </button>  
+    <!-- Hiển thị các số trang -->
+    <ng-container *ngIf="totalPages > 0">
+      <button *ngFor="let num of [].constructor(totalPages); let i = index"
+              (click)="goToPage(i)" 
+              [disabled]="i === page" 
+              class="btn btn-secondary">
+        {{ i + 1 }}
+      </button>
+    </ng-container>
+    
+    <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-secondary">
+      <i class="material-icons">chevron_right</i>
+    </button>
+  </div>
+</div>

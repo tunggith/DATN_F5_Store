@@ -15,6 +15,7 @@ import java.util.Date;
 public interface KhuyenMaiService {
     Page<KhuyenMaiDto> getAll(int page, int size);
     Page<KhuyenMaiDto> findByTenOrMa(int page, int size, String tim);
+    Page<KhuyenMaiDto> findByTrangThai(int page, int size, String trangThai);
     DataResponse create(KhuyenMaiRequest khuyenMaiRequest);
     DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id);
     KhuyenMaiEntity findById(Integer id);

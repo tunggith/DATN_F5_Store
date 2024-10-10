@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.repository;
 
+
 import com.example.datn_f5_store.entity.VoucherEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,7 @@ public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer>
 
     Page<VoucherEntity> findAllByThoiGianBatDauGreaterThanEqual(Date start, Pageable pageable);
     Page<VoucherEntity> findAllByThoiGianKetThucLessThanEqual(Date end, Pageable pageable);
+
+    @Query("SELECT p FROM VoucherEntity p WHERE p.trangThai = ?1")
+    Page<VoucherEntity> findByTrangThai(String trangThai, Pageable pageable);
 }

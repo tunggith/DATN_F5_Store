@@ -2,11 +2,13 @@ package com.example.datn_f5_store.service;
 
 import com.example.datn_f5_store.dto.ChiTietHoaDonDto;
 import com.example.datn_f5_store.dto.HoaDonDto;
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.request.ChiTietHoaDonRequest;
 import com.example.datn_f5_store.request.HoaDonRequest;
 import com.example.datn_f5_store.response.DataResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +20,5 @@ public interface IHoaDonService {
     List<ChiTietHoaDonDto> getChiTietHoaDon(Integer id);
     DataResponse chonSanPham(ChiTietHoaDonRequest request,Integer idSanPham);
     DataResponse deleteHoaDonChiTiet(Integer idHoaDonCt);
+    Page<HoaDonDto> getAllHoaDon(int page, int size);
 }
