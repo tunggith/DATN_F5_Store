@@ -2,10 +2,12 @@ package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.ChiTietHoaDonDto;
 import com.example.datn_f5_store.dto.HoaDonDto;
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.KhachHangEntity;
+import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.LichSuHoaDonEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
@@ -61,6 +63,37 @@ public class HoaDonServiceImpl implements IHoaDonService {
     private IChiTietSanPhamRepository chiTietSanPhamRepository;
     @Autowired
     private ILichSuHoaDonRepository lichSuHoaDonRepository;
+
+
+
+    @Override
+    public Page<HoaDonDto> getAllHoaDon(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<HoaDonEntity> khuyenMaiEntities = hoaDonRepository.findAll(pageable);
+
+        Page<HoaDonDto> khuyenMaiDtos = khuyenMaiEntities.map(entity -> new HoaDonDto(
+                entity.getId(),
+                entity.getKhachHang(),
+                entity.getNhanVien(),
+                entity.getVoucher(),
+                entity.getThanhToan(),
+                entity.getMa(),
+                entity.getTongTienBanDau(),
+                entity.getPhiShip(),
+                entity.getTongTienSauVoucher(),
+                entity.getTenNguoiNhan(),
+                entity.getSdtNguoiNhan(),
+                entity.getEmailNguoiNhan(),
+                entity.getDiaChiNhanHang(),
+                entity.getNgayNhanDuKien(),
+                entity.getThoiGianTao(),
+                entity.getGiaoHang(),
+                entity.getGhiChu(),
+                entity.getTrangThai()
+        ));
+        return khuyenMaiDtos;
+    }
+
 
     @Override
     public List<HoaDonDto> getAll() {

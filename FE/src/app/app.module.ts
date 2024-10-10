@@ -9,6 +9,9 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 // Import SanphamComponent if needed here, but do NOT declare it
 
+
+
+
 @NgModule({
   imports: [
     BrowserAnimationsModule,

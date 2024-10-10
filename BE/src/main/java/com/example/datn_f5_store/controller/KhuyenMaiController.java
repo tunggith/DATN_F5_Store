@@ -5,12 +5,15 @@ import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
 import com.example.datn_f5_store.service.KhuyenMaiService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +39,7 @@ public class KhuyenMaiController {
 
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(@Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
-                                          @Parameter(name = "size") @RequestParam(defaultValue = "3") Integer size) {
+                                          @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size) {
         DataResponse dataResponse = new com.example.datn_f5_store.response.DataResponse(); // Tạo đối tượng phản hồi dữ liệu
         dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
         var responseList = khuyenMaiService.getAll(page, size); // Lấy danh sách Khuyen mai với phân trang
@@ -47,27 +50,54 @@ public class KhuyenMaiController {
     }
 
     @GetMapping("/find-by-tenOrma")
-    private ResponseEntity<Object> findByTenorMa(
+    public ResponseEntity<Object> findByTenorMa(
             @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
-            @Parameter(name = "size") @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
-            @Parameter(name = "tim") @RequestParam String tim // Tên Khuyen mai hoac Mã Khuyến mai can tim
-
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
+            @RequestParam(required = false) String tim // Tên hoặc Mã Khuyến mãi cần tìm
     ) {
         DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
         dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
-        var responseList = khuyenMaiService.findByTenOrMa(page, size,tim); // Tìm Khuyến mãi theo tên hoặc mã
+
+        Page<KhuyenMaiDto> responseList = khuyenMaiService.findByTenOrMa(page, size, tim);
+
         dataResponse.setResult(
                 new ResultModel<>(
-                        new PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()), responseList
-                ) // Đặt kết quả vào response với thông tin phân trang
+                        new PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()),
+                        responseList.getContent() // Lấy danh sách các đối tượng KhuyenMaiDto từ trang hiện tại
+                )
         );
+
         return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
     }
+        @GetMapping("/find-by-trangThai")
+        public ResponseEntity<Object> findByTrangThai(
+                @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
+                @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
+                @RequestParam(required = false) String trangThai
+        ) {
+            DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+            dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+            Page<KhuyenMaiDto> responseList = khuyenMaiService.findByTrangThai(page, size, trangThai);
+
+            dataResponse.setResult(
+                    new ResultModel<>(
+                            new PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()),
+                            responseList.getContent() // Lấy danh sách các đối tượng KhuyenMaiDto từ trang hiện tại
+                    )
+            );
+            return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
+        }
+
 
     // api thêm khuyến mãi
     @PostMapping("/create")
-    private ResponseEntity<?> create(@RequestBody KhuyenMaiRequest khuyenMaiRequest) {
-        return new ResponseEntity<>(khuyenMaiService.create(khuyenMaiRequest), HttpStatus.CREATED);
+    public ResponseEntity<?> createKhuyenMai(@RequestBody KhuyenMaiRequest khuyenMai) {
+        try {
+            DataResponse savedKhuyenMai = khuyenMaiService.create(khuyenMai);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedKhuyenMai);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     // api update khuyến mãi theo id
@@ -76,12 +106,42 @@ public class KhuyenMaiController {
                                      @RequestBody KhuyenMaiRequest khuyenMaiRequest) {
         return new ResponseEntity<>(khuyenMaiService.update(khuyenMaiRequest, id), HttpStatus.OK);
     }
+    @GetMapping("/finById/{id}")
+    private ResponseEntity<DataResponse> finById(@Parameter(name = "id") @PathVariable Integer id) {
+        try {
+            // Tìm kiếm khuyến mãi theo ID
+            KhuyenMaiEntity khuyenMai = khuyenMaiService.findById(id);
+
+            // Tạo đối tượng ResultModel với nội dung là khuyến mãi
+            ResultModel<KhuyenMaiEntity> result = ResultModel.<KhuyenMaiEntity>builder()
+                    .content(khuyenMai)
+                    .pagination(null) // Hoặc thêm thông tin phân trang nếu cần
+                    .build();
+
+            // Tạo đối tượng DataResponse
+            DataResponse response = new DataResponse(true, result);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            // Tạo đối tượng ResultModel với nội dung là null
+            ResultModel<Object> result = ResultModel.<Object>builder()
+                    .content(null) // Hoặc có thể để null
+                    .pagination(null) // Hoặc thêm thông tin phân trang nếu cần
+                    .build();
+
+            // Tạo DataResponse lỗi
+            DataResponse response = new DataResponse(false, result);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 
     // api hiển lọc Khuyến mãi theo Ngày
     @GetMapping("/find-by-date")
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
-            @RequestParam(defaultValue = "3") Integer size, // Kích thước trang
+            @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayBatDau, // Ngày bắt đầu
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayKetThuc // Ngày kết thúc
     ) {
@@ -105,7 +165,7 @@ public class KhuyenMaiController {
 
 
     // api cập nhập trạng thái Khuyến mãi
-    @PostMapping("/capNhapTrangThai")
+    @PutMapping("/capNhapTrangThai")
     public ResponseEntity<?> CapNhapTrangThaiKhuyenMai(@PathParam("id") Integer id){
         try {
             khuyenMaiService.CapNhapTrangThaiKhuyenMai(id);

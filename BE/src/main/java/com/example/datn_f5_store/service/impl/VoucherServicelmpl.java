@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.service.impl;
 
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.dto.VoucherDto;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
@@ -60,10 +61,15 @@ public class VoucherServicelmpl implements VoucherService {
     @Override
     public DataResponse createVoucher(VoucherRequest voucher){
         Date ngayHienTai = new Date();
+        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
         VoucherEntity voucher1 = new VoucherEntity();
         try {
             if (CheckVoucher(voucher)) {
                 if (checkTrungMaVoucher(voucher.getMa())) {
+                    if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                    }
                     voucher1.setMa(voucher.getMa());
                     voucher1.setTen(voucher.getTen());
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
@@ -71,12 +77,22 @@ public class VoucherServicelmpl implements VoucherService {
                     voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
                     voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                     voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
+                    voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                     voucher1.setSoLuong(voucher.getSoLuong());
-                    voucher1.setNguoiTao(voucher.getNguoiTao());
+                    voucher1.setNguoiTao("ADMIN");
                     voucher1.setThoiGianTao(ngayHienTai);
-                    voucher1.setNguoiSua(voucher.getNguoiSua());
                     voucher1.setMoTa(voucher.getMoTa());
-                    voucher1.setTrangThai(voucher.getTrangThai());
+                    LocalDate thoiGianBatDau = voucher.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate thoiGianKetThuc = voucher.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    if (thoiGianKetThuc.isBefore(currentDate)) {
+                        voucher1.setTrangThai("Đã hết hạn");
+                    } else if (thoiGianBatDau.isEqual(currentDate)) {
+                        voucher1.setTrangThai("Đang diễn ra");
+                    } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
+                        voucher1.setTrangThai("Đang diễn ra");
+                    } else {
+                        voucher1.setTrangThai("Sắp diễn ra");
+                    }
                     iVoucherRepository.save(voucher1);
                     return new DataResponse(true, new ResultModel<>(null, "Thêm Voucher thành công"));
                 }
@@ -98,6 +114,9 @@ public class VoucherServicelmpl implements VoucherService {
         try {
             if (voucher1 != null) {
                 if (CheckVoucher(voucher)) {
+                    if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                    }
                     voucher1.setMa(voucher.getMa());
                     voucher1.setTen(voucher.getTen());
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
@@ -105,10 +124,10 @@ public class VoucherServicelmpl implements VoucherService {
                     voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
                     voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
                     voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
+                    voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                     voucher1.setSoLuong(voucher.getSoLuong());
-                    voucher1.setNguoiTao(voucher.getNguoiTao());
                     voucher1.setThoiGianSua(ngayHienTai);
-                    voucher1.setNguoiSua(voucher.getNguoiSua());
+                    voucher1.setNguoiSua("ADMIN");
                     voucher1.setMoTa(voucher.getMoTa());
                     voucher1.setTrangThai(voucher.getTrangThai());
                     iVoucherRepository.save(voucher1);
@@ -132,16 +151,32 @@ public class VoucherServicelmpl implements VoucherService {
     // hàm cập nhập trạng thái Voucher
     @Override
     public Boolean CapNhapTrangThaiVoucher(Integer id) throws DataNotFoundException{
+        Date ngayHienTai = new Date();
+        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Không thể cập nhập trạng thái với id : "+ id)
         );
-        if (voucher1 != null){
+        LocalDate thoiGianBatDau = voucher1.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate thoiGianKetThuc = voucher1.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (voucher1.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") || voucher1.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
             voucher1.setTrangThai("Không hoạt động");
             iVoucherRepository.save(voucher1);
             return true;
-        }else {
-            return false;
         }
+        if (voucher1.getTrangThai().trim().equalsIgnoreCase("Không hoạt động")){
+            if (thoiGianKetThuc.isBefore(currentDate)) {
+                voucher1.setTrangThai("Đã hết hạn");
+            } else if (thoiGianBatDau.isEqual(currentDate)) {
+                voucher1.setTrangThai("Đang diễn ra");
+            } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
+                voucher1.setTrangThai("Đang diễn ra");
+            } else {
+                voucher1.setTrangThai("Sắp diễn ra");
+            }
+            iVoucherRepository.save(voucher1);
+            return true;
+        }
+       return false;
     }
 
     // hàm check trùng mã Voucher
@@ -172,6 +207,7 @@ public class VoucherServicelmpl implements VoucherService {
         }
     }
 
+
     @Override
     public Page<VoucherDto> findVoucherByDate(int page, int size, Date ngayBatDau, Date ngayKetThuc) {
         Pageable pageable = PageRequest.of(page, size);
@@ -187,8 +223,10 @@ public class VoucherServicelmpl implements VoucherService {
         } else if (startDate != null && endDate != null) {
             // Nếu cả hai không null, tìm Voucher theo khoảng thời gian
             voucherEntities = iVoucherRepository
-                    .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                            Date.from(endDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+                    .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(
+                            Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            pageable);
         } else if (startDate != null) {
             // Nếu chỉ có Ngày bắt đầu , tìm Voucher bắt đầu từ ngày đó trở đi
             voucherEntities = iVoucherRepository
@@ -223,7 +261,7 @@ public class VoucherServicelmpl implements VoucherService {
         Pageable pageable = PageRequest.of(page, size);
         Page<VoucherEntity> voucherEntities;
 
-        if (tim == null && tim.trim().isEmpty()) {
+        if (tim == null || tim.trim().isEmpty()) {
             voucherEntities = iVoucherRepository.findAll(pageable);
         } else {
             voucherEntities = iVoucherRepository.getByTenContainingOrMaContaining(tim, tim, pageable);
@@ -263,6 +301,9 @@ public class VoucherServicelmpl implements VoucherService {
         if (voucherRequest.getGiaTriGiamToiDa() == null || voucherRequest.getGiaTriGiamToiDa() <= 0) {
             return false;
         }
+        if (voucherRequest.getGiaTriHoaDonToiThieu() == null || voucherRequest.getGiaTriHoaDonToiThieu() <= 0) {
+            return false;
+        }
         if (voucherRequest.getKieuGiamGia() == null || voucherRequest.getKieuGiamGia().trim().isEmpty()) {
             return false;
         }
@@ -275,19 +316,40 @@ public class VoucherServicelmpl implements VoucherService {
         if (voucherRequest.getSoLuong() == null || voucherRequest.getSoLuong() <= 0) {
             return false;
         }
-        if (voucherRequest.getNguoiTao() == null || voucherRequest.getNguoiTao().trim().isEmpty()) {
-            return false;
-        }
-        if (voucherRequest.getTrangThai() == null || voucherRequest.getTrangThai().trim().isEmpty()) {
-            return false;
-        }
         return true;
     }
 
 
 
+    @Override
+    public Page<VoucherDto> findByTrangThai(int page, int size, String trangThai) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VoucherEntity> VoucherEntity;
 
-
+        if (trangThai == null || trangThai.trim().isEmpty()) {
+            VoucherEntity = iVoucherRepository.findAll(pageable);
+        } else {
+            VoucherEntity = iVoucherRepository.findByTrangThai(trangThai, pageable);
+        }
+        return VoucherEntity.map(entity -> new VoucherDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getGiaTriVoucher(),
+                entity.getKieuGiamGia(),
+                entity.getGiaTriGiamToiDa(),
+                entity.getGiaTriHoaDonToiThieu(),
+                entity.getThoiGianBatDau(),
+                entity.getThoiGianKetThuc(),
+                entity.getMoTa(),
+                entity.getSoLuong(),
+                entity.getNguoiTao(),
+                entity.getThoiGianTao(),
+                entity.getNguoiSua(),
+                entity.getThoiGianSua(),
+                entity.getTrangThai()
+        ));
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.example.datn_f5_store.service;
 
 import com.example.datn_f5_store.dto.ChiTietHoaDonDto;
 import com.example.datn_f5_store.dto.HoaDonDto;
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.request.ChiTietHoaDonRequest;
@@ -25,4 +26,5 @@ public interface IHoaDonService {
     HoaDonEntity getDetailHoaDonCho(Integer id);
     DataResponse updateTrangThaiHoaDon(Integer id);
     Page<HoaDonDto> getByTrangThaiHoanThanh(Integer page, Integer size,String keyWord);
+    Page<HoaDonDto> getAllHoaDon(int page, int size);
 }

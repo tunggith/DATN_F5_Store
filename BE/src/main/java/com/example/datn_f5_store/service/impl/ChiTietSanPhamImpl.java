@@ -36,7 +36,7 @@ public class ChiTietSanPhamImpl {
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
     ) {
-        int size = 5;
+        int size = 3;
         Pageable pageable = PageRequest.of(currentPage, size);
 
         // Lấy kết quả phân trang từ repository

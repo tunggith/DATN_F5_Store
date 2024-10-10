@@ -33,6 +33,19 @@ public class HoaDonController {
         dataResponse.setResult(new ResultModel<>(null,hoaDonList));
         return ResponseEntity.ok(dataResponse);
     }
+
+    @GetMapping("/getAllHoaDon")
+    private ResponseEntity<Object> getAll(@Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
+                                          @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size) {
+        DataResponse dataResponse = new com.example.datn_f5_store.response.DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+        dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+        var responseList = hoaDonService.getAllHoaDon(page, size); // Lấy danh sách Khuyen mai với phân trang
+        // ham tự động cập nhập trạng thái Khuyến mãi khi hết hạn
+
+        dataResponse.setResult(new ResultModel<>(null, responseList)); // Đặt kết quả vào response
+        return ResponseEntity.ok(dataResponse);
+    }
+
     @GetMapping("/get-chi-tiet-hoa-don/{id}")
     private ResponseEntity<Object> getChiTietHoaDon(@Parameter(name = "id")@PathVariable Integer id){
         DataResponse dataResponse = new DataResponse();
