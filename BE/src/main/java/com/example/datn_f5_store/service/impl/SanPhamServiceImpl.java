@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SanPhamServiceImpl implements ISanPhamService {
@@ -40,7 +41,26 @@ public class SanPhamServiceImpl implements ISanPhamService {
     private IThuongHieuRepository thuongHieuRepo;
 
     @Autowired
-    private IGioiTinhRepository theLoaiRepo;
+    private IGioiTinhRepository gioiTinhRepo;
+
+
+    @Override
+    public List<SanPhamDto> getFull() {
+        List<SanPhamEntity> sanPhamList = sanPhamRepo.findAll();
+
+        // Chuyển đổi từ SanPhamEntity sang SanPhamDto
+        List<SanPhamDto> sanPhamDtoList = sanPhamList.stream().map(entity -> new SanPhamDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getXuatXu(),
+                entity.getThuongHieu(),
+                entity.getGioiTinh(),
+                entity.getTrangThai()
+        )).collect(Collectors.toList());
+
+        return sanPhamDtoList;
+    }
 
     // Phương thức để lấy tất cả sản phẩm với phân trang
     @Override
@@ -55,7 +75,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getTheLoai(),
+                entity.getGioiTinh(),
                 entity.getTrangThai()
         ));
     }
@@ -81,7 +101,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                 entity.getTen(),
                 entity.getXuatXu(),
                 entity.getThuongHieu(),
-                entity.getTheLoai(),
+                entity.getGioiTinh(),
                 entity.getTrangThai()
         ));
     }
@@ -101,7 +121,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
                     entity.getTen(),
                     entity.getXuatXu(),
                     entity.getThuongHieu(),
-                    entity.getTheLoai(),
+                    entity.getGioiTinh(),
                     entity.getTrangThai()
             );
             // Trả về danh sách chứa một phần tử duy nhất
@@ -180,7 +200,7 @@ public class SanPhamServiceImpl implements ISanPhamService {
             check = true;
         }
         // Kiểm tra thể loại sản phẩm
-        if (request.getTheLoai().getId() == null) {
+        if (request.getGioiTinh().getId() == null) {
             check = true;
         }
         return check;
@@ -214,8 +234,8 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setThuongHieu(thuongHieu);
 
         // Tìm và set thể loại
-        GioiTinhEntity theLoai = theLoaiRepo.findById(request.getTheLoai().getId()).orElse(null);
-        entity.setTheLoai(theLoai);
+        GioiTinhEntity gioiTinh = gioiTinhRepo.findById(request.getGioiTinh().getId()).orElse(null);
+        entity.setGioiTinh(gioiTinh);
         entity.setTrangThai(request.getTrangThai());
     }
 

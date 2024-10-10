@@ -72,7 +72,6 @@ public class PdfExportService {
                         + hoaDon.getKhachHang().getDiaChiKhachHang().getTinhThanh() + ","
                         + hoaDon.getKhachHang().getDiaChiKhachHang().getQuocGia();
             }
-
             document.add(new Paragraph("Ngày "+ngay+",tháng "+thang+",năm "+2024)
                     .setTextAlignment(TextAlignment.RIGHT));
             document.add(new Paragraph("Khách hàng:"+khachHang)
@@ -117,7 +116,7 @@ public class PdfExportService {
                         .setTextAlignment(TextAlignment.CENTER));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getMauSac().getTen())))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getTheLoai().getTen())))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getGioiTinh().getTen())))
                         .setTextAlignment(TextAlignment.CENTER));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getSoLuong())))
                         .setTextAlignment(TextAlignment.CENTER));

@@ -409,7 +409,6 @@ public class HoaDonServiceImpl implements IHoaDonService {
         hoaDonRepository.save(hoaDon);
         return new DataResponse(true,new ResultModel<>(null,"giảm thành công"));
     }
-
     @Override
     public DataResponse updateKhachhang(Integer idHoaDon,Integer idKhachHang) {
         HoaDonEntity hoaDon = hoaDonRepository.findById(idHoaDon).orElse(null);
@@ -511,7 +510,6 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 entity.getTrangThai()
         ));
     }
-
 
 
     @Override

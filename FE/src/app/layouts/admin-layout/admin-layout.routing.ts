@@ -1,7 +1,8 @@
+import { NgModule } from '@angular/core';
 import { Routes } from '@angular/router';
 
 import { BanHangComponent } from '../../ban-hang/./ban-hang.component';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { SanphamComponent } from '../../sanpham/sanpham.component'; // Đường dẫn tới component sản phẩm
 import { TableListComponent } from '../../table-list/table-list.component';
 import { TypographyComponent } from '../../typography/typography.component';
 import { IconsComponent } from '../../icons/icons.component';
@@ -53,7 +54,7 @@ export const AdminLayoutRoutes: Routes = [
     //     }]
     // }
     { path: 'ban-hang',      component: BanHangComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
+    { path: 'sanpham', component: SanphamComponent }, // Định tuyến cho sản phẩm
     { path: 'table-list',     component: TableListComponent },
     { path: 'typography',     component: TypographyComponent },
     { path: 'icons',          component: IconsComponent },
@@ -61,3 +62,11 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'notifications',  component: NotificationsComponent },
     { path: 'upgrade',        component: UpgradeComponent },
 ];
+
+@NgModule({
+  imports: [
+    // Các module cần thiết khác
+  ],
+  declarations: [],
+})
+export class AdminLayoutRoutingModule {}

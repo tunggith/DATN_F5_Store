@@ -11,7 +11,7 @@ public class SanPhamRequest {
     private Integer id;
     private XuatXuRequest xuatXu;
     private ThuongHieuRequest thuongHieu;
-    private GioiTinhRequest theLoai;
+    private GioiTinhRequest gioiTinh;
     private String ma;
     private String ten;
     private String trangThai;

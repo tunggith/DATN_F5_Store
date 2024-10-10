@@ -1,10 +1,9 @@
 
 package com.example.datn_f5_store.response;
 
-
-
-
+import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
+import com.example.datn_f5_store.entity.SizeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +21,9 @@ public class ChiTietSanPhamReponse {
 
     private SanPhamEntity San_pham;
 
-    private String  mauSac;
+    private MauSacEntity mauSac;
 
-    private String size;
+    private SizeEntity size;
 
     private String ma;
 

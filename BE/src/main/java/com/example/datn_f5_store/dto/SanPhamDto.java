@@ -18,6 +18,6 @@ public class SanPhamDto {
     private String ten;
     private XuatXuEntity xuatXu;
     private ThuongHieuEntity thuongHieu;
-    private GioiTinhEntity theLoai;
+    private GioiTinhEntity gioiTinh;
     private String trangThai;
 }

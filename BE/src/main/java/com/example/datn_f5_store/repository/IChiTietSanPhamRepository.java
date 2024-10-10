@@ -16,10 +16,11 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-            ctsp.id,
+
+           ctsp.id,
             ctsp.sanPham,
-            ctsp.mauSac.ten,
-            ctsp.size.ten,
+            ctsp.mauSac,
+            ctsp.size,
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -32,15 +33,16 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-            ctsp.id,
+         ctsp.id,
             ctsp.sanPham,
-            ctsp.mauSac.ten,
-            ctsp.size.ten,
+            ctsp.mauSac,
+            ctsp.size,
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
             ctsp.soLuong,
             ctsp.trangThai
+           
         ) 
         from ChiTietSanPhamEntity ctsp
     """)
@@ -50,8 +52,8 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham,
-            ctsp.mauSac.ten,
-            ctsp.size.ten,
+            ctsp.mauSac,
+            ctsp.size,
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -63,7 +65,9 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     """)
     Page<ChiTietSanPhamReponse> getALLByIDSPCTPhanTrang(@Param("id") Integer id, Pageable pageable);
 
-    @Query("""
+
+
+        @Query("""
         SELECT COUNT(ctsp) > 0 
         FROM ChiTietSanPhamEntity ctsp
         WHERE ctsp.sanPham.id = :idSanPham 
@@ -72,18 +76,20 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
           AND ctsp.ma = :ma 
           AND ctsp.ten = :ten
     """)
-    boolean checkTrung(@Param("idSanPham") Integer idSanPham,
-                       @Param("idMauSac") Integer idMauSac,
-                       @Param("idSize") Integer idSize,
-                       @Param("ma") String ma,
-                       @Param("ten") String ten);
+        boolean checkTrung(@Param("idSanPham") Integer idSanPham,
+                           @Param("idMauSac") Integer idMauSac,
+                           @Param("idSize") Integer idSize,
+                           @Param("ma") String ma,
+                           @Param("ten") String ten);
+
+
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-            ctsp.id,
+             ctsp.id,
             ctsp.sanPham,
-            ctsp.mauSac.ten,
-            ctsp.size.ten,
+            ctsp.mauSac,
+            ctsp.size,
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -100,8 +106,8 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham,
-            ctsp.mauSac.ten,
-            ctsp.size.ten,
+            ctsp.mauSac,
+            ctsp.size,
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -124,4 +130,5 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             String ma,
             String ten,
             Pageable pageable);
+    boolean existsByMaOrTen(String ma, String ten);
 }

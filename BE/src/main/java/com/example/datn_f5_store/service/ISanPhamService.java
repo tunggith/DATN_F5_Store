@@ -9,8 +9,12 @@ import java.util.List;
 public interface ISanPhamService {
 
     Page<SanPhamDto> getAll(int page, int size);
+    List<SanPhamDto> getFull();
+
     Page<SanPhamDto> findByTenOrMa(int page, int size,String ten,String ma);
     DataResponse create(SanPhamRequest sanPhamRequest);
     DataResponse update(SanPhamRequest sanPhamRequest,Integer id);
     List<SanPhamDto> findById(Integer id);
+
+
 }
