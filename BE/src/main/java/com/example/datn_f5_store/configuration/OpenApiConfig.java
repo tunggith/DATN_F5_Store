@@ -3,6 +3,8 @@ package com.example.datn_f5_store.configuration;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +27,17 @@ public class OpenApiConfig {
                         .version(version)
                         .description(description)
                         .license(new License().name("Api license").url("http://domain.vn/license")))
-                .servers(List.of(new Server().url(serverUrl).description(serverName)));
+                .servers(List.of(new Server().url(serverUrl).description(serverName)))
+                .addSecurityItem(new SecurityRequirement().addList("Bearer Token")) // Thêm yêu cầu bảo mật
+                .components(new io.swagger.v3.oas.models.Components()
+                        .addSecuritySchemes("Bearer Token",
+                                new SecurityScheme()
+                                        .name("Bearer Token")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
     }
+
     @Bean
     public GroupedOpenApi groupedOpenApi(){
         return GroupedOpenApi.builder()
