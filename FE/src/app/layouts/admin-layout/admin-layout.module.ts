@@ -1,3 +1,5 @@
+import { AnhChiTietSanPhamComponent } from './../../anh-chi-tiet-san-pham/anh-chi-tiet-san-pham.component';
+import { LichSuHoaDonComponent } from './../../lich-su-hoa-don/lich-su-hoa-don.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,6 +13,7 @@ import { IconsComponent } from '../../khuyenMai/icons.component';
 import { VoucherComponent } from '../../voucher/voucher.component';
 import { KhuyenMaiChiTietSanPhamComponent } from '../../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.component';
 import { MapsComponent } from '../../maps/maps.component';
+import { DiaChiKhachHangComponent } from '../../dia-chi-khach-hang/dia-chi-khach-hang.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { CustomerPopupComponent } from 'app/customer-popup/customer-popup.component';
@@ -48,6 +51,9 @@ import { MatSelectModule } from '@angular/material/select';
     CustomerPopupComponent,
     VoucherComponent,
     KhuyenMaiChiTietSanPhamComponent,
+    DiaChiKhachHangComponent,
+    LichSuHoaDonComponent,
+    AnhChiTietSanPhamComponent,
   ]
 })
 
