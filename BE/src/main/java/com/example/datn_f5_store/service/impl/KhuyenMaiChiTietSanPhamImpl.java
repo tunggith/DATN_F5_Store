@@ -116,19 +116,18 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Mã khuyến mãi "+ khuyenMai.getMa() +" đã hết hạn, không thể áp dụng"));
             }
             if (khuyenMai.getSoLuong() == 0 || khuyenMai.getSoLuong() == null){
-                return new DataResponse(false, new ResultModel<>(null, "Số lượng mã "+ khuyenMai.getMa() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getTen() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
             }
             if (chiTietSanPham.getSoLuong() <= 0 || chiTietSanPham.getSoLuong() == null){
                 return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if (chiTietSanPham.getTrangThai().equalsIgnoreCase("Hết hàng")){
-                return new DataResponse(false, new ResultModel<>(null, "Thêm sản phẩm"+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Chưa áp dụng");
-                System.out.println("Trạng thái khuyến mãi kh ok: " + khuyenMai.getTrangThai());
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
@@ -145,7 +144,6 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Đang hoạt động");
-                System.out.println("Trạng thái khuyến mãi ok:  " + khuyenMai.getTrangThai());
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
@@ -190,6 +188,22 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
                     khuyenMaictsp.setTrangThai("Đã hết hạn");
                     iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
+                }
+                if (khuyenMaictsp.getKhuyenMai().getTrangThai() != null && khuyenMaictsp.getKhuyenMai().getTrangThai().trim().equalsIgnoreCase("Không hoạt động")) {
+                     if ( !khuyenMaictsp.getKhuyenMai().getThoiGianBatDau().after(currentDate) &&
+                            !khuyenMaictsp.getKhuyenMai().getThoiGianKetThuc().before(currentDate)) {
+                         if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                             khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
+                         } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
+                             khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                         }
+                         System.out.println("khuyen mai giam gia "+ khuyenMaictsp.getKhuyenMai().getTrangThai());
+                         chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
+                         iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
+                     }else {
+                         System.out.println("khuyen mai khong giam gia "+ khuyenMaictsp.getKhuyenMai().getTrangThai());
+                         iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
+                     }
                 }
             }
         } catch (Exception e) {

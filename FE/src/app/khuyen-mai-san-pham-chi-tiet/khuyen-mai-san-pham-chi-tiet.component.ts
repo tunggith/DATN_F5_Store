@@ -15,11 +15,18 @@ import Swal from 'sweetalert2';
 export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
   khuyenMais: any[] = [];
   chiTietSanPhams: any[] = [];
+  locSanPhams: any[] = [];
   selectedKhuyenMai: any; 
   khuyenMaiChiTietSanPhams: any[];
-  
+  page: number = 0; 
+  size : number = 5;
+  totalPages: 0;
+  searchTerm: string = '';
+
   selectedKhuyenMaiId: number | null = null;
   
+
+
   constructor(private khuyenMaiChiTietSanPhamService: KhuyenMaiSanPhamChiTietService,
     private router: ActivatedRoute,
     private khuyenMaiService : KhuyenMaiService,
@@ -30,10 +37,22 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
     this.selectedKhuyenMaiId = +this.router.snapshot.paramMap.get('id')!; // Lấy id từ route
     this.fetchKhuyenMaiDetail(this.selectedKhuyenMaiId);
     this.fetchChiTietSanPhams();
+    this.loadSanPhamTimKiems();
     this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId);
     this.loadSelectionsFromLocalStorage();
     
   }
+
+ 
+
+filterSanPhams() {
+  if (!this.searchTerm) {
+    return this.chiTietSanPhams;
+  }
+  return this.chiTietSanPhams.filter(sp => sp.ten_san_pham.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+                                           sp.ma.toLowerCase().includes(this.searchTerm.toLowerCase()));
+}
+
 
   // find thông tin khuyến mãi lấy theo selectedKhuyenMaiId 
   fetchKhuyenMaiDetail(id: number) {
@@ -76,18 +95,38 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
 }
 
 
+
+
 // find chi tiết sản phẩm
-  fetchChiTietSanPhams() {
-    this.khuyenMaiChiTietSanPhamService.getAllctsp().subscribe(
-      (response: any) => {
-        if (response && response.status && response.result && response.result.content) {
-          this.chiTietSanPhams = response.result.content.body;
-          this.loadSelectionsFromLocalStorage();
-        }
-      },
-      (error) => console.error('Lỗi khi gọi API sản phẩm:', error)
-    );
-  }
+fetchChiTietSanPhams() {
+  this.khuyenMaiChiTietSanPhamService.getAllctsp(this.page, this.size).subscribe(
+    (response: any) => {
+      console.log('Response:', response);
+      this.chiTietSanPhams = response.content;  
+      this.totalPages = response.totalPages;    
+      this.loadSelectionsFromLocalStorage();  
+    },
+    (error) => console.error('Lỗi khi gọi API sản phẩm:', error)
+  );
+}
+
+loadSanPhamTimKiems(): void {
+  this.khuyenMaiChiTietSanPhamService.timTheoTenHoacMa(this.searchTerm,this.page, this.size)
+    .subscribe(response => {
+      this.chiTietSanPhams = response.content;  // Gán danh sách sản phẩm
+      this.totalPages = response.totalPages;
+      this.loadSelectionsFromLocalStorage();   // Tổng số trang
+    }, error => {
+      console.error('Lỗi khi tải sản phẩm:', error);
+    });
+}
+onSearch(): void {
+  this.page = 0;  // Reset về trang đầu tiên khi tìm kiếm mới
+  this.loadSanPhamTimKiems();
+}
+
+
+
 
 
   // hàm thêm, xóa khuyến mãi vào sản phẩm
@@ -182,8 +221,8 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
             event.target.checked = true;
             this.saveSelectionsToLocalStorage();
             this.fetchChiTietSanPhams();
-           
           }
+        
         },
         (error) => {
           console.log(error);
@@ -199,10 +238,11 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
           event.target.checked = true;
           this.saveSelectionsToLocalStorage();
           this.fetchChiTietSanPhams();  // Nếu xóa thất bại, giữ lại checkbox
-        }
-      );
-    }
+      }
+    );
   }
+}
+
 
 
   loadSelectionsFromLocalStorage() {
@@ -210,16 +250,40 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
     this.chiTietSanPhams.forEach(sp => {
       sp.selected = selectedProductIds.includes(sp.id);
     });
-}
+ }
 
-saveSelectionsToLocalStorage() {
+
+ saveSelectionsToLocalStorage() {
     const selectedProductIds = this.chiTietSanPhams
       .filter(sp => sp.selected)
       .map(sp => sp.id);
     localStorage.setItem('selectedProducts', JSON.stringify(selectedProductIds));
 }
 
-  
+
+
+prevPage(): void {
+  if (this.page > 0) {
+    this.page--;
+    this.fetchChiTietSanPhams(); // Gọi lại để tải dữ liệu cho trang trước
+  }
+}
+
+
+nextPage(): void {
+  if (this.page < this.totalPages - 1) {
+    this.page++;
+    this.fetchChiTietSanPhams(); // Gọi lại để tải dữ liệu cho trang tiếp theo
+  }
+}
+
+
+goToPage(pageNumber: number): void {
+  console.log('Current Page:', this.page);
+  this.page = pageNumber;
+  this.fetchChiTietSanPhams(); // Gọi lại API để tải dữ liệu
+}
 
 
 }
+

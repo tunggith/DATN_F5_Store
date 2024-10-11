@@ -4,7 +4,7 @@ package com.example.datn_f5_store.controller;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 
-import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 
@@ -65,6 +65,7 @@ public class ChiTietSanPhamController
     ){
         DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
+
         var responseList = ctsp_Sevice.getallPhanTrang(curentPage);
         dataResponse.setResult(new ResultModel<>(null,responseList));
         return ResponseEntity.ok(dataResponse);
@@ -124,6 +125,15 @@ public class ChiTietSanPhamController
         Page<ChiTietSanPhamReponse> result = ctsp_Sevice.searchByTenOrMa(keyword, page, size);
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/searchsp")
+    public ResponseEntity<?> searchChiTietSanPhamManKm(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Page<ChiTietSanPhamEntity> result = ctsp_Sevice.searchByTenOrMaManKm(keyword, page, size);
+        return ResponseEntity.ok(result);
+    }
 
     @GetMapping("/filterByPrice")
     public ResponseEntity<?> filterByPrice(
@@ -144,5 +154,17 @@ public class ChiTietSanPhamController
     @GetMapping("/getAllKm")
     public List<ChiTietSanPhamEntity> getallkm(){
         return chiTietSanPhamRepository.findAll();
+    }
+
+    @GetMapping("/getall-phan_trangKm")
+    public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+
+        // Gọi service để lấy dữ liệu đã phân trang
+        Page<ChiTietSanPhamEntity> pageResult = ctsp_Sevice.getAllPhanTrangKm(page, pageSize);
+
+        // Trả về đối tượng Page, bao gồm dữ liệu và thông tin phân trang
+        return ResponseEntity.ok(pageResult);
     }
 }

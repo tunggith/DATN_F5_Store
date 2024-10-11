@@ -1,6 +1,6 @@
 package com.example.datn_f5_store.repository;
 
-import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ import java.util.List;
 public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamEntity, Integer> {
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham.ten,
             ctsp.mauSac.ten,
@@ -31,7 +31,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     List<ChiTietSanPhamReponse> getAllCTSP();
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham.ten,
             ctsp.mauSac.ten,
@@ -47,7 +47,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     Page<ChiTietSanPhamReponse> getALLPhanTrang(Pageable pageable);
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham.ten,
             ctsp.mauSac.ten,
@@ -79,7 +79,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
                        @Param("ten") String ten);
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham.ten,
             ctsp.mauSac.ten,
@@ -97,7 +97,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     Page<ChiTietSanPhamReponse> searchByTenOrMa(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        select new com.example.datn_f5_store.Response.ChiTietSanPhamReponse(
             ctsp.id,
             ctsp.sanPham.ten,
             ctsp.mauSac.ten,
@@ -114,4 +114,12 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     Page<ChiTietSanPhamReponse> filterByPrice(@Param("minPrice") Double minPrice,
                                               @Param("maxPrice") Double maxPrice,
                                               Pageable pageable);
+
+    @Query("""
+        select ctsp
+        from ChiTietSanPhamEntity ctsp 
+        where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
+          or lower(ctsp.ma) like lower(concat('%', :keyword, '%'))
+    """)
+    Page<ChiTietSanPhamEntity> searchByTenOrMa1(@Param("keyword") String keyword, Pageable pageable);
 }

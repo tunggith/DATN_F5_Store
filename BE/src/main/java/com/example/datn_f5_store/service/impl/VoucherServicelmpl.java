@@ -70,6 +70,9 @@ public class VoucherServicelmpl implements VoucherService {
                     if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
                     }
+                    if (voucher.getThoiGianBatDau().after(voucher.getThoiGianKetThuc())) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
+                    }
                     voucher1.setMa(voucher.getMa());
                     voucher1.setTen(voucher.getTen());
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
@@ -116,7 +119,10 @@ public class VoucherServicelmpl implements VoucherService {
                 if (CheckVoucher(voucher)) {
                     if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                    } if (voucher.getThoiGianBatDau().after(voucher.getThoiGianKetThuc())) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
                     }
+
                     voucher1.setMa(voucher.getMa());
                     voucher1.setTen(voucher.getTen());
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
@@ -199,6 +205,9 @@ public class VoucherServicelmpl implements VoucherService {
             for (VoucherEntity voucher : vouchers) {
                 if (voucher.getThoiGianKetThuc() != null && voucher.getThoiGianKetThuc().before(currentDate)) {
                     voucher.setTrangThai("Đã hết hạn");
+                    iVoucherRepository.save(voucher);
+                }if (voucher.getSoLuong() == 0) {
+                    voucher.setTrangThai("Không hoạt động");
                     iVoucherRepository.save(voucher);
                 }
             }

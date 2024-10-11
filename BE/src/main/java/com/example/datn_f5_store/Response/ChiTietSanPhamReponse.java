@@ -1,5 +1,5 @@
 
-package com.example.datn_f5_store.response;
+package com.example.datn_f5_store.Response;
 
 
 
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor

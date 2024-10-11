@@ -40,13 +40,14 @@ export class IconsComponent implements OnInit {
   searchTerm: string = '';
   page: number = 0; 
   size: number = 3;
+  totalPages: 0;
 
   isAddingPromotionToProduct = false;
   selectedKhuyenMai: any;
   selectedProductIds: number[] = [];
   products: any[] = [];
   trangThai: string = ''; // Biến để lưu trạng thái chọn
-  totalPages: 0;
+ 
 
 
   constructor(

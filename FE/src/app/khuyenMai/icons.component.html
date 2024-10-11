@@ -231,7 +231,7 @@
             <i class="material-icons">edit</i> Sửa
           </button>
           <button class="btn btn-danger btn-sm" (click)="capNhapKm(khuyenMai.id)"
-          [disabled]="khuyenMai.trangThai === 'Đã hết hạn'">
+          [disabled]="khuyenMai.trangThai === 'Đã hết hạn' || khuyenMai.soLuong === 0">
             <i class="material-icons">swap_horiz</i> Đổi trạng thái
           </button>
           <button 
