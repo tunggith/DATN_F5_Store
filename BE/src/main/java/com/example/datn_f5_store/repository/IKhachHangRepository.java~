@@ -33,7 +33,6 @@ public interface IKhachHangRepository extends JpaRepository<KhachHangEntity, Int
     Boolean existsByEmail(String email); // Kiểm tra trùng email
     Boolean existsByUserName(String userName); // Kiểm tra trùng username
 
-    Page<KhachHangEntity> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(
-            String ten, String ma, String email, String sdt, Pageable pageable);
+    Page<KhachHangEntity> getByTenIsContainingOrMaContainingOr(String ten, String ma,String email, String sdt Pageable pageable);
 
 }

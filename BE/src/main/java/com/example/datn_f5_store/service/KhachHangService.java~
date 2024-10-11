@@ -22,6 +22,5 @@ public interface KhachHangService {
     List<KhachHangEntity> searchKhachHang(String name, String email, String sdt);
     List<KhachHangEntity> getAllKhachHangKhongPhanTrang();
 
-    Page<KhachHangDto> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(
-            int page, int size, String ten, String ma, String email, String sdt);
+    Page<KhachHangDto>  findByTenOrMa(int page, int size, String ten, String ma,String email, String sdt);
 }
