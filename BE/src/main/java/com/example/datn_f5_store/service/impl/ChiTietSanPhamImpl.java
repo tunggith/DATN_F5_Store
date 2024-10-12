@@ -46,20 +46,17 @@ public class ChiTietSanPhamImpl {
         return ResponseEntity.ok(pageResult.getContent());
     }
 
-    public ResponseEntity<?> getallPhanTrangbyidSP(
-            Integer id,
-            Integer currentPage
-
-    ) {
+    public Page<?> getallPhanTrangbyidSP(Integer id, Integer currentPage) {
         int size = 5;
         Pageable pageable = PageRequest.of(currentPage, size);
 
         // Lấy kết quả phân trang từ repository
         var pageResult = repo_ctsp.getALLByIDSPCTPhanTrang(id, pageable);
 
-        // Trả về danh sách kết quả
-        return ResponseEntity.ok(pageResult.getContent());
+        // Trả về kết quả phân trang gồm cả nội dung và thông tin phân trang
+        return pageResult;
     }
+
 
     public ResponseEntity<?> saveChiTietSanPham(ChiTietSanphamRequest ctspRequet, BindingResult result) {
         // Kiểm tra nếu có lỗi

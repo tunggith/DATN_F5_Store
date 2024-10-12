@@ -27,7 +27,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
 public class ChiTietSanPhamController
@@ -74,17 +77,24 @@ public class ChiTietSanPhamController
     @GetMapping("/getall-phan_trang/{id}")
     public ResponseEntity<?> getallPhanTrang(
             @PathVariable("id") Integer id,
-            @RequestParam(value = "currentPage" , defaultValue = "0") Integer curentPage
-
-    ){
-
-
-        DataResponse  dataResponse = new DataResponse();
+            @RequestParam(value = "currentPage", defaultValue = "0") Integer currentPage
+    ) {
+        DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = ctsp_Sevice.getallPhanTrangbyidSP(id,curentPage);
-        dataResponse.setResult(new ResultModel<>(null, responseList));
-        return ResponseEntity.ok(dataResponse);
+
+        // Gọi service để lấy kết quả phân trang
+        var pageResult = ctsp_Sevice.getallPhanTrangbyidSP(id, currentPage);
+
+        // Đưa dữ liệu phân trang và nội dung trực tiếp vào phản hồi
+        Map<String, Object> result = new HashMap<>();
+        result.put("content", pageResult.getContent());  // Danh sách sản phẩm
+        result.put("totalPages", pageResult.getTotalPages());  // Tổng số trang
+        result.put("currentPage", pageResult.getNumber());  // Trang hiện tại
+        result.put("pageSize", pageResult.getSize());  // Kích thước trang
+        result.put("totalElements", pageResult.getTotalElements());  // Tổng số phần tử
+        return ResponseEntity.ok(result);  // Trả về map chứa dữ liệu và phân trang
     }
+
 
     @PostMapping("/created")
     public ResponseEntity<?> saveChiTietSanPham(@Valid @RequestBody ChiTietSanphamRequest ctspRequest, BindingResult result) {
