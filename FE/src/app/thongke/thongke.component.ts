@@ -123,22 +123,45 @@ loadTopSanPhamTheoNam(): void {
 
   // Hàm lấy dữ liệu theo tháng và gọi API top sản phẩm theo tháng
   loadDoanhThu(): void {
+    //Kiểm tra xem năm đã chọn có hợp lệ không
+    if (!this.selectedYear || this.selectedYear <= 0) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Vui lòng chọn năm hợp lệ!',
+      });
+      console.error('Vui lòng chọn năm hợp lệ');
+      return;
+    }
+    // Lấy năm hiện tại
+    const currentYear = new Date().getFullYear();
+    
+    // Kiểm tra xem năm đã chọn có nhỏ hơn năm hiện tại không
+    if (this.selectedYear > currentYear) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Năm phải nhỏ hơn năm hiện tại!',
+      });
+      console.error('Năm phải nhỏ hơn năm hiện tại');
+      return;
+    }
+    
+  
     this.thongkeService.getDoanhThuTheoThang(this.selectedYear).subscribe(
       (data) => {
         const doanhThu = data.map(item => item.doanhThu);
         const thang = data.map(item => `Tháng ${item.thang}`);
-
+  
         this.lineChartData = [
           { data: doanhThu, label: `Doanh thu theo tháng năm ${this.selectedYear}` }
         ];
         this.lineChartLabels = thang;
-
+  
         // Tính tổng doanh thu
         this.totalDoanhThu = this.calculateTotal(doanhThu);
-
+  
         // Tìm tháng có doanh thu cao nhất
         this.findHighestRevenue(doanhThu, thang);
-
+  
         // Gọi API top sản phẩm theo tháng
         this.loadTopSanPhamTheoThang();
       },
@@ -147,25 +170,61 @@ loadTopSanPhamTheoNam(): void {
       }
     );
   }
-
+  
   // Hàm lấy dữ liệu theo quý và gọi API top sản phẩm theo quý
   loadDoanhThuTheoQuy(): void {
+// Kiểm tra xem năm đã chọn có hợp lệ không
+if (!this.selectedYear || this.selectedYear <= 0) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Vui lòng chọn năm hợp lệ!',
+  });
+  console.error('Vui lòng chọn năm hợp lệ');
+  return;
+}
+// Lấy năm hiện tại
+const currentYear = new Date().getFullYear();
+
+// Kiểm tra xem năm đã chọn có nhỏ hơn năm hiện tại không
+if (this.selectedYear > currentYear) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Năm phải nhỏ hơn năm hiện tại!',
+  });
+  console.error('Năm phải nhỏ hơn năm hiện tại');
+  return;
+}
+
+
+// Nếu cần thêm điều kiện kiểm tra khác cho năm, có thể làm như sau:
+if (this.selectedYear < 1900 || this.selectedYear > new Date().getFullYear()) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Năm phải nằm trong khoảng từ 1900 đến năm hiện tại!',
+  });
+  console.error('Năm phải nằm trong khoảng từ 1900 đến năm hiện tại');
+  return;
+}
+
+// Nếu cả hai điều kiện trên đều hợp lệ, thực hiện tiếp theo
+
+  
     this.thongkeService.getDoanhThuTheoQuy(this.selectedYear).subscribe(
       (data) => {
         const doanhThu = data.map(item => item.doanhThu);
         const quy = data.map(item => `Quý ${item.quy}`);
-
+  
         this.lineChartData = [
           { data: doanhThu, label: `Doanh thu theo quý năm ${this.selectedYear}` }
         ];
         this.lineChartLabels = quy;
-
+  
         // Tính tổng doanh thu
         this.totalDoanhThu = this.calculateTotal(doanhThu);
-
+  
         // Tìm quý có doanh thu cao nhất
         this.findHighestRevenue(doanhThu, quy);
-
+  
         // Gọi API top sản phẩm theo quý
         this.loadTopSanPhamTheoQuy();
       },
@@ -174,30 +233,55 @@ loadTopSanPhamTheoNam(): void {
       }
     );
   }
-
+  
   // Hàm lấy dữ liệu theo năm và gọi API top sản phẩm theo năm
   loadDoanhThuTheoNam(): void {
-    if (this.startYear > this.endYear) {
-      console.error('Năm bắt đầu không được lớn hơn năm kết thúc');
-      return;
-    }
+ // Kiểm tra tính hợp lệ của năm bắt đầu và năm kết thúc
+if (this.startYear > this.endYear) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Năm bắt đầu không được lớn hơn năm kết thúc!',
+  });
+  console.error('Năm bắt đầu không được lớn hơn năm kết thúc');
+  return;
+}
+
+// Kiểm tra xem năm bắt đầu có hợp lệ không
+if (this.startYear === 0 || !this.startYear) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Vui lòng nhập năm bắt đầu hợp lệ!',
+  });
+  console.error('Vui lòng nhập năm bắt đầu hợp lệ');
+  return;
+}
+
+// Kiểm tra xem năm kết thúc có hợp lệ không
+if (this.endYear === 0 || !this.endYear) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Vui lòng nhập năm kết thúc hợp lệ!',
+  });
+  console.error('Vui lòng nhập năm kết thúc hợp lệ');
+  return;
+}
 
     this.thongkeService.getDoanhThuTheoNam(this.startYear, this.endYear).subscribe(
       (data) => {
         const doanhThu = data.map(item => item.doanhThu);
         const nam = data.map(item => `Năm ${item.nam}`);
-
+  
         this.lineChartData = [
           { data: doanhThu, label: `Doanh thu từ năm ${this.startYear} đến năm ${this.endYear}` }
         ];
         this.lineChartLabels = nam;
-
+  
         // Tính tổng doanh thu
         this.totalDoanhThu = this.calculateTotal(doanhThu);
-
+  
         // Tìm năm có doanh thu cao nhất
         this.findHighestRevenue(doanhThu, nam);
-
+  
         // Gọi API top sản phẩm theo năm
         this.loadTopSanPhamTheoNam();
       },
@@ -206,46 +290,123 @@ loadTopSanPhamTheoNam(): void {
       }
     );
   }
-
+  
   // Hàm gọi API lấy dữ liệu doanh thu và top sản phẩm theo ngày
   loadDoanhThuTheoNgay(): void {
-    if (this.selectedStartDate && this.selectedEndDate) {
-      const formattedStartDate = this.formatDate(this.selectedStartDate);
-      const formattedEndDate = this.formatDate(this.selectedEndDate);
+// Kiểm tra xem ngày bắt đầu có hợp lệ không
+if (!this.selectedStartDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Vui lòng chọn ngày bắt đầu!',
+  });
+  console.error('Vui lòng chọn ngày bắt đầu');
+  return;
+}
 
-      this.thongkeService.getDoanhThuTheoNgay(formattedStartDate, formattedEndDate)
-        .subscribe(
-          data => {
-            const labels = data.map(item => item.ngay);
-            const doanhThu = data.map(item => item.doanhThu);
+// Kiểm tra xem ngày kết thúc có hợp lệ không
+if (!this.selectedEndDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Vui lòng chọn ngày kết thúc!',
+  });
+  console.error('Vui lòng chọn ngày kết thúc');
+  return;
+}
 
-            this.lineChartLabels = labels;
-            this.lineChartData = [
-              { data: doanhThu, label: `Doanh thu từ ${formattedStartDate} đến ${formattedEndDate}` }
-            ];
+// Chuyển đổi ngày bắt đầu và kết thúc sang định dạng có thể so sánh
+const startDate = new Date(this.selectedStartDate);
+const endDate = new Date(this.selectedEndDate);
 
-            // Tính tổng doanh thu
-            this.totalDoanhThu = this.calculateTotal(doanhThu);
+// Kiểm tra xem ngày kết thúc có lớn hơn ngày bắt đầu không
+if (endDate <= startDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Ngày kết thúc phải lớn hơn ngày bắt đầu!',
+  });
+  console.error('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+  return;
+}
 
-            // Tìm ngày có doanh thu cao nhất
-            this.findHighestRevenue(doanhThu, labels);
+// Kiểm tra xem ngày kết thúc có cách ngày bắt đầu không quá 30 ngày
+const dayDifference = (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24); // Tính số ngày khác nhau
+if (dayDifference > 30) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Ngày kết thúc không được cách ngày bắt đầu quá 30 ngày!',
+  });
+  console.error('Ngày kết thúc không được cách ngày bắt đầu quá 30 ngày');
+  return;
+}
 
-            // Gọi API top sản phẩm theo ngày
-            this.loadTopSanPhamTheoNgay();
-          },
-          error => {
-            console.error('Lỗi khi lấy dữ liệu doanh thu theo ngày:', error);
-          }
-        );
-    } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Vui lòng chọn ngày bắt đầu và ngày kết thúc!',
-      });
-      console.error('Vui lòng chọn ngày bắt đầu và ngày kết thúc');
-    }
+// Lấy ngày hiện tại
+const currentDate = new Date();
+// currentDate.setHours(0, 0, 0, 0); // Đặt thời gian của ngày hiện tại về 00:00:00 để so sánh chỉ ngày
+
+
+
+// Kiểm tra xem ngày bắt đầu có lớn hơn ngày hiện tại không
+if (startDate > currentDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Ngày bắt đầu không được lớn hơn ngày hiện tại!',
+  });
+  console.error('Ngày bắt đầu không được lớn hơn ngày hiện tại');
+  return;
+}
+
+// Kiểm tra xem ngày kết thúc có lớn hơn ngày hiện tại không
+if (endDate >currentDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Ngày kết thúc không được lớn hơn ngày hiện tại!',
+  });
+  console.error('Ngày kết thúc không được lớn hơn ngày hiện tại');
+  return;
+}
+
+// Kiểm tra xem ngày kết thúc có lớn hơn ngày bắt đầu không
+if (endDate < startDate) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Ngày kết thúc phải lớn hơn ngày bắt đầu!',
+  });
+  console.error('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+  return;
+}
+
+
+// Nếu cả hai ngày đều hợp lệ và ngày kết thúc không nhỏ hơn ngày bắt đầu, thực hiện tiếp theo
+
+  
+    const formattedStartDate = this.formatDate(this.selectedStartDate);
+    const formattedEndDate = this.formatDate(this.selectedEndDate);
+  
+    this.thongkeService.getDoanhThuTheoNgay(formattedStartDate, formattedEndDate)
+      .subscribe(
+        data => {
+          const labels = data.map(item => item.ngay);
+          const doanhThu = data.map(item => item.doanhThu);
+  
+          this.lineChartLabels = labels;
+          this.lineChartData = [
+            { data: doanhThu, label: `Doanh thu từ ${formattedStartDate} đến ${formattedEndDate}` }
+          ];
+  
+          // Tính tổng doanh thu
+          this.totalDoanhThu = this.calculateTotal(doanhThu);
+  
+          // Tìm ngày có doanh thu cao nhất
+          this.findHighestRevenue(doanhThu, labels);
+  
+          // Gọi API top sản phẩm theo ngày
+          this.loadTopSanPhamTheoNgay();
+        },
+        error => {
+          console.error('Lỗi khi lấy dữ liệu doanh thu theo ngày:', error);
+        }
+      );
   }
-
+  
   // Hàm định dạng ngày từ yyyy-MM-dd sang dd/MM/yyyy
   formatDate(dateString: string): string {
     const date = new Date(dateString);
