@@ -1,0 +1,175 @@
+/* Căn chỉnh container */
+.main-content {
+    padding: 20px;
+    background-color: #f8f9fa; /* Màu nền sáng cho toàn bộ nội dung */
+}
+
+/* Định dạng card */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Định dạng tiêu đề card */
+.card-header {
+    background-color: #dc3545; /* Màu đỏ cho tiêu đề */
+    color: white; /* Chữ trắng */
+    padding: 15px 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Định dạng form */
+form {
+    margin: 20px 0;
+}
+
+/* Định dạng nhãn cho input */
+.form-label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333; /* Màu chữ tối cho nhãn */
+}
+
+/* Định dạng input và select */
+.form-control, .form-select {
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s; /* Hiệu ứng khi hover */
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #dc3545; /* Đổi màu viền khi focus */
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); /* Hiệu ứng shadow */
+}
+
+/* Định dạng nút bấm */
+.btn {
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 15px; /* Khoảng cách trên nút bấm */
+}
+
+.btn-danger {
+    background-color: #dc3545; /* Màu nền đỏ */
+    color: white; /* Chữ trắng */
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Màu tối hơn khi hover */
+}
+
+/* Định dạng thông báo lỗi và thành công */
+.error {
+    color: #dc3545; /* Màu đỏ cho thông báo lỗi */
+    margin-top: 10px; /* Khoảng cách cho thông báo */
+}
+
+.success {
+    color: #28a745; /* Màu xanh lá cho thông báo thành công */
+    margin-top: 10px; /* Khoảng cách cho thông báo */
+}
+
+/* Định dạng bảng */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Gộp các đường biên của bảng */
+    margin-top: 20px; /* Khoảng cách trên bảng */
+}
+
+th, td {
+    padding: 12px; /* Khoảng cách trong ô */
+    text-align: left; /* Căn trái cho nội dung */
+}
+
+th {
+    background-color: #f1f1f1; /* Màu nền cho tiêu đề bảng */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền cho dòng chẵn */
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Hiệu ứng hover cho dòng */
+}
+
+/* Định dạng phân trang */
+.pagination {
+    justify-content: center; /* Căn giữa phân trang */
+    margin-top: 20px; /* Khoảng cách trên phân trang */
+}
+
+/* Định dạng từng mục trong phân trang */
+.pagination .page-item {
+    margin: 0 5px; /* Khoảng cách giữa các nút trang */
+}
+
+/* Định dạng liên kết trong từng mục */
+.pagination .page-link {
+    color: #007bff; /* Màu chữ cho liên kết */
+    padding: 10px 15px; /* Padding cho nút */
+    border: 1px solid #007bff; /* Đường viền cho nút */
+    border-radius: 5px; /* Bo tròn góc cho nút */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Hiệu ứng chuyển màu */
+}
+
+/* Hiệu ứng hover cho liên kết */
+.pagination .page-link:hover {
+    background-color: #007bff; /* Màu nền khi hover */
+    color: white; /* Màu chữ khi hover */
+}
+
+/* Định dạng cho trang đang hoạt động */
+.pagination .active .page-link {
+    background-color: #dc3545; /* Màu nền cho trang đang chọn */
+    color: white; /* Chữ trắng */
+    border-color: #dc3545; /* Đường viền cho trang đang chọn */
+}
+
+/* Định dạng cho trang không khả dụng */
+.pagination .disabled .page-link {
+    color: #6c757d; /* Màu xám cho chữ trong nút không khả dụng */
+    background-color: transparent; /* Màu nền trong suốt cho nút không khả dụng */
+    border-color: #6c757d; /* Đường viền cho nút không khả dụng */
+    cursor: not-allowed; /* Con trỏ không cho phép khi hover trên nút không khả dụng */
+}
+/* Đặt style chung cho các nút */
+.btn-submit {
+    background-color: #d9534f; /* Màu nền đỏ */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Loại bỏ viền */
+    padding: 10px 20px; /* Đệm bên trong nút */
+    font-size: 16px; /* Kích thước chữ */
+    cursor: pointer; /* Đổi con trỏ khi hover */
+    border-radius: 5px; /* Bo góc nhẹ cho nút */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu khi hover */
+    display: flex;
+    align-items: center; /* Căn giữa biểu tượng và văn bản */
+  }
+  
+  /* Khoảng cách giữa biểu tượng và văn bản trong nút */
+  .btn-submit i {
+    margin-right: 5px;
+  }
+  
+  /* Hiệu ứng khi hover lên nút */
+  .btn-submit:hover {
+    background-color: #c9302c; /* Đổi màu nền khi hover */
+  }
+  
+  /* Nút bị disabled */
+  .btn-submit:disabled {
+    background-color: #ccc; /* Màu nền xám khi bị vô hiệu hóa */
+    cursor: not-allowed; /* Con trỏ khi không thể nhấn */
+  }
+  
+  /* Đặt style cho khối chứa nút để căn chỉnh đúng inline */
+  .button-container {
+    display: inline-block; /* Đặt các nút hiển thị ngang hàng */
+    margin-right: 10px; /* Khoảng cách giữa các nút */
+  }
+  
+

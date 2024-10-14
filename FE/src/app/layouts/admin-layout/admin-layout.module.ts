@@ -8,7 +8,7 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 import { BanHangComponent } from '../../ban-hang/./ban-hang.component';
 import { SanphamComponent } from '../../sanpham/sanpham.component'; // Đường dẫn tới file mới
 import { TableListComponent } from '../../hoaDon/table-list.component';
-import { thongkeComponent } from '../../thongke/thongke.component';
+import { ThongkeComponent } from '../../thongke/thongke.component';
 import { IconsComponent } from '../../khuyenMai/icons.component';
 import { VoucherComponent } from '../../voucher/voucher.component';
 import { KhuyenMaiChiTietSanPhamComponent } from '../../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.component';
@@ -45,7 +45,7 @@ import { NgChartsModule } from 'ng2-charts';
     BanHangComponent,
     SanphamComponent,  // Đổi UserProfileComponent thành SanphamComponent
     TableListComponent,
-    thongkeComponent,
+    ThongkeComponent,
     IconsComponent,
     MapsComponent,
     NotificationsComponent,

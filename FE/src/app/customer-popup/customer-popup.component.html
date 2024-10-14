@@ -1,0 +1,49 @@
+<div class="popup">
+    <div class="popup-content">
+        <form class="add-customer">
+            <span class="close" (click)="close()">×</span>
+            <h2>Khách Hàng</h2>
+            <div class="mb-3">
+                <input type="text" class="form-control" placeholder="Nhập tên, email, số điện thoại..."
+                    [(ngModel)]="search" (input)="filterCustomers()" />
+                <select class="form-select mt-2" aria-label="Chọn khách hàng" [(ngModel)]="selectedCustomerId"
+                    (change)="onSelectChange($event)">
+                    <option *ngIf="!filteredCustomers.length" disabled>Không có khách hàng nào</option>
+                    <option *ngFor="let khachHang of filteredCustomers" [value]="khachHang.id">
+                        {{khachHang.ten}}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <label>Họ tên</label>
+                <input type="text" [(ngModel)]="customer.ten" name="ten">
+            </div>
+            <div class="check-input">
+                <label>Giới tính:</label>
+                <div class="input-radio">
+                    <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh"
+                        value="Nam">
+                    <label class="form-check-label">Nam</label>
+                </div>
+                <div class="input-radio">
+                    <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh"
+                        value="Nữ">
+                    <label class="form-check-label">Nữ</label>
+                </div>
+            </div>
+            <div>
+                <label>Ngày tháng năm sinh</label>
+                <input type="date">
+            </div>
+            <div>
+                <label>Email</label>
+                <input type="text" [(ngModel)]="customer.email" name="email">
+            </div>
+            <div>
+                <label>Số điện thoại</label>
+                <input type="text" [(ngModel)]="customer.sdt" name="sdt">
+            </div>
+            <button type="submit" (click)="addCustomer()" class="btn btn-primary">Thêm</button>
+        </form>
+    </div>
+</div>

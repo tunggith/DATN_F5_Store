@@ -1,0 +1,107 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Form thông tin Khuyến Mãi bên trái -->
+    <div class="col-md-4">
+      <div class="card border-primary mb-3">
+        <div class="card-header bg-primary text-white">
+          <h3>Thông Tin Khuyến Mãi</h3>
+        </div>
+        <div class="card-body">
+          <p><strong>Mã:</strong> {{ selectedKhuyenMai.ma }}</p>
+          <p><strong>Tên:</strong> {{ selectedKhuyenMai.ten }}</p>
+          <p><strong>Giá trị:</strong> {{ selectedKhuyenMai.giaTriKhuyenMai }}</p>
+          <p><strong>Loại:</strong> {{ selectedKhuyenMai.kieuKhuyenMai }}</p>
+          <p><strong>Số lượng:</strong> {{ selectedKhuyenMai.soLuong }}</p>
+          <p><strong>Thời gian bắt đầu:</strong> {{ selectedKhuyenMai.thoiGianBatDau | date: 'dd/MM/yyyy' }}</p>
+          <p><strong>Thời gian kết thúc:</strong> {{ selectedKhuyenMai.thoiGianKetThuc | date: 'dd/MM/yyyy' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng sản phẩm bên phải -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h3>Danh sách Sản phẩm</h3>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Mã Sản phẩm</th>
+                <th>Tên Sản phẩm</th>
+                <th>Tên Chi tiết</th>
+                <th>Giá tiền</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let sp of chiTietSanPhams">
+                <td>{{ sp.ma }}</td>
+                <td>{{ sp.ten_san_pham }}</td>
+                <td>{{ sp.ten }}</td>
+                <td>{{ sp.donGia | currency }}</td>
+                <td>
+                  <td>
+                    <input 
+                      type="checkbox" 
+                      [checked]="sp.selected" 
+                      [disabled]="sp.isDisabled"  
+                      (change)="onCheckboxChange(sp, $event)" 
+                    />
+
+                  
+              </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bảng sản phẩm đang có khuyến mãi bên dưới -->
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h3>Sản phẩm được áp dụng khuyến mãi</h3>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Mã </th>
+                <th>Tên sản phẩm</th>
+                <th>Tên sản phẩm chi tiết</th>
+                <th>Màu sắc</th>
+                <th>Size</th> 
+                <th>Thương hiệu</th>
+                <th>Giới tính</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="!khuyenMaiChiTietSanPhams || khuyenMaiChiTietSanPhams.length === 0">
+                  <td colspan="7" class="text-center">Chưa có sản phẩm nào áp dụng khuyến mãi.</td>
+              </tr>
+                <tr *ngFor="let km of khuyenMaiChiTietSanPhams">
+                  <td>{{ km.chiTietSanPham.ma }}</td>
+                  <td>{{ km.chiTietSanPham.sanPham.ten }}</td>
+                  <td>{{ km.chiTietSanPham.ten }}</td>
+                  <td>{{ km.chiTietSanPham.mauSac.ten }}</td>
+                  <td>{{ km.chiTietSanPham.size.ten }}</td>
+                  <td>{{ km.chiTietSanPham.sanPham.thuongHieu.ten }}</td>
+                  <td>{{ km.chiTietSanPham.sanPham.gioiTinh.ten }}</td>
+                  <td>{{ km.chiTietSanPham.soLuong }}</td>
+                  <td>{{ km.chiTietSanPham.donGia | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

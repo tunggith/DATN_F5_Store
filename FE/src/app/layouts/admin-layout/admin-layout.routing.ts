@@ -3,7 +3,7 @@ import { LichSuHoaDonComponent } from './../../lich-su-hoa-don/lich-su-hoa-don.c
 import { Routes } from '@angular/router';
 import { BanHangComponent } from '../../ban-hang/./ban-hang.component';
 import { SanphamComponent } from '../../sanpham/sanpham.component'; // Đường dẫn tới component sản phẩm
-import { thongkeComponent } from '../../thongke/thongke.component';
+import { ThongkeComponent } from '../../thongke/thongke.component';
 import { IconsComponent } from '../../khuyenMai/icons.component';
 import { VoucherComponent } from '../../voucher/voucher.component';
 import { MapsComponent } from '../../maps/maps.component';
@@ -18,7 +18,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'ban-hang',      component: BanHangComponent },
     { path: 'sanpham', component: SanphamComponent }, // Định tuyến cho sản phẩm
     { path: 'hoaDon',     component: TableListComponent },
-    { path: 'thongke',     component: thongkeComponent },
+    { path: 'thongke',     component: ThongkeComponent },
     { path: 'khuyenMai',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
     { path: 'notifications',  component: NotificationsComponent },

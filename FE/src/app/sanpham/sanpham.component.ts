@@ -156,22 +156,25 @@ export class SanphamComponent implements OnInit {
   }
   
 
-  
   getChiTietSanPhamPhanTrang(idSanPham: number, page: number = 0) {
     this.sanPhamService.getChiTietSanPhamPhanTrang(idSanPham, page).subscribe(
       response => {
         if (response) {
-          // Lấy danh sách sản phẩm từ content
-          this.chiTietSanPhamList = response.content || [];
-          this.filteredChiTietSanPhamList = [...this.chiTietSanPhamList]; // Cập nhật danh sách lọc
+          // Kiểm tra và xử lý thông tin phân trang
+          this.totalPagesChiTiet = response.totalPages !== undefined ? response.totalPages : 1;
+          this.pageChiTiet = response.currentPage !== undefined ? response.currentPage : 0;
+          this.pageSizeChiTiet = response.pageSize !== undefined ? response.pageSize : 5;
   
-          // Cập nhật thông tin phân trang
-          this.totalPagesChiTiet = response.totalPages || 1;  // Tổng số trang
-          this.pageChiTiet = response.currentPage || 0;       // Trang hiện tại
-          this.pageSizeChiTiet = response.pageSize || 5;      // Kích thước trang (5 sản phẩm mỗi trang)
-          this.totalElementsChiTiet = response.totalElements || 0;  // Tổng số phần tử
+          // Cập nhật danh sách sản phẩm (content)
+          this.chiTietSanPhamList = response.content !== undefined ? response.content : [];
+          this.filteredChiTietSanPhamList = [...this.chiTietSanPhamList]; // Cập nhật danh sách lọc nếu cần
   
-          console.log(`Trang hiện tại: ${this.pageChiTiet}, Tổng số trang: ${this.totalPagesChiTiet}`);
+          // Kiểm tra nếu không có sản phẩm nào
+          if (this.chiTietSanPhamList.length === 0) {
+            console.warn('Không có sản phẩm nào trong danh sách');
+          }
+        } else {
+          console.warn('Response không có dữ liệu');
         }
       },
       error => {
@@ -179,6 +182,8 @@ export class SanphamComponent implements OnInit {
       }
     );
   }
+  
+  
   
   
   // Hàm chọn sản phẩm và điền vào form
@@ -667,9 +672,15 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
       // Tạo object đúng với API yêu cầu
       const chiTietSanPhamData = {
         id: 0,
-        idSanPham: this.selectedSanPhamId,  // Gửi ID sản phẩm thay vì đối tượng
-        idMauSac: this.chiTietSanPhamForm.value.idMauSac,  // Gửi ID màu sắc
-        idSize: this.chiTietSanPhamForm.value.idSize,  // Gửi ID kích thước
+        idSanPham: {
+          id: this.selectedSanPhamId  // Gửi đối tượng sản phẩm với ID
+        },
+        idMauSac: {
+          id: this.chiTietSanPhamForm.value.idMauSac  // Gửi đối tượng màu sắc với ID
+        },
+        idSize: {
+          id: this.chiTietSanPhamForm.value.idSize  // Gửi đối tượng kích thước với ID
+        },
         ma: this.chiTietSanPhamForm.value.ma,
         ten: this.chiTietSanPhamForm.value.ten,
         donGia: this.chiTietSanPhamForm.value.donGia,
@@ -677,11 +688,13 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
         trangThai: this.chiTietSanPhamForm.value.trangThai
       };
   
+      console.log(chiTietSanPhamData);  // In log để kiểm tra dữ liệu trước khi gửi
+  
       // Kiểm tra trùng lặp
       this.sanPhamService.checkTrungChiTietSanPham(
-        chiTietSanPhamData.idSanPham,
-        chiTietSanPhamData.idMauSac,
-        chiTietSanPhamData.idSize,
+        chiTietSanPhamData.idSanPham.id,  // Lấy ID từ đối tượng idSanPham
+        chiTietSanPhamData.idMauSac.id,   // Lấy ID từ đối tượng idMauSac
+        chiTietSanPhamData.idSize.id,     // Lấy ID từ đối tượng idSize
         chiTietSanPhamData.ma,
         chiTietSanPhamData.ten
       ).subscribe(
@@ -737,6 +750,7 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
     }
   }
   
+  
 
 
   onSubmitUpdateChiTietSanPham() {
@@ -767,9 +781,15 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
       // Tạo object theo cấu trúc API yêu cầu
       const updatedChiTietSanPhamData = {
         id: this.selectedChiTietSanPhamId,  // ID của sản phẩm chi tiết cần cập nhật
-        idSanPham: this.selectedSanPhamId,  // ID sản phẩm chính
-        idMauSac: this.chiTietSanPhamForm.value.idMauSac,  // ID màu sắc
-        idSize: this.chiTietSanPhamForm.value.idSize,  // ID kích thước
+        idSanPham: {
+          id: this.selectedSanPhamId  // Gửi đối tượng sản phẩm với ID
+        },
+        idMauSac: {
+          id: this.chiTietSanPhamForm.value.idMauSac  // Gửi đối tượng màu sắc với ID
+        },
+        idSize: {
+          id: this.chiTietSanPhamForm.value.idSize  // Gửi đối tượng kích thước với ID
+        },
         ma: this.chiTietSanPhamForm.value.ma,
         ten: this.chiTietSanPhamForm.value.ten,
         donGia: donGia,  // Giá tiền
@@ -801,5 +821,6 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
       );
     }
   }
+  
   
 }

@@ -1,0 +1,70 @@
+/* Đặt màu nền cho card */
+.card {
+    background-color: #f8f9fa; /* Màu nền sáng */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Đặt màu cho tiêu đề card */
+.card-header-danger {
+    background-color: #dc3545; /* Màu đỏ */
+    color: white; /* Chữ màu trắng */
+}
+
+/* Tạo kiểu cho bảng */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6; /* Đường viền dưới cho các ô */
+}
+
+.table th {
+    background-color: #f2f2f2; /* Màu nền cho tiêu đề bảng */
+    font-weight: bold;
+}
+
+/* Tạo kiểu cho các hàng */
+.table tbody tr:hover {
+    background-color: #e9ecef; /* Màu nền khi hover */
+}
+
+/* Tạo kiểu cho phân trang */
+.pagination {
+    justify-content: center; /* Căn giữa phân trang */
+    margin-top: 20px; /* Khoảng cách phía trên */
+}
+
+.pagination .page-item {
+    margin: 0 5px; /* Khoảng cách giữa các trang */
+}
+
+.pagination .page-link {
+    color: #007bff; /* Màu chữ */
+    padding: 10px 15px; /* Padding cho các nút */
+    border: 1px solid #0661c3; /* Đường viền cho nút */
+    border-radius: 5px; /* Bo tròn góc */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: background-color 0.2s ease; /* Hiệu ứng chuyển màu */
+}
+
+.pagination .page-link:hover {
+    background-color: #007bff; /* Màu nền khi hover */
+    color: white; /* Màu chữ khi hover */
+}
+
+.pagination .disabled .page-link {
+    color: #6c757d; /* Màu chữ cho nút disabled */
+    background-color: transparent; /* Màu nền cho nút disabled */
+    border-color: #6c757d; /* Đường viền cho nút disabled */
+}
+
+.pagination .active .page-link {
+    background-color: #007bff; /* Màu nền cho nút active */
+    color: white; /* Màu chữ cho nút active */
+    border-color: #007bff; /* Đường viền cho nút active */
+}
