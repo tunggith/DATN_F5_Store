@@ -58,6 +58,7 @@ public class ChiTietSanPhamImpl {
     }
 
 
+
     public ResponseEntity<?> saveChiTietSanPham(ChiTietSanphamRequest ctspRequet, BindingResult result) {
         // Kiểm tra nếu có lỗi
         if (result.hasErrors()) {
