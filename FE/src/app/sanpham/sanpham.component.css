@@ -1,0 +1,43 @@
+/* Trong sanpham.component.css */
+.invalid-field {
+    border-color: red !important; /* Đổi màu viền cho các trường không hợp lệ */
+}
+
+.text-danger {
+    color: red; /* Màu chữ thông báo lỗi */
+}
+
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.custom-modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    max-width: 100%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}

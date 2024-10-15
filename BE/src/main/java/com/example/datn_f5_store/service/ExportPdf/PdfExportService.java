@@ -63,13 +63,15 @@ public class PdfExportService {
             int nam = hoaDon.getThoiGianTao().getYear();
             String maHoaDon = hoaDon.getMa();
             double tongTien = hoaDon.getTongTienSauVoucher();
-            String diaChi = hoaDon.getKhachHang().getDiaChiKhachHang().getSoNha()+", "
-                    +hoaDon.getKhachHang().getDiaChiKhachHang().getDuong()+","
-                    +hoaDon.getKhachHang().getDiaChiKhachHang().getPhuongXa()+", "
-                    +hoaDon.getKhachHang().getDiaChiKhachHang().getQuanHuyen()+", "
-                    +hoaDon.getKhachHang().getDiaChiKhachHang().getTinhThanh()+","
-                    +hoaDon.getKhachHang().getDiaChiKhachHang().getQuocGia();
-
+            String diaChi = "";
+            if(hoaDon.getKhachHang().getDiaChiKhachHang()!=null) {
+                diaChi = hoaDon.getKhachHang().getDiaChiKhachHang().getSoNha() + ", "
+                        + hoaDon.getKhachHang().getDiaChiKhachHang().getDuong() + ","
+                        + hoaDon.getKhachHang().getDiaChiKhachHang().getPhuongXa() + ", "
+                        + hoaDon.getKhachHang().getDiaChiKhachHang().getQuanHuyen() + ", "
+                        + hoaDon.getKhachHang().getDiaChiKhachHang().getTinhThanh() + ","
+                        + hoaDon.getKhachHang().getDiaChiKhachHang().getQuocGia();
+            }
             document.add(new Paragraph("Ngày "+ngay+",tháng "+thang+",năm "+2024)
                     .setTextAlignment(TextAlignment.RIGHT));
             document.add(new Paragraph("Khách hàng:"+khachHang)
@@ -128,8 +130,13 @@ public class PdfExportService {
             document.add(table);
             document.add(new Paragraph("Tổng tiền:"+hoaDon.getTongTienBanDau())
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("giảm giá:"+hoaDon.getVoucher().getGiaTriVoucher()+hoaDon.getVoucher().getKieuGiamGia())
-                    .setTextAlignment(TextAlignment.RIGHT));
+            if(hoaDon.getVoucher()!=null) {
+                document.add(new Paragraph("giảm giá:" + hoaDon.getVoucher().getGiaTriVoucher() + hoaDon.getVoucher().getKieuGiamGia())
+                        .setTextAlignment(TextAlignment.RIGHT));
+            }else {
+                document.add(new Paragraph("giảm giá:" + 0)
+                        .setTextAlignment(TextAlignment.RIGHT));
+            }
             document.add(new Paragraph("Tổng tiền phải thanh toán:"+tongTien)
                     .setTextAlignment(TextAlignment.RIGHT));
             document.add(new Paragraph("Nhân viên thanh toán")

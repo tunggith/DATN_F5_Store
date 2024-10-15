@@ -4,8 +4,9 @@ package com.example.datn_f5_store.controller;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 
-import com.example.datn_f5_store.Response.ChiTietSanPhamReponse;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 
 
@@ -16,18 +17,17 @@ import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
 import com.example.datn_f5_store.service.impl.ChiTietSanPhamImpl;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
 public class ChiTietSanPhamController
@@ -86,34 +86,30 @@ public class ChiTietSanPhamController
         dataResponse.setResult(new ResultModel<>(null, responseList));
         return ResponseEntity.ok(dataResponse);
     }
-    @PostMapping("/Created")
-    public ResponseEntity<?> saveChiTietSanPham(@Valid @RequestBody ChiTietSanphamRequest ctspRequet, BindingResult result,
-                                                @RequestParam(value = "idSanpham") Integer idSanpham,
-                                                @RequestParam(value = "idMau") Integer idMau,
-                                                @RequestParam(value = "idSize") Integer idSize) {
 
-        DataResponse  dataResponse = new DataResponse();
+    @PostMapping("/created")
+    public ResponseEntity<?> saveChiTietSanPham(@Valid @RequestBody ChiTietSanphamRequest ctspRequest, BindingResult result) {
+        DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList =  ctsp_Sevice.saveChiTietSanPham(ctspRequet,result,idSanpham,idMau,idSize);
+
+        // Gọi service để lưu chi tiết sản phẩm
+        var responseList = ctsp_Sevice.saveChiTietSanPham(ctspRequest, result);
         dataResponse.setResult(new ResultModel<>(null, responseList));
+
         return ResponseEntity.ok(dataResponse);
     }
 
-
-
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateChiTietSanPham(@PathVariable("id") Integer id,
-                                                  @Valid @RequestBody ChiTietSanphamRequest ctspRequest, BindingResult result,
-                                                  @RequestParam(value = "idSanpham") Integer idSanpham,
-                                                  @RequestParam(value = "idMau") Integer idMau,
-                                                  @RequestParam(value = "idSize") Integer idSize) {
-
+                                                  @Valid @RequestBody ChiTietSanphamRequest ctspRequest, BindingResult result) {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = ctsp_Sevice.updateChiTietSanPham(id,ctspRequest, result, idSanpham, idMau, idSize);
-        dataResponse.setResult(new ResultModel<>(null, responseList));
-        return ResponseEntity.ok(dataResponse);
 
+        // Gọi service để cập nhật chi tiết sản phẩm
+        var responseList = ctsp_Sevice.updateChiTietSanPham(id, ctspRequest, result);
+        dataResponse.setResult(new ResultModel<>(null, responseList));
+
+        return ResponseEntity.ok(dataResponse);
     }
 
     @GetMapping("/search")
@@ -156,6 +152,7 @@ public class ChiTietSanPhamController
         return chiTietSanPhamRepository.findAll();
     }
 
+
     @GetMapping("/getall-phan_trangKm")
     public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -167,4 +164,54 @@ public class ChiTietSanPhamController
         // Trả về đối tượng Page, bao gồm dữ liệu và thông tin phân trang
         return ResponseEntity.ok(pageResult);
     }
-}
+
+        @GetMapping("/get-by-trang-thai")
+        public ResponseEntity<Object> getByTrangThai (
+                @Parameter(name = "size") @RequestParam(defaultValue = "0") Integer size,
+                @Parameter(name = "page") @RequestParam(defaultValue = "5") Integer page,
+                @Parameter(name = "ten") @RequestParam(required = false) String ten,
+                @Parameter(name = "ma") @RequestParam(required = false) String ma
+    ){
+            DataResponse dataResponse = new DataResponse();
+            dataResponse.setStatus(true);
+            var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size, page, ten, ma);
+            dataResponse.setResult(new ResultModel<>(
+                    new PagingModel(page, size, listSanPham.getTotalElements(), listSanPham.getTotalPages()), listSanPham
+            ));
+            return ResponseEntity.ok(dataResponse);
+        }
+
+        @GetMapping("/{id}")
+        public ResponseEntity<?> getChiTietSanPhamById (@PathVariable("id") Integer id){
+            DataResponse dataResponse = new DataResponse();
+
+            // Gọi service để tìm chi tiết sản phẩm theo ID
+            var chiTietSanPham = ctsp_Sevice.getChiTietSanPhamById(id);
+
+            // Nếu tìm thấy chi tiết sản phẩm, trả về kết quả
+            if (chiTietSanPham != null) {
+                dataResponse.setStatus(true);
+                dataResponse.setResult(new ResultModel<>(null, chiTietSanPham));
+                return ResponseEntity.ok(dataResponse);
+            } else {
+                // Nếu không tìm thấy, trả về lỗi NOT_FOUND
+                dataResponse.setStatus(false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
+            }
+        }
+
+
+        @GetMapping("/check-trung")
+        public ResponseEntity<Boolean> checkTrungChiTietSanPham (
+                @RequestParam Integer idSanPham,
+                @RequestParam Integer idMauSac,
+                @RequestParam Integer idSize,
+                @RequestParam String ma,
+                @RequestParam String ten){
+
+            boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
+            return ResponseEntity.ok(isDuplicate);
+
+        }
+
+    }

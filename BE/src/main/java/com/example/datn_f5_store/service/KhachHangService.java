@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface KhachHangService {
+
     // Phương thức lấy danh sách khách hàng với phân trang
     Page<KhachHangDto> getAllKhachHang(int page, int size, String search);
 
@@ -18,5 +19,9 @@ public interface KhachHangService {
     Boolean updateKhachHang(Integer id, KhachHangRequest khachHangRequest);
 
     // Phương thức tìm kiếm khách hàng theo tên
-    List<KhachHangEntity> searchKhachHangByName(String name);
+    List<KhachHangEntity> searchKhachHang(String name, String email, String sdt);
+    List<KhachHangEntity> getAllKhachHangKhongPhanTrang();
+
+    Page<KhachHangDto> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(
+            int page, int size, String ten, String ma, String email, String sdt);
 }

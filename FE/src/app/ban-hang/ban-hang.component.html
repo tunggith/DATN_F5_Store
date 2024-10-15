@@ -1,118 +1,292 @@
 <div class="main-content">
     <div class="container-fluid">
-        <div class="row">
-            <div class="hoa-don-create">
-                <div class="craete-invoice">
-                    <div class="create-order">
-                        <i class="material-icons">add</i>
-                        <a>Tạo hóa đơn</a>
-                    </div>
-                    <div class="create-client">
-                        <i class="material-icons">person_add</i>
-                        <a>Chọn khách hàng</a>
-                    </div>
-                    <div class="profile-client">
-                        <span>Tên khách hàng:</span>
-                    </div>
-                </div>
-                <div class="order-list" id="order-list">
-                    <div class="order-item active" data-id="HD15030034" onclick="setActive(this)">
-                        <a href="#">HD15030034</a>
-                        <span class="close" onclick="removeOrder(this)">x</span>
-                    </div>
-                    <div class="order-item" data-id="HD15030032" onclick="setActive(this)">
-                        <a href="#">HD15030032</a>
-                        <span class="close" onclick="removeOrder(this)">x</span>
-                    </div>
-                    <div class="order-item" data-id="HD15030028" onclick="setActive(this)">
-                        <a href="#">HD15030028</a>
-                        <span class="close" onclick="removeOrder(this)">x</span>
-                    </div>
-                </div>
-                <div class="cart">
-                    <i class="material-icons">production_quantity_limits</i>
-                    <p>Chưa có sản phẩm</p>
-                </div>
-                <div class="profile-pay">
-                    <div>
-                        <div class="cash">
-                            <div>
-                                <span>Tổng tiền: </span>
-                            </div>
-                            <div>
-                                <span>Tiền khách đưa: </span>
-                                <input type="text" class="cash-client">
-                            </div>
-                            <div>
-                                <span>Tổng tiền phải thanh toán: </span>
-                            </div>
-                            <div>
-                                <span>tiền trả lại: </span>
-                            </div>
-                            <div class="payment">
-                                <button><i class="material-icons">payments</i>Thanh toán</button>
-                            </div>
+        <div class="tab">
+            <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
+            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa đơn</a>
+
+        </div>
+        <!--form tạo mới-->
+        <div *ngIf="activeTab==='taoMoi'">
+            <div class="row">
+                <div class="hoa-don-create">
+                    <div class="craete-invoice">
+                        <div class="create-order">
+                            <i class="material-icons">add</i>
+                            <a (click)="createHoaDon()">Tạo hóa đơn</a>
+                        </div>
+                        <div class="create-client">
+                            <i class="material-icons">person_add</i>
+                            <a (click)="openPopup()">Chọn khách hàng</a>
+                        </div>
+                        <app-customer-popup *ngIf="popup" (closePopup)="closePopup()"
+                            (customerSelected)="onCustomerSelected($event)"></app-customer-popup>
+                        <div class="profile-client">
+                            <span>Tên khách hàng:{{tenKhachHang}}</span>
                         </div>
                     </div>
-                    <div class="voucher">
-                        <label for="">Chọn voucher</label>
-                        <input type="text">
-                        <button>
-                            <i class="material-icons">add_task</i>
-                        </button>
+                    <div class="order-list" id="order-list" *ngIf="checkHoaDon;else dataHoaDon">
+                        <i class="material-icons">error</i>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-warning">
-                        <h4 class="card-title">Sản phẩm</h4> 
-                        <input type="text" placeholder="Nhập tên sản phẩm or mã...">
+                    <ng-template #dataHoaDon>
+                        <div class="order-item" *ngFor="let hoaDon of hoaDon"
+                            [ngClass]="{'active':hoaDon.id==activeInvoidID}">
+                            <button (click)="getChiTietHoaDon(hoaDon.id)">{{hoaDon.ma}}</button>
+                            <span class="close" (click)="removeHoaDon(hoaDon.id)">x</span>
+                        </div>
+                    </ng-template>
+                    <div class="cart">
+                        <div *ngIf="hasError; else dataTable">
+                            <i class="material-icons">production_quantity_limits</i>
+                            <p>Chưa có sản phẩm</p>
+                        </div>
                     </div>
-                    <div class="card-body table-responsive">
+                    <ng-template #dataTable>
                         <table class="table table-hover">
-                            <thead class="text-warning">
+                            <thead class="text-dark">
                                 <th>Stt</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Xuất xứ</th>
                                 <th>Thương hiệu</th>
-                                <th>Thể loại</th>
+                                <th>Màu sắc</th>
+                                <th>Giới Tính</th>
                                 <th>Size</th>
-                                <th>số lượng</th>
-                                <th>Thao tác</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                                <th>Hành động</th>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Dakota Rice</td>
-                                    <td>$36,738</td>
-                                    <td>Niger</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Minerva Hooper</td>
-                                    <td>$23,789</td>
-                                    <td>Curaçao</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Sage Rodriguez</td>
-                                    <td>$56,142</td>
-                                    <td>Netherlands</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>Philip Chaney</td>
-                                    <td>$38,735</td>
-                                    <td>Korea, South</td>
+                                <tr *ngFor="let cthd of chitietHoaDon, let i = index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{cthd.chiTietSanPham?.ten}}</td>
+                                    <td>{{cthd.chiTietSanPham?.sanPham?.xuatXu?.ten}}</td>
+                                    <td>{{cthd.chiTietSanPham?.sanPham?.thuongHieu?.ten}}</td>
+                                    <td>{{cthd.chiTietSanPham?.mauSac?.ten}}</td>
+                                    <td>{{cthd.chiTietSanPham?.sanPham?.theLoai?.ten}}</td>
+                                    <td>{{cthd.chiTietSanPham?.size?.ten}}</td>
+                                    <td>
+                                        <div class="input-group mb-3">
+                                            <button class="input-group-text"><i class="material-icons"
+                                                    (click)="decreaseQuantity(cthd.id)">remove</i></button>
+                                            <input type="text" class="form-control" [value]="cthd.soLuong" disabled>
+                                            <button class="input-group-text"><i class="material-icons"
+                                                    (click)="increaseQuantity(cthd.chiTietSanPham?.id)">add</i></button>
+                                        </div>
+                                    </td>
+                                    <td>{{cthd.giaSpctHienTai | currency:'VND'}}</td>
+                                    <td><button class="select-invoice"><i class="material-icons"
+                                                (click)="removeHoaDonChiTiet(cthd.id)">delete_forever</i></button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                    </ng-template>
+                    <div class="profile-pay">
+                        <div class="thanh-toan">
+                            <div class="cash">
+                                <div>
+                                    <span>Tổng tiền: {{tongTienBanDau | currency:'VND'}}</span>
+                                </div>
+                                <div style="display: flex;">
+                                    <div>
+                                        <span>Tiền khách đưa: </span>
+                                        <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
+                                            (input)="getTienTraLai(tienKhachDua)"
+                                            [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
+                                    </div>
+                                    <div *ngIf="tienKhachDua < tongTienSauVoucher">
+                                        <span class="error-text">Số tiền khách đưa không đủ!</span>
+                                    </div>
+                                    <div *ngIf="tienKhachDuaInvalid">
+                                        <span class="error-text">Dữ liệu không hợp lệ!</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span>Tổng tiền phải thanh toán: {{tongTienSauVoucher | currency:'VND'}}</span>
+                                </div>
+                                <div>
+                                    <span>tiền trả lại: {{tienTraLai}}</span>
+                                </div>
+                                <div class="payment">
+                                    <button (click)="thanhtoanHoaDon(activeInvoidID)"><i
+                                            class="material-icons">payments</i>Thanh toán</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="voucher">
+                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
+                                <option selected disabled>---chọn phương thức thanh toán</option>
+                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
+                                    {{phuongThuc.tenPhuongThuc}}</option>
+                            </select>
+                            <div class="giao-hang">
+                                <span>Giao hàng: <i class="material-icons toggle-icon"
+                                        [ngStyle]="{ color: icon === 'toggle_off' ? 'gray' : 'green' }"
+                                        (click)="toggleIcon()">
+                                        {{ icon }}
+                                    </i></span>
+                            </div>
+                            <div class="combo-box">
+                                <input type="text" id="comboInput" list="options"
+                                    placeholder="Nhập hoặc chọn voucher..." (input)="onInputChange($event)" />
+                                <datalist id="options">
+                                    <option *ngFor="let voucher of voucher" [value]="voucher.ten"
+                                        [attr.data-id]="voucher.id"></option>
+                                </datalist>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-warning">
+                            <h4 class="card-title">Sản phẩm</h4>
+                            <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
+                                (input)="searchProduct()">
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-warning">
+                                    <th>Stt</th>
+                                    <th>Mã</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Xuất xứ</th>
+                                    <th>Thương hiệu</th>
+                                    <th>Màu sắc</th>
+                                    <th>Giới Tính</th>
+                                    <th>Size</th>
+                                    <th>số lượng</th>
+                                    <th>Đơn giá</th>
+                                    <th>Thao tác</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let ctsp of product, let i = index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{ctsp.ma}}</td>
+                                        <td>{{ctsp.ten}}</td>
+                                        <td>{{ctsp.san_pham?.xuatXu?.ten}}</td>
+                                        <td>{{ctsp.san_pham?.thuongHieu?.ten}}</td>
+                                        <td>{{ctsp.mauSac}}</td>
+                                        <td>{{ctsp.san_pham?.theLoai?.ten}}</td>
+                                        <td>{{ctsp.size}}</td>
+                                        <td>{{ctsp.soLuong}}</td>
+                                        <td>{{ctsp.donGia | currency:'VND'}}</td>
+                                        <td><button class="select-product" (click)="selectProduct(ctsp.id)">
+                                                <i class="material-icons">add_shopping_cart</i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination">
+                            <button (click)="getSanPham(pagination.pageNumber - 1)"
+                                [disabled]="pagination.pageNumber === 0">
+                                <i class="material-icons">arrow_back_ios</i>
+                            </button>
+                            <span>Page {{pagination.pageNumber + 1}} of {{pagination.totalPage}}</span>
+                            <button (click)="getSanPham(pagination.pageNumber + 1)"
+                                [disabled]="pagination.pageNumber === pagination.totalPage - 1">
+                                <i class="material-icons">arrow_forward_ios</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---form danh sách hóa đơn-->
+        <div *ngIf="activeTab==='danhSachHoaDon'" class="danh-sach-hoa-don">
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                        <th scope="col">Stt</th>
+                        <th scope="col">Mã hóa đơn</th>
+                        <th scope="col">Tên khách hàng</th>
+                        <th scope="col">Giao hàng</th>
+                        <th scope="col">Phương thức thanh toán</th>
+                        <th scope="col">Thời gian tạo</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Hành động</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let hoaDon of hoaDonCho, let i = index">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{hoaDon.ma}}</td>
+                            <td>{{hoaDon.khachHang.ten}}</td>
+                            <td *ngIf="hoaDon.giaoHang==1">có</td>
+                            <td *ngIf="hoaDon.giaoHang==0">không</td>
+                            <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
+                            <td>{{hoaDon.thoiGianTao}}</td>
+                            <td>{{hoaDon.tongTienSauVoucher}}</td>
+                            <td class="button-select" (click)="getIdThongTinDonHang(hoaDon.id)">
+                                <i class="material-icons">add_task</i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>Thông tin đơn hàng</h1>
+                        <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
+                        <button *ngIf="trangThaiHoaDon==='hoàn thành'" (click)="downloadPdf(hoaDonChoId)">
+                            <i class="material-icons">print</i>
+                        </button>
+                    </div>
+                    <button *ngIf="trangThaiHoaDon==='chờ xác nhận'||trangThaiHoaDon===null" class="btn btn-primary"
+                        (click)="updateTrangThaiHoaDon(hoaDonChoId)">xác nhận</button>
+                    <button *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===1" class="btn btn-primary"
+                        (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
+                    <button *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='đang giao hàng'"
+                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">hoàn thành</button>
+                    <div style="display:inline-block;width:100%;overflow-y:auto;">
+                        <div class="main-timeline10">
+                            <!-- Trạng thái Chờ xác nhận -->
+                            <div class="col-md-3 col-sm-6 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'chờ xác nhận' || trangThaiHoaDon === 'đã xác nhận' || trangThaiHoaDon === 'đang giao hàng'||trangThaiHoaDon === 'hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Chờ xác nhận</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-exclamation"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái Đã xác nhận -->
+                            <div class="col-md-3 col-sm-6 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'đã xác nhận' || trangThaiHoaDon === 'đang giao hàng'||trangThaiHoaDon === 'hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Đã xác nhận</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái Đang giao hàng -->
+                            <div class="col-md-3 col-sm-6 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'đang giao hàng' || trangThaiHoaDon === 'hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Đang giao hàng</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-truck"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái Hoàn thành -->
+                            <div class="col-md-3 col-sm-6 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Hoàn thành</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-regular fa-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

@@ -22,5 +22,9 @@ export class HoaDonService {
     return this.http.get<any>(`${this.apiGetHoaDonChiTiet}/${id}`);
   }
 
+  downloadPdf(id: number): Observable<Blob> {
+    return this.http.get(`${this.apiXuatHoaDon}?id=${id}`, { responseType: 'blob' });
+  }
+
 
 }

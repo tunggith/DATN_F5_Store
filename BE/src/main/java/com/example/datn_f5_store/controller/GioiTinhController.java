@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
-@RequestMapping("/api/v1/chat-lieu")
+@RequestMapping("/api/v1/gioi-tinh")
 public class GioiTinhController {
     @Autowired
-    private IGioiTinhService chatLieuService;
+    private IGioiTinhService gioiTinhService;
+
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(){
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var chatLieuList = chatLieuService.getAll();
+        var chatLieuList = gioiTinhService.getAll();
         dataResponse.setResult(new ResultModel<>(null,chatLieuList));
         return ResponseEntity.ok(dataResponse);
     }

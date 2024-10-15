@@ -1,0 +1,57 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title"><i class="material-icons">history</i> Lịch sử hóa đơn</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="historyTable">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Hóa Đơn</th>
+                                    <th>Nhân Viên</th>
+                                    <th>Ghi chú</th>
+                                    <th>Thời gian thực hiện</th>
+                                    <th>Trạng thái cũ</th>
+                                    <th>Trạng thái mới</th>
+                                    <th>Loại thay đổi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let history of invoiceHistory; let i = index">
+                                    <td>{{ i + 1 + (currentPage * pageSize) }}</td>
+                                    <td>{{ history.hoaDon.ma }}</td> <!-- Giả sử bạn có trường idHoaDon -->
+                                    <td>{{ history.nhanVien.ma }}</td> <!-- Giả sử bạn có trường idNhanVien -->
+                                    <td>{{ history.ghiChu }}</td> <!-- Giả sử bạn có trường ghiChu -->
+                                    <td>{{ history.thoiGianThucHien }}</td>
+                                    <!-- Giả sử bạn có trường thoiGianThucHien -->
+                                    <td>{{ history.trangThaiCu }}</td> <!-- Giả sử bạn có trường trangThaiCu -->
+                                    <td>{{ history.trangThaiMoi }}</td> <!-- Giả sử bạn có trường trangThaiMoi -->
+                                    <td>{{ history.loaiThayDoi }}</td> <!-- Giả sử bạn có trường loaiThayDoi -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Phân trang -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item" [class.disabled]="currentPage === 0">
+                            <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                        </li>
+                        <li *ngFor="let page of getPages(); let i = index" class="page-item"
+                            [class.active]="i === currentPage">
+                            <a class="page-link" (click)="changePage(i)">{{ i + 1 }}</a>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+                            <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

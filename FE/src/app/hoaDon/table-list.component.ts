@@ -59,28 +59,55 @@ export class TableListComponent implements OnInit {
 
   TaiHoaDon(chiTietId: number) {
     this.http.get(`http://localhost:8080/api/v1/pdf/download?id=${chiTietId}`, { responseType: 'blob' })
-      .subscribe((response) => {
-        const blob = new Blob([response], { type: 'application/pdf' }); // Thay đổi type nếu cần
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `hoa_don_${chiTietId}.pdf`; // Tên file tải về
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        Swal.fire({
-          title: 'F5 Store xin thông báo : ',
-          text:'Tải hóa đơn thành công!!',
-          icon: 'success',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'custom-confirm-button'
+      .subscribe({
+        next: (response) => {
+          // Kiểm tra kiểu dữ liệu trả về
+          const blob = new Blob([response], { type: 'application/pdf' }); // Thay đổi type nếu cần
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `hoa_don_${chiTietId}.pdf`; // Tên file tải về
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          
+          Swal.fire({
+            title: 'F5 Store xin thông báo : ',
+            text: 'Tải hóa đơn thành công!!',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-confirm-button'
+            }
+          }); 
+        },
+        error: (error) => {
+          // Xử lý lỗi ở đây
+          if (error.error instanceof Blob) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const errorMessage = JSON.parse(reader.result as string);
+              Swal.fire({
+                title: 'Lỗi xảy ra!',
+                text: errorMessage.message || 'Có lỗi xảy ra trong quá trình tải hóa đơn.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+              });
+            };
+            reader.readAsText(error.error);
+          } else {
+            Swal.fire({
+              title: 'Lỗi xảy ra!',
+              text: 'Không thể tải hóa đơn. Vui lòng thử lại sau.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
           }
-        }); // Giải phóng bộ nhớ
+        }
       });
   }
+  
   
 
   prevPage(): void {

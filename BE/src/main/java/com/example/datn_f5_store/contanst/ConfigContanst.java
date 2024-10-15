@@ -128,7 +128,7 @@ public class ConfigContanst {
         public static final String TABLE = "SAN_PHAM";
         public static final String ID_XUAT_XU = "ID_XUAT_XU";
         public static final String ID_THUONG_HIEU = "ID_THUONG_HIEU";
-        public static final String ID_GIOI_TINH = "ID_Gioi_Tinh";
+        public static final String ID_GIOI_TINH = "ID_GIOI_TINH";
         public static final String MA = "MA";
         public static final String TEN = "TEN";
         public static final String TRANG_THAI = "TRANG_THAI";

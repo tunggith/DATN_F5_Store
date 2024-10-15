@@ -49,18 +49,17 @@ export class KhuyenMaiService {
   
   timTheoNgay(page: number, size: number, fromDate: string | null, toDate: string | null): Observable<any> {
     let params = `?page=${page}&size=${size}`;
-  
+    
     if (fromDate && toDate) {
       // Nếu cả hai tham số đều có giá trị, thêm cả hai vào URL
       params += `&ngayBatDau=${fromDate}&ngayKetThuc=${toDate}`;
   } else if (fromDate && !toDate) {
       // Nếu chỉ có fromDate, thêm nó vào URL
       params += `&ngayBatDau=${fromDate}`;
-  } else if (toDate && fromDate) {
+  } else if (toDate && !fromDate) {
       // Nếu chỉ có toDate, thêm nó vào URL
       params += `&ngayKetThuc=${toDate}`;
   }
-
     return this.http.get<any>(`${this.apiTimTheoNgay}${params}`);
 }
 

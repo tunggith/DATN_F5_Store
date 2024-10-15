@@ -3,6 +3,7 @@ package com.example.datn_f5_store.controller;
 import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.KhachHangService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,13 +36,13 @@ public class KhachHangController {
     private KhachHangService khachHangService;
 
     @GetMapping("/getAllKhachHang")
-    private ResponseEntity<Object> getAllKhachHang(
-            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
-            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size
-    ) {
+    public ResponseEntity<Object> getAllKhachHang() {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = khachHangService.getAllKhachHang(page, size,null);
+
+        // Gọi service để lấy tất cả khách hàng
+        var responseList = khachHangService.getAllKhachHangKhongPhanTrang(); // Cập nhật phương thức này trong service để không nhận page, size
+
         dataResponse.setResult(new ResultModel<>(null, responseList));
         return ResponseEntity.ok(dataResponse);
     }
@@ -57,22 +58,38 @@ public class KhachHangController {
         dataResponse.setStatus(true);
 
         // Gọi dịch vụ để lấy danh sách khách hàng với phân trang và tìm kiếm
-        var responseList = khachHangService.getAllKhachHang(page, size,search);
+        var responseList = khachHangService.getAllKhachHang(page, size, search);
         dataResponse.setResult(new ResultModel<>(null, responseList));
 
         return ResponseEntity.ok(dataResponse);
     }
 
-
+    @GetMapping("/find-by-ten-ma-email-sdt")
+    private ResponseEntity<Object> findByTenOrMaOrEmailOrSdt(
+            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size,
+            @Parameter(name = "ten") @RequestParam(required = false) String ten,
+            @Parameter(name = "ma") @RequestParam(required = false) String ma,
+            @Parameter(name = "email") @RequestParam(required = false) String email,
+            @Parameter(name = "sdt") @RequestParam(required = false) String sdt
+    ) {
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var responseList = khachHangService.findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(page, size, ten, ma, email, sdt);
+        dataResponse.setResult(
+                new ResultModel<>(
+                        new PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()), responseList));
+        return ResponseEntity.ok(dataResponse);
+    }
 
     @PostMapping("/addKhachHang")
     public ResponseEntity<?> addKhachHang(@RequestBody @Valid KhachHangRequest khachHangRequest,
-                                          BindingResult bingBindingResult) {
+                                          BindingResult bindingResult) {
         // Kiểm tra xem có lỗi validation không
-        if (bingBindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             // Nếu có lỗi validation, tạo một map để lưu các thông báo lỗi
             Map<String, String> errors = new HashMap<>();
-            bingBindingResult.getFieldErrors().forEach(error ->
+            bindingResult.getFieldErrors().forEach(error ->
                     errors.put(error.getField(), error.getDefaultMessage()));
 
             // Trả về mã lỗi 400 với chi tiết lỗi
@@ -84,12 +101,18 @@ public class KhachHangController {
 
         // Kiểm tra nếu thêm thành công
         if (check) {
-            return ResponseEntity.ok("Thêm khách hàng thành công!");
+            // Trả về một đối tượng JSON với thông điệp
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Thêm khách hàng thành công!");
+            return ResponseEntity.ok(response);
         } else {
             // Nếu có lỗi khi thêm, trả về mã lỗi 500
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Có lỗi xảy ra khi thêm khách hàng.");
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Có lỗi xảy ra khi thêm khách hàng.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
 
     @PutMapping("/updateKhachHang/{id}")
     public ResponseEntity<?> updateKhachHang(@PathVariable Integer id,
@@ -123,21 +146,20 @@ public class KhachHangController {
 
 
     @GetMapping("/searchKhachHang")
-    public ResponseEntity<?> searchKhachHangByName(@RequestParam String name) {
-        HashMap<String, Object> response = new HashMap<>();
+    public ResponseEntity<Object> searchKhachHang(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String sdt
+    ) {
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
 
-        // Gọi service để tìm kiếm khách hàng theo tên
-        List<KhachHangEntity> khachHangList = khachHangService.searchKhachHangByName(name);
+        var responseList = khachHangService.searchKhachHang(name, email, sdt);
+        dataResponse.setResult(new ResultModel<>(null, responseList));
 
-        if (khachHangList.isEmpty()) {
-            response.put("message", "Không tìm thấy khách hàng nào với tên đã cho.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        } else {
-            response.put("message", "Tìm kiếm thành công!");
-            response.put("data", khachHangList);
-            return ResponseEntity.ok(response);
-        }
+        return ResponseEntity.ok(dataResponse);
     }
+
 
 //    @GetMapping("/searchKhachHang")
 //    public ResponseEntity<?> searchKhachHangByName(@RequestParam String name) {
@@ -155,7 +177,6 @@ public class KhachHangController {
 //            return ResponseEntity.ok(response);
 //        }
 //    }
-
 
 
 }

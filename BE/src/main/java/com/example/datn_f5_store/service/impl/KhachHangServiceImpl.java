@@ -11,9 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class KhachHangServiceImpl implements KhachHangService {
@@ -33,7 +33,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         } else {
             khachHangPage = khachHangRepository.findAll(pageable);
         }
-
         return khachHangPage.map(khachHangEntity -> new KhachHangDto(
                 khachHangEntity.getId(),
                 khachHangEntity.getDiaChiKhachHang(),
@@ -77,16 +76,15 @@ public class KhachHangServiceImpl implements KhachHangService {
         try {
             KhachHangEntity khachHang = new KhachHangEntity();
             khachHang.setDiaChiKhachHang(khachHangRequest.getDiaChiKhachHang());
-            khachHang.setMa(khachHangRequest.getMa());
+            khachHang.setMa(generateMaKhachHang());
             khachHang.setTen(khachHangRequest.getTen());
             khachHang.setGioiTinh(khachHangRequest.getGioiTinh());
             khachHang.setNgayThangNamSinh(khachHangRequest.getNgayThangNamSinh());
             khachHang.setEmail(khachHangRequest.getEmail());
-            khachHang.setAnh(khachHangRequest.getAnh());
             khachHang.setSdt(khachHangRequest.getSdt());
             khachHang.setUserName(khachHangRequest.getUserName());
             khachHang.setPassword(khachHangRequest.getPassword());
-            khachHang.setTrangThai(khachHangRequest.getTrangThai());
+            khachHang.setTrangThai("Đang hoạt động");
 
             khachHangRepository.save(khachHang);
             return true;
@@ -94,6 +92,21 @@ public class KhachHangServiceImpl implements KhachHangService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    // Phương thức để sinh mã khách hàng
+    private String generateMaKhachHang() {
+        // Chữ cái đầu tiên
+        char letter = (char) ('A' + new Random().nextInt(26)); // Sinh một chữ cái ngẫu nhiên từ A-Z
+
+        // Sinh 5 chữ số ngẫu nhiên
+        StringBuilder numberPart = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            numberPart.append(new Random().nextInt(10)); // Sinh số từ 0-9
+        }
+
+        // Kết hợp chữ cái và số
+        return letter + numberPart.toString();
     }
 
     @Override
@@ -132,10 +145,40 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHangEntity> searchKhachHangByName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            return new ArrayList<>();
+    public List<KhachHangEntity> searchKhachHang(String name, String email, String sdt) {
+        return khachHangRepository.findByNameOrEmailOrSdt(name, email, sdt);
+    }
+
+    @Override
+    public List<KhachHangEntity> getAllKhachHangKhongPhanTrang() {
+        return khachHangRepository.findAll(); // Lấy tất cả khách hàng
+    }
+
+    @Override
+    public Page<KhachHangDto> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(int page, int size, String ten, String ma, String email, String sdt) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<KhachHangEntity> khachHangEntityPage;
+
+        if (ten == null || ma == null || email == null || sdt == null) {
+            khachHangEntityPage = khachHangRepository.findAll(pageable);
+        } else {
+            khachHangEntityPage = khachHangRepository.findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(ten, ma, email, sdt, pageable);
         }
-        return khachHangRepository.findByTenContainingIgnoreCase(name);
+        return khachHangEntityPage.map(khachHangEntity -> new KhachHangDto(
+                khachHangEntity.getId(),
+                khachHangEntity.getDiaChiKhachHang(),
+                khachHangEntity.getMa(),
+                khachHangEntity.getTen(),
+                khachHangEntity.getGioiTinh(),
+                khachHangEntity.getNgayThangNamSinh(),
+                khachHangEntity.getEmail(),
+                khachHangEntity.getAnh(),
+                khachHangEntity.getSdt(),
+                khachHangEntity.getUserName(),
+                khachHangEntity.getPassword(),
+                khachHangEntity.getTrangThai()
+        ));
     }
 }
+
+

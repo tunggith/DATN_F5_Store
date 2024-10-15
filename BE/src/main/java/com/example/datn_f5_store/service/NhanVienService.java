@@ -10,4 +10,5 @@ public interface NhanVienService {
     Page<NhanVienDto> findByTenOrMa(int page, int size, String ten, String ma);
     DataResponse create(NhanVienRequest nhanVienRequest);
     DataResponse update(NhanVienRequest nhanVienRequest, Integer id);
+    DataResponse delete(Integer id); // Thêm phương thức xóa
 }

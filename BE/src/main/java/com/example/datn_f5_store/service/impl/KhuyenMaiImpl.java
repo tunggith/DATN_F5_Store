@@ -187,7 +187,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 if (khuyenMaiRequest.getThoiGianBatDau().after(khuyenMaiRequest.getThoiGianKetThuc())) {
                     return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
                 }
-                if(!khuyenMaiEntity.getThoiGianBatDau().after(currentDate)){
+                if(!khuyenMaiEntity.getThoiGianBatDau().after(currentDate) && khuyenMaiEntity.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")){
                 khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                 khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                 khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
@@ -210,7 +210,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 khuyenMaiRepository.save(khuyenMaiEntity);
                 return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
                 }
-                if(khuyenMaiEntity.getThoiGianBatDau().after(currentDate)){
+                else {
                     khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                     khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                     khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
@@ -235,7 +235,6 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     khuyenMaiRepository.save(khuyenMaiEntity);
                     return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
                 }
-
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ lệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
         } catch (Exception e) {
@@ -295,7 +294,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 entity.getMoTa(),
                 entity.getSoLuong(),
                 entity.getGiaTriKhuyenMai(),
-                             entity.getThoiGianBatDau(),
+                entity.getThoiGianBatDau(),
                 entity.getThoiGianKetThuc(),
                 entity.getThoiGianTao(),
                 entity.getThoiGianSua(),

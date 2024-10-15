@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { KhuyenMaiSanPhamChiTietService } from './khuyen-mai-san-pham-chi-tiet.service';
+import { CommonModule } from '@angular/common';
 import { KhuyenMaiService } from '../khuyenMai/khuyen-mai.service';
 import { ActivatedRoute } from '@angular/router';
 import { DataResponse } from '../models/data-response.model';
@@ -30,6 +31,7 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
   constructor(private khuyenMaiChiTietSanPhamService: KhuyenMaiSanPhamChiTietService,
     private router: ActivatedRoute,
     private khuyenMaiService : KhuyenMaiService,
+    private CommonModule : CommonModule
     
   ) {}
 

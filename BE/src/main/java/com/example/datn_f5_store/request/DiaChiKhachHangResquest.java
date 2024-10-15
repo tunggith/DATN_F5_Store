@@ -54,7 +54,6 @@ public class DiaChiKhachHangResquest {
     private String quocGia;
 
     @Column(name = "LOAI_DIA_CHI")
-    @NotBlank(message = "Loại địa chỉ không được để trống")
     private String loaiDiaChi;
 
     @Column(name = "TRANG_THAI")

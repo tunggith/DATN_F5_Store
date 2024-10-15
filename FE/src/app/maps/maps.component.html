@@ -1,1 +1,282 @@
-<div id="map"></div>
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="material-icons">group_add</i> Quản lý nhân viên</h3>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="nhanVienForm" (ngSubmit)="createNhanVien()">
+                    <div class="form-row">
+<!--                        form nhap ma nhan vien-->
+                        <div class="form-group">
+                            <label for="maNhanVien">Mã Nhân Viên:</label>
+                            <input type="text" class="form-control" id="maNhanVien" placeholder="Nhập mã nhân viên"
+                                   formControlName="ma" required>
+                            <div *ngIf="nhanVienForm.get('ma').invalid && nhanVienForm.get('ma').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('ma').errors?.required">Mã nhân viên
+                                    là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.ma">{{ validationErrors.ma }}</small>
+                            </div>
+                        </div>
+
+<!--                        form nhap ten nhan vien-->
+                        <div class="form-group">
+                            <label for="tenNhanVien">Tên Nhân Viên:</label>
+                            <input type="text" class="form-control" id="tenNhanVien" placeholder="Nhập tên nhân viên"
+                                   formControlName="ten" required>
+                            <div *ngIf="nhanVienForm.get('ten').invalid && nhanVienForm.get('ten').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('ten').errors?.required">Tên nhân
+                                    viên là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.ten">{{ validationErrors.ten }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+<!--                        form nhap so dien thoai-->
+                        <div class="form-group">
+                            <label for="sdt">Số Điện Thoại:</label>
+                            <input type="text" class="form-control" id="sdt" placeholder="Nhập số điện thoại"
+                                   formControlName="sdt" required>
+                            <div *ngIf="nhanVienForm.get('sdt').invalid && nhanVienForm.get('sdt').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('sdt').errors?.required">Số điện
+                                    thoại là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.sdt">{{ validationErrors.sdt }}</small>
+                            </div>
+                        </div>
+
+<!--                        form nhap email-->
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập email"
+                                   formControlName="email" required>
+                            <div *ngIf="nhanVienForm.get('email').invalid && nhanVienForm.get('email').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.required">Email là
+                                    bắt buộc.</small>
+                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.email">Email không
+                                    hợp lệ.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.email">{{ validationErrors.email }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+<!--                        form nhap ngay sinh-->
+                        <div class="form-group">
+                            <label for="ngayThangNamSinh">Ngày Sinh:</label>
+                            <input type="date" class="form-control" id="ngayThangNamSinh"
+                                   formControlName="ngayThangNamSinh" required>
+                            <div *ngIf="nhanVienForm.get('ngayThangNamSinh').invalid && nhanVienForm.get('ngayThangNamSinh').touched">
+                                <small class="text-danger"
+                                       *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.required">Ngày sinh là bắt
+                                    buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.ngayThangNamSinh">{{ validationErrors.ngayThangNamSinh }}</small>
+                            </div>
+                        </div>
+
+<!--                        form nhap dia chi-->
+                        <div class="form-group">
+                            <label for="diaChi">Địa Chỉ:</label>
+                            <input type="text" class="form-control" id="diaChi" placeholder="Nhập địa chỉ"
+                                   formControlName="diaChi" required>
+                            <div *ngIf="nhanVienForm.get('diaChi').invalid && nhanVienForm.get('diaChi').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('diaChi').errors?.required">Địa chỉ
+                                    là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.diaChi">{{ validationErrors.diaChi }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+<!--                        form nhap username-->
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <input type="text" class="form-control" id="username" placeholder="Nhập username"
+                                   formControlName="username" required>
+                            <div *ngIf="nhanVienForm.get('username').invalid && nhanVienForm.get('username').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('username').errors?.required">Username
+                                    là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.username">{{ validationErrors.username }}</small>
+                            </div>
+                        </div>
+
+<!--                        form nhap password-->
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" placeholder="Nhập password"
+                                   formControlName="password" required>
+                            <div *ngIf="nhanVienForm.get('password').invalid && nhanVienForm.get('password').touched">
+                                <small class="text-danger" *ngIf="nhanVienForm.get('password').errors?.required">Password
+                                    là bắt buộc.</small>
+                                <small class="text-danger"
+                                       *ngIf="validationErrors?.password">{{ validationErrors.password }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+<!--                    form upload anh-->
+                    <div class="form-row">
+                        <div class="form-group upload-container">
+                            <label for="anh">
+                                <i class="material-icons">upload_file</i> Upload Ảnh:
+                            </label>
+                            <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)" required>
+                        </div>
+                    </div>
+<!--                    hien thi anh da chon-->
+                    <div *ngIf="newNhanVien.anh" class="image-preview">
+                        <img [src]="newNhanVien.anh" alt="Ảnh nhân viên" class="img-thumbnail"/>
+                    </div>
+
+
+                    <div class="form-row">
+<!--                        form chon gioi tinh-->
+                        <div class="form-group">
+                            <label>Giới Tính:</label>
+                            <div>
+                                <input type="radio" id="gioiTinhNam" formControlName="gioiTinh" value="1" required>
+                                <label for="gioiTinhNam" style="margin-right: 20px;">Nam</label>
+
+                                <input type="radio" id="gioiTinhNu" formControlName="gioiTinh" value="0">
+                                <label for="gioiTinhNu">Nữ</label>
+                            </div>
+                        </div>
+
+<!--                        form chon trang thai-->
+                        <div class="form-group">
+                            <label>Trạng Thái:</label>
+                            <div>
+                                <input type="radio" id="trangThaiHoatDong" formControlName="trangThai" value="Hoạt động"
+                                       required>
+                                <label for="trangThaiHoatDong" style="margin-right: 20px;">Hoạt động</label>
+
+                                <input type="radio" id="trangThaiKhongHoatDong" formControlName="trangThai"
+                                       value="Không hoạt động">
+                                <label for="trangThaiKhongHoatDong">Không hoạt động</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+<!--                        button them nhan vien-->
+                        <div style="display: inline-block; margin-right: 10px;">
+                            <button type="submit" class="btn-submit">
+                                <i class="material-icons">person_add</i> Thêm Nhân Viên
+                            </button>
+                        </div>
+
+<!--                        button cap nhat nhan vien-->
+                        <div style="display: inline-block;">
+                            <button (click)="updateNhanVien(updateNhanVienData.id)" class="btn-submit"
+                                    [disabled]="!updateNhanVienData.id">
+                                <i class="material-icons">update</i> Cập Nhật Nhân Viên
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <hr>
+
+<!--                form tim kiem nhan vien theo ma hoac ten-->
+                <div class="search-container">
+                    <input type="text" [(ngModel)]="searchKeyword" (keyup)="searchNhanVien()" placeholder="Nhập tên hoặc mã nhân viên"
+                           class="search-input">
+<!--                    <button (click)="searchNhanVien()" class="search-button">Tìm kiếm</button>-->
+                </div>
+
+                <hr>
+
+<!--                table hien thi danh sach nhan vien da phan trang-->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>ID</th>
+                        <th>Mã</th>
+                        <th>Tên</th>
+                        <th>Giới Tính</th>
+                        <th>Ngày Sinh</th>
+                        <th>Email</th>
+                        <th>SĐT</th>
+                        <th>Địa Chỉ</th>
+                        <th>Ảnh</th>
+                        <th>Username</th>
+                        <th>Trạng thái</th>
+                        <th>Hành Động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let nhanVien of nhanViens; let i = index">
+                        <th scope="row">{{ i + 1 }}</th>
+                        <td>{{ nhanVien.id }}</td>
+                        <td>{{ nhanVien.ma }}</td>
+                        <td>{{ nhanVien.ten }}</td>
+                        <td>{{ nhanVien.gioiTinh === '1' ? 'Nam' : 'Nữ' }}</td>
+                        <td>{{ formatDate(nhanVien.ngayThangNamSinh) }}</td>
+                        <td>{{ nhanVien.email }}</td>
+                        <td>{{ nhanVien.sdt }}</td>
+                        <td>{{ nhanVien.diaChi }}</td>
+                        <td>
+                            <img *ngIf="nhanVien.anh" [src]="nhanVien.anh" alt=""
+                                 style="width: 50px; height: 50px; object-fit: cover;">
+                        </td>
+
+                        <td>{{ nhanVien.username }}</td>
+                        <td>{{ nhanVien.trangThai }}</td>
+                        <td>
+                            <!--                            <button (click)="deleteNhanVien(nhanVien.id)">-->
+                            <!--                                <i class="material-icons">delete</i>-->
+                            <!--                            </button>-->
+
+<!--                            button hien thi thong tin nhan vien vua chon len form-->
+                            <div class="button-group">
+                                <button (click)="showDetail(nhanVien)" class="btn btn-info">
+                                    <i class="material-icons">info</i>
+                                    <span class="btn-text">Xem</span>
+                                </button>
+
+<!--                                button doi trang thai-->
+                                <button (click)="toggleStatus(nhanVien.id)" class="btn btn-toggle">
+                                    <i class="material-icons">swap_horiz</i>
+                                    <span class="btn-text">Đổi</span>
+                                </button>
+                            </div>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+<!--                phan trang-->
+                <div class="pagination">
+<!--                    button back lai trang truoc-->
+                    <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-secondary">
+                        <i class="material-icons">chevron_left</i>
+                    </button>
+
+<!--                    hien thi so trang-->
+                    <ng-container *ngIf="totalPages > 0">
+                        <button *ngFor="let num of [].constructor(totalPages); let i = index"
+                                (click)="goToPage(i)"
+                                [disabled]="i === page"
+                                class="btn btn-secondary">
+                            {{ i + 1 }}
+                        </button>
+                    </ng-container>
+
+<!--                    button tien den trang sau-->
+                    <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-secondary">
+                        <i class="material-icons">chevron_right</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

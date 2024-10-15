@@ -1,0 +1,98 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title"><i class="material-icons">perm_media</i> Ảnh chi tiết sản phẩm</h3>
+            </div>
+            <div class="card-body">
+                <form (ngSubmit)="createAnhChiTiet()">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Danh sách sản phẩm chi tiết</label> <br>
+                                <!-- Liên kết với chiTietSanPhamId trong form -->
+                                <select class="form-select" [(ngModel)]="chiTietSanPhamId" name="chiTietSanPham" required>
+                                    <option value="" disabled selected>Chọn sản phẩm</option>
+                                    <!-- Hiển thị danh sách chi tiết sản phẩm -->
+                                    <option *ngFor="let detail of productDetails" [value]="detail.id">{{ detail.ten }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label for="urlAnh">
+                                    <i class="material-icons">upload_file</i> Upload Ảnh
+                                </label>
+                                <!-- Thêm file ảnh và xử lý sự kiện khi người dùng chọn file -->
+                                <input type="file" class="form-control" id="urlAnh" (change)="onFileSelected($event)" required>
+                                <!-- Hiển thị ảnh đã chọn nếu có -->
+                                <img *ngIf="newAnhChiTiet.urlAnh" [src]="newAnhChiTiet.urlAnh" alt="Ảnh sản phẩm chi tiết" class="img-thumbnail" width="70">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: inline-block; margin-right: 10px;">
+                        <button type="submit" class="btn-submit">
+                            <i class="material-icons">person_add</i> Thêm
+                        </button>
+                    </div>
+                    <div style="display: inline-block;">
+                        <button (click)="updateAnhChiTiet(updateAnhChiTietData.id)" class="btn-submit" type="button" [disabled]="!updateAnhChiTietData.id">
+                            <i class="material-icons">update</i> Cập Nhật
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Table hiển thị danh sách ảnh chi tiết sản phẩm -->
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên chi tiết sản phẩm</th>
+                                    <th>Url Ảnh</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of products; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ product.chiTietSanPham.ten }}</td>
+                                    <td> <img *ngIf="product.urlAnh" [src]="product.urlAnh" alt=""
+                                        style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                    <td>
+                                        <button (click)="showDetail(product)" class="btn btn-info" style="white-space: nowrap;">
+                                            <i class="material-icons" style="white-space: nowrap;">visibility</i>
+                                            <span class="btn-text" style="white-space: nowrap;">Xem Chi Tiết</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <nav aria-label="Page navigation">
+                    <div class="pagination">
+                        <!-- Nút về trang trước, nếu là trang đầu tiên thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">
+                            <i class="material-icons">skip_previous</i> Trang Trước
+                        </button>
+                        <!-- Hiển thị số trang -->
+                        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                            <button class="btn btn-primary" [class.active]="i === currentPage" (click)="goToPage(i)">
+                                {{ i + 1 }}
+                            </button>
+                        </ng-container>
+
+                        <!-- Nút về trang sau, nếu là trang cuối thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === totalPages - 1" (click)="goToPage(currentPage + 1)">
+                            Trang sau <i class="material-icons">skip_next</i>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

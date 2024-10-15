@@ -4,6 +4,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -54,7 +55,8 @@ export class IconsComponent implements OnInit {
     private khuyenMaiService: KhuyenMaiService, 
     private changeDetectorRef: ChangeDetectorRef,
     private router: Router,
-    private fb: FormBuilder 
+    private fb: FormBuilder,
+    private CommonModule: CommonModule
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +97,7 @@ export class IconsComponent implements OnInit {
       }
     );
   }
+  
 
   // Gọi phương thức này khi nhấn nút thêm
   addKhuyenMai(): void {
@@ -247,23 +250,22 @@ searchVouchers(values: any): void {
     // Tìm theo ten/ma
     this.khuyenMaiService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
       this.khuyenMais = response.result.content;
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo ten/ma : ',this.khuyenMais);
+      this.totalPages = response.result.totalPages;
+      console.log('du lieu vc ten : ', this.khuyenMais);
     });
   } else if (trangThai && !searchKey && !fromDate && !toDate) {
     // Tìm theo trạng thái
     this.khuyenMaiService.timTheoTrangThai(this.page, this.size, trangThai).subscribe((response) => {
       this.khuyenMais = response.result.content;
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo trangthai : ',this.khuyenMais);
+      this.totalPages = response.result.totalPages;
+      console.log('du lieu vc trang thai : ', this.khuyenMais);
     });
   } else if ((fromDate || toDate) && !searchKey && !trangThai) {
     // Tìm theo ngày
     this.khuyenMaiService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-      this.khuyenMaiService = response.result.content;
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo ngay : ',this.khuyenMais);
-      
+      this.khuyenMais = response.result.content;
+      this.totalPages = response.result.totalPages;
+      console.log('du lieu vc ngày : ', this.khuyenMais);
     });
 } else if (searchKey && (fromDate || toDate) && !trangThai) {
     // Tìm theo tên/ma và ngày
@@ -271,8 +273,8 @@ searchVouchers(values: any): void {
       this.khuyenMais = response.result.content.filter(voucher =>
         (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey)) 
       );
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo ten va ngay : ',this.khuyenMais);
+      console.log('du lieu theo ten va ngay',this.khuyenMais);
+      this.totalPages = response.result.totalPages;
     });   
   }else if (!searchKey && (fromDate || toDate) && trangThai) {
     // Tìm theo ngày và Trạng thái
@@ -280,9 +282,8 @@ searchVouchers(values: any): void {
       this.khuyenMais = response.result.content.filter(voucher =>
          voucher.trangThai === trangThai
       );    
-      
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo ngay va trang thai : ',this.khuyenMais);
+      console.log('du lieu theo ngay va trang thai',this.khuyenMais);
+      this.totalPages = response.result.totalPages;
     });   
   }else if (searchKey && !(fromDate || toDate) && trangThai) {
     // Tìm theo ten/ma và trạng thái
@@ -290,39 +291,44 @@ searchVouchers(values: any): void {
       this.khuyenMais = response.result.content.filter(voucher =>
         voucher.trangThai === trangThai
       );
-      this.totalPages = response.result.content.totalPages;
-      console.log('tim theo ten va trangthai : ',this.khuyenMais);
+      console.log('du lieu ten trang thai',this.khuyenMais);
+      this.totalPages = response.result.totalPages;
     });   
-  }else if (searchKey && (fromDate && !toDate) && trangThai) {
-    // Tìm tất cả để trống ngày kết th
-    this.khuyenMaiService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-      this.khuyenMais = response.result.content.filter(voucher =>
-        (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey))  && voucher.trangThai === trangThai  
-      );
-      console.log('tim theo tat ca nhgay bat dau : ',this.khuyenMais);
-      this.totalPages = response.result.content.totalPages;
-    });   
-  }else if (searchKey && (!fromDate && toDate) && trangThai) {
-    // Tìm tất cả để trống ngày kết th
-    this.khuyenMaiService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-      this.khuyenMais = response.result.content.filter(voucher =>
-        (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey))  && voucher.trangThai === trangThai  
-      );
-      console.log('tim theo tat ca ngay ket thuc : ',this.khuyenMais);
-      this.totalPages = response.result.content.totalPages;
-    });   
-  }else if (searchKey && fromDate && toDate && trangThai) {
-    // Tìm tất cả để trống ngày kết th
-    this.khuyenMaiService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-      this.khuyenMais = response.result.content.filter(voucher =>
-        (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey))  && voucher.trangThai === trangThai  
-      );
-      console.log('tim theo tat ca full : ',this.khuyenMais);
-      console.log('Search parameters:', { searchKey, fromDate, toDate, trangThai });
-      this.totalPages = response.result.content.totalPages;
-    });   
-    
   }
+  else if (searchKey && (fromDate || toDate) && trangThai) {
+
+  
+    // Khởi tạo biến từ từ ngày và đến ngày
+    const startDate = fromDate ? new Date(fromDate) : null; // Ngày bắt đầu
+    const endDate = toDate ? new Date(toDate) : null; // Ngày kết thúc
+  
+    // Kiểm tra xem startDate và endDate có giá trị hợp lệ không
+    if (startDate && !isNaN(startDate.getTime()) && endDate && !isNaN(endDate.getTime())) {
+      // Đặt giờ cuối cùng cho ngày kết thúc
+      endDate.setHours(23, 59, 59, 999); 
+  
+      // Gọi dịch vụ để tìm theo ngày
+      this.khuyenMaiService.timTheoNgay(this.page, this.size, startDate.toISOString(), endDate.toISOString()).subscribe((response) => {
+        console.log('Phản hồi từ server:', response); // Kiểm tra phản hồi
+  
+        this.khuyenMais = response.result.content.filter(voucher => {
+          const tenValid = voucher.ten ? voucher.ten.includes(searchKey) : false; // Kiểm tra ten
+          const maValid = voucher.ma ? voucher.ma.includes(searchKey) : false; // Kiểm tra ma
+          const trangThaiValid = voucher.trangThai === trangThai; // Kiểm tra trangThai
+  
+          // Thêm điều kiện kiểm tra ngày
+          const voucherDate = new Date(voucher.thoiGianBatDau); // Giả sử voucher có thuộc tính thoiGianBatDau
+          return (tenValid || maValid) && trangThaiValid && (voucherDate >= startDate && voucherDate <= endDate);
+        });
+  
+        console.log('Dữ liệu tìm thấy:', this.khuyenMais);
+        this.totalPages = response.result.totalPages;
+      });
+    } else {
+      console.error('Ngày bắt đầu hoặc ngày kết thúc không hợp lệ:', startDate, endDate);
+    }
+  }
+  
   else {
     // nếu tất cả trống thì findAll
     this.loadKhuyenMais();

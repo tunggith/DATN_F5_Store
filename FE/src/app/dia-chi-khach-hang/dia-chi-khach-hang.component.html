@@ -1,0 +1,213 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header card-header-danger">
+                <h3 class="card-title"><i class="material-icons">location_on</i> Quản lý địa chỉ khách hàng</h3>
+            </div>
+            <div class="card-body">
+                <form id="customerForm" (ngSubmit)="createDiaChiKhachHang()" #customerForm="ngForm">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" placeholder="Nhập họ và tên" name="hoTen"
+                                    [(ngModel)]="newDiaChiKhachHang.hoTen" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
+                                    [(ngModel)]="newDiaChiKhachHang.sdt" required>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Số nhà</label>
+                                <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha"
+                                    [(ngModel)]="newDiaChiKhachHang.soNha" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Đường</label>
+                                <input type="text" class="form-control" placeholder="Nhập đường" name="duong"
+                                    [(ngModel)]="newDiaChiKhachHang.duong" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Phường xã</label>
+                                <input type="text" class="form-control" placeholder="Nhập phường xã" name="phuongXa"
+                                    [(ngModel)]="newDiaChiKhachHang.phuongXa" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Quận huyện</label>
+                                <input type="text" class="form-control" placeholder="Nhập quận huyện" name="quanHuyen"
+                                    [(ngModel)]="newDiaChiKhachHang.quanHuyen" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Tỉnh thành</label>
+                                <input type="text" class="form-control" placeholder="Nhập tỉnh thành" name="tinhThanh"
+                                    [(ngModel)]="newDiaChiKhachHang.tinhThanh" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Quốc gia</label>
+                                <input type="text" class="form-control" placeholder="Nhập quốc gia" name="quocGia"
+                                    [(ngModel)]="newDiaChiKhachHang.quocGia" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Loại địa chỉ</label>
+                                <div class="form-check">
+                                    <input class="form-check-radio" type="radio" id="loaiDiaChiNhaRieng"
+                                        [(ngModel)]="newDiaChiKhachHang.loaiDiaChi"  name="loaiDiaChi"
+                                        value="Nhà riêng" required checked>
+                                    <label class="form-check-label" for="loaiDiaChiNhaRieng"
+                                        style="margin-right: 20px;">Nhà riêng</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-radio" type="radio"  name="loaiDiaChi" id="loaiDiaChiCongTy"
+                                        [(ngModel)]="newDiaChiKhachHang.loaiDiaChi" value="Công ty"
+                                        required>
+                                    <label class="form-check-label" for="loaiDiaChiCongTy"
+                                        style="margin-right: 20px;">Công ty</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="mb-3">
+                                <label class="form-label">Trạng thái</label>
+                                <div class="form-check">
+                                    <input class="form-check-radio" type="radio" name="trangThai" value="Còn sử dụng"
+                                        id="editConSuDung" [(ngModel)]="newDiaChiKhachHang.trangThai" checked    >
+                                    <label class="form-check-label" for="editConSuDung">Còn sử
+                                        dụng</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-radio" type="radio" name="trangThai"
+                                        value="Không còn sử dụng" id="editKhongConSuDung"
+                                        [(ngModel)]="newDiaChiKhachHang.trangThai">
+                                    <label class="form-check-label" for="editKhongConSuDung">Không còn
+                                        sử dụng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12 text-end">
+                            <div class="text-center">
+                                <div style="display: inline-block; margin-right: 10px;">
+                                    <button type="submit" class="btn-submit">
+                                        <i class="material-icons">person_add</i> Thêm Địa Chỉ Khách Hàng
+                                    </button>
+                                </div>
+                                <div style="display: inline-block;">
+                                    <button (click)="updateDiaChiKhachHang(updateDiaChiKhachHangData.id)"
+                                        class="btn-submit" type="submit" [disabled]="!updateDiaChiKhachHangData.id">
+                                        <i class="material-icons">update</i> Cập Nhật Địa Chỉ Khách Hàng
+                                    </button>
+                                </div>
+                                <div style="display: inline-block;">
+                                    <button type="reset" class="btn-submit"> <i class="material-icons"
+                                            (click)="resetFormDiaChiKhach()">refresh</i> Làm mới</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+                <!-- Table hiển thị dữ liệu khách hàng -->
+                <div class="row mt-4">
+                    <div class="col-sm-12">
+                        <table class="table table-bordered" id="customerTable">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Số nhà</th>
+                                    <th>Đường</th>
+                                    <th>Phường xã</th>
+                                    <th>Quận huyện</th>
+                                    <th>Tỉnh thành </th>
+                                    <th>Quốc gia</th>
+                                    <th>Loại địa chỉ</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let customerAddress of customersDiaChi; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>{{ customerAddress.hoTen }}</td> <!-- Hiển thị họ tên -->
+                                    <td>{{ customerAddress.sdt }}</td> <!-- Hiển thị số điện thoại -->
+                                    <td>{{ customerAddress.soNha }}</td> <!-- Hiển thị số nhà -->
+                                    <td>{{ customerAddress.duong }}</td> <!-- Hiển thị đường -->
+                                    <td>{{ customerAddress.phuongXa }}</td> <!-- Hiển thị phường xã -->
+                                    <td>{{ customerAddress.quanHuyen }}</td> <!-- Hiển thị quận huyện -->
+                                    <td>{{ customerAddress.tinhThanh }}</td> <!-- Hiển thị tỉnh thành -->
+                                    <td>{{ customerAddress.quocGia }}</td> <!-- Hiển thị quốc gia -->
+                                    <td>{{ customerAddress.loaiDiaChi }}</td> <!-- Hiển thị loại địa chỉ -->
+                                    <td>{{ customerAddress.trangThai }}</td> <!-- Hiển thị trạng thái -->
+                                    <td>
+                                        <button (click)="showDetailDiaChi(customerAddress)" class="btn btn-info">
+                                            <i class="material-icons" style="white-space: nowrap;">visibility</i>
+                                            <span class="btn-text" style="white-space: nowrap;"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Phân trang -->
+                <nav aria-label="Page navigation">
+                    <div class="pagination">
+                        <!-- Nút về trang trước, nếu là trang đầu tiên thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === 0"
+                            (click)="goToPage(currentPage - 1)">
+                            <i class="material-icons">skip_previous</i>Trang Trước
+                        </button>
+                        <!-- &lt;!&ndash; Hiển thị số trang &ndash;&gt; -->
+                        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                            <button class="btn btn-primary" [class.active]="i === currentPage" (click)="goToPage(i)">
+                                {{ i + 1 }}
+                            </button>
+                        </ng-container>
+
+                        <!-- Nút về trang sau, nếu là trang cuối thì bị vô hiệu hóa -->
+                        <button class="btn btn-secondary" [disabled]="currentPage === totalPages"
+                            (click)="goToPage(currentPage + 1)">
+                            Trang sau<i class="material-icons">skip_next</i>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
