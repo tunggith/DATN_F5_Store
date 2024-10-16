@@ -122,85 +122,66 @@
                 </div>
 
                 <hr>
-
-                <!-- Table hiển thị dữ liệu khách hàng -->
-                <div class="row mt-4">
-                    <div class="col-sm-12">
-                        <table class="table table-bordered" id="customerTable">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th class="text-center" style="white-space: nowrap;">Mã khách hàng</th>
-                                    <th class="text-center" style="white-space: nowrap;">Tên khách hàng</th>
-                                    <th class="text-center" style="white-space: nowrap;">Giới tính</th>
-                                    <th class="text-center" style="white-space: nowrap;">Năm sinh</th>
-                                    <th class="text-center">Email</th>
-                                    <th class="text-center">Ảnh</th>
-                                    <th style="white-space: nowrap;">Số điện thoại</th>
-                                    <th class="text-center">Username</th>
-                                    <th class="text-center">Password</th>
-                                    <th class="text-center" style="white-space: nowrap;">Trạng thái</th>
-                                    <th class="text-center">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let customer of customers; let i = index">
-                                    <!-- Ẩn thằng khách hàng 001 đi nó là khách vãng lai -->
-                                    <ng-container *ngIf="customer.ma !== 'KH001'">
-                                        <td>{{ i + 1 }}</td>
-                                        <td>{{ customer.ma }}</td>
-                                        <td>{{ customer.ten }}</td>
-                                        <td>{{ customer.gioiTinh === '0' ? 'Nam' : 'Nữ' }}</td>
-                                        <td>{{ formatDate(customer.ngayThangNamSinh) }}</td>
-                                        <td>{{ customer.email }}</td>
-                                        <td> <img *ngIf="customer.anh" [src]="customer.anh" alt=""
-                                                style="width: 50px; height: 50px; object-fit: cover;"></td>
-                                        <td>{{ customer.sdt }}</td>
-                                        <td>{{ customer.userName }}</td>
-                                        <td>{{ customer.password }}</td>
-                                        <td style="white-space: nowrap;">{{ customer.trangThai === 'Đang hoạt động' ?
-                                            'Đang hoạt động' : 'Không hoạt
-                                            động' }}</td>
-                                        <td style="width: 220px;">
-                                            <button (click)="showDetail(customer)" class="btn btn-info"
-                                                style="white-space: nowrap;">
-                                                <i class="material-icons" style="white-space: nowrap;">visibility</i>
-                                                <span class="btn-text" style="white-space: nowrap;"></span>
-                                            </button>
-                                            <button (click)="toggleStatus(customer.id)" class="btn btn-toggle">
-                                                <i class="material-icons">swap_horiz</i>
-                                                <span class="btn-text"></span>
-                                            </button>
-                                        </td>
-                                    </ng-container>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Mã khách hàng</th>
+                                <th scope="col">Tên khách hàng</th>
+                                <th scope="col">Giới tính</th>
+                                <th scope="col">Năm sinh</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Ảnh</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">Password</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let customer of customers; let i = index">
+                                <!-- Ẩn thằng khách hàng 001 đi nó là khách vãng lai -->
+                                <ng-container *ngIf="customer.ma !== 'KH001'">
+                                    <td>{{ i }}</td>
+                                    <td>{{ customer.ma }}</td>
+                                    <td>{{ customer.ten }}</td>
+                                    <td>{{ customer.gioiTinh === '0' ? 'Nam' : 'Nữ' }}</td>
+                                    <td>{{ formatDate(customer.ngayThangNamSinh) }}</td>
+                                    <td>{{ customer.email }}</td>
+                                    <td> <img *ngIf="customer.anh" [src]="customer.anh" alt=""
+                                            style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                    <td>{{ customer.sdt }}</td>
+                                    <td>{{ customer.userName }}</td>
+                                    <td>{{ customer.password }}</td>
+                                    <td>{{ customer.trangThai}}</td>
+                                    <td style="width: 220px;">
+                                        <button (click)="showDetail(customer)" class="btn btn-info">
+                                            <i class="material-icons">visibility</i>
+                                        </button>
+                                        <button (click)="updateTrangThai(customer.id)" class="btn btn-toggle">
+                                            <i class="material-icons">swap_horiz</i>
+                                        </button>
+                                        <button (click)="openPopup(customer.id)" class="btn btn-warning">
+                                            <i class="material-icons">local_library</i>
+                                        </button>
+                                    </td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- Phân trang -->
-                <nav aria-label="Page navigation">
-                    <div class="pagination">
-                        <!-- Nút về trang trước, nếu là trang đầu tiên thì bị vô hiệu hóa -->
-                        <button class="btn btn-secondary" [disabled]="currentPage === 0"
-                            (click)="goToPage(currentPage - 1)">
-                            <i class="material-icons">skip_previous</i>Trang Trước
-                        </button>
-                        <!-- &lt;!&ndash; Hiển thị số trang &ndash;&gt; -->
-                        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
-                            <button class="btn btn-primary" [class.active]="i === currentPage" (click)="goToPage(i)">
-                                {{ i + 1 }}
-                            </button>
-                        </ng-container>
-
-                        <!-- Nút về trang sau, nếu là trang cuối thì bị vô hiệu hóa -->
-                        <button class="btn btn-secondary" [disabled]="currentPage === totalPages"
-                            (click)="goToPage(currentPage + 1)">
-                            Trang sau<i class="material-icons">skip_next</i>
-                        </button>
-                    </div>
-                </nav>
+                <div class="pagination">
+                    <button [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">
+                        <i class="material-icons">arrow_back_ios</i>
+                    </button>
+                    <span>Page {{currentPage + 1}} of {{totalPages}}</span>
+                    <button [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                        <i class="material-icons">arrow_forward_ios</i>
+                    </button>
+                </div>
+                <app-dia-chi-khach-hang *ngIf="popup" [idKhachHang]="idKhachHang" (closePopup)="closePopup()"></app-dia-chi-khach-hang>
             </div>
         </div>
     </div>

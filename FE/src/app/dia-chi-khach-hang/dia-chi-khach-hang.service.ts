@@ -11,13 +11,16 @@ export class DiaChiKhachHangService {
   constructor(private http: HttpClient) {}
 
   // Lấy danh sách địa chỉ khách hàng với phân trang
-  getAllAddresses(page: number, size: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrlDiaChi}/getAllDiaChiKhachHang_PhanTrang_TimKiem?page=${page}&size=${size}`);
+  getAllAddresses(id:number,page:number,size:number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrlDiaChi}/get-by-khach-hang/${id}?page=${page}&size=${size}`);
   }
   addDiaChiKhachHang(customerAddress: any): Observable<any> {
-    return this.http.post(`${this.baseUrlDiaChi}/addDiaChiKhachHang`, customerAddress); // Địa chỉ API thêm khách hàng
+    return this.http.post(`${this.baseUrlDiaChi}/addDiaChiKhachHang`, customerAddress); 
   }
   updateDiaChiKhachHang(id: number, customerAddress: any): Observable<any> {
-    return this.http.put(`${this.baseUrlDiaChi}/updateDiaChiKhachHang/${id}`, customerAddress); // Địa chỉ API cập nhật khách hàng
+    return this.http.put(`${this.baseUrlDiaChi}/updateDiaChiKhachHang/${id}`, customerAddress);
+  }
+  chiTietDiaChi(id:number):Observable<any>{
+    return this.http.get(`${this.baseUrlDiaChi}/chi-tiet-dia-chi/${id}`);
   }
 }

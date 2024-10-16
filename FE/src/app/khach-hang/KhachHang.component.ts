@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CustomerService } from './notifications.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { CustomerService } from './KhachHang.service';
 import { DatePipe } from '@angular/common';
 
 declare var $: any;
@@ -9,21 +9,23 @@ import { error, log } from 'console';
 
 @Component({
   selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css'],
+  templateUrl: './KhachHang.component.html',
+  styleUrls: ['./KhachHang.component.css'],
   providers: [DatePipe] // Thêm DatePipe vào providers
 
 })
-export class NotificationsComponent implements OnInit {
+export class KhachHangComponent implements OnInit {
   //Khách hàng
   customers: any[] = [];
   addresses = [];
   searchKeyword: string = '';
+  popup: boolean = false;
+  idKhachHang: number = 0;
 
   newKhachHang: any = {
     gioiTinh: '1',
     trangThai: 'Đang hoạt động',
-    anh : '',
+    anh: '',
   };
   updateKhachHangData: any = {
     gioiTinh: '1',
@@ -37,44 +39,22 @@ export class NotificationsComponent implements OnInit {
   totalPages: number = 0; // Tổng số trang
 
   constructor(private customerService: CustomerService, private datePipe: DatePipe) { }
-  showNotification(from, align) {
-    const type = ['', 'info', 'success', 'warning', 'danger'];
-
-    const color = Math.floor((Math.random() * 4) + 1);
-
-    $.notify({
-      icon: "notifications",
-      message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
-
-    }, {
-      type: type[color],
-      timer: 4000,
-      placement: {
-        from: from,
-        align: align
-      },
-      template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
-        '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +
-        '<i class="material-icons" data-notify="icon">notifications</i> ' +
-        '<span data-notify="title">{1}</span> ' +
-        '<span data-notify="message">{2}</span>' +
-        '<div class="progress" data-notify="progressbar">' +
-        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-        '</div>' +
-        '<a href="{3}" target="{4}" data-notify="url"></a>' +
-        '</div>'
-    });
+  ngOnInit() {
+    this.loadKhachHang(this.currentPage);
   }
-
+  openPopup(idKhachHang:number) {
+    this.idKhachHang = idKhachHang;
+    this.popup = true;
+  }
+  closePopup() {
+    this.popup = false;
+  }
   goToPage(page: number): void {
     if (page < 0 || page >= this.totalPages) {
       return; // Kiểm tra nếu trang không hợp lệ
     }
     this.currentPage = page;
     // this.searchKhachHang();
-    this.loadKhachHang(this.currentPage);
-  }
-  ngOnInit() {
     this.loadKhachHang(this.currentPage);
   }
   loadKhachHang(page: number): void {
@@ -91,7 +71,13 @@ export class NotificationsComponent implements OnInit {
       }
     );
   }
-
+  updateTrangThai(id:number){
+    this.customerService.updateTrangThai(id).subscribe(
+      response=>{
+        this.loadKhachHang(this.currentPage);
+      }
+    )
+  }
   // Phương thức để định dạng ngày sinh
   formatDate(dateString: string): string {
     const date = new Date(dateString); // Chuyển đổi chuỗi ngày thành đối tượng Date
@@ -120,7 +106,7 @@ export class NotificationsComponent implements OnInit {
     if (!this.validateKhachHang(this.newKhachHang)) {
       return; // Ngừng lại nếu dữ liệu không hợp lệ
     }
-    
+
     this.customerService.addKhachHang(this.newKhachHang).subscribe(
       (response) => {
         this.newKhachHang = {};
@@ -256,24 +242,23 @@ export class NotificationsComponent implements OnInit {
   searchKhachHang(): void {
     // Nếu không có từ khóa tìm kiếm, tải lại danh sách khách hàng
     if (!this.searchKeyword || this.searchKeyword.trim() === '') {
-        this.loadKhachHang(this.currentPage);
-        return;
+      this.loadKhachHang(this.currentPage);
+      return;
     }
-    
+
     // Tìm kiếm khách hàng với từ khóa và phân trang
     this.customerService.searchKhachHang(this.currentPage, this.size, this.searchKeyword.trim()).subscribe((response) => {
-        if (response.status) {
-            this.customers = response.result.content.content; // Cập nhật danh sách khách hàng
-            this.totalPages = response.result.content.totalPages; // Cập nhật tổng số trang
-            console.log('Kết quả tìm kiếm:', response);
-        } else {
-            this.customers = []; // Nếu không có kết quả, set danh sách khách hàng rỗng
-            this.totalPages = 0; // Reset tổng số trang
-        }
+      if (response.status) {
+        this.customers = response.result.content.content; // Cập nhật danh sách khách hàng
+        this.totalPages = response.result.content.totalPages; // Cập nhật tổng số trang
+        console.log('Kết quả tìm kiếm:', response);
+      } else {
+        this.customers = []; // Nếu không có kết quả, set danh sách khách hàng rỗng
+        this.totalPages = 0; // Reset tổng số trang
+      }
     }, (error) => {
-        console.error('Lỗi khi tìm kiếm khách hàng:', error);
+      console.error('Lỗi khi tìm kiếm khách hàng:', error);
     });
-}
-
   }
-  
+
+}

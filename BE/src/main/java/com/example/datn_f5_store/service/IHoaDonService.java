@@ -22,9 +22,9 @@ public interface IHoaDonService {
     DataResponse deleteHoaDonChiTiet(Integer idHoaDonCt);
     DataResponse giamSoLuongSanPham(Integer idHdct);
     DataResponse updateKhachhang(Integer idHoaDon,Integer idKhachHang);
-    List<HoaDonDto> getByTrangThai();
+    Page<HoaDonDto> getByTrangThai(Integer page, Integer size,String keyWord);
     HoaDonEntity getDetailHoaDonCho(Integer id);
     DataResponse updateTrangThaiHoaDon(Integer id);
-    Page<HoaDonDto> getByTrangThaiHoanThanh(Integer page, Integer size,String keyWord);
     Page<HoaDonDto> getAllHoaDon(int page, int size);
+    DataResponse updateDiaChiNhanHang(Integer id,HoaDonRequest request);
 }

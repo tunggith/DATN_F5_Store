@@ -1,5 +1,4 @@
 import { AnhChiTietSanPhamComponent } from './../../anh-chi-tiet-san-pham/anh-chi-tiet-san-pham.component';
-import { LichSuHoaDonComponent } from './../../lich-su-hoa-don/lich-su-hoa-don.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -14,7 +13,7 @@ import { VoucherComponent } from '../../voucher/voucher.component';
 import { KhuyenMaiChiTietSanPhamComponent } from '../../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { DiaChiKhachHangComponent } from '../../dia-chi-khach-hang/dia-chi-khach-hang.component';
-import { NotificationsComponent } from '../../notifications/notifications.component';
+import { KhachHangComponent } from '../../khach-hang/KhachHang.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { CustomerPopupComponent } from 'app/customer-popup/customer-popup.component';
 import { TimelineModule } from 'primeng/timeline';
@@ -24,6 +23,9 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { MatAutocompleteModule } from '@angular/material/autocomplete'
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { HistoryPopupComponent } from 'app/history-popup/history-popup.component';
 
 @NgModule({
   imports: [
@@ -38,6 +40,9 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
     MatTooltipModule,
     TimelineModule,
+    MatAutocompleteModule,
+    TimelineModule,
+    AutoCompleteModule,
   ],
   declarations: [
     BanHangComponent,
@@ -46,14 +51,14 @@ import { MatSelectModule } from '@angular/material/select';
     TypographyComponent,
     IconsComponent,
     MapsComponent,
-    NotificationsComponent,
+    KhachHangComponent,
     UpgradeComponent,
     CustomerPopupComponent,
     VoucherComponent,
     KhuyenMaiChiTietSanPhamComponent,
     DiaChiKhachHangComponent,
-    LichSuHoaDonComponent,
     AnhChiTietSanPhamComponent,
+    HistoryPopupComponent,
   ]
 })
 

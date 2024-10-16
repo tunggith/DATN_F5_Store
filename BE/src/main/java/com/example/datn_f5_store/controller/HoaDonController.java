@@ -90,10 +90,18 @@ public class HoaDonController {
         return new ResponseEntity<>(hoaDonService.updateKhachhang(idHoaDon,idKhachHang),HttpStatus.OK);
     }
     @GetMapping("/find-by-trang-thai")
-    private ResponseEntity<Object> findByTrangThai(){
+    private ResponseEntity<Object> findByTrangThai(
+            @Parameter(name = "page")@RequestParam(defaultValue = "0")Integer page,
+            @Parameter(name = "size")@RequestParam(defaultValue = "5")Integer size,
+            @Parameter(name = "keyWord")@RequestParam(required = false)String keyWord
+    ){
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        dataResponse.setResult(new ResultModel<>(null,hoaDonService.getByTrangThai()));
+        var pageHoaDon = hoaDonService.getByTrangThai(page,size,keyWord);
+        dataResponse.setResult(
+                new ResultModel<>(
+                        new PagingModel(page,size,pageHoaDon.getTotalElements(),pageHoaDon.getTotalPages()),pageHoaDon
+                ));
         return ResponseEntity.ok(dataResponse);
     }
     @GetMapping("/detail-hoa-don-cho/{id}")
@@ -111,19 +119,11 @@ public class HoaDonController {
     ){
         return new ResponseEntity<>(hoaDonService.updateTrangThaiHoaDon(id),HttpStatus.OK);
     }
-    @GetMapping("/get-trang-thai-hoan-thanh")
-    private ResponseEntity<Object> getTrangThaiHoanThanh(
-            @Parameter(name = "page")@RequestParam(defaultValue = "0")Integer page,
-            @Parameter(name = "size")@RequestParam(defaultValue = "5")Integer size,
-            @Parameter(name = "keyWord")@RequestParam(required = false)String keyWord
+    @PutMapping("/update-dia-chi-nhan-hang/{id}")
+    private ResponseEntity<Object> updateDiaChiNhanHang(
+            @Parameter(name = "id")@PathVariable Integer id,
+            @RequestBody HoaDonRequest request
     ){
-        DataResponse dataResponse = new DataResponse();
-        dataResponse.setStatus(true);
-        var dataList = hoaDonService.getByTrangThaiHoanThanh(page,size,keyWord);
-        dataResponse.setResult(
-                new ResultModel<>(
-                        new PagingModel(page,size,dataList.getTotalElements(),dataList.getTotalPages()),dataList
-                ));
-        return ResponseEntity.ok(dataResponse);
+        return new ResponseEntity<>(hoaDonService.updateDiaChiNhanHang(id,request),HttpStatus.OK);
     }
 }

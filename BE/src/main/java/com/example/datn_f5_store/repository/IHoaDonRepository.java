@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface IHoaDonRepository extends JpaRepository<HoaDonEntity, Integer> {
-    Page<HoaDonEntity> findByTrangThaiIn(List<String> trangThais, Pageable pageable);
+//    Page<HoaDonEntity> findByTrangThaiIn(List<String> trangThais, Pageable pageable);
     @Query("SELECT h FROM HoaDonEntity h WHERE " +
             "(LOWER(h.khachHang.ten) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(h.ma) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
@@ -24,6 +24,6 @@ public interface IHoaDonRepository extends JpaRepository<HoaDonEntity, Integer> 
     boolean existsByMa(String ma);
     List<HoaDonEntity> findByTrangThai(String trangThai);
     @Query("SELECT h FROM HoaDonEntity h WHERE h.trangThai IN :trangThai ORDER BY h.thoiGianTao DESC")
-    List<HoaDonEntity> findByTrangThaiIn(@Param("trangThai") List<String> trangThai);
+    Page<HoaDonEntity> findByTrangThaiIn(@Param("trangThai") List<String> trangThai,Pageable pageable);
 
 }

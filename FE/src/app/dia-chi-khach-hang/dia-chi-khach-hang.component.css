@@ -1,114 +1,37 @@
-/* Đặt màu sắc tổng thể cho giao diện */
-body {
-    background-color: #f5f5f5;
-    font-family: 'Roboto', sans-serif;
+.popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9;
+    /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
-
-.card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.content{
+    background-color: #ffff;
+    width: 70%;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: auto;
     border-radius: 10px;
-    border: none;
-    margin-top: 20px;
 }
-
-.card-header {
-    background-color: #d9534f;
-    color: #fff;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+.close {
+    cursor: pointer;
+    position: absolute;
+    top: 23px;
+    right:245px;
+    font-size: 24px;
 }
-
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.form-label {
-    font-weight: bold;
-    color: #333;
-}
-
-.form-control {
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    transition: all 0.3s ease;
-}
-
-.form-control:focus {
-    border-color: #d9534f;
-    box-shadow: 0 0 5px rgba(217, 83, 79, 0.5);
-}
-
-.btn-danger {
-    background-color: #d9534f;
-    border-color: #d9534f;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-    background-color: #c9302c;
-}
-
-.table {
+.pagination button{
     background-color: #fff;
-    border-radius: 10px;
+    border: 0px;
+    justify-content: center;
+    
 }
-
-.table thead th {
-    background-color: #d9534f;
-    color: #fff;
-    text-align: center;
-    font-weight: bold;
-}
-
-.table tbody td {
-    text-align: center;
-    vertical-align: middle;
-}
-
-/* Định dạng phân trang */
-.pagination {
-    justify-content: center; /* Căn giữa phân trang */
-    margin-top: 20px; /* Khoảng cách trên phân trang */
-}
-
-/* Định dạng từng mục trong phân trang */
-.pagination .page-item {
-    margin: 0 5px; /* Khoảng cách giữa các nút trang */
-}
-
-/* Định dạng liên kết trong từng mục */
-.pagination .page-link {
-    color: #007bff; /* Màu chữ cho liên kết */
-    padding: 10px 15px; /* Padding cho nút */
-    border: 1px solid #007bff; /* Đường viền cho nút */
-    border-radius: 5px; /* Bo tròn góc cho nút */
-    text-decoration: none; /* Bỏ gạch chân */
-    transition: background-color 0.2s ease, color 0.2s ease; /* Hiệu ứng chuyển màu */
-}
-
-/* Hiệu ứng hover cho liên kết */
-.pagination .page-link:hover {
-    background-color: #007bff; /* Màu nền khi hover */
-    color: white; /* Màu chữ khi hover */
-}
-
-/* Định dạng cho trang đang hoạt động */
-.pagination .active .page-link {
-    background-color: #dc3545; /* Màu nền cho trang đang chọn */
-    color: white; /* Chữ trắng */
-    border-color: #dc3545; /* Đường viền cho trang đang chọn */
-}
-
-/* Định dạng cho trang không khả dụng */
-.pagination .disabled .page-link {
-    color: #6c757d; /* Màu xám cho chữ trong nút không khả dụng */
-    background-color: transparent; /* Màu nền trong suốt cho nút không khả dụng */
-    border-color: #6c757d; /* Đường viền cho nút không khả dụng */
-    cursor: not-allowed; /* Con trỏ không cho phép khi hover trên nút không khả dụng */
-}
-
 /* Custom radio buttons */
 .form-check-radio {
     /* appearance: none; */
@@ -134,64 +57,60 @@ button {
 .alert {
     border-radius: 8px;
 }
-
-/* Table actions button */
-.btn-warning {
-    background-color: #f0ad4e;
-    border-color: #f0ad4e;
-    transition: all 0.3s ease;
+.table-responsive{
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
-.btn-warning:hover {
-    background-color: #ec971f;
-}
-
 .material-icons {
     vertical-align: middle;
 }
+
 /* CSS chung cho tất cả các nút */
 .btn-submit {
-    background-color: #4CAF50; /* Màu nền chính */
-    color: white; /* Màu chữ */
-    padding: 10px 20px; /* Đệm cho nút */
-    border: none; /* Bỏ đường viền */
-    border-radius: 5px; /* Bo tròn góc */
-    cursor: pointer; /* Hiển thị dấu trỏ tay khi hover */
+    background-color: #4CAF50;
+    /* Màu nền chính */
+    color: white;
+    /* Màu chữ */
+    padding: 10px 20px;
+    /* Đệm cho nút */
+    border: none;
+    /* Bỏ đường viền */
+    border-radius: 5px;
+    /* Bo tròn góc */
+    cursor: pointer;
+    /* Hiển thị dấu trỏ tay khi hover */
     font-size: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu khi hover */
+    transition: background-color 0.3s ease;
+    /* Hiệu ứng chuyển màu khi hover */
 }
 
 /* Hiệu ứng khi hover lên nút */
 .btn-submit:hover {
-    background-color: #45a049; /* Màu nền khi hover */
+    background-color: #45a049;
+    /* Màu nền khi hover */
 }
 
 /* Icon trong nút */
 .btn-submit i {
-    margin-right: 5px; /* Khoảng cách giữa icon và text */
+    margin-right: 5px;
+    /* Khoảng cách giữa icon và text */
     font-size: 18px;
 }
 
 /* Hiệu ứng riêng cho nút "Cập Nhật Địa Chỉ Khách Hàng" khi bị disabled */
 button[disabled] {
-    background-color: #4CAF50; /* Màu nền cho nút bị disable */
-    cursor: not-allowed; /* Đổi con trỏ chuột khi bị disable */
+    background-color: #4CAF50;
+    /* Màu nền cho nút bị disable */
+    cursor: not-allowed;
+    /* Đổi con trỏ chuột khi bị disable */
 }
-
-/* Khoảng cách giữa các nút */
-div[style*="display: inline-block;"] {
-    margin-right: 10px; /* Khoảng cách giữa các nút */
-}
-
-/* Nút "Làm mới" với khoảng cách bên trái riêng */
-div[style*="margin-left: 10px;"] {
-    margin-left: 10px;
-}
-
 /* Tùy chọn cho phần refresh icon */
 .btn-submit i:hover {
-    color: #f1f1f1; /* Màu icon khi hover */
+    color: #f1f1f1;
+    /* Màu icon khi hover */
 }

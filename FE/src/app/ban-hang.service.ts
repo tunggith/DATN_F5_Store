@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -12,62 +12,70 @@ export class BanHangService {
   public thanhToanUrl = 'http://localhost:8080/api/v1/phuong-thuc-thanh-toan';
   public khachHangUrl = 'http://localhost:8080/api/v1/khach-hang';
   private exportHoaDonUrl = 'http://localhost:8080/api/v1/pdf/download';
+  private lichSuHoaDonUrl = 'http://localhost:8080/api/v1/lich-su-hoa-don';
 
   constructor(private http: HttpClient) { }
   //phương thức gọi api lấy danh sách sản phẩm
-  getSanPham(pageSize: number, pageNumber: number, ten?: string,ma?:string): Observable<any> {
-    return this.http.get(`${this.url}/get-by-trang-thai?size=${pageSize}&page=${pageNumber}&ten=${ten}&ma=${ma}`);
+  getSanPham(pageSize: number, pageNumber: number, keyword?: string): Observable<any> {
+    return this.http.get(`${this.url}/get-by-trang-thai?size=${pageSize}&page=${pageNumber}&keyword=${keyword}`);
   }
-  getHoaDon():Observable<any>{
+  getHoaDon(): Observable<any> {
     return this.http.get(`${this.hoaDonUrl}/getAll`);
   }
-  getChiTietHoaDon(id:number):Observable<any>{
+  getChiTietHoaDon(id: number): Observable<any> {
     return this.http.get(`${this.hoaDonUrl}/get-chi-tiet-hoa-don/${id}`);
   }
-  getVoucher():Observable<any>{
+  getVoucher(): Observable<any> {
     return this.http.get(`${this.voucherUrl}/getAll`);
   }
-  getPhuongThucThanhToan():Observable<any>{
+  getPhuongThucThanhToan(): Observable<any> {
     return this.http.get(`${this.thanhToanUrl}/getAll`);
   }
-  createHoaDon(hoaDonData: any):Observable<any>{
-    return this.http.post(`${this.hoaDonUrl}/create`,hoaDonData);
+  createHoaDon(hoaDonData: any): Observable<any> {
+    return this.http.post(`${this.hoaDonUrl}/create`, hoaDonData);
   }
-  removeHoaDon(idHoaDon:number):Observable<any>{
-    return this.http.put(`${this.hoaDonUrl}/huy-hoa-don/${idHoaDon}`,{});
+  removeHoaDon(idHoaDon: number): Observable<any> {
+    return this.http.put(`${this.hoaDonUrl}/huy-hoa-don/${idHoaDon}`, {});
   }
-  selectProduct(idSanPham:number,sanPhamData:any):Observable<any>{
-    return this.http.post(`${this.hoaDonUrl}/chon-san-pham/${idSanPham}`,sanPhamData);
+  selectProduct(idSanPham: number, sanPhamData: any): Observable<any> {
+    return this.http.post(`${this.hoaDonUrl}/chon-san-pham/${idSanPham}`, sanPhamData);
   }
-  removeHoaDonChiTiet(idHoaDonChiTiet:number):Observable<any>{
+  removeHoaDonChiTiet(idHoaDonChiTiet: number): Observable<any> {
     return this.http.delete(`${this.hoaDonUrl}/delete-hoa-don-chi-tiet/${idHoaDonChiTiet}`);
   }
-  removeSoLuongHoaDonChiTiet(idHoaDonChiTiet:number):Observable<any>{
-    return this.http.put(`${this.hoaDonUrl}/delete-single-san-pham/${idHoaDonChiTiet}`,{});
+  removeSoLuongHoaDonChiTiet(idHoaDonChiTiet: number): Observable<any> {
+    return this.http.put(`${this.hoaDonUrl}/delete-single-san-pham/${idHoaDonChiTiet}`, {});
   }
-  thanhToanHoaDOn(idHoaDon:number,hoaDonData:any):Observable<any>{
-    return this.http.put(`${this.hoaDonUrl}/thanh-toan/${idHoaDon}`,hoaDonData);
+  thanhToanHoaDOn(idHoaDon: number, hoaDonData: any): Observable<any> {
+    return this.http.put(`${this.hoaDonUrl}/thanh-toan/${idHoaDon}`, hoaDonData);
   }
-  getKhachHang(pageNumber:number,pageSize:number,search?:String):Observable<any>{
-    return this.http.get(`${this.khachHangUrl}/getAllKhachHang_PhanTrang_TimKiem?page=${pageNumber}&size=${pageSize}&ten=${search}`);
+  getKhachHang(search?: String): Observable<any> {
+    return this.http.get(`${this.khachHangUrl}/get-all-khach-hang?ten=${search}`);
   }
-  addKhachHang(customer: any):Observable<any>{
-    return this.http.post(`${this.khachHangUrl}/addKhachHang`,customer);
+  addKhachHang(customer: any): Observable<any> {
+    return this.http.post(`${this.khachHangUrl}/create`, customer);
   }
-  updateKhachHang(idHoaDon:number,idKhachHang:number):Observable<any>{
-    return this.http.put(`${this.hoaDonUrl}/update-khach-hang/${idHoaDon}?idKhachHang=${idKhachHang}`,{});
+  updateKhachHang(idHoaDon: number, idKhachHang: number): Observable<any> {
+    return this.http.put(`${this.hoaDonUrl}/update-khach-hang/${idHoaDon}?idKhachHang=${idKhachHang}`, {});
   }
-  getByTrangThai():Observable<any>{
-    return this.http.get(`${this.hoaDonUrl}/find-by-trang-thai`);
+  getByTrangThai(page: number, size: number, keywork: string): Observable<any> {
+    return this.http.get(`${this.hoaDonUrl}/find-by-trang-thai?page=${page}&size=${size}&keyWord=${keywork}`);
   }
-  getDetailHoaDonCho(id: number):Observable<any>{
+  getDetailHoaDonCho(id: number): Observable<any> {
     return this.http.get(`${this.hoaDonUrl}/detail-hoa-don-cho/${id}`);
   }
-  updateTrangThaiHoaDon(id:number):Observable<any>{
-    return this.http.put(`${this.hoaDonUrl}/update-trang-thai-don-hang/${id}`,{});
+  updateTrangThaiHoaDon(id: number): Observable<any> {
+    return this.http.put(`${this.hoaDonUrl}/update-trang-thai-don-hang/${id}`, {});
   }
   downloadPdf(id: number): Observable<Blob> {
     return this.http.get(`${this.exportHoaDonUrl}?id=${id}`, { responseType: 'blob' });
   }
+  getLichSuHoaDon(id: number): Observable<any> {
+    return this.http.get(`${this.lichSuHoaDonUrl}/get-by-hoa-don/${id}`);
+  }
+  updateDiaChiNhanHang(id: number, hoaDon: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.put(`${this.hoaDonUrl}/update-dia-chi-nhan-hang/${id}`, hoaDon, { headers });
+  }
+
 }
-                                                               

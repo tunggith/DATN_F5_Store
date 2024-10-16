@@ -20,9 +20,6 @@ public class KhachHangEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name = ConfigContanst.KhachHang.ID_DIA_CHI)
-    private DiaChiKhachHangEntity diaChiKhachHang;
     @Column(name = ConfigContanst.KhachHang.MA)
     private String ma;
     @Column(name = ConfigContanst.KhachHang.HO_TEN)

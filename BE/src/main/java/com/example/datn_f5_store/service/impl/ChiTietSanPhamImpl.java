@@ -159,19 +159,22 @@ public class ChiTietSanPhamImpl {
         return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
     }
 
-    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String ten, String ma) {
+    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChiTietSanPhamEntity> chiTietSanPham;
-        if (ten == null && ten.isEmpty() && ma == null && ma.isEmpty()) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // Nếu keyword là null hoặc chuỗi trống, chỉ lọc theo trạng thái
             chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("còn hàng", "đang hoạt động", pageable);
         } else {
-            chiTietSanPham = repo_ctsp.getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
-                    "còn hàng",
+            // Nếu có keyword, thêm điều kiện tìm kiếm theo keyword
+            chiTietSanPham = repo_ctsp.getByTrangThai(
+                    "Còn hàng",
                     "đang hoạt động",
-                    ten,
-                    ma,
+                    keyword,
                     pageable);
         }
+
+        // Chuyển từ ChiTietSanPhamEntity sang ChiTietSanPhamReponse
         return chiTietSanPham.map(entity -> new ChiTietSanPhamReponse(
                 entity.getId(),
                 entity.getSanPham(),
@@ -184,7 +187,6 @@ public class ChiTietSanPhamImpl {
                 entity.getTrangThai()
         ));
     }
-
 
     public ChiTietSanPhamEntity getChiTietSanPhamById(Integer id) {
         return repo_ctsp.findById(id).get();

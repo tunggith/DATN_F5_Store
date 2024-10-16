@@ -30,9 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
-public class ChiTietSanPhamController
-{
-
+public class ChiTietSanPhamController {
     @Autowired
     IChiTietSanPhamRepository repo_ctsp;
     @Autowired
@@ -145,12 +143,11 @@ public class ChiTietSanPhamController
     public ResponseEntity<Object> getByTrangThai(
             @Parameter(name = "size")@RequestParam(defaultValue = "0")Integer size,
             @Parameter(name = "page")@RequestParam(defaultValue = "5")Integer page,
-            @Parameter(name = "ten")@RequestParam(required = false) String ten,
-            @Parameter(name = "ma")@RequestParam(required = false) String ma
+            @Parameter(name = "keyword")@RequestParam(required = false) String keyword
     ){
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,ten,ma);
+        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,keyword);
         dataResponse.setResult(new ResultModel<>(
                 new PagingModel(page,size,listSanPham.getTotalElements(),listSanPham.getTotalPages()),listSanPham
         ));

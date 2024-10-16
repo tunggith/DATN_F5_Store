@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,31 +43,11 @@ public class LichSuHoaDonController {
 
         return ResponseEntity.ok(dataResponse);
     }
-
-
-    //    @GetMapping("/export-excel")
-//    public ResponseEntity<byte[]> exportLichSuHoaDonToExcel(
-//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-//            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-//
-//        // Log lại giá trị startDate và endDate để kiểm tra
-//        System.out.println("Start Date: " + startDate);
-//        System.out.println("End Date: " + endDate);
-//
-//        // Gọi dịch vụ để lấy danh sách hóa đơn
-//        List<LichSuHoaDonDto> lichSuHoaDonList = lichSuHoaDonService.getAllLichSuHoaDon(0, Integer.MAX_VALUE, startDate, endDate).getContent();
-//
-//        // Xuất file Excel
-//        ByteArrayOutputStream excelStream = lichSuHoaDonService.exportLichSuHoaDonToExcel(lichSuHoaDonList);
-//
-//        byte[] excelBytes = excelStream.toByteArray();
-//
-//        // Thiết lập header cho response
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=lich_su_hoa_don.xlsx");
-//        headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-//
-//        return new ResponseEntity<>(excelBytes, headers, HttpStatus.OK);
-//    }
-
+    @GetMapping("/get-by-hoa-don/{id}")
+    private ResponseEntity<Object> getByHoaDon(@Parameter(name = "id")@PathVariable Integer id){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        dataResponse.setResult(new ResultModel<>(null,lichSuHoaDonService.getByHoaDon(id)));
+        return ResponseEntity.ok(dataResponse);
+    }
 }

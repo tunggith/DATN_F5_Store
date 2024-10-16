@@ -27,6 +27,9 @@ export class CustomerService {
     let params = `?page=${page}&size=${size}&ten=${keyword}&ma=${keyword}&email=${keyword}&sdt=${keyword}`;
     return this.http.get(`${this.baseUrl}/find-by-ten-ma-email-sdt${params}`);
   }
+  updateTrangThai(id:number):Observable<any>{
+    return this.http.put(`${this.baseUrl}/update-trang-thai/${id}`,{});
+  }
   
 
 }
