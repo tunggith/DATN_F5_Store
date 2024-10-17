@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CustomerService } from './khach-hang/KhachHang.service';
 
+
 @NgModule({
   imports: [
     BrowserAnimationsModule, 

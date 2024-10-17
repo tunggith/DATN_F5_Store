@@ -118,6 +118,15 @@ public class ChiTietSanPhamController {
         Page<ChiTietSanPhamReponse> result = ctsp_Sevice.searchByTenOrMa(keyword, page, size);
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/searchsp")
+    public ResponseEntity<?> searchChiTietSanPhamManKm(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Page<ChiTietSanPhamEntity> result = ctsp_Sevice.searchByTenOrMaManKm(keyword, page, size);
+        return ResponseEntity.ok(result);
+    }
 
     @GetMapping("/filterByPrice")
     public ResponseEntity<?> filterByPrice(
@@ -154,35 +163,37 @@ public class ChiTietSanPhamController {
         return ResponseEntity.ok(dataResponse);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getChiTietSanPhamById(@PathVariable("id") Integer id) {
-        DataResponse dataResponse = new DataResponse();
+        @GetMapping("/{id}")
+        public ResponseEntity<?> getChiTietSanPhamById (@PathVariable("id") Integer id){
+            DataResponse dataResponse = new DataResponse();
 
-        // Gọi service để tìm chi tiết sản phẩm theo ID
-        var chiTietSanPham = ctsp_Sevice.getChiTietSanPhamById(id);
+            // Gọi service để tìm chi tiết sản phẩm theo ID
+            var chiTietSanPham = ctsp_Sevice.getChiTietSanPhamById(id);
 
-        // Nếu tìm thấy chi tiết sản phẩm, trả về kết quả
-        if (chiTietSanPham != null) {
-            dataResponse.setStatus(true);
-            dataResponse.setResult(new ResultModel<>(null, chiTietSanPham));
-            return ResponseEntity.ok(dataResponse);
-        } else {
-            // Nếu không tìm thấy, trả về lỗi NOT_FOUND
-            dataResponse.setStatus(false);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
+            // Nếu tìm thấy chi tiết sản phẩm, trả về kết quả
+            if (chiTietSanPham != null) {
+                dataResponse.setStatus(true);
+                dataResponse.setResult(new ResultModel<>(null, chiTietSanPham));
+                return ResponseEntity.ok(dataResponse);
+            } else {
+                // Nếu không tìm thấy, trả về lỗi NOT_FOUND
+                dataResponse.setStatus(false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
+            }
         }
+
+
+        @GetMapping("/check-trung")
+        public ResponseEntity<Boolean> checkTrungChiTietSanPham (
+                @RequestParam Integer idSanPham,
+                @RequestParam Integer idMauSac,
+                @RequestParam Integer idSize,
+                @RequestParam String ma,
+                @RequestParam String ten){
+
+            boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
+            return ResponseEntity.ok(isDuplicate);
+
+        }
+
     }
-
-
-    @GetMapping("/check-trung")
-    public ResponseEntity<Boolean> checkTrungChiTietSanPham(
-            @RequestParam Integer idSanPham,
-            @RequestParam Integer idMauSac,
-            @RequestParam Integer idSize,
-            @RequestParam String ma,
-            @RequestParam String ten) {
-
-        boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
-        return ResponseEntity.ok(isDuplicate);
-    }
-}

@@ -67,6 +67,7 @@ export class BanHangService {
   updateTrangThaiHoaDon(id: number): Observable<any> {
     return this.http.put(`${this.hoaDonUrl}/update-trang-thai-don-hang/${id}`, {});
   }
+  
   downloadPdf(id: number): Observable<Blob> {
     return this.http.get(`${this.exportHoaDonUrl}?id=${id}`, { responseType: 'blob' });
   }

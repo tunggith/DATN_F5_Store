@@ -1,5 +1,7 @@
 package com.example.datn_f5_store.service.impl;
 
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
+import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
@@ -153,6 +155,12 @@ public class ChiTietSanPhamImpl {
         Pageable pageable = PageRequest.of(page, size);
         return repo_ctsp.searchByTenOrMa(keyword, pageable);
     }
+
+    public Page<ChiTietSanPhamEntity> searchByTenOrMaManKm(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repo_ctsp.searchByTenOrMa1(keyword, pageable);
+    }
+
 
     public Page<ChiTietSanPhamReponse> filterByPrice(Double minPrice, Double maxPrice, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);

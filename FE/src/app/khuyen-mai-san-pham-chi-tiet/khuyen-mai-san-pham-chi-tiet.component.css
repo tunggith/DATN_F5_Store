@@ -1,0 +1,39 @@
+/* Custom Styles for the Promotion Section and Tables */
+
+.promotion-card {
+  min-height: 100%; /* Ensure it stretches to match the height of the product table */
+}
+
+.table th, .table td {
+  vertical-align: middle; /* Aligns content vertically in the middle */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f8f9fa; /* Light background for better contrast */
+}
+
+.table-hover tbody tr:hover {
+  background-color: #e2e6ea; /* Hover effect for rows */
+}
+
+.paginationr .btn {
+  border-radius: 20px; /* Rounded corners for pagination buttons */
+}
+
+.paginationr .btn-dark {
+  background-color: #343a40; /* Dark background for pagination buttons */
+  color: white; /* White text for buttons */
+}
+
+.paginationr .btn-dark:hover {
+  background-color: #495057; /* Lighter on hover */
+}
+
+h3 {
+  font-weight: 600; /* Bold headers */
+}
+
+/* Center align checkbox */
+.table td.text-center {
+  text-align: center; /* Center the checkbox */
+}

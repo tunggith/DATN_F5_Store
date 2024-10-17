@@ -131,6 +131,9 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
                     }
+                    if (khuyenMaiRequest.getThoiGianBatDau().after(khuyenMaiRequest.getThoiGianKetThuc())) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                    }
                     // Gán giá trị cho khuyenMaiEntity
                     khuyenMaiEntity.setMa(ma);
                     khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
@@ -181,7 +184,10 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
                     return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
                 }
-                if(!khuyenMaiEntity.getThoiGianBatDau().after(currentDate)){
+                if (khuyenMaiRequest.getThoiGianBatDau().after(khuyenMaiRequest.getThoiGianKetThuc())) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
+                }
+                if(!khuyenMaiEntity.getThoiGianBatDau().after(currentDate) && khuyenMaiEntity.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")){
                 khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                 khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                 khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
@@ -204,7 +210,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 khuyenMaiRepository.save(khuyenMaiEntity);
                 return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
                 }
-                if(khuyenMaiEntity.getThoiGianBatDau().after(currentDate)){
+                else {
                     khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                     khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                     khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
@@ -229,7 +235,6 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     khuyenMaiRepository.save(khuyenMaiEntity);
                     return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
                 }
-
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ lệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
         } catch (Exception e) {
@@ -289,7 +294,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 entity.getMoTa(),
                 entity.getSoLuong(),
                 entity.getGiaTriKhuyenMai(),
-                             entity.getThoiGianBatDau(),
+                entity.getThoiGianBatDau(),
                 entity.getThoiGianKetThuc(),
                 entity.getThoiGianTao(),
                 entity.getThoiGianSua(),
@@ -365,6 +370,10 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     khuyenMai.setTrangThai("Đang diễn ra");
                     khuyenMaiRepository.save(khuyenMai);
                 }
+                if (khuyenMai.getSoLuong() == 0) {
+                    khuyenMai.setTrangThai("Không hoạt động");
+                    khuyenMaiRepository.save(khuyenMai);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -377,7 +386,6 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
         KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("Không thể cập nhập trạng thái với id : "+ id)
         );
-
         LocalDate thoiGianBatDau = khuyenMai.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate thoiGianKetThuc = khuyenMai.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") || khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
