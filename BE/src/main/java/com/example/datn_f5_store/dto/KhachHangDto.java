@@ -13,7 +13,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class KhachHangDto {
     private Integer id;
-    private DiaChiKhachHangEntity diaChiKhachHang; // bên request phải dùng biến để gọi
     private String ma;
     private String ten;
     private String gioiTinh;

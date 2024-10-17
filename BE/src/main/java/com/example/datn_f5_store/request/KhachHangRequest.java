@@ -28,17 +28,16 @@ import java.util.Date;
 public class KhachHangRequest {
 
     private Integer id;
-    @NotNull(message = "Địa chỉ khách hàng không được để trống")
+
     private DiaChiKhachHangEntity diaChiKhachHang;
 
-    @NotBlank(message = "Mã không được để trống")
     private String ma;
 
     @NotBlank(message = "Tên không được để trống")
     @Size(min = 3, message = "Tên phải có ít nhất 3 ký tự")
     private String ten;
 
-    @NotBlank(message = "Giới tính không được để trống")
+
     private String gioiTinh;
 
     @NotNull(message = "Ngày sinh không được để trống")

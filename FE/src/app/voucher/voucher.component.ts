@@ -3,6 +3,8 @@ import { VoucherService } from './voucher.service';
 import { debounceTime } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-voucher',
@@ -20,7 +22,8 @@ export class VoucherComponent implements OnInit {
 
   constructor(
     private voucherService: VoucherService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private CommonModule: CommonModule
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +53,6 @@ export class VoucherComponent implements OnInit {
       nguoiSua: [''],
       trangThai: ['']
     });
-
     // Lắng nghe sự thay đổi của tất cả các trường trong form tìm kiếm
     this.searchForm.valueChanges
       .pipe(debounceTime(500))
@@ -100,75 +102,97 @@ export class VoucherComponent implements OnInit {
     });
   }
 
+
   createOrUpdateVoucher(): void {
     const voucherData = this.voucherForm.value;
+
+    // Format lại ngày trước khi gửi lên API
+    voucherData.thoiGianBatDau = this.formatDate(voucherData.thoiGianBatDau);
+    voucherData.thoiGianKetThuc = this.formatDate(voucherData.thoiGianKetThuc);
+
+    console.log('Dữ liệu từ form:', voucherData);
+
+    // Kiểm tra xem có đang chỉnh sửa hay không
     if (this.currentVoucher) {
-      voucherData.id = this.currentVoucher.id;
-      // Nếu đang sửa voucher
-      this.updateVoucher(voucherData);
+        voucherData.id = this.currentVoucher.id; // Lấy ID để cập nhật
+        this.updateVoucher(voucherData);
     } else {
-      // Nếu đang thêm voucher
-      this.createVoucher(voucherData);
+        this.createVoucher(voucherData);
     }
-  }
+}
 
+updateVoucher(voucherData: any): void {
+    console.log('Dữ liệu sửa:', voucherData);
 
+    this.voucherService.update(voucherData).subscribe(
+        (response: any) => {
+            if (response.status) {
+                this.vouchers = response.result.content;
 
-  updateVoucher(voucherData: any): void {
-    this.voucherService.update(voucherData).subscribe((response : any) => {
-      if(response.status){
-      const index = this.vouchers.findIndex(km => km.id === response.result.content.id);
-      if(index !== -1){
-        this.vouchers[index] == response.result.content;
-      }
-      Swal.fire({
-        title: 'F5 Store xin thông báo : ',
-        text: response.result.content,
-        icon: 'success',
-        confirmButtonText: 'OK',
-        customClass: {
-          confirmButton: 'custom-confirm-button'
+                Swal.fire({
+                    title: 'F5 Store xin thông báo:',
+                    text: 'Cập nhật voucher thành công!',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'custom-confirm-button'
+                    }
+                });
+
+                // Load lại danh sách voucher và reset form
+                this.getAllVouchers();
+                this.resetForm();
+            } else {
+                Swal.fire({
+                    title: 'F5 Store xin thông báo:',
+                    text: response.result.content || 'Cập nhật thất bại!',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    customClass: {
+                        confirmButton: 'custom-confirm-button'
+                    }
+                });
+                console.log('Lỗi cập nhật:', response);
+            }
+        },
+        (error) => {
+            Swal.fire({
+                title: 'F5 Store xin thông báo:',
+                text: 'Lỗi sửa voucher, vui lòng thử lại',
+                icon: 'error',
+                confirmButtonText: 'OK',
+                customClass: {
+                    confirmButton: 'custom-confirm-button'
+                }
+            });
+            console.log('Lỗi từ BE:', error);
         }
-      });
-      this.getAllVouchers();
-      this.resetForm();
-    }
-      if(! response.status){
-        Swal.fire({
-          title: 'F5 Store xin thông báo : ',
-          text: 'Lỗi sửa voucher, vui lòng thử lại',
-          icon: 'error',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'custom-confirm-button'
-          }
-        });
-      } 
-    },(error) => {
-      Swal.fire({
-        title: 'F5 Store xin thông báo : ',
-        text: 'Lỗi sửa voucher, vui lòng thử lại',
-        icon: 'error',
-        confirmButtonText: 'OK',
-        customClass: {
-          confirmButton: 'custom-confirm-button'
-        }
-      });
-    });
-  }
-  editVoucher(voucher: any): void {
+    );
+}
+
+editVoucher(voucher: any): void {
     this.currentVoucher = voucher;
-    if (voucher.trangThai === 'Đang diễn ra') {
-      // Vô hiệu hóa trường ngày bắt đầu
-      this.voucherForm.get('thoiGianBatDau').disable();
-    } else {
-      // Kích hoạt lại trường nếu trạng thái khác
-      this.voucherForm.get('thoiGianBatDau').enable();
-    }
+
+    // Kích hoạt lại trường nếu đã vô hiệu hóa trước đó
+    this.voucherForm.get('thoiGianBatDau').enable();
+
+    // Format lại ngày trước khi patch vào form
     voucher.thoiGianBatDau = this.formatDate(voucher.thoiGianBatDau);
     voucher.thoiGianKetThuc = this.formatDate(voucher.thoiGianKetThuc);
-    this.voucherForm.patchValue(voucher); // Tự động điền dữ liệu vào form
-  }
+
+    console.log('Trước khi patch, thoiGianBatDau:', voucher.thoiGianBatDau);
+
+    // Patch dữ liệu vào form
+    this.voucherForm.patchValue({
+        ...voucher,
+
+    });
+
+
+    console.log('Giá trị form sau khi patch:', this.voucherForm.value);
+}
+
+
 
 
   capNhap(VoucherId: number): void {
@@ -226,15 +250,16 @@ export class VoucherComponent implements OnInit {
 
   formatDate(date: string): string {
     let d = new Date(date);
-    let month = '' + (d.getMonth() + 1);
-    let day = '' + d.getDate();
-    let year = d.getFullYear();
-  
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-  
-    return [year, month, day].join('-');
-  }
+    let month = '' + (d.getMonth() + 1); // Tháng (1-12)
+    let day = '' + d.getDate(); // Ngày (1-31)
+    let year = d.getFullYear(); // Năm
+
+    if (month.length < 2) month = '0' + month; // Thêm số 0 vào tháng nếu cần
+    if (day.length < 2) day = '0' + day; // Thêm số 0 vào ngày nếu cần
+
+    return [year, month, day].join('-'); // Trả về định dạng yyyy-MM-dd
+}
+
 
 
   searchVouchers(values: any): void {

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import  com.example.datn_f5_store.response.ResultModel;
-
+import com.example.datn_f5_store.response.DataResponse;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/khuyen-mai-ctsp")
@@ -28,22 +28,30 @@ public class KhuyenMaiChiTietSanPhamController {
 
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(@Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
-                                          @Parameter(name = "size") @RequestParam(defaultValue = "3") Integer size) {
-        com.example.datn_f5_store.response.DataResponse dataResponse = new com.example.datn_f5_store.response.DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+                                          @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size) {
+    DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
         dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
         var responseList = khuyenMaiChiTietSanPhamService.getAll(page, size); // Lấy danh sách Khuyen mai Chi tiết sản pham với phân trang
         // ham tự động cập nhập trạng thái Khuyến mãi chi tiết sản phẩm khi Khuyến mãi hết hạn
-        khuyenMaiChiTietSanPhamService.CapNhapTrangThaiKhuyenMaiCtSpDhh();
+        khuyenMaiChiTietSanPhamService.upDateTrangThaiKhuyenMaiCtSp();
+        dataResponse.setResult(new ResultModel<>(null, responseList)); // Đặt kết quả vào response
+        return ResponseEntity.ok(dataResponse);
+    }
+    @GetMapping("/getByKhuyenMai/{id}")
+    private ResponseEntity<Object> getByKhuyenMai(@Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
+                                                  @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size,
+                                                  @PathVariable("id") Integer id) {
+       DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+        dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+        var responseList = khuyenMaiChiTietSanPhamService.getByKhuyenMai(page, size,id); // Lấy danh sách Khuyen mai Chi tiết sản pham với phân trang
+        // ham tự động cập nhập trạng thái Khuyến mãi chi tiết sản phẩm khi Khuyến mãi hết hạn
+        khuyenMaiChiTietSanPhamService.upDateTrangThaiKhuyenMaiCtSp();
         dataResponse.setResult(new ResultModel<>(null, responseList)); // Đặt kết quả vào response
         return ResponseEntity.ok(dataResponse);
     }
     @PostMapping("/create")
     private ResponseEntity<?> create(@RequestBody KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest){
         return new ResponseEntity<>(khuyenMaiChiTietSanPhamService.createKhuyenMaictsp(khuyenMaiChiTietSanPhamRequest), HttpStatus.CREATED);
-    }
-    @PutMapping("/update/{id}")
-    private ResponseEntity<?> update(@Parameter(name ="id") @PathVariable Integer id){
-        return new ResponseEntity<>(khuyenMaiChiTietSanPhamService.capNhapTrangThaiKhuyenMaiSpct(id), HttpStatus.OK);
     }
     @DeleteMapping("/delete/{id}")
     private ResponseEntity<?> delete(@Parameter(name ="id") @PathVariable Integer id){

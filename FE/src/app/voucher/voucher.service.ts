@@ -56,7 +56,7 @@ export class VoucherService {
   } else if (fromDate && !toDate) {
       // Nếu chỉ có fromDate, thêm nó vào URL
       params += `&ngayBatDau=${fromDate}`;
-  } else if (toDate && fromDate) {
+  } else if (!fromDate && toDate) {
       // Nếu chỉ có toDate, thêm nó vào URL
       params += `&ngayKetThuc=${toDate}`;
   }

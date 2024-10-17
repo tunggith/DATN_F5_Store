@@ -18,8 +18,6 @@ import lombok.ToString;
 
 public class DiaChiKhachHangDto {
     private Integer id;
-    private String hoTen;
-    private String SDT;
     private String soNha;
     private String duong;
     private String phuongXa;

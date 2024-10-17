@@ -33,9 +33,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
-public class ChiTietSanPhamController
-{
-
+public class ChiTietSanPhamController {
     @Autowired
     IChiTietSanPhamRepository repo_ctsp;
     @Autowired
@@ -130,6 +128,15 @@ public class ChiTietSanPhamController
         Page<ChiTietSanPhamReponse> result = ctsp_Sevice.searchByTenOrMa(keyword, page, size);
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/searchsp")
+    public ResponseEntity<?> searchChiTietSanPhamManKm(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+
+        Page<ChiTietSanPhamEntity> result = ctsp_Sevice.searchByTenOrMaManKm(keyword, page, size);
+        return ResponseEntity.ok(result);
+    }
 
 //    ttt
     @GetMapping("/filterByPrice")
@@ -156,47 +163,48 @@ public class ChiTietSanPhamController
     public ResponseEntity<Object> getByTrangThai(
             @Parameter(name = "size")@RequestParam(defaultValue = "0")Integer size,
             @Parameter(name = "page")@RequestParam(defaultValue = "5")Integer page,
-            @Parameter(name = "ten")@RequestParam(required = false) String ten,
-            @Parameter(name = "ma")@RequestParam(required = false) String ma
+            @Parameter(name = "keyword")@RequestParam(required = false) String keyword
     ){
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,ten,ma);
+        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,keyword);
         dataResponse.setResult(new ResultModel<>(
                 new PagingModel(page,size,listSanPham.getTotalElements(),listSanPham.getTotalPages()),listSanPham
         ));
         return ResponseEntity.ok(dataResponse);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getChiTietSanPhamById(@PathVariable("id") Integer id) {
-        DataResponse dataResponse = new DataResponse();
+        @GetMapping("/{id}")
+        public ResponseEntity<?> getChiTietSanPhamById (@PathVariable("id") Integer id){
+            DataResponse dataResponse = new DataResponse();
 
-        // Gọi service để tìm chi tiết sản phẩm theo ID
-        var chiTietSanPham = ctsp_Sevice.getChiTietSanPhamById(id);
+            // Gọi service để tìm chi tiết sản phẩm theo ID
+            var chiTietSanPham = ctsp_Sevice.getChiTietSanPhamById(id);
 
-        // Nếu tìm thấy chi tiết sản phẩm, trả về kết quả
-        if (chiTietSanPham != null) {
-            dataResponse.setStatus(true);
-            dataResponse.setResult(new ResultModel<>(null, chiTietSanPham));
-            return ResponseEntity.ok(dataResponse);
-        } else {
-            // Nếu không tìm thấy, trả về lỗi NOT_FOUND
-            dataResponse.setStatus(false);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
+            // Nếu tìm thấy chi tiết sản phẩm, trả về kết quả
+            if (chiTietSanPham != null) {
+                dataResponse.setStatus(true);
+                dataResponse.setResult(new ResultModel<>(null, chiTietSanPham));
+                return ResponseEntity.ok(dataResponse);
+            } else {
+                // Nếu không tìm thấy, trả về lỗi NOT_FOUND
+                dataResponse.setStatus(false);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
+            }
         }
+
+
+        @GetMapping("/check-trung")
+        public ResponseEntity<Boolean> checkTrungChiTietSanPham (
+                @RequestParam Integer idSanPham,
+                @RequestParam Integer idMauSac,
+                @RequestParam Integer idSize,
+                @RequestParam String ma,
+                @RequestParam String ten){
+
+            boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
+            return ResponseEntity.ok(isDuplicate);
+
+        }
+
     }
-
-
-    @GetMapping("/check-trung")
-    public ResponseEntity<Boolean> checkTrungChiTietSanPham(
-            @RequestParam Integer idSanPham,
-            @RequestParam Integer idMauSac,
-            @RequestParam Integer idSize,
-            @RequestParam String ma,
-            @RequestParam String ten) {
-
-        boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
-        return ResponseEntity.ok(isDuplicate);
-    }
-}

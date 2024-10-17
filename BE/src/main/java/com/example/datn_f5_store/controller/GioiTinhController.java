@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GioiTinhController {
     @Autowired
     private IGioiTinhService gioiTinhService;
+
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(){
         DataResponse dataResponse = new DataResponse();

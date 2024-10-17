@@ -1,9 +1,6 @@
 
 package com.example.datn_f5_store.response;
 
-
-
-
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.entity.SizeEntity;
@@ -12,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 @Getter
 @Setter
 @AllArgsConstructor

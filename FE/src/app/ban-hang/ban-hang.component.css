@@ -4,6 +4,7 @@
     margin: 10px;
     background-color: #fff;
     border-radius: 15px;
+    /* overflow: hidden; */
 }
 
 .tab {
@@ -28,6 +29,7 @@
 .create-order {
     display: flex;
     justify-content: space-between;
+    height: 50px;
     margin: 20px 0;
     background-color: #f44336;
     border: none;
@@ -52,24 +54,24 @@
     justify-content: space-between;
     margin: 20px 0;
     margin-left: 10px;
-    background-color: #91ec70;
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
-    color: #fff;
-    font-size: 16px;
+    color: #464545;
+    font-size: 15px;
     cursor: pointer;
 }
 
 .create-client button:hover {
-    background-color: #9bdc83;
+    font-size: 25px;
 }
 
 .profile-client {
+    display: flex;
     justify-content: space-between;
-    margin: 20px 0;
-    margin-left: 500px;
-    padding: 10px 20px;
+    margin-top: 20px;
+    margin-left: 600px;
+    padding: 0 20px;
 }
 
 .order-list {
@@ -362,11 +364,39 @@ datalist {
 }
 
 .button-select {
-    font-size: 20px;
+    font-size: 15px;
+    color: #ffff;
+    text-align: center;
+}
+
+.button-select .choXacNhan {
+    background-color: green;
+    border-radius: 20%;
+}
+
+.button-select .daXacNhan {
+    background-color: #9f84c4;
+    border-radius: 20%;
+}
+
+.button-select .dangGiaoHang {
+    background-color: red;
+    border-radius: 20%;
+}
+
+.button-select .hoanThanh {
+    background-color: rgb(192, 59, 10);
+    border-radius: 20%;
+}
+
+.button-select .daHuy {
+    background-color: orange;
+    border-radius: 20%;
 }
 
 .button-select:hover {
-    font-size: 25px;
+    cursor: pointer;
+    font-size: 20px;
 }
 
 /* time line */
@@ -378,9 +408,10 @@ datalist {
     clear: both
 }
 
-.main-timeline10 .timeline {
-    padding: 0;
-    display: -webkit-inline-box
+.main-timeline10 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
 }
 
 .main-timeline10 .col-md-3 {
@@ -389,24 +420,38 @@ datalist {
     max-width: 24%
 }
 
+.main-timeline10 .timeline {
+    flex: 1;
+    margin: 0 10px;
+    position: relative;
+}
+
 .main-timeline10 .timeline-inner {
     text-align: center;
-    margin: 20px 20px 35px 35px;
-    position: relative
+    margin: 20px 10px;
+    position: relative;
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .main-timeline10 .timeline-inner:after {
     content: "";
-    width: 120%;
+    width: 300px;
+    /* Đặt độ dài cố định cho thanh dưới */
     height: 3px;
-    background: #555;
+    background: #030303;
     position: absolute;
-    bottom: 0;
-    left: 10%
+    bottom: 95px;
+    /* Đặt thanh dưới icon */
+    left: 110%;
+    transform: translateX(-50%);
+    /* Căn giữa thanh nối */
 }
 
 .main-timeline10 .timeline:last-child .timeline-inner:after {
-    width: 0
+    width: 0;
 }
 
 .main-timeline10 .year {
@@ -490,9 +535,8 @@ datalist {
     font-size: 30px;
     color: #555;
     z-index: 1;
-    position: absolute;
-    bottom: -35px;
-    left: -35px
+    position: relative;
+    margin-bottom: 20px;
 }
 
 .main-timeline10 .timeline:nth-child(2n) .year {
@@ -561,28 +605,27 @@ datalist {
     border-color: #e67e49
 }
 
-@media only screen and (max-width:990px) {
-    .main-timeline10 .timeline-inner:after {
-        width: 110%
-    }
-
-    .main-timeline10 .timeline:nth-child(2n) .timeline-inner:after {
-        width: 0
-    }
-}
-
-@media only screen and (max-width:767px) {
+@media only screen and (min-width: 1200px) {
     .main-timeline10 .timeline {
-        margin-bottom: 50px
-    }
-
-    .main-timeline10 .timeline-inner:after,
-    .main-timeline10 .timeline:nth-child(2n) .timeline-inner:after {
-        width: 100%;
-        height: 3px;
-        left: 0
+        flex: 1 1 18%;
+        /* Khi màn hình lớn hơn 1200px, chia mỗi phần tử chiếm 18% chiều rộng */
     }
 }
+
+@media only screen and (max-width: 990px) {
+    .main-timeline10 .timeline {
+        flex: 1 1 48%;
+        /* Màn hình trung bình (dưới 990px), chia mỗi phần tử chiếm 48% chiều rộng */
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .main-timeline10 .timeline {
+        flex: 1 1 100%;
+        /* Màn hình nhỏ hơn 767px, mỗi phần tử chiếm toàn bộ chiều rộng */
+    }
+}
+
 .timeline .timeline-inner {
     opacity: 0;
     /* Tạo hiệu ứng mờ cho các trạng thái chưa hoàn thành */
@@ -592,31 +635,81 @@ datalist {
     opacity: 1;
     /* Làm sáng các trạng thái đã hoàn thành hoặc trạng thái hiện tại */
 }
-.timeline-inner h4{
-    margin-left: 100px;
+
+.timeline-inner h4 {
+    margin: 0;
+    /* Loại bỏ margin để không làm thay đổi độ dài thanh */
+    font-size: 18px;
+    /* Điều chỉnh kích thước chữ nếu cần */
+    white-space: nowrap;
+    /* Giữ cho thẻ h4 không bị xuống dòng */
 }
-.page-header button{
-    border: 0.5px solid gray;
+
+.page-header button {
+    border: 0;
+    background-color: #9075ab;
+    border-radius: 45%;
 }
-.page-header button i{
+
+.page-header button i {
     font-size: 20px;
+    color: #ffff;
+    text-align: center;
 }
-.page-header button i:hover{
+
+.chiTietHoaDon,
+.lichSuHoaDon {
+    font-size: 15px;
+    color: rgb(177, 166, 166);
+}
+
+.chiTietHoaDon i:hover {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.lichSuHoaDon i:hover {
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.page-header button i:hover {
     font-size: 27px;
 }
+
+.form_address {
+    margin: 10px;
+    justify-content: center;
+    padding: 10px;
+    display: flex;
+}
+
+.form_address div {
+    margin-left: 20px;
+}
+
+.form_address .mb-3 input,.form_address .mb-3 select {
+    width: 300px;
+}
+
+.example-form {
+    margin-top: -15px;
+    margin-left: 20px;
+    min-width: 100px;
+    max-width: 200px;
+    width: 100%;
+}
+
+.example-full-width {
+    width: 100%;
+}
+
 /* Media Queries cho màn hình điện thoại */
 @media (max-width: 768px) {
     .tab {
         flex-direction: column;
         gap: 10px;
     }
-
-    .create-order,
-    .create-client {
-        width: 100%;
-        justify-content: center;
-    }
-
     .profile-client {
         width: 100%;
         margin-left: 0;

@@ -16,10 +16,12 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+
            ctsp.id,
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
+
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -31,11 +33,15 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     List<ChiTietSanPhamReponse> getAllCTSP();
 
     @Query("""
+
+      
+
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
          ctsp.id,
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
+
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -49,7 +55,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-       ctsp.id,
+            ctsp.id,
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
@@ -89,6 +95,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
+
             ctsp.ma,
             ctsp.ten,
             ctsp.donGia,
@@ -119,16 +126,29 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     Page<ChiTietSanPhamReponse> filterByPrice(@Param("minPrice") Double minPrice,
                                               @Param("maxPrice") Double maxPrice,
                                               Pageable pageable);
+
+
+    @Query("""
+        select ctsp
+        from ChiTietSanPhamEntity ctsp 
+        where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
+          or lower(ctsp.ma) like lower(concat('%', :keyword, '%'))
+    """)
+    Page<ChiTietSanPhamEntity> searchByTenOrMa1(@Param("keyword") String keyword, Pageable pageable);
+
     Page<ChiTietSanPhamEntity> findByTrangThaiAndSanPhamTrangThai(
             String chiTietSanPham,
             String sanPham,
             Pageable pageable);
-    Page<ChiTietSanPhamEntity> getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
-            String trangThai,
-            String sanPhamTrangThai,
-            String ma,
-            String ten,
+    @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
+            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%) " +
+            "AND ctsp.trangThai = :trangThai " +
+            "AND ctsp.sanPham.trangThai = :sanPhamTrangThai")
+    Page<ChiTietSanPhamEntity> getByTrangThai(
+            @Param("trangThai") String trangThai,
+            @Param("sanPhamTrangThai") String sanPhamTrangThai,
+            @Param("keyword") String keyword,
             Pageable pageable);
-
     boolean existsByMaOrTen(String ma, String ten);
+
 }

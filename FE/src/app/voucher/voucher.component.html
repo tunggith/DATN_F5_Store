@@ -133,9 +133,17 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
-          <input type="date" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau" 
-          [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" 
-          />
+          <!-- Nếu trạng thái là "Đang diễn ra", hiển thị giá trị và không cho phép sửa -->
+          <div *ngIf="voucherForm.get('trangThai').value === 'Đang diễn ra'">
+            <input type="date" id="thoiGianBatDau" class="form-control" required
+              [value]="voucherForm.get('thoiGianBatDau').value"
+              readonly />
+          </div>
+          <!-- Nếu trạng thái không phải là "Đang diễn ra", hiển thị ô nhập liệu -->
+          <div *ngIf="voucherForm.get('trangThai').value !== 'Đang diễn ra'">
+            <input type="date" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau"
+              [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" />
+          </div>
         </div>
         <div *ngIf="voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)">
           <span class="error-message">Thời gian bắt đầu không hợp lệ</span>
@@ -145,7 +153,7 @@
         <div class="form-group">
           <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
           <input type="date" id="thoiGianKetThuc" class="form-control" required formControlName="thoiGianKetThuc" 
-          [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
+            [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
         </div>
         <div *ngIf="voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)">
           <span class="error-message">Thời gian kết thúc không hợp lệ</span>

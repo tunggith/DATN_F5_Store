@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {HoaDonService} from './hoa-don.service';
 import Swal from 'sweetalert2';
@@ -9,34 +9,21 @@ import Swal from 'sweetalert2';
   styleUrls: ['./table-list.component.css']
 })
 export class TableListComponent implements OnInit {
-  
-  hoaDon : any []= []; 
+  @Output() closePopup = new EventEmitter<void>();
+  @Input() hoaDonId!: number;
   hoaDonChiTiet : any []= [];
-  page = 0;
-  size = 5;
-  currentVoucher: any = null;
-  totalPages: number = 0;
 
   constructor(private http: HttpClient,
     private hoaDonService : HoaDonService
   ) { }
 
   ngOnInit() {
-    this.getAllhoaDon();
+    this.GetHoaDonCtByHoaDon(this.hoaDonId);
   }
 
-  getAllhoaDon(): void {
-    this.hoaDonService.getAll(this.page,this.size).subscribe((response: any) => {
-      this.hoaDon = response.result.content.content;
-      this.totalPages = response.result.content.totalPages;
-      console.log('total :',this.totalPages);
-      console.log('Dữ liệu Hóa đơn: ', this.hoaDon);
-    }, (error) => {
-      console.error('Lỗi khi lấy dữ liệu Hóa đơn', error);
-    });
+  close() {
+    this.closePopup.emit();
   }
-
-
   GetHoaDonCtByHoaDon(id: number): void {
     console.log('id duoc truyen vao',id);
     if (!id) {
@@ -56,52 +43,4 @@ export class TableListComponent implements OnInit {
       }
     );
   }
-
-  TaiHoaDon(chiTietId: number) {
-    this.http.get(`http://localhost:8080/api/v1/pdf/download?id=${chiTietId}`, { responseType: 'blob' })
-      .subscribe((response) => {
-        const blob = new Blob([response], { type: 'application/pdf' }); // Thay đổi type nếu cần
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `hoa_don_${chiTietId}.pdf`; // Tên file tải về
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-        Swal.fire({
-          title: 'F5 Store xin thông báo : ',
-          text:'Tải hóa đơn thành công!!',
-          icon: 'success',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'custom-confirm-button'
-          }
-        }); // Giải phóng bộ nhớ
-      });
-  }
-  
-
-  prevPage(): void {
-    if (this.page > 0) {
-      this.page--;
-      this.getAllhoaDon(); // Gọi lại để tải dữ liệu cho trang trước
-    }
-  }
-
-  nextPage(): void {
-    if (this.page < this.totalPages - 1) {
-      this.page++;
-      this.getAllhoaDon(); // Gọi lại để tải dữ liệu cho trang tiếp theo
-    }
-  }
-
-  goToPage(pageNumber: number): void {
-    this.page = pageNumber;
-    this.getAllhoaDon(); // Gọi lại để tải dữ liệu cho trang đã chọn
-  }
-
-  
-
 }

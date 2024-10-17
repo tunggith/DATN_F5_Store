@@ -2,6 +2,7 @@ package com.example.datn_f5_store.service;
 
 
 
+
 import com.example.datn_f5_store.dto.VoucherDto;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
@@ -23,5 +24,6 @@ public interface VoucherService {
    void CapNhapTrangThaiVoucherDhh();
    Page<VoucherDto> findVoucherByDate(int page, int size, Date start, Date end);
    Page<VoucherDto> findByTenOrMa(int page, int size, String tim);
+   Page<VoucherDto> findByTrangThai(int page, int size, String trangThai);
 
 }

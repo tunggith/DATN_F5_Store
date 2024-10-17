@@ -18,4 +18,8 @@ public interface IKhuyenMaiRepository extends JpaRepository<KhuyenMaiEntity,Inte
     Page<KhuyenMaiEntity> findAllByThoiGianBatDauGreaterThanEqual(Date ngayBatDau, Pageable pageable);
     Page<KhuyenMaiEntity> findAllByThoiGianKetThucLessThanEqual(Date ngayKetThuc, Pageable pageable);
     KhuyenMaiEntity findByMa(String ma);
+
+    @Query("SELECT p FROM KhuyenMaiEntity p WHERE p.trangThai = ?1")
+    Page<KhuyenMaiEntity> findByTrangThai(String trangThai, Pageable pageable);
+
 }

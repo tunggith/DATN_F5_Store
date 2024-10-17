@@ -14,7 +14,14 @@ import java.util.List;
 
 @Repository
 public interface IHoaDonRepository extends JpaRepository<HoaDonEntity, Integer> {
-    Page<HoaDonEntity> findByTrangThai(String trangThai, Pageable pageable);
+//    Page<HoaDonEntity> findByTrangThaiIn(List<String> trangThais, Pageable pageable);
+    @Query("SELECT h FROM HoaDonEntity h WHERE " +
+            "(LOWER(h.khachHang.ten) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(h.ma) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND h.trangThai IN :trangThais")
+    Page<HoaDonEntity> searchByKeywordAndTrangThai(@Param("keyword") String keyword,
+                                                   @Param("trangThais") List<String> trangThais,
+                                                   Pageable pageable);
     boolean existsByMa(String ma);
     List<HoaDonEntity> findByTrangThai(String trangThai);
 
@@ -90,5 +97,8 @@ public interface IHoaDonRepository extends JpaRepository<HoaDonEntity, Integer> 
             "ORDER BY ys.nam ASC",
             nativeQuery = true)
     List<Object[]> findDoanhThuTheoKhoangNam(int startYear, int endYear);
+
+    @Query("SELECT h FROM HoaDonEntity h WHERE h.trangThai IN :trangThai ORDER BY h.thoiGianTao DESC")
+    Page<HoaDonEntity> findByTrangThaiIn(@Param("trangThai") List<String> trangThai,Pageable pageable);
 
 }

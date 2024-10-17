@@ -1,4 +1,5 @@
 package com.example.datn_f5_store.response;
+import com.example.datn_f5_store.response.ResultModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DataResponse {
     private boolean status;
-    private com.example.datn_f5_store.response.ResultModel<?> result;
+    private ResultModel<?> result;
 }

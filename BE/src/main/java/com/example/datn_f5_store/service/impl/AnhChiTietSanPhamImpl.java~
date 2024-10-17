@@ -1,0 +1,94 @@
+package com.example.datn_f5_store.service.impl;
+
+import com.example.datn_f5_store.dto.AnhChiTietSanPhamDto;
+import com.example.datn_f5_store.dto.DiaChiKhachHangDto;
+import com.example.datn_f5_store.entity.AnhChiTietSanPham;
+import com.example.datn_f5_store.entity.DiaChiKhachHangEntity;
+import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
+import com.example.datn_f5_store.request.AnhChiTietSanPhamRequest;
+import com.example.datn_f5_store.service.IAnhChiTietSanPhamService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Optional;
+
+@Service
+public class AnhChiTietSanPhamImpl implements IAnhChiTietSanPhamService {
+    @Autowired
+    private IAnhChiTietSanPhamRepository anhChiTietSanPhamRepository;
+    @Override
+    public Page<AnhChiTietSanPhamDto> getAllAnhChiTietSanPham(int page, int size, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<AnhChiTietSanPham> anhChiTietSanPhams;
+
+        if (search != null && !search.trim().isEmpty()) {
+            anhChiTietSanPhams = anhChiTietSanPhamRepository.findBySearch(search, pageable);
+        } else {
+            anhChiTietSanPhams = anhChiTietSanPhamRepository.findAll(pageable);
+        }
+        return anhChiTietSanPhams.map(entity -> new AnhChiTietSanPhamDto(
+                entity.getId(),
+                entity.getChiTietSanPham(),
+                entity.getUrlAnh()
+        ));
+    }
+
+    @Override
+    public Boolean addAnhChiTietSanPham(AnhChiTietSanPhamRequest anhChiTietSanPhamRequest) {
+        if (anhChiTietSanPhamRepository.existsByUrlAnh(anhChiTietSanPhamRequest.getUrlAnh())) {
+            System.out.println("Đường dẫn link ảnh đã tồn tại!");
+            return false;
+        }
+        try {
+            AnhChiTietSanPham anhChiTietSanPham = new AnhChiTietSanPham();
+            anhChiTietSanPham.setChiTietSanPham(anhChiTietSanPhamRequest.getChiTietSanPham());
+            anhChiTietSanPham.setUrlAnh(anhChiTietSanPhamRequest.getUrlAnh());
+            anhChiTietSanPhamRepository.save(anhChiTietSanPham);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean updateAnhChiTietSanPham(Integer id,AnhChiTietSanPhamRequest anhChiTietSanPhamRequest) {
+        Optional<AnhChiTietSanPham> optional = anhChiTietSanPhamRepository.findById(id);
+        if (optional.isPresent()) {
+            AnhChiTietSanPham anhChiTietSanPham = optional.get();
+            try {
+                anhChiTietSanPham.setChiTietSanPham(anhChiTietSanPhamRequest.getChiTietSanPham());
+                anhChiTietSanPham.setUrlAnh(anhChiTietSanPhamRequest.getUrlAnh());
+                anhChiTietSanPhamRepository.save(anhChiTietSanPham);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String saveImage(MultipartFile file, Long chiTietSanPhamId) throws Exception {
+        // Đường dẫn lưu trữ ảnh
+        String uploadDir = "src/main/resources/static/images/"; // Đường dẫn đến thư mục lưu trữ ảnh
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename(); // Tạo tên file duy nhất
+        Path filePath = Paths.get(uploadDir + fileName);
+
+        // Lưu file vào đường dẫn
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // Trả về URL của ảnh (tùy thuộc vào cách bạn cấu hình server)
+        return "/images/" + fileName; // Giả sử bạn lưu ảnh trong thư mục 'images'
+    }
+}

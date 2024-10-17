@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,10 +23,9 @@ public class DiaChiKhachHangEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "HO_TEN")
-    private String hoTen;
-    @Column(name = "SDT")
-    private String SDT;
+    @ManyToOne
+    @JoinColumn(name = "ID_KHACH_HANG")
+    private KhachHangEntity khackHang;
     @Column(name = "SO_NHA")
     private String soNha;
     @Column(name = "DUONG")

@@ -1,5 +1,7 @@
 package com.example.datn_f5_store.service.impl;
 
+import com.example.datn_f5_store.dto.KhuyenMaiDto;
+import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
@@ -36,7 +38,7 @@ public class ChiTietSanPhamImpl {
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
     ) {
-        int size = 5;
+        int size = 3;
         Pageable pageable = PageRequest.of(currentPage, size);
 
         // Lấy kết quả phân trang từ repository
@@ -71,9 +73,9 @@ public class ChiTietSanPhamImpl {
 
         // Kiểm tra sản phẩm có trùng không
         boolean exists = repo_ctsp.checkTrung(
-                ctspRequet.getIdSanPham().getId(),
-                ctspRequet.getIdMauSac().getId(),
-                ctspRequet.getIdSize().getId(),
+                ctspRequet.getIdSanPham(),
+                ctspRequet.getIdMauSac(),
+                ctspRequet.getIdSize(),
                 ctspRequet.getMa(),
                 ctspRequet.getTen()
         );
@@ -83,14 +85,14 @@ public class ChiTietSanPhamImpl {
         }
 
         // Tìm thực thể từ database
-        SanPhamEntity sanPham = repo_sanPham.findById(ctspRequet.getIdSanPham().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với id: " + ctspRequet.getIdSanPham().getId()));
+        SanPhamEntity sanPham = repo_sanPham.findById(ctspRequet.getIdSanPham())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với id: " + ctspRequet.getIdSanPham()));
 
-        MauSacEntity mauSac = repo_mauSac.findById(ctspRequet.getIdMauSac().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy màu sắc với id: " + ctspRequet.getIdMauSac().getId()));
+        MauSacEntity mauSac = repo_mauSac.findById(ctspRequet.getIdMauSac())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy màu sắc với id: " + ctspRequet.getIdMauSac()));
 
-        SizeEntity size = repo_size.findById(ctspRequet.getIdSize().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy kích thước với id: " + ctspRequet.getIdSize().getId()));
+        SizeEntity size = repo_size.findById(ctspRequet.getIdSize())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy kích thước với id: " + ctspRequet.getIdSize()));
 
         // Tạo mới chi tiết sản phẩm và sao chép thuộc tính
         ChiTietSanPhamEntity chiTietSanPham = new ChiTietSanPhamEntity();
@@ -123,14 +125,14 @@ public class ChiTietSanPhamImpl {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết sản phẩm với id: " + id));
 
         // Tìm thực thể từ database
-        SanPhamEntity sanPham = repo_sanPham.findById(ctspRequest.getIdSanPham().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với id: " + ctspRequest.getIdSanPham().getId()));
+        SanPhamEntity sanPham = repo_sanPham.findById(ctspRequest.getIdSanPham())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm với id: " + ctspRequest.getIdSanPham()));
 
-        MauSacEntity mauSac = repo_mauSac.findById(ctspRequest.getIdMauSac().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy màu sắc với id: " + ctspRequest.getIdMauSac().getId()));
+        MauSacEntity mauSac = repo_mauSac.findById(ctspRequest.getIdMauSac())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy màu sắc với id: " + ctspRequest.getIdMauSac()));
 
-        SizeEntity size = repo_size.findById(ctspRequest.getIdSize().getId())
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy kích thước với id: " + ctspRequest.getIdSize().getId()));
+        SizeEntity size = repo_size.findById(ctspRequest.getIdSize())
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy kích thước với id: " + ctspRequest.getIdSize()));
 
         // Sao chép các thuộc tính từ request sang chi tiết sản phẩm
         BeanUtils.copyProperties(ctspRequest, chiTietSanPham);
@@ -152,24 +154,33 @@ public class ChiTietSanPhamImpl {
         return repo_ctsp.searchByTenOrMa(keyword, pageable);
     }
 
+    public Page<ChiTietSanPhamEntity> searchByTenOrMaManKm(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repo_ctsp.searchByTenOrMa1(keyword, pageable);
+    }
+
+
     public Page<ChiTietSanPhamReponse> filterByPrice(Double minPrice, Double maxPrice, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
     }
 
-    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String ten, String ma) {
+    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChiTietSanPhamEntity> chiTietSanPham;
-        if (ten == null && ten.isEmpty() && ma == null && ma.isEmpty()) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // Nếu keyword là null hoặc chuỗi trống, chỉ lọc theo trạng thái
             chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("còn hàng", "đang hoạt động", pageable);
         } else {
-            chiTietSanPham = repo_ctsp.getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
-                    "còn hàng",
+            // Nếu có keyword, thêm điều kiện tìm kiếm theo keyword
+            chiTietSanPham = repo_ctsp.getByTrangThai(
+                    "Còn hàng",
                     "đang hoạt động",
-                    ten,
-                    ma,
+                    keyword,
                     pageable);
         }
+
+        // Chuyển từ ChiTietSanPhamEntity sang ChiTietSanPhamReponse
         return chiTietSanPham.map(entity -> new ChiTietSanPhamReponse(
                 entity.getId(),
                 entity.getSanPham(),
@@ -183,7 +194,6 @@ public class ChiTietSanPhamImpl {
         ));
     }
 
-
     public ChiTietSanPhamEntity getChiTietSanPhamById(Integer id) {
         return repo_ctsp.findById(id).get();
     }
@@ -191,5 +201,4 @@ public class ChiTietSanPhamImpl {
     public boolean isChiTietSanPhamExists(String ma, String ten) {
         return repo_ctsp.existsByMaOrTen(ma, ten);
     }
-
 }
