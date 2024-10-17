@@ -25,5 +25,6 @@ public interface VoucherService {
    Page<VoucherDto> findVoucherByDate(int page, int size, Date start, Date end);
    Page<VoucherDto> findByTenOrMa(int page, int size, String tim);
    Page<VoucherDto> findByTrangThai(int page, int size, String trangThai);
+   Page<VoucherDto> findByTrangThaiDangDienRa(int page, int size, String trangThai);
 
 }

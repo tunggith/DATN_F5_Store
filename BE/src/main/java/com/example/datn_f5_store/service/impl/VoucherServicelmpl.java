@@ -414,5 +414,35 @@ public class VoucherServicelmpl implements VoucherService {
         ));
     }
 
+    @Override
+    public Page<VoucherDto> findByTrangThaiDangDienRa(int page, int size, String trangThai) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VoucherEntity> VoucherEntity;
+
+        if (trangThai == null || trangThai.trim().isEmpty()) {
+            VoucherEntity = iVoucherRepository.findAll(pageable);
+        } else {
+            VoucherEntity = iVoucherRepository.findByTrangThai(trangThai, pageable);
+        }
+        return VoucherEntity.map(entity -> new VoucherDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getTen(),
+                entity.getGiaTriVoucher(),
+                entity.getKieuGiamGia(),
+                entity.getGiaTriGiamToiDa(),
+                entity.getGiaTriHoaDonToiThieu(),
+                entity.getThoiGianBatDau(),
+                entity.getThoiGianKetThuc(),
+                entity.getMoTa(),
+                entity.getSoLuong(),
+                entity.getNguoiTao(),
+                entity.getThoiGianTao(),
+                entity.getNguoiSua(),
+                entity.getThoiGianSua(),
+                entity.getTrangThai()
+        ));
+    }
+
 
 }

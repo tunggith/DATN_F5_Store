@@ -22,4 +22,5 @@ public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer>
 
     @Query("SELECT p FROM VoucherEntity p WHERE p.trangThai = ?1")
     Page<VoucherEntity> findByTrangThai(String trangThai, Pageable pageable);
+
 }

@@ -143,5 +143,24 @@ public class VoucherController {
         return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
     }
 
+    @GetMapping("/find-by-trangThaiDangDienRa")
+    public ResponseEntity<Object> findByTrangThaiDangDienRa(
+            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size // Kích thước trang
+
+    ) {
+        DataResponse dataResponse = new DataResponse(); // Tạo đối tượng phản hồi dữ liệu
+        dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
+        Page<VoucherDto> responseList = voucherService.findByTrangThaiDangDienRa(page, size,"Đang diễn ra");
+
+        dataResponse.setResult(
+                new ResultModel<>(
+                        new com.example.datn_f5_store.response.PagingModel(page, size, responseList.getTotalElements(), responseList.getTotalPages()),
+                        responseList.getContent() // Lấy danh sách các đối tượng VoucherDto từ trang hiện tại
+                )
+        );
+        return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
+    }
+
 
 }
