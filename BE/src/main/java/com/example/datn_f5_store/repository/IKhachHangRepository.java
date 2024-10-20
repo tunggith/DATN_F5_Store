@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IKhachHangRepository extends JpaRepository<KhachHangEntity, Integer> {
+    KhachHangEntity findTopByOrderByIdDesc();
 
     List<KhachHangEntity> findByTenContainingIgnoreCase(String name);
     @Query("SELECT k FROM KhachHangEntity k WHERE " +
@@ -20,7 +21,12 @@ public interface IKhachHangRepository extends JpaRepository<KhachHangEntity, Int
             "k.ma LIKE %:search% OR " +
             "k.ten LIKE %:search%")
     Page<KhachHangEntity> findBySearch(@Param("search") String search, Pageable pageable);
-
+    @Query("SELECT k FROM KhachHangEntity k WHERE " +
+            "k.sdt LIKE %:search% OR " +
+            "k.email LIKE %:search% OR " +
+            "k.ma LIKE %:search% OR " +
+            "k.ten LIKE %:search%")
+    List<KhachHangEntity> getAll(@Param("search") String search);
     @Query("SELECT k FROM KhachHangEntity k WHERE " +
             "k.ten LIKE %:name% OR " +
             "k.email LIKE %:email% OR " +

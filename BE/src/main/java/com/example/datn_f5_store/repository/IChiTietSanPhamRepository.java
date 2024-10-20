@@ -140,11 +140,14 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             String chiTietSanPham,
             String sanPham,
             Pageable pageable);
-    Page<ChiTietSanPhamEntity> getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
-            String trangThai,
-            String sanPhamTrangThai,
-            String ma,
-            String ten,
+    @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
+            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%) " +
+            "AND ctsp.trangThai = :trangThai " +
+            "AND ctsp.sanPham.trangThai = :sanPhamTrangThai")
+    Page<ChiTietSanPhamEntity> getByTrangThai(
+            @Param("trangThai") String trangThai,
+            @Param("sanPhamTrangThai") String sanPhamTrangThai,
+            @Param("keyword") String keyword,
             Pageable pageable);
     boolean existsByMaOrTen(String ma, String ten);
 

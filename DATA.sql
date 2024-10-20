@@ -102,21 +102,19 @@ INSERT INTO ANH_CHI_TIET_SAN_PHAM (ID_CHI_TIET_SAN_PHAM, URL_ANH) VALUES
 (10, 'https://example.com/images/ctsp010.jpg');
 select*from ANH_CHI_TIET_SAN_PHAM
 
+INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT, USERNAME, [PASSWORD], TRANG_THAI) VALUES
+('KH001', 'Khách vãng lai', null, null, null, null, null,null ,null,null),
+('KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@example.com', 'anh2.jpg', '0987654321', N'tranthib', 'password456', N'đang hoạt động'),
+('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@example.com', 'anh3.jpg', '0909123456', N'phamvanc', 'password789', N'đang hoạt động'),
+('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@example.com', 'anh4.jpg', '0911223344', N'lethid', 'password101', N'đang hoạt động'),
+('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@example.com', 'anh5.jpg', '0933445566', N'vovane', 'password202', N'đang hoạt động');
 
-INSERT INTO DIA_CHI_KHACH_HANG (HO_TEN, SDT, SO_NHA, DUONG, PHUONG_XA, QUAN_HUYEN, TINH_THANH, QUOC_GIA, LOAI_DIA_CHI, TRANG_THAI) VALUES
-(N'Nguyễn Văn A', '0912345678', N'123', N'Nguyễn Trãi', N'Phường 1', N'Quận 1', N'TP. Hồ Chí Minh', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
-(N'Trần Thị B', '0987654321', N'456', N'Lê Lợi', N'Phường 2', N'Quận 3', N'Hà Nội', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
-(N'Phạm Văn C', '0909123456', N'789', N'Phan Xích Long', N'Phường 3', N'Quận 5', N'Đà Nẵng', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
-(N'Lê Thị D', '0911223344', N'321', N'Trường Chinh', N'Phường 4', N'Quận 2', N'Hải Phòng', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
-(N'Võ Văn E', '0933445566', N'654', N'Quang Trung', N'Phường 5', N'Quận 7', N'Cần Thơ', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng');
-
-
-INSERT INTO KHACH_HANG (ID_DIA_CHI, MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT, USERNAME, [PASSWORD], TRANG_THAI) VALUES
-(null, 'KH001', 'Khách vãng lai', null, null, null, null, null,null ,null,null),
-(2, 'KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@example.com', 'anh2.jpg', '0987654321', N'tranthib', 'password456', N'Hoạt động'),
-(3, 'KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@example.com', 'anh3.jpg', '0909123456', N'phamvanc', 'password789', N'Hoạt động'),
-(4, 'KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@example.com', 'anh4.jpg', '0911223344', N'lethid', 'password101', N'Hoạt động'),
-(5, 'KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@example.com', 'anh5.jpg', '0933445566', N'vovane', 'password202', N'Hoạt động');
+INSERT INTO DIA_CHI_KHACH_HANG (ID_KHACH_HANG,SO_NHA, DUONG, PHUONG_XA, QUAN_HUYEN, TINH_THANH, QUOC_GIA, LOAI_DIA_CHI, TRANG_THAI) VALUES
+(2, N'123', N'Nguyễn Trãi', N'Phường 1', N'Quận 1', N'TP. Hồ Chí Minh', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
+(2, N'456', N'Lê Lợi', N'Phường 2', N'Quận 3', N'Hà Nội', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
+(2, N'789', N'Phan Xích Long', N'Phường 3', N'Quận 5', N'Đà Nẵng', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
+(3, N'321', N'Trường Chinh', N'Phường 4', N'Quận 2', N'Hải Phòng', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
+(4, N'654', N'Quang Trung', N'Phường 5', N'Quận 7', N'Cần Thơ', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng');
 
 
 INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, DIA_CHI, ANH, USERNAME, [PASSWORD], THOI_GIAN_TAO, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
@@ -136,11 +134,11 @@ INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA
 
 INSERT INTO HOA_DON (ID_NHAN_VIEN, ID_KHACH_HANG, ID_VOUCHER, ID_PHUONG_THUC_THANH_TOAN, MA, TONG_TIEN_BAN_DAU,PHI_SHIP, TONG_TIEN_THANH_TOAN, TEN_NGUOI_NHAN, SDT_NGUOI_NHAN, EMAIL_NGUOI_NHAN, DIA_CHI_NHAN_HANG, NGAY_NHAN_DU_KIEN, THOI_GIAN_TAO,GIAO_HANG, GHI_CHU, TRANG_THAI) 
 VALUES
-(1, 1, 1, 1, N'HD001', 500000,10000, 450000, N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'Số 1, Đường ABC, Quận 1, TP.HCM', '2024-09-30', GETDATE(),1, N'Giao hàng trước 12h', N'chưa thanh toán'),
-(2, 2, 2, 1, N'HD002', 1000000,10000, 900000, N'Trần Thị B', '0987654321', 'tranthib@gmail.com', N'Số 10, Đường XYZ, Quận 2, TP.HCM', '2024-09-25', GETDATE(),0, N'Giao hàng nhanh', N'đã thanh toán'),
-(3, 3, 3, 2, N'HD003', 750000,10000, 700000, N'Phạm Văn C', '0909123456', 'phamvanc@gmail.com', N'Số 5, Đường LMN, Quận 3, TP.HCM', '2024-10-01', GETDATE(),0, N'Không yêu cầu đặc biệt', N'đã thanh toán'),
-(4, 4, 4, 1, N'HD004', 1500000,10000, 1350000, N'Vũ Thị D', '0934567890', 'vuthid@gmail.com', N'Số 20, Đường OPQ, Quận 4, TP.HCM', '2024-09-27', GETDATE(),0, N'Giao hàng sau 18h', N'chưa thanh toán'),
-(5, 5, 5, 1, N'HD005', 2000000,10000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(),0, N'Yêu cầu liên lạc trước', N'chưa thanh toán');
+(1, 1, 1, 1, N'HD001', 500000,10000, 450000, N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'Số 1, Đường ABC, Quận 1, TP.HCM', '2024-09-30', GETDATE(),1, N'Giao hàng trước 12h', N'hoàn thành'),
+(2, 2, 2, 1, N'HD002', 1000000,10000, 900000, N'Trần Thị B', '0987654321', 'tranthib@gmail.com', N'Số 10, Đường XYZ, Quận 2, TP.HCM', '2024-09-25', GETDATE(),0, N'Giao hàng nhanh', N'hoàn thành'),
+(3, 3, 3, 2, N'HD003', 750000,10000, 700000, N'Phạm Văn C', '0909123456', 'phamvanc@gmail.com', N'Số 5, Đường LMN, Quận 3, TP.HCM', '2024-10-01', GETDATE(),0, N'Không yêu cầu đặc biệt', N'đã hủy'),
+(4, 4, 4, 1, N'HD004', 1500000,10000, 1350000, N'Vũ Thị D', '0934567890', 'vuthid@gmail.com', N'Số 20, Đường OPQ, Quận 4, TP.HCM', '2024-09-27', GETDATE(),0, N'Giao hàng sau 18h', N'đã hủy'),
+(5, 5, 5, 1, N'HD005', 2000000,10000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(),0, N'Yêu cầu liên lạc trước', N'hoàn thành');
 
 
 INSERT INTO LICH_SU_HOA_DON (ID_HOA_DON, ID_NHAN_VIEN, GHI_CHU, THOI_GIAN_THUC_HIEN, TRANG_THAI_CU, TRANG_THAI_MOI, LOAI_THAY_DOI) VALUES

@@ -8,6 +8,7 @@ import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.KhachHangService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,16 +36,17 @@ public class KhachHangController {
     @Autowired
     private KhachHangService khachHangService;
 
-    @GetMapping("/getAllKhachHang")
-    public ResponseEntity<Object> getAllKhachHang() {
+    @GetMapping("/get-all-khach-hang")
+    public ResponseEntity<Object> getAllKhachHang(@Parameter(name = "search")@RequestParam(required = false) String search) {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-
-        // Gọi service để lấy tất cả khách hàng
-        var responseList = khachHangService.getAllKhachHangKhongPhanTrang(); // Cập nhật phương thức này trong service để không nhận page, size
-
+        var responseList = khachHangService.getAllKhachHangKhongPhanTrang(search);
         dataResponse.setResult(new ResultModel<>(null, responseList));
         return ResponseEntity.ok(dataResponse);
+    }
+    @PostMapping("/create")
+    public ResponseEntity<Object> createKhachHang(@RequestBody KhachHangRequest request) throws BadRequestException {
+        return new ResponseEntity<>(khachHangService.create(request),HttpStatus.CREATED);
     }
 
 
@@ -159,25 +161,10 @@ public class KhachHangController {
 
         return ResponseEntity.ok(dataResponse);
     }
-
-
-//    @GetMapping("/searchKhachHang")
-//    public ResponseEntity<?> searchKhachHangByName(@RequestParam String name) {
-//        HashMap<String, Object> response = new HashMap<>();
-//
-//        // Gọi service để tìm kiếm khách hàng theo tên
-//        List<KhachHangEntity> khachHangList = khachHangService.searchKhachHangByName(name);
-//
-//        if (khachHangList.isEmpty()) {
-//            response.put("message", "Không tìm thấy khách hàng nào với tên đã cho.");
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-//        } else {
-//            response.put("message", "Tìm kiếm thành công!");
-//            response.put("data", khachHangList);
-//            return ResponseEntity.ok(response);
-//        }
-//    }
-
+    @PutMapping("/update-trang-thai/{id}")
+    private ResponseEntity<Object> updateTrangThai(@Parameter(name = "id")@PathVariable Integer id){
+        return new ResponseEntity<>(khachHangService.updateTrangThai(id),HttpStatus.OK);
+    }
 
 }
 

@@ -48,7 +48,7 @@ export class IconsComponent implements OnInit {
   selectedProductIds: number[] = [];
   products: any[] = [];
   trangThai: string = ''; // Biến để lưu trạng thái chọn
- 
+
 
 
   constructor(
@@ -97,7 +97,7 @@ export class IconsComponent implements OnInit {
       }
     );
   }
-  
+
 
   // Gọi phương thức này khi nhấn nút thêm
   addKhuyenMai(): void {
@@ -293,34 +293,34 @@ searchVouchers(values: any): void {
       );
       console.log('du lieu ten trang thai',this.khuyenMais);
       this.totalPages = response.result.totalPages;
-    });   
+    });
   }
   else if (searchKey && (fromDate || toDate) && trangThai) {
 
-  
+
     // Khởi tạo biến từ từ ngày và đến ngày
     const startDate = fromDate ? new Date(fromDate) : null; // Ngày bắt đầu
     const endDate = toDate ? new Date(toDate) : null; // Ngày kết thúc
-  
+
     // Kiểm tra xem startDate và endDate có giá trị hợp lệ không
     if (startDate && !isNaN(startDate.getTime()) && endDate && !isNaN(endDate.getTime())) {
       // Đặt giờ cuối cùng cho ngày kết thúc
-      endDate.setHours(23, 59, 59, 999); 
-  
+      endDate.setHours(23, 59, 59, 999);
+
       // Gọi dịch vụ để tìm theo ngày
       this.khuyenMaiService.timTheoNgay(this.page, this.size, startDate.toISOString(), endDate.toISOString()).subscribe((response) => {
         console.log('Phản hồi từ server:', response); // Kiểm tra phản hồi
-  
+
         this.khuyenMais = response.result.content.filter(voucher => {
           const tenValid = voucher.ten ? voucher.ten.includes(searchKey) : false; // Kiểm tra ten
           const maValid = voucher.ma ? voucher.ma.includes(searchKey) : false; // Kiểm tra ma
           const trangThaiValid = voucher.trangThai === trangThai; // Kiểm tra trangThai
-  
+
           // Thêm điều kiện kiểm tra ngày
           const voucherDate = new Date(voucher.thoiGianBatDau); // Giả sử voucher có thuộc tính thoiGianBatDau
           return (tenValid || maValid) && trangThaiValid && (voucherDate >= startDate && voucherDate <= endDate);
         });
-  
+
         console.log('Dữ liệu tìm thấy:', this.khuyenMais);
         this.totalPages = response.result.totalPages;
       });
@@ -328,7 +328,7 @@ searchVouchers(values: any): void {
       console.error('Ngày bắt đầu hoặc ngày kết thúc không hợp lệ:', startDate, endDate);
     }
   }
-  
+
   else {
     // nếu tất cả trống thì findAll
     this.loadKhuyenMais();

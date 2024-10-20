@@ -135,13 +135,13 @@
           <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
           <!-- Nếu trạng thái là "Đang diễn ra", hiển thị giá trị và không cho phép sửa -->
           <div *ngIf="voucherForm.get('trangThai').value === 'Đang diễn ra'">
-            <input type="date" id="thoiGianBatDau" class="form-control" required 
-              [value]="voucherForm.get('thoiGianBatDau').value" 
+            <input type="date" id="thoiGianBatDau" class="form-control" required
+              [value]="voucherForm.get('thoiGianBatDau').value"
               readonly />
           </div>
           <!-- Nếu trạng thái không phải là "Đang diễn ra", hiển thị ô nhập liệu -->
           <div *ngIf="voucherForm.get('trangThai').value !== 'Đang diễn ra'">
-            <input type="date" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau" 
+            <input type="date" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau"
               [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" />
           </div>
         </div>
@@ -160,7 +160,7 @@
         </div>
       </div>
     </div>
-    
+
     <button type="submit" class="btn btn-primary w-100" [disabled]="voucherForm.invalid">
       <i class="material-icons" style="vertical-align: middle;">add</i>
       {{ currentVoucher ? 'Cập nhật' : 'Thêm' }}

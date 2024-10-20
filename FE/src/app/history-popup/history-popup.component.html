@@ -1,0 +1,25 @@
+<div class="popup">
+    <div class="popup-content">
+        <span class="close" (click)="close()">×</span>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                  <th scope="col">Mã hóa đơn</th>
+                  <th scope="col">Thời gian thực hiện</th>
+                  <th scope="col">trạng thái cũ</th>
+                  <th scope="col">trạng thái mới</th>
+                  <th scope="col">loại thay đổi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let history of hoaDonHistory">
+                  <th>{{history.hoaDon?.ma}}</th>
+                  <td>{{history.thoiGianThucHien}}</td>
+                  <td>{{history.trangThaiCu}}</td>
+                  <td>{{history.trangThaiMoi}}</td>
+                  <td>{{history.loaiThayDoi}}</td>
+                </tr>
+              </tbody>
+        </table>
+    </div>
+</div>

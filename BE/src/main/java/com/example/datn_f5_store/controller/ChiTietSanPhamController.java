@@ -27,12 +27,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/chi_tiet_san_pham")
-public class ChiTietSanPhamController
-{
-
+public class ChiTietSanPhamController {
     @Autowired
     IChiTietSanPhamRepository repo_ctsp;
     @Autowired
@@ -65,7 +66,6 @@ public class ChiTietSanPhamController
     ){
         DataResponse  dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-
         var responseList = ctsp_Sevice.getallPhanTrang(curentPage);
         dataResponse.setResult(new ResultModel<>(null,responseList));
         return ResponseEntity.ok(dataResponse);
@@ -75,17 +75,24 @@ public class ChiTietSanPhamController
     @GetMapping("/getall-phan_trang/{id}")
     public ResponseEntity<?> getallPhanTrang(
             @PathVariable("id") Integer id,
-            @RequestParam(value = "currentPage" , defaultValue = "0") Integer curentPage
-
-    ){
-
-
-        DataResponse  dataResponse = new DataResponse();
+            @RequestParam(value = "currentPage", defaultValue = "0") Integer currentPage
+    ) {
+        DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var responseList = ctsp_Sevice.getallPhanTrangbyidSP(id,curentPage);
-        dataResponse.setResult(new ResultModel<>(null, responseList));
-        return ResponseEntity.ok(dataResponse);
+
+        // Gọi service để lấy kết quả phân trang
+        var pageResult = ctsp_Sevice.getallPhanTrangbyidSP(id, currentPage);
+
+        // Đưa dữ liệu phân trang và nội dung trực tiếp vào phản hồi
+        Map<String, Object> result = new HashMap<>();
+        result.put("content", pageResult.getContent());  // Danh sách sản phẩm
+        result.put("totalPages", pageResult.getTotalPages());  // Tổng số trang
+        result.put("currentPage", pageResult.getNumber());  // Trang hiện tại
+        result.put("pageSize", pageResult.getSize());  // Kích thước trang
+        result.put("totalElements", pageResult.getTotalElements());  // Tổng số phần tử
+        return ResponseEntity.ok(result);  // Trả về map chứa dữ liệu và phân trang
     }
+
 
     @PostMapping("/created")
     public ResponseEntity<?> saveChiTietSanPham(@Valid @RequestBody ChiTietSanphamRequest ctspRequest, BindingResult result) {
@@ -131,6 +138,7 @@ public class ChiTietSanPhamController
         return ResponseEntity.ok(result);
     }
 
+//    ttt
     @GetMapping("/filterByPrice")
     public ResponseEntity<?> filterByPrice(
             @RequestParam(value = "minPrice", defaultValue = "0") Double minPrice,
@@ -151,35 +159,20 @@ public class ChiTietSanPhamController
     public List<ChiTietSanPhamEntity> getallkm(){
         return chiTietSanPhamRepository.findAll();
     }
-
-
-    @GetMapping("/getall-phan_trangKm")
-    public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
-
-        // Gọi service để lấy dữ liệu đã phân trang
-        Page<ChiTietSanPhamEntity> pageResult = ctsp_Sevice.getAllPhanTrangKm(page, pageSize);
-
-        // Trả về đối tượng Page, bao gồm dữ liệu và thông tin phân trang
-        return ResponseEntity.ok(pageResult);
-    }
-
-        @GetMapping("/get-by-trang-thai")
-        public ResponseEntity<Object> getByTrangThai (
-                @Parameter(name = "size") @RequestParam(defaultValue = "0") Integer size,
-                @Parameter(name = "page") @RequestParam(defaultValue = "5") Integer page,
-                @Parameter(name = "ten") @RequestParam(required = false) String ten,
-                @Parameter(name = "ma") @RequestParam(required = false) String ma
+    @GetMapping("/get-by-trang-thai")
+    public ResponseEntity<Object> getByTrangThai(
+            @Parameter(name = "size")@RequestParam(defaultValue = "0")Integer size,
+            @Parameter(name = "page")@RequestParam(defaultValue = "5")Integer page,
+            @Parameter(name = "keyword")@RequestParam(required = false) String keyword
     ){
-            DataResponse dataResponse = new DataResponse();
-            dataResponse.setStatus(true);
-            var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size, page, ten, ma);
-            dataResponse.setResult(new ResultModel<>(
-                    new PagingModel(page, size, listSanPham.getTotalElements(), listSanPham.getTotalPages()), listSanPham
-            ));
-            return ResponseEntity.ok(dataResponse);
-        }
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,keyword);
+        dataResponse.setResult(new ResultModel<>(
+                new PagingModel(page,size,listSanPham.getTotalElements(),listSanPham.getTotalPages()),listSanPham
+        ));
+        return ResponseEntity.ok(dataResponse);
+    }
 
         @GetMapping("/{id}")
         public ResponseEntity<?> getChiTietSanPhamById (@PathVariable("id") Integer id){

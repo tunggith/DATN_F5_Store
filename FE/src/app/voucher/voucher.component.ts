@@ -120,10 +120,10 @@ export class VoucherComponent implements OnInit {
         this.createVoucher(voucherData);
     }
 }
-  
+
 updateVoucher(voucherData: any): void {
     console.log('Dữ liệu sửa:', voucherData);
-    
+
     this.voucherService.update(voucherData).subscribe(
         (response: any) => {
             if (response.status) {
@@ -185,16 +185,16 @@ editVoucher(voucher: any): void {
     // Patch dữ liệu vào form
     this.voucherForm.patchValue({
         ...voucher,
-      
+
     });
 
-    
+
     console.log('Giá trị form sau khi patch:', this.voucherForm.value);
 }
 
-  
-  
-  
+
+
+
   capNhap(VoucherId: number): void {
     console.log("Đang gọi hàm capNhap với ID:", VoucherId);
     const voucher = { id: VoucherId };

@@ -48,20 +48,18 @@ public class ChiTietSanPhamImpl {
         return ResponseEntity.ok(pageResult.getContent());
     }
 
-    public ResponseEntity<?> getallPhanTrangbyidSP(
-            Integer id,
-            Integer currentPage
-
-    ) {
+    public Page<?> getallPhanTrangbyidSP(Integer id, Integer currentPage) {
         int size = 5;
         Pageable pageable = PageRequest.of(currentPage, size);
 
         // Lấy kết quả phân trang từ repository
         var pageResult = repo_ctsp.getALLByIDSPCTPhanTrang(id, pageable);
 
-        // Trả về danh sách kết quả
-        return ResponseEntity.ok(pageResult.getContent());
+        // Trả về kết quả phân trang gồm cả nội dung và thông tin phân trang
+        return pageResult;
     }
+
+
 
     public ResponseEntity<?> saveChiTietSanPham(ChiTietSanphamRequest ctspRequet, BindingResult result) {
         // Kiểm tra nếu có lỗi
@@ -167,28 +165,22 @@ public class ChiTietSanPhamImpl {
         return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
     }
 
-
-
-    public Page<ChiTietSanPhamEntity> getAllPhanTrangKm(int currentPage, int pageSize) {
-        Pageable pageable = PageRequest.of(currentPage, pageSize);
-        return repo_ctsp.findAll(pageable);
-    }
-
-
-
-    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String ten, String ma) {
+    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChiTietSanPhamEntity> chiTietSanPham;
-        if (ten == null && ten.isEmpty() && ma == null && ma.isEmpty()) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            // Nếu keyword là null hoặc chuỗi trống, chỉ lọc theo trạng thái
             chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("còn hàng", "đang hoạt động", pageable);
         } else {
-            chiTietSanPham = repo_ctsp.getByTrangThaiAndSanPhamTrangThaiAndTenContainingOrMaContaining(
-                    "còn hàng",
+            // Nếu có keyword, thêm điều kiện tìm kiếm theo keyword
+            chiTietSanPham = repo_ctsp.getByTrangThai(
+                    "Còn hàng",
                     "đang hoạt động",
-                    ten,
-                    ma,
+                    keyword,
                     pageable);
         }
+
+        // Chuyển từ ChiTietSanPhamEntity sang ChiTietSanPhamReponse
         return chiTietSanPham.map(entity -> new ChiTietSanPhamReponse(
                 entity.getId(),
                 entity.getSanPham(),
@@ -202,7 +194,6 @@ public class ChiTietSanPhamImpl {
         ));
     }
 
-
     public ChiTietSanPhamEntity getChiTietSanPhamById(Integer id) {
         return repo_ctsp.findById(id).get();
     }
@@ -210,5 +201,4 @@ public class ChiTietSanPhamImpl {
     public boolean isChiTietSanPhamExists(String ma, String ten) {
         return repo_ctsp.existsByMaOrTen(ma, ten);
     }
-
 }

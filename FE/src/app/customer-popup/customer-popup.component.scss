@@ -11,16 +11,6 @@
   z-index: 9999;
   /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
-
-.popup-content {
-  background-color: white;
-  padding: 0;
-  border-radius: 5px;
-  width: 450px;
-  text-align: center;
-  position: relative;
-  /* Để định vị nút đóng chính xác */
-}
 .h2{
   font-weight: bold;
   color: black;
@@ -34,6 +24,9 @@
 }
 
 .add-customer {
+  width: 450px;
+  text-align: center;
+  position: relative;
   max-width: 400px;
   margin: 20px auto;
   padding: 20px;
@@ -101,6 +94,15 @@
 
 .btn-primary:hover {
   background-color: #0056b3;
+}
+.example-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
 }
 
 @media (max-width: 480px) {

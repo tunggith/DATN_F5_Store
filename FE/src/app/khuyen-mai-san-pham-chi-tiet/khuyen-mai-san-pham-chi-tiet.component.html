@@ -57,11 +57,11 @@
           <div class="paginationr text-center my-3">
             <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-dark btn-sm">
               <i class="material-icons">chevron_left</i>
-            </button>  
+            </button>
             <ng-container *ngIf="totalPages > 0">
               <button *ngFor="let num of [].constructor(totalPages); let i = index"
-                      (click)="goToPage(i)" 
-                      [disabled]="i === page" 
+                      (click)="goToPage(i)"
+                      [disabled]="i === page"
                       class="btn btn-dark btn-sm mx-1">
                 {{ i + 1 }}
               </button>

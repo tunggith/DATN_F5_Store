@@ -1,9 +1,12 @@
 package com.example.datn_f5_store.service.ExportPdf;
 
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
+import com.example.datn_f5_store.entity.DiaChiKhachHangEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
+import com.example.datn_f5_store.repository.IDiaChiKhachHangRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
+import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
@@ -30,6 +33,8 @@ public class PdfExportService {
     IHoaDonRepository hoaDonRepository;
     @Autowired
     IChiTietHoaDonRepository chiTietHoaDonRepository;
+    @Autowired
+    IDiaChiKhachHangRepository diaChiRepository;
     public ByteArrayInputStream exportPdf(Integer id) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -63,14 +68,16 @@ public class PdfExportService {
             int nam = hoaDon.getThoiGianTao().getYear();
             String maHoaDon = hoaDon.getMa();
             double tongTien = hoaDon.getTongTienSauVoucher();
+            List<DiaChiKhachHangEntity> listDiaChi = diaChiRepository.findByKhackHang_Id(hoaDon.getKhachHang().getId());
             String diaChi = "";
-            if(hoaDon.getKhachHang().getDiaChiKhachHang()!=null) {
-                diaChi = hoaDon.getKhachHang().getDiaChiKhachHang().getSoNha() + ", "
-                        + hoaDon.getKhachHang().getDiaChiKhachHang().getDuong() + ","
-                        + hoaDon.getKhachHang().getDiaChiKhachHang().getPhuongXa() + ", "
-                        + hoaDon.getKhachHang().getDiaChiKhachHang().getQuanHuyen() + ", "
-                        + hoaDon.getKhachHang().getDiaChiKhachHang().getTinhThanh() + ","
-                        + hoaDon.getKhachHang().getDiaChiKhachHang().getQuocGia();
+            if(listDiaChi != null && !listDiaChi.isEmpty()) {
+                DiaChiKhachHangEntity lastDiaChi = listDiaChi.get(listDiaChi.size()-1);
+                diaChi = lastDiaChi.getSoNha() + ", "
+                        + lastDiaChi.getDuong() + ","
+                        + lastDiaChi.getPhuongXa() + ", "
+                        + lastDiaChi.getQuanHuyen() + ", "
+                        + lastDiaChi.getTinhThanh() + ","
+                        + lastDiaChi.getQuocGia();
             }
             document.add(new Paragraph("Ngày "+ngay+",tháng "+thang+",năm "+2024)
                     .setTextAlignment(TextAlignment.RIGHT));

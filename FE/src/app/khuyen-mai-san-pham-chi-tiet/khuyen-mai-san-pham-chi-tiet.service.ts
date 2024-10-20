@@ -16,8 +16,8 @@ export class KhuyenMaiSanPhamChiTietService {
   private apiUrlKhuyenMai = 'http://localhost:8080/api/v1/khuyen-mai/getAll';
   private apiUrlCtsp = 'http://localhost:8080/api/v1/chi_tiet_san_pham/getall-phan_trangKm';
   private apitimKiemSp = 'http://localhost:8080/api/v1/chi_tiet_san_pham/searchsp';
-  private apigetByKm = 'http://localhost:8080/api/v1/khuyen-mai-ctsp/getByKhuyenMai'; 
-  
+  private apigetByKm = 'http://localhost:8080/api/v1/khuyen-mai-ctsp/getByKhuyenMai';
+
 
   constructor(private http: HttpClient) {}
 
@@ -53,7 +53,7 @@ XoaKmctsp(id: number): Observable<DataResponse<any>> {
     return this.http.get<DataResponse<any>>(`${this.apigetByKm}/${id}`); 
   }
 
-  
+
   timTheoTenHoacMa(keyword : string,page: number, size: number): Observable<any> {
     const params = { page: page.toString(), size: size.toString(), keyword  };
     return this.http.get<any>(this.apitimKiemSp, { params });

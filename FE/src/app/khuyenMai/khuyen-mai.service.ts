@@ -49,7 +49,7 @@ export class KhuyenMaiService {
   
   timTheoNgay(page: number, size: number, fromDate: string | null, toDate: string | null): Observable<any> {
     let params = `?page=${page}&size=${size}`;
-    
+
     if (fromDate && toDate) {
       // Nếu cả hai tham số đều có giá trị, thêm cả hai vào URL
       params += `&ngayBatDau=${fromDate}&ngayKetThuc=${toDate}`;

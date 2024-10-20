@@ -4,7 +4,10 @@ import com.example.datn_f5_store.dto.KhachHangDto;
 import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.example.datn_f5_store.request.KhachHangRequest;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.KhachHangService;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class KhachHangServiceImpl implements KhachHangService {
@@ -35,7 +39,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return khachHangPage.map(khachHangEntity -> new KhachHangDto(
                 khachHangEntity.getId(),
-                khachHangEntity.getDiaChiKhachHang(),
                 khachHangEntity.getMa(),
                 khachHangEntity.getTen(),
                 khachHangEntity.getGioiTinh(),
@@ -75,7 +78,6 @@ public class KhachHangServiceImpl implements KhachHangService {
 
         try {
             KhachHangEntity khachHang = new KhachHangEntity();
-            khachHang.setDiaChiKhachHang(khachHangRequest.getDiaChiKhachHang());
             khachHang.setMa(generateMaKhachHang());
             khachHang.setTen(khachHangRequest.getTen());
             khachHang.setGioiTinh(khachHangRequest.getGioiTinh());
@@ -92,6 +94,33 @@ public class KhachHangServiceImpl implements KhachHangService {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public DataResponse create(KhachHangRequest request) throws BadRequestException {
+        // Validate dữ liệu
+        if (request.getTen() == null || request.getTen().isEmpty()) {
+            throw new BadRequestException("Tên khách hàng không được để trống");
+        }
+        if (request.getNgayThangNamSinh() == null) {
+            throw new BadRequestException("Ngày sinh không được để trống");
+        }
+        if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            throw new BadRequestException("Email không hợp lệ");
+        }
+        if (request.getSdt() == null || !request.getSdt().matches("^\\d{10}$")) {
+            throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
+        }
+        var ma = this.generateCustomerCode();
+        KhachHangEntity khachHang = new KhachHangEntity();
+        khachHang.setMa(ma);
+        khachHang.setTen(request.getTen());
+        khachHang.setGioiTinh(request.getGioiTinh());
+        khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
+        khachHang.setEmail(request.getEmail());
+        khachHang.setSdt(request.getSdt());
+        khachHangRepository.save(khachHang);
+        return new DataResponse(true,new ResultModel<>(null,"create khach hang successfull"));
     }
 
     // Phương thức để sinh mã khách hàng
@@ -121,7 +150,6 @@ public class KhachHangServiceImpl implements KhachHangService {
             }
 
             try {
-                khachHang.setDiaChiKhachHang(khachHangRequest.getDiaChiKhachHang());
                 khachHang.setMa(khachHangRequest.getMa());
                 khachHang.setTen(khachHangRequest.getTen());
                 khachHang.setGioiTinh(khachHangRequest.getGioiTinh());
@@ -150,8 +178,28 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public List<KhachHangEntity> getAllKhachHangKhongPhanTrang() {
-        return khachHangRepository.findAll(); // Lấy tất cả khách hàng
+    public List<KhachHangDto> getAllKhachHangKhongPhanTrang(String search) {
+        List<KhachHangEntity> listKhachHang;
+        if(search==null){
+            listKhachHang = khachHangRepository.findAll(); // Lấy tất cả khách hàng
+        }else {
+            listKhachHang = khachHangRepository.getAll(search);
+        }
+        return listKhachHang.stream()
+                .filter(khachHang -> khachHang.getId()!=1)
+                .map(entity->new KhachHangDto(
+                        entity.getId(),
+                        entity.getMa(),
+                        entity.getTen(),
+                        entity.getGioiTinh(),
+                        entity.getNgayThangNamSinh(),
+                        entity.getEmail(),
+                        entity.getAnh(),
+                        entity.getSdt(),
+                        entity.getUserName(),
+                        entity.getPassword(),
+                        entity.getTrangThai()
+                )).collect(Collectors.toList());
     }
 
     @Override
@@ -166,7 +214,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return khachHangEntityPage.map(khachHangEntity -> new KhachHangDto(
                 khachHangEntity.getId(),
-                khachHangEntity.getDiaChiKhachHang(),
                 khachHangEntity.getMa(),
                 khachHangEntity.getTen(),
                 khachHangEntity.getGioiTinh(),
@@ -179,6 +226,35 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getTrangThai()
         ));
     }
+
+    @Override
+    public DataResponse updateTrangThai(Integer id) {
+        KhachHangEntity khachHang = khachHangRepository.findById(id).orElse(null);
+        if(khachHang.getTrangThai().equals("không hoạt động")){
+            khachHang.setTrangThai("đang hoạt động");
+        }else if(khachHang.getTrangThai().equals("đang hoạt động")){
+            khachHang.setTrangThai("không hoạt động");
+        }
+        khachHangRepository.save(khachHang);
+        return new DataResponse(true,new ResultModel<>(null,khachHang)) ;
+    }
+
+    public String generateCustomerCode() {
+        // Lấy khách hàng cuối cùng trong cơ sở dữ liệu (giả sử khách hàng có cột mã là 'ma')
+        KhachHangEntity lastCustomer = khachHangRepository.findTopByOrderByIdDesc(); // Giả sử lấy khách hàng theo ID giảm dần
+
+        if (lastCustomer != null && lastCustomer.getMa() != null) {
+            String lastCode = lastCustomer.getMa();
+            // Tách số từ mã khách hàng (giả sử mã có định dạng KHXXX)
+            int numberPart = Integer.parseInt(lastCode.substring(2));
+            String newCode = String.format("KH%03d", numberPart + 1); // Tăng số lên 1 và format với 3 chữ số
+            return newCode;
+        } else {
+            // Nếu chưa có khách hàng nào, trả về mã khách hàng đầu tiên
+            return "KH001";
+        }
+    }
+
 }
 
 

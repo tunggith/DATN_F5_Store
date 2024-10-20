@@ -127,8 +127,7 @@
                   <td>{{ sanpham.gioiTinh.ten }}</td>
                   <td>{{ sanpham.trangThai }}</td>
                   <td>
-                    <button class="btn btn-primary btn-sm mb-1" (click)="selectSanPham(sanpham)">Chọn</button>
-                    <button class="btn btn-success btn-sm mb-1" (click)="selectSanPhamChiTiet(sanpham.id)">Chi tiết</button>
+                    <button class="btn btn-success btn-sm mb-1" (click)="selectSanPham(sanpham)" (click)="selectSanPhamChiTiet(sanpham.id)">Chi tiết</button>
                     <button class="btn btn-info btn-sm" (click)="openModalAddProductDetail(sanpham.id)">Thêm Chi Tiết</button>
                   </td>
                 </tr>

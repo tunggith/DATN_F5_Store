@@ -45,7 +45,7 @@ export class KhuyenMaiChiTietSanPhamComponent implements OnInit {
     
   }
 
- 
+
 
 filterSanPhams() {
   if (!this.searchTerm) {
@@ -224,7 +224,7 @@ onSearch(): void {
             this.saveSelectionsToLocalStorage();
             this.fetchChiTietSanPhams();
           }
-        
+
         },
         (error) => {
           console.log(error);
