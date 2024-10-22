@@ -4,8 +4,6 @@ import { DatePipe } from '@angular/common';
 
 declare var $: any;
 import Swal from 'sweetalert2';
-import { error, log } from 'console';
-
 
 @Component({
   selector: 'app-notifications',

@@ -26,6 +26,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { HistoryPopupComponent } from 'app/history-popup/history-popup.component';
 import { ThongkeComponent } from 'app/thongke/thongke.component';
+// @ts-ignore
 import { NgChartsModule } from 'ng2-charts';
 import { NotificationsComponent } from 'app/notifications/notifications.component';
 
