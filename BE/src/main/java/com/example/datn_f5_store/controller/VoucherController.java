@@ -150,6 +150,4 @@ public class VoucherController {
         dataResponse.setResult(new ResultModel<>(null,listData));
         return ResponseEntity.ok(dataResponse);
     }
-
-
 }

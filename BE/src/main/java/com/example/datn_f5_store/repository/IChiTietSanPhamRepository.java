@@ -136,6 +136,13 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     """)
     Page<ChiTietSanPhamEntity> searchByTenOrMa1(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("""
+        select ctsp
+        from ChiTietSanPhamEntity ctsp 
+        where ctsp.trangThai = ?1
+    """)
+    Page<ChiTietSanPhamEntity> finByTTSp( String keyword, Pageable pageable);
+
     Page<ChiTietSanPhamEntity> findByTrangThaiAndSanPhamTrangThai(
             String chiTietSanPham,
             String sanPham,

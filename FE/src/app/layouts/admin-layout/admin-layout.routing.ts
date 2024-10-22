@@ -15,9 +15,9 @@ import { ThongkeComponent } from 'app/thongke/thongke.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'ban-hang',      component: BanHangComponent },
-    { path: 'sanpham', component: SanphamComponent }, // Định tuyến cho sản phẩm
+    { path: 'san-pham', component: SanphamComponent }, // Định tuyến cho sản phẩm
     { path: 'thong-ke',     component: ThongkeComponent },
-    { path: 'khuyenMai',          component: IconsComponent },
+    { path: 'khuyen-Mai',          component: IconsComponent },
     { path: 'nhan-vien',           component: NhanVienComponent },
     { path: 'khach-hang',  component: KhachHangComponent },
     { path: 'upgrade',        component: UpgradeComponent },

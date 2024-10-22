@@ -417,7 +417,6 @@ public class VoucherServicelmpl implements VoucherService {
                 entity.getTrangThai()
         ));
     }
-
     @Override
     public List<VoucherDto> getTrangThai() {
         List<VoucherEntity> voucherEntities = iVoucherRepository.getByTrangThai("Đang diễn ra");

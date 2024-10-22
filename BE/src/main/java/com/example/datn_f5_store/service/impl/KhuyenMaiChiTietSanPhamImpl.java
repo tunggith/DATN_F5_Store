@@ -116,7 +116,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Mã khuyến mãi "+ khuyenMai.getMa() +" đã hết hạn, không thể áp dụng"));
             }
             if (khuyenMai.getSoLuong() == 0 || khuyenMai.getSoLuong() == null){
-                return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getTen() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getMa() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
             }
             if (chiTietSanPham.getSoLuong() <= 0 || chiTietSanPham.getSoLuong() == null){
                 return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
@@ -197,11 +197,9 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                          } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                              khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
                          }
-                         System.out.println("khuyen mai giam gia "+ khuyenMaictsp.getKhuyenMai().getTrangThai());
                          chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                          iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                      }else {
-                         System.out.println("khuyen mai khong giam gia "+ khuyenMaictsp.getKhuyenMai().getTrangThai());
                          iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                      }
                 }
