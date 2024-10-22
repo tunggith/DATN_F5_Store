@@ -11,21 +11,17 @@ export class AnhChiTietSanPhamService {
   constructor(private http: HttpClient) { }
 
   // Phương thức để lấy danh sách sản phẩm
-  getProducts(page: number, size: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getAllAnhChiTietSanPham_TimKiem_PhanTrang?page=${page}&size=${size}`);
+  getProducts(page: number, size: number,id:number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/get-by-san-pham/${id}?page=${page}&size=${size}`);
   }
- // Phương thức để lấy danh sách chi tiết sản phẩm
-  getChiTietSanPham(page: number, size: number): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/v1/chi_tiet_san_pham/getall-phan_trang?page=${page}&size=${size}`);
+  create(anhNew:any):Observable<any>{
+    return this.http.post(`${this.baseUrl}/create`,anhNew);
   }
-  // Phương thức để thêm sản phẩm
-  addProduct(product: any, chiTietSanPhamId: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/addAnhChiTietSanPham?chiTietSanPhamId=${chiTietSanPhamId}`, product);
+  update(id:number,anhNew:any):Observable<any>{
+    return this.http.put(`${this.baseUrl}/update/${id}`,anhNew);
   }
-  // Phương thức để cập nhật sản phẩm
-  updateProduct(id: number, product: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/updateAnhChiTietSanPham/${id}`, product);
+  detail(id:number):Observable<any>{
+    return this.http.get(`${this.baseUrl}/detail/${id}`);
   }
-
  
 }

@@ -23,12 +23,12 @@ export class KhachHangComponent implements OnInit {
   idKhachHang: number = 0;
 
   newKhachHang: any = {
-    gioiTinh: '1',
+    gioiTinh: '0',
     trangThai: 'Đang hoạt động',
     anh: '',
   };
   updateKhachHangData: any = {
-    gioiTinh: '1',
+    gioiTinh: '0',
     trangThai: 'Đang hoạt động',
   };
 
@@ -42,7 +42,7 @@ export class KhachHangComponent implements OnInit {
   ngOnInit() {
     this.loadKhachHang(this.currentPage);
   }
-  openPopup(idKhachHang:number) {
+  openPopup(idKhachHang: number) {
     this.idKhachHang = idKhachHang;
     this.popup = true;
   }
@@ -71,9 +71,9 @@ export class KhachHangComponent implements OnInit {
       }
     );
   }
-  updateTrangThai(id:number){
+  updateTrangThai(id: number) {
     this.customerService.updateTrangThai(id).subscribe(
-      response=>{
+      response => {
         this.loadKhachHang(this.currentPage);
       }
     )
@@ -209,14 +209,14 @@ export class KhachHangComponent implements OnInit {
       id: 0,
       ma: '',
       ten: '',
-      gioiTinh: '',
+      gioiTinh: '0',
       namSinh: '',
       email: '',
       sdt: '',
       anh: '',
       userName: '',
       password: '',
-      trangThai: '',
+      trangThai: 'Đang hoạt động',
       diaChiKhachHangId: null,
     };
   }

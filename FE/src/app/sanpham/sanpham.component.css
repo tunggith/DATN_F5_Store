@@ -6,8 +6,32 @@
 .text-danger {
     color: red; /* Màu chữ thông báo lỗi */
 }
-
-
+.table {
+    width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng của container */
+    table-layout: auto; /* Cố định bố cục bảng */
+}
+.table-responsive{
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+th, td {
+    white-space: nowrap; /* Ngăn không cho nội dung xuống dòng */
+    padding: 0 10px; /* Thêm khoảng cách cho các ô */
+    text-align: center; /* Căn trái cho nội dung */
+}
+.btn-action{
+    background-color: #ffff;
+    height: 50px;
+    margin-left: 5px;
+    border: 0px;
+    font-size: 15px;
+}
+.btn-action:hover{
+    font-size: 20px;
+}
+.btn-action i:hover{
+    font-size: 25px;
+}
 .custom-modal-overlay {
     position: fixed;
     top: 0;

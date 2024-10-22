@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MapsService} from './maps.service';
+import {MapsService} from './nhan-vien.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import Swal from 'sweetalert2';
 import {DatePipe} from '@angular/common';
@@ -7,12 +7,12 @@ import {DatePipe} from '@angular/common';
 declare const google: any;
 
 @Component({
-    selector: 'app-maps',
-    templateUrl: './maps.component.html',
-    styleUrls: ['./maps.component.css'],
+    selector: 'app-nhan-vien',
+    templateUrl: './nhan-vien.component.html',
+    styleUrls: ['./nhan-vien.component.css'],
     providers: [DatePipe] // Đăng ký DatePipe ở đây
 })
-export class MapsComponent implements OnInit {
+export class NhanVienComponent implements OnInit {
 
     nhanVienForm: FormGroup;
     validationErrors: any = {};  // Lưu lỗi từ backend
@@ -189,7 +189,7 @@ export class MapsComponent implements OnInit {
     updateNhanVien(id: number): void {
         if (this.nhanVienForm.valid) {
             this.updateNhanVienData = {...this.nhanVienForm.getRawValue()}; // Lấy tất cả dữ liệu từ form, kể cả các trường bị disabled
-            delete this.updateNhanVienData.ma; // Bỏ qua trường mã vì nó không được chỉnh sửa
+            // delete this.updateNhanVienData.ma; // Bỏ qua trường mã vì nó không được chỉnh sửa
 
             this.mapsService.updateNhanVien(id, this.updateNhanVienData).subscribe({
                 next: () => {

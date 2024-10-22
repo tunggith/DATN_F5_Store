@@ -85,65 +85,16 @@ public class KhachHangController {
     }
 
     @PostMapping("/addKhachHang")
-    public ResponseEntity<?> addKhachHang(@RequestBody @Valid KhachHangRequest khachHangRequest,
-                                          BindingResult bindingResult) {
-        // Kiểm tra xem có lỗi validation không
-        if (bindingResult.hasErrors()) {
-            // Nếu có lỗi validation, tạo một map để lưu các thông báo lỗi
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error ->
-                    errors.put(error.getField(), error.getDefaultMessage()));
-
-            // Trả về mã lỗi 400 với chi tiết lỗi
-            return ResponseEntity.badRequest().body(errors);
-        }
-
-        // Thực hiện xử lý logic thêm khách hàng
-        Boolean check = khachHangService.addKhachHang(khachHangRequest);
-
-        // Kiểm tra nếu thêm thành công
-        if (check) {
-            // Trả về một đối tượng JSON với thông điệp
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Thêm khách hàng thành công!");
-            return ResponseEntity.ok(response);
-        } else {
-            // Nếu có lỗi khi thêm, trả về mã lỗi 500
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Có lỗi xảy ra khi thêm khách hàng.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+    public ResponseEntity<Object> addKhachHang(@RequestBody @Valid KhachHangRequest request) throws BadRequestException {
+        return new ResponseEntity<>(khachHangService.addKhachHang(request),HttpStatus.OK);
     }
 
 
     @PutMapping("/updateKhachHang/{id}")
-    public ResponseEntity<?> updateKhachHang(@PathVariable Integer id,
-                                             @RequestBody @Valid KhachHangRequest khachHangRequest,
-                                             BindingResult bingBindingResult) {
-        HashMap<String, Object> response = new HashMap<>();
-
-        // Kiểm tra lỗi validation
-        if (bingBindingResult.hasErrors()) {
-            // Lưu lỗi vào HashMap
-            bingBindingResult.getFieldErrors().forEach(error ->
-                    response.put(error.getField(), error.getDefaultMessage()));
-
-            // Trả về phản hồi lỗi 400 với chi tiết lỗi
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        // Gọi service để cập nhật khách hàng
-        Boolean checkUpdate = khachHangService.updateKhachHang(id, khachHangRequest);
-
-        if (checkUpdate) {
-            // Trả về phản hồi thành công
-            response.put("message", "Cập nhật khách hàng thành công!");
-            return ResponseEntity.ok(response);
-        } else {
-            // Nếu không tìm thấy khách hàng theo id, trả về mã lỗi 404
-            response.put("message", "Không tìm thấy khách hàng với ID đã cho.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+    public ResponseEntity<Object> updateKhachHang(
+            @Parameter(name = "id")@PathVariable Integer id,
+            @RequestBody KhachHangRequest khachHangRequest) throws BadRequestException {
+        return new ResponseEntity<>(khachHangService.updateKhachHang(id,khachHangRequest),HttpStatus.OK);
     }
 
 
@@ -158,13 +109,27 @@ public class KhachHangController {
 
         var responseList = khachHangService.searchKhachHang(name, email, sdt);
         dataResponse.setResult(new ResultModel<>(null, responseList));
-
         return ResponseEntity.ok(dataResponse);
     }
     @PutMapping("/update-trang-thai/{id}")
     private ResponseEntity<Object> updateTrangThai(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(khachHangService.updateTrangThai(id),HttpStatus.OK);
     }
-
+    @GetMapping("/get-trang-thai")
+    private ResponseEntity<Object> getByTrangThai(@Parameter(name = "search")@RequestParam(required = false)String search){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var dataList = khachHangService.getByTrangThai();
+        dataResponse.setResult(new ResultModel<>(null,dataList));
+        return ResponseEntity.ok(dataResponse);
+    }
+    @GetMapping("/detail/{id}")
+    private ResponseEntity<Object> getDetail(@Parameter(name = "id")Integer id){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = khachHangService.detail(id);
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
+    }
 }
 

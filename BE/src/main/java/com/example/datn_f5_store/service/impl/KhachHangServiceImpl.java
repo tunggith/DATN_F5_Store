@@ -53,27 +53,22 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public Boolean addKhachHang(KhachHangRequest khachHangRequest) {
+    public DataResponse addKhachHang(KhachHangRequest khachHangRequest) throws BadRequestException {
         // Kiểm tra mã, số điện thoại, email, và username
         if (khachHangRepository.existsByMa(khachHangRequest.getMa())) {
-            System.out.println("Mã khách hàng đã tồn tại, không thể thêm mới!");
-            return false;
+            throw new BadRequestException("Mã khách hàng đã tồn tại, không thể thêm mới!");
         }
         if (khachHangRepository.existsBySdt(khachHangRequest.getSdt())) {
-            System.out.println("Số điện thoại đã tồn tại, không thể thêm mới!");
-            return false;
+            throw new BadRequestException("Số điện thoại đã tồn tại, không thể thêm mới!");
         }
         if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
-            System.out.println("Email đã tồn tại, không thể thêm mới!");
-            return false;
+            throw new BadRequestException("Email đã tồn tại, không thể thêm mới!");
         }
         if (khachHangRepository.existsByUserName(khachHangRequest.getUserName())) {
-            System.out.println("Username đã tồn tại, không thể thêm mới!");
-            return false;
+            throw new BadRequestException("Username đã tồn tại, không thể thêm mới!");
         }
         if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-            System.out.println("Email phải có đuôi @gmail.com");
-            return false;
+            throw new BadRequestException("Email phải có đuôi @gmail.com");
         }
 
         try {
@@ -84,15 +79,16 @@ public class KhachHangServiceImpl implements KhachHangService {
             khachHang.setNgayThangNamSinh(khachHangRequest.getNgayThangNamSinh());
             khachHang.setEmail(khachHangRequest.getEmail());
             khachHang.setSdt(khachHangRequest.getSdt());
+            khachHang.setAnh(khachHangRequest.getAnh());
             khachHang.setUserName(khachHangRequest.getUserName());
             khachHang.setPassword(khachHangRequest.getPassword());
-            khachHang.setTrangThai("Đang hoạt động");
+            khachHang.setTrangThai("đang hoạt động");
 
             khachHangRepository.save(khachHang);
-            return true;
+            return new DataResponse(true,new ResultModel<>(null,"create successfully"));
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return new DataResponse(false, new ResultModel<>(null,"create exception"));
         }
     }
 
@@ -111,7 +107,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (request.getSdt() == null || !request.getSdt().matches("^\\d{10}$")) {
             throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
         }
-        var ma = this.generateCustomerCode();
+        var ma = this.generateMaKhachHang();
         KhachHangEntity khachHang = new KhachHangEntity();
         khachHang.setMa(ma);
         khachHang.setTen(request.getTen());
@@ -119,6 +115,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
         khachHang.setEmail(request.getEmail());
         khachHang.setSdt(request.getSdt());
+        khachHang.setTrangThai("đang hoạt động");
         khachHangRepository.save(khachHang);
         return new DataResponse(true,new ResultModel<>(null,"create khach hang successfull"));
     }
@@ -139,16 +136,13 @@ public class KhachHangServiceImpl implements KhachHangService {
     }
 
     @Override
-    public Boolean updateKhachHang(Integer id, KhachHangRequest khachHangRequest) {
+    public DataResponse updateKhachHang(Integer id, KhachHangRequest khachHangRequest) throws BadRequestException {
         Optional<KhachHangEntity> kiemTraTonTaiKhachHang = khachHangRepository.findById(id);
         if (kiemTraTonTaiKhachHang.isPresent()) {
             KhachHangEntity khachHang = kiemTraTonTaiKhachHang.get();
-
             if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-                System.out.println("Email phải có đuôi @gmail.com");
-                return false;
+                throw new BadRequestException("Email phải có đuôi @gmail.com");
             }
-
             try {
                 khachHang.setMa(khachHangRequest.getMa());
                 khachHang.setTen(khachHangRequest.getTen());
@@ -162,13 +156,13 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHang.setTrangThai(khachHangRequest.getTrangThai());
 
                 khachHangRepository.save(khachHang);
-                return true;
+                return new DataResponse(true,new ResultModel<>(null,"update succesfully"));
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                return new DataResponse(false,new ResultModel<>(null,"update exception"));
             }
         } else {
-            return false;
+            throw new BadRequestException("khách hàng không tồn tại");
         }
     }
 
@@ -187,6 +181,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return listKhachHang.stream()
                 .filter(khachHang -> khachHang.getId()!=1)
+                .filter(khachHang->"đang hoạt động".equals(khachHang.getTrangThai()))
                 .map(entity->new KhachHangDto(
                         entity.getId(),
                         entity.getMa(),
@@ -239,22 +234,30 @@ public class KhachHangServiceImpl implements KhachHangService {
         return new DataResponse(true,new ResultModel<>(null,khachHang)) ;
     }
 
-    public String generateCustomerCode() {
-        // Lấy khách hàng cuối cùng trong cơ sở dữ liệu (giả sử khách hàng có cột mã là 'ma')
-        KhachHangEntity lastCustomer = khachHangRepository.findTopByOrderByIdDesc(); // Giả sử lấy khách hàng theo ID giảm dần
-
-        if (lastCustomer != null && lastCustomer.getMa() != null) {
-            String lastCode = lastCustomer.getMa();
-            // Tách số từ mã khách hàng (giả sử mã có định dạng KHXXX)
-            int numberPart = Integer.parseInt(lastCode.substring(2));
-            String newCode = String.format("KH%03d", numberPart + 1); // Tăng số lên 1 và format với 3 chữ số
-            return newCode;
-        } else {
-            // Nếu chưa có khách hàng nào, trả về mã khách hàng đầu tiên
-            return "KH001";
-        }
+    @Override
+    public List<KhachHangDto> getByTrangThai() {
+        List<KhachHangEntity> khachHangEntities = khachHangRepository.findByTrangThai("đang hoạt động");
+        return khachHangEntities.stream()
+                .map(entity -> new KhachHangDto(
+                        entity.getId(),
+                        entity.getMa(),
+                        entity.getTen(),
+                        entity.getGioiTinh(),
+                        entity.getNgayThangNamSinh(),
+                        entity.getEmail(),
+                        entity.getAnh(),
+                        entity.getSdt(),
+                        entity.getUserName(),
+                        entity.getPassword(),
+                        entity.getTrangThai()
+                )).collect(Collectors.toList());
     }
 
+    @Override
+    public KhachHangEntity detail(Integer id) {
+        KhachHangEntity khachHang = khachHangRepository.findById(id).orElse(null);
+        return khachHang;
+    }
 }
 
 

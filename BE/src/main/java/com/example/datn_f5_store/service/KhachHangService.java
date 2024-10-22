@@ -11,20 +11,16 @@ import java.util.List;
 
 public interface KhachHangService {
 
-    // Phương thức lấy danh sách khách hàng với phân trang
     Page<KhachHangDto> getAllKhachHang(int page, int size, String search);
-
-    // Phương thức thêm khách hàng mới
-    Boolean addKhachHang(KhachHangRequest khachHangRequest);
+    DataResponse addKhachHang(KhachHangRequest khachHangRequest) throws BadRequestException;
     DataResponse create(KhachHangRequest request) throws BadRequestException;
 
-    // Phương thức cập nhật thông tin khách hàng
-    Boolean updateKhachHang(Integer id, KhachHangRequest khachHangRequest);
-
-    // Phương thức tìm kiếm khách hàng theo tên
+    DataResponse updateKhachHang(Integer id, KhachHangRequest khachHangRequest) throws BadRequestException;
     List<KhachHangEntity> searchKhachHang(String name, String email, String sdt);
     List<KhachHangDto> getAllKhachHangKhongPhanTrang(String search);
     Page<KhachHangDto> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(
             int page, int size, String ten, String ma, String email, String sdt);
     DataResponse updateTrangThai(Integer id);
+    List<KhachHangDto> getByTrangThai();
+    KhachHangEntity detail(Integer id);
 }

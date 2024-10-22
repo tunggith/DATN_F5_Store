@@ -1,10 +1,13 @@
 package com.example.datn_f5_store.service.impl;
 
+import com.example.datn_f5_store.dto.KhachHangDto;
 import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.dto.VoucherDto;
+import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
+import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
 import com.example.datn_f5_store.request.VoucherRequest;
 import com.example.datn_f5_store.service.VoucherService;
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
@@ -412,6 +416,30 @@ public class VoucherServicelmpl implements VoucherService {
                 entity.getThoiGianSua(),
                 entity.getTrangThai()
         ));
+    }
+
+    @Override
+    public List<VoucherDto> getTrangThai() {
+        List<VoucherEntity> voucherEntities = iVoucherRepository.getByTrangThai("Đang diễn ra");
+        return voucherEntities.stream()
+                .map(entity->new VoucherDto(
+                        entity.getId(),
+                        entity.getMa(),
+                        entity.getTen(),
+                        entity.getGiaTriVoucher(),
+                        entity.getKieuGiamGia(),
+                        entity.getGiaTriGiamToiDa(),
+                        entity.getGiaTriHoaDonToiThieu(),
+                        entity.getThoiGianBatDau(),
+                        entity.getThoiGianKetThuc(),
+                        entity.getMoTa(),
+                        entity.getSoLuong(),
+                        entity.getNguoiTao(),
+                        entity.getThoiGianTao(),
+                        entity.getNguoiSua(),
+                        entity.getThoiGianSua(),
+                        entity.getTrangThai()
+                )).collect(Collectors.toList());
     }
 
 

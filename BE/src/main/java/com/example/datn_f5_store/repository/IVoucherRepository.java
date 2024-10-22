@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer> {
     boolean existsByMa(String ma);
@@ -22,4 +23,5 @@ public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer>
 
     @Query("SELECT p FROM VoucherEntity p WHERE p.trangThai = ?1")
     Page<VoucherEntity> findByTrangThai(String trangThai, Pageable pageable);
+    List<VoucherEntity> getByTrangThai(String trangThai);
 }

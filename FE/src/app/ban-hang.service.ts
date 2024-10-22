@@ -26,7 +26,7 @@ export class BanHangService {
     return this.http.get(`${this.hoaDonUrl}/get-chi-tiet-hoa-don/${id}`);
   }
   getVoucher(): Observable<any> {
-    return this.http.get(`${this.voucherUrl}/getAll`);
+    return this.http.get(`${this.voucherUrl}/get-trang-thai`);
   }
   getPhuongThucThanhToan(): Observable<any> {
     return this.http.get(`${this.thanhToanUrl}/getAll`);
