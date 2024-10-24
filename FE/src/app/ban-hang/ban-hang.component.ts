@@ -30,7 +30,7 @@ export class BanHangComponent implements OnInit {
   tienKhachDuaInvalid: boolean = false;
   voucher: any[] = [];
   phuongThucThanhToan: any[] = [];
-  icon: string = 'toggle_off';
+  icon: string = 'toggle_on';
   checkHoaDon: boolean = false;
   selectedVoucherId: number | null = null;
   idThanhToan: number = 0;
@@ -98,7 +98,7 @@ export class BanHangComponent implements OnInit {
     this.activeTab = tabName;
   }
   toggleIcon() {
-    this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
+    this.icon = this.icon === 'toggle_on' ? 'toggle_off' : 'toggle_on';
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
   }
 
@@ -420,22 +420,34 @@ export class BanHangComponent implements OnInit {
     this.banHangService.updateKhachHang(idHoaDon, idKhachHang).subscribe();
   }
   //==================Thanh toán hóa đơn==================
+  
   thanhtoanHoaDon(idHoaDon: number): void {
     if (this.tienKhachDua < this.tongTienSauVoucher) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
+
+    // Nếu idGiaoHang là 1 thì mới gọi submitAddress và kiểm tra địa chỉ
+    if (this.idGiaoHang === 1) {
+      this.submitAddress();
+
+      if (this.diaChiNhanHang === null||this.diaChiNhanHang==='') {
+        return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
+      }
+    }
+
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
-      idKhachHang: this.idKhachHang || 1, // Cập nhật giá trị thực tế của khách hàng
-      idNhanVien: 1, // Cập nhật giá trị thực tế của nhân viên
+      idKhachHang: this.idKhachHang || 1,
+      idNhanVien: 1,
       idVoucher: this.selectedVoucherId || null,
-      idThanhToan: this.idThanhToan || 2, // Phương thức thanh toán mặc định
-      ma: this.hoaDonChiTietMoi.hoaDon.ma, // Mã hóa đơn chi tiết hiện tại
+      idThanhToan: this.idThanhToan || 2,
+      ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
       tongTienSauVoucher: 0,
-      tenNguoiNhan: this.tenKhachHang, // Tên khách hàng// Thời gian tạo hóa đơn
+      tenNguoiNhan: this.tenKhachHang,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
+      diaChiNhanHang: this.diaChiNhanHang
     };
 
     // Gọi service để thanh toán hóa đơn
@@ -445,6 +457,7 @@ export class BanHangComponent implements OnInit {
         this.getHoaDon(); // Cập nhật lại danh sách hóa đơn sau khi thanh toán
         this.getSanPham(); // Cập nhật lại danh sách sản phẩm
         this.getByTrangThai();
+        this.icon='toggle_off';
       },
       error => {
         this.handleError(error); // Xử lý lỗi nếu có
@@ -452,6 +465,7 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
+
   onKeyworkChange(event: Event): void {
     const input = event.target as HTMLInputElement; // Lấy giá trị từ event
     this.keywork = input.value; // Gán giá trị vào keywork
@@ -633,10 +647,11 @@ export class BanHangComponent implements OnInit {
         phiShip: this.phiVanChuyen
       };
       console.log(this.phiVanChuyen);
+      console.log(this.activeInvoidID);
       // Gọi API để cập nhật địa chỉ nhận hàng
-      this.banHangService.updateDiaChiNhanHang(this.hoaDonChoId, hoaDon).subscribe(
+      this.banHangService.updateDiaChiNhanHang(this.activeInvoidID, hoaDon).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật địa chỉ thành công');
+          //this.showSuccessMessage('cập nhật địa chỉ thành công');
         },
         error => {
           console.error('Cập nhật địa chỉ thất bại:', error);

@@ -93,61 +93,6 @@
                             </table>
                         </div>
                     </div>
-                    <div class="profile-pay">
-                        <div class="thanh-toan">
-                            <div class="cash">
-                                <div>
-                                    <span>Tổng tiền: {{tongTienBanDau | currency:'VND'}}</span>
-                                </div>
-                                <div style="display: flex;">
-                                    <div>
-                                        <span>Tiền khách đưa: </span>
-                                        <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
-                                            (input)="getTienTraLai(tienKhachDua)"
-                                            [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
-                                    </div>
-                                    <div *ngIf="tienKhachDua < tongTienSauVoucher">
-                                        <span class="error-text">Số tiền khách đưa không đủ!</span>
-                                    </div>
-                                    <div *ngIf="tienKhachDuaInvalid">
-                                        <span class="error-text">Dữ liệu không hợp lệ!</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <span>Tổng tiền phải thanh toán: {{tongTienSauVoucher | currency:'VND'}}</span>
-                                </div>
-                                <div>
-                                    <span>tiền trả lại: {{tienTraLai}}</span>
-                                </div>
-                                <div class="payment">
-                                    <button (click)="thanhtoanHoaDon(activeInvoidID)"><i
-                                            class="material-icons">payments</i>Thanh toán</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="voucher">
-                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                                <option selected disabled>---chọn phương thức thanh toán</option>
-                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
-                                    {{phuongThuc.tenPhuongThuc}}</option>
-                            </select>
-                            <div class="giao-hang">
-                                <span>Giao hàng: <i class="material-icons toggle-icon"
-                                        [ngStyle]="{ color: icon === 'toggle_off' ? 'gray' : 'green' }"
-                                        (click)="toggleIcon()">
-                                        {{ icon }}
-                                    </i></span>
-                            </div>
-                            <div class="combo-box">
-                                <input type="text" id="comboInput" list="options"
-                                    placeholder="Nhập hoặc chọn voucher..." (input)="onInputChange($event)" />
-                                <datalist id="options">
-                                    <option *ngFor="let voucher of voucher" [value]="voucher.ten"
-                                        [attr.data-id]="voucher.id"></option>
-                                </datalist>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -205,71 +150,120 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="voucher">
+                    <div>
+                        <span>Tổng tiền: {{tongTienBanDau | currency:'VND'}}</span>
+                    </div>
+                    <div style="display: flex;">
+                        <div>
+                            <span>Tiền khách đưa: </span>
+                            <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
+                                (input)="getTienTraLai(tienKhachDua)"
+                                [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
+                        </div>
+                        <div *ngIf="tienKhachDua < tongTienSauVoucher">
+                            <span class="error-text">Số tiền khách đưa không đủ!</span>
+                        </div>
+                        <div *ngIf="tienKhachDuaInvalid">
+                            <span class="error-text">Dữ liệu không hợp lệ!</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Tổng tiền phải thanh toán: {{tongTienSauVoucher | currency:'VND'}}</span>
+                    </div>
+                    <div>
+                        <span>Tiền trả lại: {{tienTraLai}}</span>
+                    </div>
+                    <div>
+                        <select class="form-select" (change)="getIdThanhToan($event.target.value)">
+                            <option selected disabled>---chọn phương thức thanh toán</option>
+                            <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
+                                {{phuongThuc.tenPhuongThuc}}</option>
+                        </select>
+                    </div>
+                    <div class="giao-hang">
+                        <span>Giao hàng: <i class="material-icons toggle-icon"
+                                [ngStyle]="{ color: icon === 'toggle_off' ? 'gray' : 'green' }" (click)="toggleIcon()">
+                                {{ icon }}
+                            </i></span>
+                    </div>
+                    <div class="combo-box">
+                        <input type="text" id="comboInput" list="options" placeholder="Nhập hoặc chọn voucher..."
+                            (input)="onInputChange($event)" />
+                        <datalist id="options">
+                            <option *ngFor="let voucher of voucher" [value]="voucher.ten" [attr.data-id]="voucher.id">
+                            </option>
+                        </datalist>
+                    </div>
+                    <div class="payment">
+                        <button (click)="thanhtoanHoaDon(activeInvoidID)"><i class="material-icons">payments</i>Thanh
+                            toán</button>
+                    </div>
+                </div>
+                <div class="address" *ngIf="icon==='toggle_on'">
+                    <form class="form_address" (ngSubmit)="submitAddress()">
+                        <div>
+                            <div class="mb-3">
+                                <label for="hoTen" class="form-label">Họ và Tên</label>
+                                <input type="text" class="form-control" id="hoTen" [(ngModel)]="hoTenNguoiNhan"
+                                    name="hoTen" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="soDienThoai" [(ngModel)]="soDienThoai"
+                                    name="soDienThoai" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="soNha" class="form-label">Số nhà</label>
+                                <input type="text" class="form-control" id="soNha" [(ngModel)]="soNha" name="soNha"
+                                    required>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                <label for="duong" class="form-label">Đường</label>
+                                <input type="text" class="form-control" id="duong" [(ngModel)]="duong" name="duong"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
+                                <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh"
+                                    name="tinhThanh" (change)="onTinhThanhChange($event)" required>
+                                    <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{
+                                        tinh.ProvinceName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quanHuyen" class="form-label">Quận/ huyện</label>
+                                <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen"
+                                    name="quanHuyen" (change)="onQuanHuyenChange($event)" required>
+                                    <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
+                                        quan.DistrictName }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phuongXa" class="form-label">Phường/ xã</label>
+                                <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa"
+                                    name="phuongXa" (change)="onPhuongXaChange($event)" required>
+                                    <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         <!---form danh sách hóa đơn-->
         <div *ngIf="activeTab==='danhSachHoaDon'" class="danh-sach-hoa-don">
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="material-icons">search</i></span>
-                <input type="text" class="form-control" placeholder="Nhập mã hóa đơn or tên khách hàng"
-                    (input)="onKeyworkChange($event)">
-            </div>
-            <div class="row">
-                <table class="table table-hover">
-                    <thead>
-                        <th scope="col">Stt</th>
-                        <th scope="col">Mã hóa đơn</th>
-                        <th scope="col">Tên khách hàng</th>
-                        <th scope="col">Giao hàng</th>
-                        <th scope="col">Phương thức thanh toán</th>
-                        <th scope="col">Thời gian tạo</th>
-                        <th scope="col">Tổng tiền</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col">Thao tác</th>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let hoaDon of hoaDonCho, let i = index">
-                            <th scope="row">{{i+1}}</th>
-                            <td>{{hoaDon.ma}}</td>
-                            <td>{{hoaDon.khachHang.ten}}</td>
-                            <td *ngIf="hoaDon.giaoHang==1">có</td>
-                            <td *ngIf="hoaDon.giaoHang==0">không</td>
-                            <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
-                            <td>{{hoaDon.thoiGianTao}}</td>
-                            <td>{{hoaDon.tongTienSauVoucher}}</td>
-                            <td class="button-select">
-                                <div *ngIf="hoaDon.trangThai==='chờ xác nhận'" class="choXacNhan"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">chờ xác nhận</div>
-                                <div *ngIf="hoaDon.trangThai==='đã xác nhận'" class="daXacNhan"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã xác nhận</div>
-                                <div *ngIf="hoaDon.trangThai==='đang giao hàng'" class="dangGiaoHang"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đang giao hàng</div>
-                                <div *ngIf="hoaDon.trangThai==='hoàn thành'" class="hoanThanh"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">hoàn thành</div>
-                                <div *ngIf="hoaDon.trangThai==='đã hủy'" class="daHuy"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã hủy</div>
-                            </td>
-                            <td style="display: flex;">
-                                <div class="chiTietHoaDon"><i class="material-icons"
-                                        (click)="openPopupHd(hoaDon.id)">visibility</i></div>
-                                <div class="lichSuHoaDon"><i class="material-icons"
-                                        (click)="openPopupHs(hoaDon.id)">history_edu</i></div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <app-history-popup *ngIf="popupHs" [hoaDonId]="hoaDonChoId"
-                    (closePopup)="closePopupHs()"></app-history-popup>
-                <app-table-list *ngIf="popupHd" [hoaDonId]="hoaDonChoId" (closePopup)="closePopupHd()"></app-table-list>
-            </div>
-            <div class="pagination">
-                <button (click)="changePage(pageHoaDonCt - 1)" [disabled]="pageHoaDonCt === 0">
-                    <i class="material-icons">arrow_back_ios</i>
-                </button>
-                <span>Page {{pageHoaDonCt + 1}} of {{paginationHd.totalPage}}</span>
-                <button (click)="changePage(pageHoaDonCt + 1)" [disabled]="pageHoaDonCt === paginationHd.totalPage - 1">
-                    <i class="material-icons">arrow_forward_ios</i>
-                </button>
-            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="page-header">
@@ -344,65 +338,67 @@
                     </div>
                 </div>
             </div>
-            <div class="row"
-                *ngIf="hoaDonChoId!==0&&trangThaiHoaDon ==='đã xác nhận'&&trangThaiHoaDon!=='đang giao hàng'&&idGiaoHang===1">
-                <form class="form_address" (ngSubmit)="submitAddress()">
-                    <div>
-                        <div class="mb-3">
-                            <label for="hoTen" class="form-label">Họ và Tên</label>
-                            <input type="text" class="form-control" id="hoTen" [(ngModel)]="hoTenNguoiNhan" name="hoTen"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="soDienThoai" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" id="soDienThoai" [(ngModel)]="soDienThoai"
-                                name="soDienThoai" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="soNha" class="form-label">Số nhà</label>
-                            <input type="text" class="form-control" id="soNha" [(ngModel)]="soNha" name="soNha"
-                                required>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="mb-3">
-                            <label for="duong" class="form-label">Đường</label>
-                            <input type="text" class="form-control" id="duong" [(ngModel)]="duong" name="duong"
-                                required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
-                            <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh" name="tinhThanh"
-                                (change)="onTinhThanhChange($event)" required>
-                                <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="quanHuyen" class="form-label">Quận/ huyện</label>
-                            <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen" name="quanHuyen"
-                                (change)="onQuanHuyenChange($event)" required>
-                                <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{ quan.DistrictName }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="phuongXa" class="form-label">Phường/ xã</label>
-                            <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa" name="phuongXa"
-                                (change)="onPhuongXaChange($event)" required>
-                                <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}
-                                </option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
-
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="material-icons">search</i></span>
+                <input type="text" class="form-control" placeholder="Nhập mã hóa đơn or tên khách hàng"
+                    (input)="onKeyworkChange($event)">
+            </div>
+            <div class="row">
+                <table class="table table-hover">
+                    <thead>
+                        <th scope="col">Stt</th>
+                        <th scope="col">Mã hóa đơn</th>
+                        <th scope="col">Tên khách hàng</th>
+                        <th scope="col">Giao hàng</th>
+                        <th scope="col">Phương thức thanh toán</th>
+                        <th scope="col">Thời gian tạo</th>
+                        <th scope="col">Tổng tiền</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Thao tác</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let hoaDon of hoaDonCho, let i = index">
+                            <th scope="row">{{i+1}}</th>
+                            <td>{{hoaDon.ma}}</td>
+                            <td>{{hoaDon.khachHang.ten}}</td>
+                            <td *ngIf="hoaDon.giaoHang==1">có</td>
+                            <td *ngIf="hoaDon.giaoHang==0">không</td>
+                            <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
+                            <td>{{hoaDon.thoiGianTao}}</td>
+                            <td>{{hoaDon.tongTienSauVoucher}}</td>
+                            <td class="button-select">
+                                <div *ngIf="hoaDon.trangThai==='chờ xác nhận'" class="choXacNhan"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">chờ xác nhận</div>
+                                <div *ngIf="hoaDon.trangThai==='đã xác nhận'" class="daXacNhan"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã xác nhận</div>
+                                <div *ngIf="hoaDon.trangThai==='đang giao hàng'" class="dangGiaoHang"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">đang giao hàng</div>
+                                <div *ngIf="hoaDon.trangThai==='hoàn thành'" class="hoanThanh"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">hoàn thành</div>
+                                <div *ngIf="hoaDon.trangThai==='đã hủy'" class="daHuy"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã hủy</div>
+                            </td>
+                            <td style="display: flex;">
+                                <div class="chiTietHoaDon"><i class="material-icons"
+                                        (click)="openPopupHd(hoaDon.id)">visibility</i></div>
+                                <div class="lichSuHoaDon"><i class="material-icons"
+                                        (click)="openPopupHs(hoaDon.id)">history_edu</i></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <app-history-popup *ngIf="popupHs" [hoaDonId]="hoaDonChoId"
+                    (closePopup)="closePopupHs()"></app-history-popup>
+                <app-table-list *ngIf="popupHd" [hoaDonId]="hoaDonChoId" (closePopup)="closePopupHd()"></app-table-list>
+            </div>
+            <div class="pagination">
+                <button (click)="changePage(pageHoaDonCt - 1)" [disabled]="pageHoaDonCt === 0">
+                    <i class="material-icons">arrow_back_ios</i>
+                </button>
+                <span>Page {{pageHoaDonCt + 1}} of {{paginationHd.totalPage}}</span>
+                <button (click)="changePage(pageHoaDonCt + 1)" [disabled]="pageHoaDonCt === paginationHd.totalPage - 1">
+                    <i class="material-icons">arrow_forward_ios</i>
+                </button>
             </div>
         </div>
     </div>
