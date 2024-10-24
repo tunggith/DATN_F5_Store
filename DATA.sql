@@ -103,7 +103,7 @@ INSERT INTO ANH_CHI_TIET_SAN_PHAM (ID_CHI_TIET_SAN_PHAM, URL_ANH) VALUES
 select*from ANH_CHI_TIET_SAN_PHAM
 
 INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT,ROLES, USERNAME, [PASSWORD], TRANG_THAI) VALUES
-('KH001', 'Khách vãng lai', null, null, null, null, null,null ,null,null),
+('KH001', 'Khách vãng lai', null,null, null, null, null, null,null ,null,null),
 ('KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@example.com', 'anh2.jpg', '0987654321','CUSTOMER', N'tranthib', 'password456', N'đang hoạt động'),
 ('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@example.com', 'anh3.jpg', '0909123456','CUSTOMER', N'phamvanc', 'password789', N'đang hoạt động'),
 ('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@example.com', 'anh4.jpg', '0911223344', N'lethid','CUSTOMER', 'password101', N'đang hoạt động'),
