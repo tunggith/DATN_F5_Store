@@ -492,7 +492,7 @@ export class BanHangComponent implements OnInit {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
       data => {
         this.trangThaiHoaDon = data.result.content.trangThai;
-        if (this.trangThaiHoaDon != 'đã hủy') {
+        if (this.trangThaiHoaDon != 'Đã hủy') {
           this.isHidden = false;
         } else {
           this.isHidden = true;

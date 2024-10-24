@@ -99,7 +99,7 @@
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
                         <div class="card-header card-header-warning">
-                            <h4 class="card-title">Sản phẩm</h4>
+                            <h4 class="card-title">Danh sách sản phẩm</h4>
                             <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
                                 (input)="searchProduct()">
                         </div>
@@ -114,7 +114,7 @@
                                     <th>Màu sắc</th>
                                     <th>Giới Tính</th>
                                     <th>Size</th>
-                                    <th>số lượng</th>
+                                    <th>Số lượng</th>
                                     <th>Đơn giá</th>
                                     <th>Thao tác</th>
                                 </thead>
@@ -269,7 +269,7 @@
                     <div class="page-header">
                         <h1>Thông tin đơn hàng</h1>
                         <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
-                        <button *ngIf="trangThaiHoaDon==='hoàn thành'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
+                        <button *ngIf="trangThaiHoaDon==='Hoàn thành'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
                             <i class="material-icons">print</i>
                         </button>
                         <button *ngIf="trangThaiHoaDon==='chờ xác nhận' &&!isHidden"
@@ -283,17 +283,17 @@
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
                     <button *ngIf="trangThaiHoaDon==='chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
-                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">xác nhận</button>
+                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
                     <button *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
                     <button
                         *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='đang giao hàng' &&!isHidden"
-                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">hoàn thành</button>
+                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div style="display:inline-block;width:100%;overflow-x:hidden;" *ngIf="!isHidden">
                         <div class="row main-timeline10">
                             <!-- Trạng thái Chờ xác nhận -->
                             <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-                                [ngClass]="{'active': trangThaiHoaDon === 'chờ xác nhận' || trangThaiHoaDon === 'đã xác nhận' || trangThaiHoaDon === 'đang giao hàng'||trangThaiHoaDon === 'hoàn thành'}">
+                                [ngClass]="{'active': trangThaiHoaDon === 'Chờ xác nhận' || trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng'||trangThaiHoaDon === 'Hoàn thành'}">
                                 <div class="timeline-inner">
                                     <h4>Chờ xác nhận</h4>
                                     <div class="timeline-icon">
@@ -304,7 +304,7 @@
 
                             <!-- Trạng thái Đã xác nhận -->
                             <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-                                [ngClass]="{'active': trangThaiHoaDon === 'đã xác nhận' || trangThaiHoaDon === 'đang giao hàng'||trangThaiHoaDon === 'hoàn thành'}">
+                                [ngClass]="{'active': trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng'||trangThaiHoaDon === 'Hoàn thành'}">
                                 <div class="timeline-inner">
                                     <h4>Đã xác nhận</h4>
                                     <div class="timeline-icon">
@@ -315,7 +315,7 @@
 
                             <!-- Trạng thái Đang giao hàng -->
                             <div *ngIf="idGiaoHang=== 1" class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-                                [ngClass]="{'active': trangThaiHoaDon === 'đang giao hàng' || trangThaiHoaDon === 'hoàn thành'}">
+                                [ngClass]="{'active': trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'}">
                                 <div class="timeline-inner">
                                     <h4>Đang giao hàng</h4>
                                     <div class="timeline-icon">
@@ -326,7 +326,7 @@
 
                             <!-- Trạng thái Hoàn thành -->
                             <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-                                [ngClass]="{'active': trangThaiHoaDon === 'hoàn thành'}">
+                                [ngClass]="{'active': trangThaiHoaDon === 'Hoàn thành'}">
                                 <div class="timeline-inner">
                                     <h4>Hoàn thành</h4>
                                     <div class="timeline-icon">
@@ -367,16 +367,16 @@
                             <td>{{hoaDon.thoiGianTao}}</td>
                             <td>{{hoaDon.tongTienSauVoucher}}</td>
                             <td class="button-select">
-                                <div *ngIf="hoaDon.trangThai==='chờ xác nhận'" class="choXacNhan"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">chờ xác nhận</div>
-                                <div *ngIf="hoaDon.trangThai==='đã xác nhận'" class="daXacNhan"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã xác nhận</div>
-                                <div *ngIf="hoaDon.trangThai==='đang giao hàng'" class="dangGiaoHang"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đang giao hàng</div>
-                                <div *ngIf="hoaDon.trangThai==='hoàn thành'" class="hoanThanh"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">hoàn thành</div>
-                                <div *ngIf="hoaDon.trangThai==='đã hủy'" class="daHuy"
-                                    (click)="getIdThongTinDonHang(hoaDon.id)">đã hủy</div>
+                                <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">Chờ xác nhận</div>
+                                <div *ngIf="hoaDon.trangThai==='Đã xác nhận'" class="daXacNhan"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">Đã xác nhận</div>
+                                <div *ngIf="hoaDon.trangThai==='Đang giao hàng'" class="dangGiaoHang"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">Đang giao hàng</div>
+                                <div *ngIf="hoaDon.trangThai==='Hoàn thành'" class="hoanThanh"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">Hoàn thành</div>
+                                <div *ngIf="hoaDon.trangThai==='Đã hủy'" class="daHuy"
+                                    (click)="getIdThongTinDonHang(hoaDon.id)">Đã hủy</div>
                             </td>
                             <td style="display: flex;">
                                 <div class="chiTietHoaDon"><i class="material-icons"
