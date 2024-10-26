@@ -7,6 +7,7 @@ import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.KhachHangService;
+import com.example.datn_f5_store.service.sendEmail.SendEmailService;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,9 +15,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +28,8 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Autowired
     private IKhachHangRepository khachHangRepository;
+    @Autowired
+    private SendEmailService sendEmailService;
 
 
     @Override
@@ -64,14 +70,13 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
             throw new BadRequestException("Email đã tồn tại, không thể thêm mới!");
         }
-        if (khachHangRepository.existsByUserName(khachHangRequest.getUserName())) {
-            throw new BadRequestException("Username đã tồn tại, không thể thêm mới!");
-        }
         if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
             throw new BadRequestException("Email phải có đuôi @gmail.com");
         }
 
         try {
+            String username = khachHangRequest.getEmail(); // Hoặc email nếu bạn muốn gửi đến email
+            String password = khachHangRequest.getPassword(); // Mật khẩu mà khách hàng đã tạo
             KhachHangEntity khachHang = new KhachHangEntity();
             khachHang.setMa(generateMaKhachHang());
             khachHang.setTen(khachHangRequest.getTen());
@@ -80,17 +85,29 @@ public class KhachHangServiceImpl implements KhachHangService {
             khachHang.setEmail(khachHangRequest.getEmail());
             khachHang.setSdt(khachHangRequest.getSdt());
             khachHang.setAnh(khachHangRequest.getAnh());
-            khachHang.setUserName(khachHangRequest.getUserName());
-            khachHang.setPassword(khachHangRequest.getPassword());
+            khachHang.setUserName(username);
+            khachHang.setPassword(password);
             khachHang.setTrangThai("đang hoạt động");
 
+            // Lưu khách hàng vào database
             khachHangRepository.save(khachHang);
-            return new DataResponse(true,new ResultModel<>(null,"create successfully"));
+
+            // Gửi email thông báo
+
+            DataResponse emailResponse = sendEmailService.sendSimpleEmail(khachHangRequest.getEmail(), username, password);
+
+            // Kiểm tra phản hồi từ việc gửi email
+            if (!emailResponse.isStatus()) {
+                return new DataResponse(false, new ResultModel<>(null, "Tạo khách hàng thành công nhưng gửi email thất bại: " + emailResponse.getResult()));
+            }
+
+            return new DataResponse(true, new ResultModel<>(null, "Tạo khách hàng thành công và đã gửi email"));
         } catch (Exception e) {
             e.printStackTrace();
-            return new DataResponse(false, new ResultModel<>(null,"create exception"));
+            return new DataResponse(false, new ResultModel<>(null, "Lỗi trong quá trình tạo khách hàng"));
         }
     }
+
 
     @Override
     public DataResponse create(KhachHangRequest request) throws BadRequestException {
@@ -107,6 +124,10 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (request.getSdt() == null || !request.getSdt().matches("^\\d{10}$")) {
             throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
         }
+
+        String username = request.getEmail();
+        String password = this.generatePassword();
+        // Tạo mã khách hàng
         var ma = this.generateMaKhachHang();
         KhachHangEntity khachHang = new KhachHangEntity();
         khachHang.setMa(ma);
@@ -115,10 +136,25 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
         khachHang.setEmail(request.getEmail());
         khachHang.setSdt(request.getSdt());
+        khachHang.setUserName(username);
+        khachHang.setPassword(password);
         khachHang.setTrangThai("đang hoạt động");
+
+        // Lưu khách hàng vào database
         khachHangRepository.save(khachHang);
-        return new DataResponse(true,new ResultModel<>(null,"create khach hang successfull"));
+        request.setUserName(request.getEmail());
+        // Gửi email thông báo
+
+        DataResponse emailResponse = sendEmailService.sendSimpleEmail(request.getEmail(), username, password);
+
+        // Kiểm tra phản hồi từ việc gửi email
+        if (!emailResponse.isStatus()) {
+            return new DataResponse(false, new ResultModel<>(null, "Tạo khách hàng thành công nhưng gửi email thất bại: " + emailResponse.getResult()));
+        }
+
+        return new DataResponse(true, new ResultModel<>(null, "Tạo khách hàng thành công và đã gửi email"));
     }
+
 
     // Phương thức để sinh mã khách hàng
     private String generateMaKhachHang() {
@@ -257,6 +293,13 @@ public class KhachHangServiceImpl implements KhachHangService {
     public KhachHangEntity detail(Integer id) {
         KhachHangEntity khachHang = khachHangRepository.findById(id).orElse(null);
         return khachHang;
+    }
+    public String generatePassword() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("mmss");
+        String timeFormat = now.format(dateTimeFormatter);
+        String uuidPart = UUID.randomUUID().toString().substring(0, 5);
+        return uuidPart + timeFormat;
     }
 }
 
