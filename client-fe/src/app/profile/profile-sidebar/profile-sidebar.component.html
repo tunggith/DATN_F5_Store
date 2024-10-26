@@ -1,0 +1,87 @@
+<div class="info">
+  <div class="imgCustomer">
+    <img
+      id="avatar"
+      class="pointer"
+      [src]="loggedCust.image.imageUrl"
+      (click)="openFileInput()"
+      title="Nhấp để thay ảnh đại diện"
+    />
+
+    <input
+      id="fileInput"
+      type="file"
+      hidden
+      accept="image/*"
+      (change)="imageChange($event, 'avatar')"
+    />
+  </div>
+</div>
+
+<div class="nameCustomer">
+  <div class="text-center">
+    <div>
+      <button
+        class="btn btn-primary me-1"
+        *ngIf="selectFile"
+        (click)="updateAvatar()"
+      >
+        Cập nhật ảnh đại diện
+      </button>
+      <button
+        class="btn btn-danger"
+        *ngIf="selectFile"
+        (click)="cancelUpdateAvatar()"
+      >
+        Hủy
+      </button>
+    </div>
+    <span>{{ loggedCust.hoTen }}</span>
+    <a href="profile/my-account/"><i class="bi bi-pencil-square"></i></a>
+  </div>
+</div>
+
+<ul class="listChucNang">
+  <li
+    class="itemChucNang pointer rounded"
+    routerLink="/profile/my-account"
+    routerLinkActive="active"
+  >
+    <i class="bi bi-credit-card-2-back"></i>
+    Thông tin tài khoản
+  </li>
+  <li
+    class="itemChucNang pointer rounded"
+    routerLink="/profile/my-discounts"
+    routerLinkActive="active"
+  >
+    <i class="bi bi-credit-card-2-back"></i>
+    Mã ưu đãi của tôi
+  </li>
+  <li
+    class="itemChucNang pointer rounded"
+    routerLink="/profile/my-orders"
+    routerLinkActive="active"
+  >
+    <i class="bi bi-box-seam"></i>
+    Đơn hàng của tôi
+  </li>
+  <li
+    class="itemChucNang pointer rounded"
+    routerLink="/profile/my-addresses"
+    routerLinkActive="active"
+  >
+    <i class="bi bi-geo-alt"></i>
+    Sổ địa chỉ
+  </li>
+  <li
+    class="itemChucNang pointer rounded"
+    routerLink="/profile/change-password"
+    routerLinkActive="active"
+  >
+    <i class="bi bi-shield-lock"></i>
+    Đổi mật khẩu
+  </li>
+</ul>
+
+<app-overlay *ngIf="isLoadding" [text]="overlayText"></app-overlay>

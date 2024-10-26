@@ -170,12 +170,12 @@ public class ChiTietSanPhamImpl {
         Page<ChiTietSanPhamEntity> chiTietSanPham;
         if (keyword == null || keyword.trim().isEmpty()) {
             // Nếu keyword là null hoặc chuỗi trống, chỉ lọc theo trạng thái
-            chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("còn hàng", "đang hoạt động", pageable);
+            chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("Còn hàng", "Đang hoạt động", pageable);
         } else {
             // Nếu có keyword, thêm điều kiện tìm kiếm theo keyword
             chiTietSanPham = repo_ctsp.getByTrangThai(
                     "Còn hàng",
-                    "đang hoạt động",
+                    "Đang hoạt động",
                     keyword,
                     pageable);
         }
