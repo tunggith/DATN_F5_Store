@@ -1,7 +1,8 @@
+import { response } from 'express';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CustomerService } from './KhachHang.service';
 import { DatePipe } from '@angular/common';
-// im {GiaoHangNhanhService} from './giaoHangNhanh.service';
+
 declare var $: any;
 import Swal from 'sweetalert2';
 import { error, log } from 'console';
@@ -30,7 +31,11 @@ export class KhachHangComponent implements OnInit {
   updateKhachHangData: any = {
     gioiTinh: '0',
     trangThai: 'Đang hoạt động',
+    anh: '',
   };
+  isUpdating: boolean = false; // Biến để xác định hành động
+  isAdding: boolean = true; // Biến để xác định hành động thêm
+
 
   // Phân trang
   totalElements: number = 0;
@@ -134,7 +139,7 @@ export class KhachHangComponent implements OnInit {
       return; // Ngừng lại nếu dữ liệu không hợp lệ
     }
 
-    this.customerService.updateKhachHang(id, this.newKhachHang).subscribe(() => {
+    this.customerService.updateKhachHang(id, this.newKhachHang).subscribe((response) => {
       Swal.fire({
         title: 'Thành công!',
         text: 'Khách hàng đã được cập nhật thành công.',
@@ -143,6 +148,8 @@ export class KhachHangComponent implements OnInit {
       });
       this.loadKhachHang(this.currentPage);
       this.updateKhachHangData = {};
+      // this.isUpdating = false; // Đặt lại trạng thái sau khi cập nhật
+
     }, error => {
       Swal.fire({
         title: 'Lỗi!',
@@ -179,14 +186,6 @@ export class KhachHangComponent implements OnInit {
       Swal.fire('Lỗi!', 'Số điện thoại phải từ 10 đến 11 ký tự.', 'error');
       return false;
     }
-    if (!khachHang.userName) {
-      Swal.fire('Lỗi!', 'Tên người dùng không được để trống.', 'error');
-      return false;
-    }
-    if (!khachHang.password || khachHang.password.length < 6) {
-      Swal.fire('Lỗi!', 'Mật khẩu phải ít nhất 6 ký tự.', 'error');
-      return false;
-    }
 
     return true; // Tất cả các kiểm tra đều hợp lệ
   }
@@ -201,6 +200,9 @@ export class KhachHangComponent implements OnInit {
     this.newKhachHang = { ...khachHang }; // Sao chép thông tin của nhân viên vào newNhanVien
     this.newKhachHang.ngayThangNamSinh = this.formatDate(khachHang.ngayThangNamSinh); // Định dạng lại ngày sinh
     this.updateKhachHangData.id = khachHang.id; // Lưu ID của nhân viên cần cập nhật
+    this.isUpdating = true; // Đặt biến là true khi đang cập nhật
+    this.isAdding = false; // Đặt lại trạng thái về thêm
+
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -213,12 +215,12 @@ export class KhachHangComponent implements OnInit {
       namSinh: '',
       email: '',
       sdt: '',
+      roles :'',
       anh: '',
-      userName: '',
-      password: '',
       trangThai: 'Đang hoạt động',
-      diaChiKhachHangId: null,
     };
+    this.isAdding = true; // Đặt lại trạng thái về thêm
+    this.isUpdating = false; // Đặt lại trạng thái sau khi reset form
   }
 
   toggleStatus(id: number): void {
@@ -260,5 +262,7 @@ export class KhachHangComponent implements OnInit {
       console.error('Lỗi khi tìm kiếm khách hàng:', error);
     });
   }
+
   protected readonly document = document;
 }
+

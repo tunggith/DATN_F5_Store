@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DiaChiKhachHangService } from './dia-chi-khach-hang.service';
 import Swal from 'sweetalert2';
 import { error, log } from 'console';
-
+import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 
 
 @Component({
@@ -15,13 +15,26 @@ export class DiaChiKhachHangComponent implements OnInit {
   @Input() idKhachHang !: number;
   //Địa chỉ khách hàng
   customersDiaChi: any[] = [];
+  phuongXa: string = '';
+  quanHuyen: string = '';
+  tinhThanh: string = '';
+  // myControl = new FormControl('');
+  // options: any[] = [];
+  // filteredOptions: Observable<string[]>;
+  provinces: any[] = [];
+  districts: any[] = [];
+  wards: any[] = [];
+  selectedTinhThanh: string;
+  selectedQuanHuyen: string;
+  selectedPhuongXa: string;
   page: number = 0;
-  size: number = 3;
+  size: number = 2;
   pagination: any = [];
   idDiaChi: number=0;
   diaChiMoi: any={
       soNha: '',
       duong: '',
+      sdt: '',
       phuongXa: '',
       quanHuyen: '',
       tinhThanh: '',
@@ -30,9 +43,11 @@ export class DiaChiKhachHangComponent implements OnInit {
       trangThai: 'Còn sử dụng'
   }
 
-  constructor(private diaChiKhachHangService: DiaChiKhachHangService) { }
+  constructor(private diaChiKhachHangService: DiaChiKhachHangService, private giaoHangNhanhService: GiaoHangNhanhService) { }
   ngOnInit(): void {
     this.loadDiaChi(this.idKhachHang);
+    this.loadProvinces();
+
   }
   // =================== Thông báo ===================
 
@@ -105,10 +120,14 @@ export class DiaChiKhachHangComponent implements OnInit {
     )
   }
   createDiaChi(): void {
+    this.diaChiMoi.phuongXa = this.selectedPhuongXa;
+    this.diaChiMoi.quanHuyen = this.selectedQuanHuyen;
+    this.diaChiMoi.tinhThanh = this.selectedTinhThanh;
     const diaChiData = {
       idKhachHang: this.idKhachHang,
       soNha: this.diaChiMoi.soNha,
       duong: this.diaChiMoi.duong,
+      sdt: this.diaChiMoi.sdt,
       phuongXa: this.diaChiMoi.phuongXa,
       quanHuyen: this.diaChiMoi.quanHuyen,
       tinhThanh: this.diaChiMoi.tinhThanh,
@@ -118,7 +137,7 @@ export class DiaChiKhachHangComponent implements OnInit {
     };
     this.diaChiKhachHangService.addDiaChiKhachHang(diaChiData).subscribe(
       response=>{
-        this.showSuccessMessage("add thành công!");
+        this.showSuccessMessage("Add thành công!");
         this.loadDiaChi(this.idKhachHang);
       },
       error=>{
@@ -127,26 +146,104 @@ export class DiaChiKhachHangComponent implements OnInit {
     )
   }
   updateDiaChi():void{
+    this.diaChiMoi.phuongXa = this.selectedPhuongXa;
+    this.diaChiMoi.quanHuyen = this.selectedQuanHuyen;
+    this.diaChiMoi.tinhThanh = this.selectedTinhThanh;
     const diaChiData = {
+      // idKhachHang: this.idKhachHang,
+      // soNha: '',
+      // duong: '',
+      // phuongXa: '',
+      // quanHuyen: '',
+      // tinhThanh: '',
+      // quocGia: '',
+      // loaiDiaChi: '',
+      // trangThai: ''
       idKhachHang: this.idKhachHang,
-      soNha: '',
-      duong: '',
-      phuongXa: '',
-      quanHuyen: '',
-      tinhThanh: '',
-      quocGia: '',
-      loaiDiaChi: '',
-      trangThai: ''
+      soNha: this.diaChiMoi.soNha,
+      duong: this.diaChiMoi.duong,
+      sdt : this.diaChiMoi.sdt,
+      phuongXa: this.diaChiMoi.phuongXa,
+      quanHuyen: this.diaChiMoi.quanHuyen,
+      tinhThanh: this.diaChiMoi.tinhThanh,
+      quocGia: this.diaChiMoi.quocGia,
+      loaiDiaChi: this.diaChiMoi.loaiDiaChi,
+      trangThai: this.diaChiMoi.trangThai
     };
-    this.diaChiKhachHangService.updateDiaChiKhachHang(this.idDiaChi,diaChiData).subscribe(
+    this.diaChiKhachHangService.updateDiaChiKhachHang(this.idKhachHang,diaChiData).subscribe(
       response=>{
-        this.showSuccessMessage("cập nhật thành công!");
+        this.showSuccessMessage("Cập nhật thành công!");
         this.loadDiaChi(this.idKhachHang);
       },
       error=>{
         this.handleError(error);
       }
     )
+  }
+    
+  loadProvinces(): void {
+    this.giaoHangNhanhService.getProvinces().subscribe(
+      data => {
+        this.provinces = data['data'];  // Gán dữ liệu vào 'provinces'
+      },
+      error => {
+        console.error('Lỗi khi tải danh sách tỉnh/thành:', error);
+      }
+    );
+  }
+  
+  // Xử lý khi thay đổi tỉnh/thành
+  onTinhThanhChange(event: any): void {
+    const provinceId = event.target.value;
+    this.selectedTinhThanh = provinceId;  // Lưu ID tỉnh/thành
+    console.log(this.selectedTinhThanh);
+    this.tinhThanh = this.provinces.find(p => p.ProvinceID === Number(provinceId))?.ProvinceName || '';  // Gán tên tỉnh/thành
+
+    this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
+      data => {
+        this.districts = data['data'];  // Gán dữ liệu vào 'districts'
+        this.wards = [];  // Xóa danh sách phường/xã khi chọn tỉnh/thành mới
+        this.selectedQuanHuyen = '';  // Reset quận/huyện
+        this.selectedPhuongXa = '';  // Reset phường/xã
+        this.quanHuyen = '';  // Reset tên quận/huyện
+        this.phuongXa = '';  // Reset tên phường/xã
+      },
+      error => {
+        console.error('Lỗi khi tải danh sách quận/huyện:', error);
+      }
+    );
+  }
+
+  // Xử lý khi thay đổi quận/huyện
+  onQuanHuyenChange(event: any): void {
+    const districtId = event.target.value;
+    this.selectedQuanHuyen = districtId;  // Lưu ID quận/huyện
+    console.log(this.selectedQuanHuyen);
+    this.quanHuyen = this.districts.find(d => d.DistrictID === Number(districtId))?.DistrictName || '';  // Gán tên quận/huyện
+
+    this.giaoHangNhanhService.getWards(districtId).subscribe(
+      data => {
+        this.wards = data['data'];  // Gán dữ liệu vào 'wards'
+      },
+      error => {
+        console.error('Lỗi khi tải danh sách phường/xã:', error);
+      }
+    );
+  }
+
+  // Xử lý khi thay đổi phường/xã
+  onPhuongXaChange(event: any): void {
+    const wardCode = event.target.value; // Lấy mã phường/xã từ sự kiện
+    this.selectedPhuongXa = wardCode; // Lưu mã phường/xã
+
+    // Tìm tên phường/xã tương ứng
+    const foundWard = this.wards.find(w => w.WardCode === wardCode); // So sánh trực tiếp với wardCode
+
+    if (foundWard) {
+      this.phuongXa = foundWard.WardName; // Gán tên phường/xã
+    } else {
+      this.phuongXa = ''; // Nếu không tìm thấy, gán rỗng
+    }
   }
 
 }
