@@ -377,7 +377,7 @@
     table-layout: auto; /* Cột tự điều chỉnh kích thước dựa trên nội dung */
   }
   .table thead{
-    background-color: #dc3545;
+    background-color: #03009a;
     color: #ffff;
     font-weight: bold;
   }

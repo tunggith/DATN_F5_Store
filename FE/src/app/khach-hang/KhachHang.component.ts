@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CustomerService } from './KhachHang.service';
 import { DatePipe } from '@angular/common';
-
+// im {GiaoHangNhanhService} from './giaoHangNhanh.service';
 declare var $: any;
 import Swal from 'sweetalert2';
 import { error, log } from 'console';
@@ -260,5 +260,5 @@ export class KhachHangComponent implements OnInit {
       console.error('Lỗi khi tìm kiếm khách hàng:', error);
     });
   }
-
+  protected readonly document = document;
 }
