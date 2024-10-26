@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -59,150 +61,124 @@ public class VoucherServicelmpl implements VoucherService {
 
     // hàm thêm mới Voucher
     @Override
-    public DataResponse createVoucher(VoucherRequest voucher){
-        Date ngayHienTai = new Date();
-        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    public DataResponse createVoucher(VoucherRequest voucher) {
+        // Lấy thời gian hiện tại bao gồm cả ngày, giờ, phút
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
 
         VoucherEntity voucher1 = new VoucherEntity();
         try {
             if (CheckVoucher(voucher)) {
+                // Kiểm tra trùng mã voucher
                 if (checkTrungMaVoucher(voucher.getMa())) {
-                    if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
+                    // Kiểm tra điều kiện cho giảm giá
+                    if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99) {
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
                     }
-                    if (voucher.getThoiGianBatDau() == null ){
+                    if (voucher.getThoiGianBatDau() == null) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
                     }
-                    if (voucher.getThoiGianKetThuc() == null ){
+                    if (voucher.getThoiGianKetThuc() == null) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
                     }
-                    if (voucher.getThoiGianBatDau().after(voucher.getThoiGianKetThuc())) {
+                    if (voucher.getThoiGianBatDau().isAfter(voucher.getThoiGianKetThuc())) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
                     }
+
+                    // Gán giá trị cho voucher
                     voucher1.setMa(voucher.getMa());
                     voucher1.setTen(voucher.getTen());
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
                     voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
                     voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
-                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
+                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau()); // Giữ nguyên LocalDateTime
+                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc()); // Giữ nguyên LocalDateTime
                     voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                     voucher1.setSoLuong(voucher.getSoLuong());
                     voucher1.setNguoiTao("ADMIN");
-                    voucher1.setThoiGianTao(ngayHienTai);
+                    voucher1.setThoiGianTao(Timestamp.valueOf(currentDateTime)); // Lấy thời gian hiện tại
                     voucher1.setMoTa(voucher.getMoTa());
-                    LocalDate thoiGianBatDau = voucher.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate thoiGianKetThuc = voucher.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    if (thoiGianKetThuc.isBefore(currentDate)) {
-                        voucher1.setTrangThai("Đã hết hạn");
-                    } else if (thoiGianBatDau.isEqual(currentDate)) {
-                        voucher1.setTrangThai("Đang diễn ra");
-                    } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
+
+                    // Kiểm tra trạng thái của voucher
+                    if (voucher1.getThoiGianKetThuc().isBefore(currentDateTime)) {
+                        voucher1.setTrangThai("Đã kết thúc");
+                    } else if (voucher1.getThoiGianBatDau().isBefore(currentDateTime) && voucher1.getThoiGianKetThuc().isAfter(currentDateTime)) {
                         voucher1.setTrangThai("Đang diễn ra");
                     } else {
                         voucher1.setTrangThai("Sắp diễn ra");
                     }
+
+                    // Lưu voucher vào cơ sở dữ liệu
                     iVoucherRepository.save(voucher1);
                     return new DataResponse(true, new ResultModel<>(null, "Thêm Voucher thành công"));
                 }
                 return new DataResponse(false, new ResultModel<>(null, "Mã Voucher đã tồn tại"));
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
-        }catch (Exception e){
-            return new DataResponse(false, new ResultModel<>(null, "Thêm thất bại do lỗi : " + e));
+        } catch (Exception e) {
+            return new DataResponse(false, new ResultModel<>(null, "Thêm thất bại do lỗi: " + e));
         }
     }
+
 
 
     // hàm Update Voucher theo id
     @Override
     public DataResponse updateVoucher(Integer id, VoucherRequest voucher) throws DataNotFoundException {
-        Date ngayHienTai = new Date();
-        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(()
-                -> new DataNotFoundException("Không thể sửa Voucher với id : "+ voucher.getId()));
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+        VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(() ->
+                new DataNotFoundException("Không thể sửa Voucher với id : " + id));
+
         try {
-            if (voucher1 != null) {
-                if (CheckVoucher(voucher)) {
-                    if(voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99){
-                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
-                    }
-                    if(!voucher1.getThoiGianBatDau().after(ngayHienTai) && voucher1.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")){
-                        if (voucher.getThoiGianKetThuc() == null ){
-                            return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
-                        }
-                        if (voucher.getThoiGianBatDau().after(voucher.getThoiGianKetThuc())) {
-                            return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
-                        }
-                        voucher1.setId(voucher.getId());
-                        voucher1.setTen(voucher.getTen());
-                        voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
-                        voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                        voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                        voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
-                        voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
-                        voucher1.setSoLuong(voucher.getSoLuong());
-                        voucher1.setThoiGianSua(ngayHienTai);
-                        voucher1.setNguoiSua("ADMIN");
-                        voucher1.setMoTa(voucher.getMoTa());
-                        LocalDate thoiGianBatDau = voucher.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        LocalDate thoiGianKetThuc = voucher.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        if (thoiGianKetThuc.isBefore(currentDate)) {
-                            voucher1.setTrangThai("Đã hết hạn");
-                        } else if (thoiGianBatDau.isEqual(currentDate)) {
-                            voucher1.setTrangThai("Đang diễn ra");
-                        } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
-                            voucher1.setTrangThai("Đang diễn ra");
-                        } else {
-                            voucher1.setTrangThai("Sắp diễn ra");
-                        }
-                        iVoucherRepository.save(voucher1);
-                        return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
-                    }
-                    else{
-                        if (voucher.getThoiGianBatDau() == null ){
-                            return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
-                        }
-                        if (voucher.getThoiGianKetThuc() == null ){
-                            return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
-                        }
-                        if (voucher.getThoiGianBatDau().after(voucher.getThoiGianKetThuc())) {
-                            return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
-                        }
-                        voucher1.setId(voucher.getId());
-                        voucher1.setTen(voucher.getTen());
-                        voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
-                        voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                        voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                        voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
-                        voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
-                        voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
-                        voucher1.setSoLuong(voucher.getSoLuong());
-                        voucher1.setThoiGianSua(ngayHienTai);
-                        voucher1.setNguoiSua("ADMIN");
-                        voucher1.setMoTa(voucher.getMoTa());
-                        LocalDate thoiGianBatDau = voucher.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        LocalDate thoiGianKetThuc = voucher.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                        if (thoiGianKetThuc.isBefore(currentDate)) {
-                            voucher1.setTrangThai("Đã hết hạn");
-                        } else if (thoiGianBatDau.isEqual(currentDate)) {
-                            voucher1.setTrangThai("Đang diễn ra");
-                        } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
-                            voucher1.setTrangThai("Đang diễn ra");
-                        } else {
-                            voucher1.setTrangThai("Sắp diễn ra");
-                        }
-                        iVoucherRepository.save(voucher1);
-                        return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
-                    }
+            if (CheckVoucher(voucher)) {
+                if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99) {
+                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
                 }
-                return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được bỏ trống hoặc giá trị phải > 0"));
+
+                LocalDateTime thoiGianBatDau = voucher.getThoiGianBatDau();
+                LocalDateTime thoiGianKetThuc = voucher.getThoiGianKetThuc();
+
+                if (thoiGianBatDau == null) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
+                }
+                if (thoiGianKetThuc == null) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
+                }
+                if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                }
+
+                // Update voucher properties
+                voucher1.setTen(voucher.getTen());
+                voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
+                voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
+                voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
+                voucher1.setThoiGianBatDau(thoiGianBatDau);
+                voucher1.setThoiGianKetThuc(thoiGianKetThuc);
+                voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
+                voucher1.setSoLuong(voucher.getSoLuong());
+                voucher1.setThoiGianSua(Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+                voucher1.setNguoiSua("ADMIN");
+                voucher1.setMoTa(voucher.getMoTa());
+
+                // Check status based on date and time
+                if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                    voucher1.setTrangThai("Đã kết thúc");
+                } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
+                    voucher1.setTrangThai("Đang diễn ra");
+                } else {
+                    voucher1.setTrangThai("Sắp diễn ra");
+                }
+
+                iVoucherRepository.save(voucher1);
+                return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
             }
-            return new DataResponse(false, new ResultModel<>(null, "Không tìm thay voucher với id là : "+ id));
-        }catch (Exception e){
-            return new DataResponse(false, new ResultModel<>(null, "Sửa voucher thất bại với lỗi : "+ e));
+            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
+        } catch (Exception e) {
+            return new DataResponse(false, new ResultModel<>(null, "Sửa thất bại do lỗi : " + e.getMessage()));
         }
     }
+
+
 
     // hàm find Voucher theo id
     @Override
@@ -212,35 +188,46 @@ public class VoucherServicelmpl implements VoucherService {
     }
 
     // hàm cập nhập trạng thái Voucher
+
     @Override
-    public Boolean CapNhapTrangThaiVoucher(Integer id) throws DataNotFoundException{
-        Date ngayHienTai = new Date();
-        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        VoucherEntity voucher1 = iVoucherRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Không thể cập nhập trạng thái với id : "+ id)
-        );
-        LocalDate thoiGianBatDau = voucher1.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate thoiGianKetThuc = voucher1.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if (voucher1.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") || voucher1.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
-            voucher1.setTrangThai("Không hoạt động");
-            iVoucherRepository.save(voucher1);
-            return true;
+    public DataResponse CapNhapTrangThaiVoucher(Integer id){
+        // Lấy thời gian hiện tại
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
+        // Tìm khuyến mãi theo ID
+        VoucherEntity khuyenMai = iVoucherRepository.findById(id).get();
+
+        LocalDateTime thoiGianBatDau = khuyenMai.getThoiGianBatDau();
+        LocalDateTime thoiGianKetThuc = khuyenMai.getThoiGianKetThuc();
+
+        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") ||
+                khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")) {
+            khuyenMai.setTrangThai("Đã kết thúc");
+            iVoucherRepository.save(khuyenMai);
+            return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái Voucher thành Đã kết thúc thành công" ));
         }
-        if (voucher1.getTrangThai().trim().equalsIgnoreCase("Không hoạt động")){
-            if (thoiGianKetThuc.isBefore(currentDate)) {
-                voucher1.setTrangThai("Đã hết hạn");
-            } else if (thoiGianBatDau.isEqual(currentDate)) {
-                voucher1.setTrangThai("Đang diễn ra");
-            } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
-                voucher1.setTrangThai("Đang diễn ra");
+
+        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đã kết thúc")) {
+            if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                return new DataResponse(false, new ResultModel<>(null, "Voucher đã kết thúc,Không thể đổi trạng thái " ));
+            } else if (thoiGianBatDau.isEqual(currentDateTime)) {
+                khuyenMai.setTrangThai("Đang diễn ra");
+                iVoucherRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công Voucher thành Đang diễn ra" ));
+            } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
+                khuyenMai.setTrangThai("Đang diễn ra");
+                iVoucherRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công Voucher Đang diễn ra" ));
             } else {
-                voucher1.setTrangThai("Sắp diễn ra");
+                khuyenMai.setTrangThai("Sắp diễn ra");
+                iVoucherRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công Voucher Sắp diễn ra" ));
             }
-            iVoucherRepository.save(voucher1);
-            return true;
         }
-       return false;
+        return new DataResponse(false, new ResultModel<>(null, "Lỗi khi đổi trạng thái" ));
     }
+
+
 
     // hàm check trùng mã Voucher
     @Override
@@ -252,23 +239,32 @@ public class VoucherServicelmpl implements VoucherService {
     }
 
 
-    //hàm tự động câp nhập trạng thái Voucher khi đã hết hạn
+    //hàm tự động câp nhập trạng thái Voucher khi đã kết thúc
     @Override
     @Scheduled(cron = "0 0 12 * * ?")
     public void CapNhapTrangThaiVoucherDhh() {
         try {
-            Date currentDate = new Date();
+            // Lấy thời gian hiện tại với cả ngày, giờ và phút
+            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
             List<VoucherEntity> vouchers = iVoucherRepository.findAll();
             for (VoucherEntity voucher : vouchers) {
-                if (voucher.getThoiGianKetThuc() != null && voucher.getThoiGianKetThuc().before(currentDate)) {
-                    voucher.setTrangThai("Đã hết hạn");
+
+                LocalDateTime thoiGianBatDau = voucher.getThoiGianBatDau() ;
+                LocalDateTime thoiGianKetThuc = voucher.getThoiGianKetThuc() ;
+
+                if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
+                    voucher.setTrangThai("Đã kết thúc");
                     iVoucherRepository.save(voucher);
-                }if (voucher.getSoLuong() == 0) {
-                    voucher.setTrangThai("Không hoạt động");
+                }
+                if (voucher.getSoLuong() == 0) {
+                    voucher.setTrangThai("Đã hết");
                     iVoucherRepository.save(voucher);
-                } if (voucher.getThoiGianKetThuc() != null && voucher.getThoiGianBatDau() != null
-                        && !voucher.getThoiGianBatDau().after(currentDate) &&
-                        !voucher.getThoiGianKetThuc().before(currentDate)
+                }
+
+                if (thoiGianBatDau != null && thoiGianKetThuc != null
+                        && !thoiGianBatDau.isAfter(currentDateTime)
+                        && !thoiGianKetThuc.isBefore(currentDateTime)
                         && voucher.getTrangThai().trim().equalsIgnoreCase("Sắp diễn ra")) {
                     voucher.setTrangThai("Đang diễn ra");
                     iVoucherRepository.save(voucher);
@@ -280,34 +276,36 @@ public class VoucherServicelmpl implements VoucherService {
     }
 
 
+
     @Override
-    public Page<VoucherDto> findVoucherByDate(int page, int size, Date ngayBatDau, Date ngayKetThuc) {
+    public Page<VoucherDto> findVoucherByDate(int page, int size, LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc) {
         Pageable pageable = PageRequest.of(page, size);
         Page<VoucherEntity> voucherEntities;
 
-        // Chuyển đổi Date sang LocalDate
-        LocalDate startDate = ngayBatDau != null ? ngayBatDau.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
-        LocalDate endDate = ngayKetThuc != null ? ngayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
+        // Chuyển đổi Date sang LocalDateTime để giữ giờ và phút
+        LocalDateTime startDateTime = ngayBatDau;
+        LocalDateTime endDateTime = ngayKetThuc ;
 
-        if (startDate == null && endDate == null) {
-            // Nếu ngày bắt đầu và ngày kết thúc đều null, thì tìm tất cả Voucher
+        // Nếu cả Ngày bắt đầu và Ngày kết thúc đều null, thì tìm tất cả khuyến mãi
+        if (startDateTime == null && endDateTime == null) {
             voucherEntities = iVoucherRepository.findAll(pageable);
-        } else if (startDate != null && endDate != null) {
-            // Nếu cả hai không null, tìm Voucher theo khoảng thời gian
+        } else if (startDateTime != null && endDateTime != null) {
+            // Nếu cả hai không null, tìm khuyến mãi theo khoảng thời gian
             voucherEntities = iVoucherRepository
                     .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(
-                            Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                            Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                          ngayBatDau,
+                            ngayKetThuc,
                             pageable);
-        } else if (startDate != null) {
-            // Nếu chỉ có Ngày bắt đầu , tìm Voucher bắt đầu từ ngày đó trở đi
+        } else if (startDateTime != null) {
+            // Nếu chỉ có Ngày bắt đầu, tìm khuyến mãi bắt đầu từ ngày đó trở đi
             voucherEntities = iVoucherRepository
-                    .findAllByThoiGianBatDauGreaterThanEqual(Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+                    .findAllByThoiGianBatDauGreaterThanEqual(ngayBatDau, pageable);
         } else {
-            // Nếu chỉ có Ngày kết thúc, tìm voucher kết thúc trước hoặc bằng ngày đó
+            // Nếu chỉ có Ngày kết thúc, tìm khuyến mãi kết thúc trước hoặc bằng ngày đó
             voucherEntities = iVoucherRepository
-                    .findAllByThoiGianKetThucLessThanEqual(Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+                    .findAllByThoiGianKetThucLessThanEqual(ngayKetThuc, pageable);
         }
+
         return voucherEntities.map(entity -> new VoucherDto(
                 entity.getId(),
                 entity.getMa(),
