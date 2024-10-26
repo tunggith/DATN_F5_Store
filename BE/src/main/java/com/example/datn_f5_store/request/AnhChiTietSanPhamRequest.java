@@ -20,11 +20,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AnhChiTietSanPhamRequest {
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "ID_CHI_TIET_SAN_PHAM")
-    private ChiTietSanPhamEntity chiTietSanPham;
-    @Column(name = "URL_ANH")
-    @NotNull(message = "Url ảnh không được để trống")
+    private Integer idChiTietSanPham;
     private String urlAnh;
 
 }

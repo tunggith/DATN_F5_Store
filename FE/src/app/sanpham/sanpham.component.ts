@@ -29,6 +29,7 @@ export class SanphamComponent implements OnInit {
   mauSacList: any[] = [];
 
   filteredSanPhamList: any[] = [];
+  popup: boolean=false;
 
   searchTerm: string = '';
   isUpdateProductDetailModalOpen: boolean = false;  // Biến điều khiển modal cập nhật
@@ -53,7 +54,7 @@ export class SanphamComponent implements OnInit {
       xuatXu: ['', Validators.required],
       thuongHieu: ['', Validators.required],
       gioiTinh: ['', Validators.required],
-      trangThai: ['Còn hàng', Validators.required]
+      trangThai: ['đang hoạt động', Validators.required]
     });
 
 
@@ -78,7 +79,13 @@ export class SanphamComponent implements OnInit {
 
     this.filteredChiTietSanPhamList = [...this.chiTietSanPhamList];
   }
-
+  openPopup(idChiTietSanPham:number) {
+    this.selectedSanPhamId = idChiTietSanPham;
+    this.popup = true;
+  }
+  closePopup() {
+    this.popup = false;
+  }
   loaddata() {
     this.getSanPhamPhanTrang(this.pageSanPham);
     this.getAllThuongHieu();
@@ -157,19 +164,23 @@ export class SanphamComponent implements OnInit {
   getChiTietSanPhamPhanTrang(idSanPham: number, page: number = 0) {
     this.sanPhamService.getChiTietSanPhamPhanTrang(idSanPham, page, this.sizeChiTiet).subscribe(
       response => {
-        if (response.status) {
-          this.chiTietSanPhamList = response.result.content.body || [];
+        console.log("danh sachs chi tiet san pham duoc lau",response)
+        if (response && response.content) {
+          this.chiTietSanPhamList = response.content || [];
           this.filteredChiTietSanPhamList = [...this.chiTietSanPhamList]; // Cập nhật danh sách lọc từ danh sách chính
-
+        
           // Cập nhật thông tin phân trang
-          if (response.result.pagination) {
-            this.totalPagesChiTiet = response.result.pagination.totalPages || 1;
-            this.pageChiTiet = response.result.pagination.pageNumber || 0;
+          if (response.pagination) {
+            this.totalPagesChiTiet = response.pagination.totalPages || 1;
+            this.pageChiTiet = response.pagination.pageNumber || 0;
           } else {
             this.totalPagesChiTiet = 1;
             this.pageChiTiet = 0;
           }
+        } else {
+          console.warn('Response không hợp lệ hoặc không có danh sách sản phẩm.');
         }
+        
       },
       error => {
         console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
@@ -403,47 +414,33 @@ export class SanphamComponent implements OnInit {
       // Lấy màu sắc và kích thước đã chọn từ danh sách (nếu cần bổ sung)
       const selectedMauSac = this.mauSacList.find(mau => mau.id === this.chiTietSanPhamForm.value.idMauSac);
       const selectedSize = this.sizes.find(size => size.id === this.chiTietSanPhamForm.value.idSize);
-
+  
+      // Kiểm tra và cập nhật số lượng và trạng thái dựa trên giá trị của số lượng
+      let soLuong = this.chiTietSanPhamForm.value.soLuong;
+      let trangThai = this.chiTietSanPhamForm.value.trangThai;
+  
+      if (soLuong < 0) {
+        soLuong = 0; // Nếu số lượng âm, đặt lại thành 0
+        trangThai = "Hết hàng"; // Số lượng âm vẫn coi là hết hàng
+      } else if (soLuong === 0) {
+        trangThai = "Hết hàng"; // Nếu số lượng bằng 0, đặt trạng thái là "Hết hàng"
+      } else {
+        trangThai = "Còn hàng"; // Nếu số lượng lớn hơn 0, đặt trạng thái là "Còn hàng"
+      }
+  
       // Tạo object theo cấu trúc API yêu cầu
       const updatedChiTietSanPhamData = {
         id: this.selectedChiTietSanPhamId,  // ID của sản phẩm chi tiết cần cập nhật
-        idSanPham: {
-          id: this.selectedSanPhamId,  // ID sản phẩm chính
-          xuatXu: {
-            id: 0,
-            ma: "",  // Giữ trống hoặc cập nhật nếu cần
-            ten: ""
-          },
-          thuongHieu: {
-            id: 0,
-            ma: "",
-            ten: ""
-          },
-          gioiTinh: {
-            id: 0,
-            ten: ""
-          },
-          ma: "",  // Giữ trống hoặc cập nhật nếu cần
-          ten: "",  // Giữ trống hoặc cập nhật nếu cần
-          trangThai: ""
-        },
-        idMauSac: {
-          id: this.chiTietSanPhamForm.value.idMauSac,
-          ma: selectedMauSac ? selectedMauSac.ma : "",   // Bổ sung mã màu sắc
-          ten: selectedMauSac ? selectedMauSac.ten : ""   // Bổ sung tên màu sắc
-        },
-        idSize: {
-          id: this.chiTietSanPhamForm.value.idSize,
-          ma: selectedSize ? selectedSize.ma : "",   // Bổ sung mã kích thước
-          ten: selectedSize ? selectedSize.ten : ""   // Bổ sung tên kích thước
-        },
+        idSanPham: this.selectedSanPhamId,  // Gửi trực tiếp ID sản phẩm thay vì object
+        idMauSac: this.chiTietSanPhamForm.value.idMauSac,  // Gửi ID màu sắc thay vì object
+        idSize: this.chiTietSanPhamForm.value.idSize,  // Gửi ID kích thước thay vì object
         ma: this.chiTietSanPhamForm.value.ma,
         ten: this.chiTietSanPhamForm.value.ten,
         donGia: this.chiTietSanPhamForm.value.donGia,
-        soLuong: this.chiTietSanPhamForm.value.soLuong,
-        trangThai: this.chiTietSanPhamForm.value.trangThai
+        soLuong: soLuong,  // Cập nhật số lượng đã kiểm tra
+        trangThai: trangThai  // Sử dụng trạng thái đã được cập nhật
       };
-
+  
       // Gửi dữ liệu cập nhật tới API
       this.sanPhamService.updateChiTietSanPham(this.selectedChiTietSanPhamId, updatedChiTietSanPhamData).subscribe(
         response => {
@@ -452,7 +449,7 @@ export class SanphamComponent implements OnInit {
             title: 'Cập nhật thành công!',
             text: 'Chi tiết sản phẩm đã được cập nhật.'
           });
-
+  
           this.isUpdateProductDetailModalOpen = false;  // Đóng modal sau khi cập nhật thành công
           this.loaddata();
           this.selectSanPhamChiTiet(this.selectedSanPhamId);  // Tải lại danh sách chi tiết sản phẩm
@@ -468,6 +465,7 @@ export class SanphamComponent implements OnInit {
       );
     }
   }
+  
 
     // Gọi API để lấy toàn bộ chi tiết sản phẩm
     loadAllChiTietSanPham() {
@@ -730,42 +728,15 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
     if (this.chiTietSanPhamForm.valid) {
       // Tạo object đúng với API yêu cầu
       const chiTietSanPhamData = {
-        id: 0,  // ID cho chi tiết sản phẩm mới, backend có thể tự sinh
-        idSanPham: {
-          id: this.selectedSanPhamId,  // ID của sản phẩm đã chọn
-          xuatXu: {
-            id: 0,    // Tùy chọn có thể gửi null nếu không cần
-            ma: "",   // Tùy chọn có thể gửi null nếu không cần
-            ten: ""   // Tùy chọn có thể gửi null nếu không cần
-          },
-          thuongHieu: {
-            id: 0,    // Tùy chọn có thể gửi null nếu không cần
-            ma: "",   // Tùy chọn có thể gửi null nếu không cần
-            ten: ""   // Tùy chọn có thể gửi null nếu không cần
-          },
-          gioiTinh: {
-            id: 0,    // Tùy chọn có thể gửi null nếu không cần
-            ten: ""   // Tùy chọn có thể gửi null nếu không cần
-          },
-          ma: "",     // Mã sản phẩm nếu cần điền vào
-          ten: "",    // Tên sản phẩm nếu cần điền vào
-          trangThai: ""  // Trạng thái của sản phẩm, có thể bỏ trống nếu không cần
-        },
-        idMauSac: {
-          id: this.chiTietSanPhamForm.value.idMauSac,  // ID của màu sắc
-          ma: "",  // Mã màu sắc có thể điền vào hoặc bỏ trống
-          ten: ""  // Tên màu sắc có thể điền vào hoặc bỏ trống
-        },
-        idSize: {
-          id: this.chiTietSanPhamForm.value.idSize,  // ID của kích thước
-          ma: "",  // Mã kích thước có thể điền vào hoặc bỏ trống
-          ten: ""  // Tên kích thước có thể điền vào hoặc bỏ trống
-        },
-        ma: this.chiTietSanPhamForm.value.ma,  // Mã chi tiết sản phẩm
-        ten: this.chiTietSanPhamForm.value.ten,  // Tên chi tiết sản phẩm
-        donGia: this.chiTietSanPhamForm.value.donGia,  // Đơn giá sản phẩm
-        soLuong: this.chiTietSanPhamForm.value.soLuong,  // Số lượng
-        trangThai: this.chiTietSanPhamForm.value.trangThai  // Trạng thái của chi tiết sản phẩm
+        id: this.selectedChiTietSanPhamId,  // ID của sản phẩm chi tiết cần cập nhật
+      idSanPham: this.selectedSanPhamId,  // Gửi trực tiếp ID sản phẩm thay vì object
+      idMauSac: this.chiTietSanPhamForm.value.idMauSac,  // Gửi ID màu sắc thay vì object
+      idSize: this.chiTietSanPhamForm.value.idSize,  // Gửi ID kích thước thay vì object
+      ma: this.chiTietSanPhamForm.value.ma,
+      ten: this.chiTietSanPhamForm.value.ten,
+      donGia: this.chiTietSanPhamForm.value.donGia,
+      soLuong: this.chiTietSanPhamForm.value.soLuong,
+      trangThai: this.chiTietSanPhamForm.value.trangThai
       };
 
       // Gửi object tới API backend

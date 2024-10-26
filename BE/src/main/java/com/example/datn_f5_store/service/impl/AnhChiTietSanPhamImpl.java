@@ -3,9 +3,13 @@ package com.example.datn_f5_store.service.impl;
 import com.example.datn_f5_store.dto.AnhChiTietSanPhamDto;
 import com.example.datn_f5_store.dto.DiaChiKhachHangDto;
 import com.example.datn_f5_store.entity.AnhChiTietSanPham;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.DiaChiKhachHangEntity;
 import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
+import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.request.AnhChiTietSanPhamRequest;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IAnhChiTietSanPhamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,17 +23,13 @@ import java.util.Optional;
 public class AnhChiTietSanPhamImpl implements IAnhChiTietSanPhamService {
     @Autowired
     private IAnhChiTietSanPhamRepository anhChiTietSanPhamRepository;
+    @Autowired
+    private IChiTietSanPhamRepository chiTietSanPhamRepository;
     @Override
-    public Page<AnhChiTietSanPhamDto> getAllAnhChiTietSanPham(int page, int size, String search) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<AnhChiTietSanPham> anhChiTietSanPhams;
-
-        if (search != null && !search.trim().isEmpty()) {
-            anhChiTietSanPhams = anhChiTietSanPhamRepository.findBySearch(search, pageable);
-        } else {
-            anhChiTietSanPhams = anhChiTietSanPhamRepository.findAll(pageable);
-        }
-        return anhChiTietSanPhams.map(entity -> new AnhChiTietSanPhamDto(
+    public Page<AnhChiTietSanPhamDto> getBySanPham(Integer page, Integer size, Integer id) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<AnhChiTietSanPham> anh = anhChiTietSanPhamRepository.findByChiTietSanPham_Id(id,pageable);
+        return anh.map(entity->new AnhChiTietSanPhamDto(
                 entity.getId(),
                 entity.getChiTietSanPham(),
                 entity.getUrlAnh()
@@ -37,39 +37,39 @@ public class AnhChiTietSanPhamImpl implements IAnhChiTietSanPhamService {
     }
 
     @Override
-    public Boolean addAnhChiTietSanPham(AnhChiTietSanPhamRequest anhChiTietSanPhamRequest) {
-        if (anhChiTietSanPhamRepository.existsByUrlAnh(anhChiTietSanPhamRequest.getUrlAnh())) {
-            System.out.println("Đường dẫn link ảnh đã tồn tại!");
-            return false;
-        }
-        try {
-            AnhChiTietSanPham anhChiTietSanPham = new AnhChiTietSanPham();
-            anhChiTietSanPham.setChiTietSanPham(anhChiTietSanPhamRequest.getChiTietSanPham());
-            anhChiTietSanPham.setUrlAnh(anhChiTietSanPhamRequest.getUrlAnh());
-            anhChiTietSanPhamRepository.save(anhChiTietSanPham);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public DataResponse create(AnhChiTietSanPhamRequest request) {
+        return this.createOfUpdate(new AnhChiTietSanPham(),request);
     }
 
     @Override
-    public Boolean updateAnhChiTietSanPham(Integer id,AnhChiTietSanPhamRequest anhChiTietSanPhamRequest) {
-        Optional<AnhChiTietSanPham> optional = anhChiTietSanPhamRepository.findById(id);
-        if (optional.isPresent()) {
-            AnhChiTietSanPham anhChiTietSanPham = optional.get();
-            try {
-                anhChiTietSanPham.setChiTietSanPham(anhChiTietSanPhamRequest.getChiTietSanPham());
-                anhChiTietSanPham.setUrlAnh(anhChiTietSanPhamRequest.getUrlAnh());
-                anhChiTietSanPhamRepository.save(anhChiTietSanPham);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
+    public DataResponse update(Integer id, AnhChiTietSanPhamRequest request) {
+        AnhChiTietSanPham entity = anhChiTietSanPhamRepository.findById(id).orElse(null);
+        request.setId(id);
+        return this.createOfUpdate(entity,request);
+    }
+
+    @Override
+    public AnhChiTietSanPham detail(Integer id) {
+        AnhChiTietSanPham entity = anhChiTietSanPhamRepository.findById(id).orElse(null);
+        return entity;
+    }
+
+    private DataResponse createOfUpdate(AnhChiTietSanPham entity,AnhChiTietSanPhamRequest request){
+        try {
+            ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham())
+                    .orElse(null);
+            if(request.getUrlAnh().isEmpty()){
+                throw new RuntimeException("url ảnh không được để trống!");
+            }else {
+                entity.setId(request.getId());
+                entity.setChiTietSanPham(chiTietSanPham);
+                entity.setUrlAnh(request.getUrlAnh());
+                anhChiTietSanPhamRepository.save(entity);
+                return new DataResponse(true, new ResultModel<>(null, "create of update success"));
             }
-        } else {
-            return false;
+        }catch (Exception e){
+            e.printStackTrace();
+            return new DataResponse(false,new ResultModel<>(null,"create of update exception"));
         }
     }
 }

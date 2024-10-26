@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AnhChiTietSanPhamService } from './anh-chi-tiet-san-pham.service';
 import Swal from 'sweetalert2';
+import { error } from 'console';
+import { url } from 'inspector';
+import * as e from 'express';
+import { flush } from '@angular/core/testing';
 declare var $: any;
 
 @Component({
@@ -10,159 +14,159 @@ declare var $: any;
   styleUrls: ['./anh-chi-tiet-san-pham.component.css']
 })
 export class AnhChiTietSanPhamComponent implements OnInit {
+  @Output() closePopup = new EventEmitter<void>();
+  @Input() idChiTietSanPham !: number;
   products: any[] = []; // Biến chứa danh sách sản phẩm
-  productDetails: any[] = []; // Biến chứa danh sách chi tiết sản phẩm
-
-
   totalElements: number = 0;
   size: number = 10; // Cấu hình số lượng nhân viên mỗi trang
   currentPage: number = 0; // Trang hiện tại
   totalPages: number = 0; // Tổng số trang
-
-
-  chiTietSanPhamList: any[] = [];  // Danh sách chi tiết sản phẩm để hiển thị trong select
-chiTietSanPhamId: number;  // Biến để lưu ID được chọn
-  // Biến cho sản phẩm được thêm hoặc cập nhật
-  newAnhChiTiet: any = {
-    urlAnh : '',
-  };
-  updateAnhChiTietData: any ={
-
-  }
+  idAnhDetail: number;
+  urlDetail: string = '';
+  selectedFile: File = null;
+  urlAnh: string = '';
+  validate: boolean = false;
 
   constructor(private productService: AnhChiTietSanPhamService) { }
 
+  ngOnInit(): void {
+    this.getProducts(); // Gọi phương thức để tải danh sách sản phẩm khi component được khởi tạo
+  }
+  close() {
+    this.closePopup.emit();
+  }
   goToPage(page: number): void {
     if (page < 0 || page >= this.totalPages) {
       return; // Kiểm tra nếu trang không hợp lệ
     }
     this.currentPage = page;
     // this.searchKhachHang();
-    this.getProducts(this.currentPage);
-    this.getProductDetails
+    this.getProducts();
   }
-  ngOnInit(): void {
-    this.getProducts(this.currentPage); // Gọi phương thức để tải danh sách sản phẩm khi component được khởi tạo
-    this.getProductDetails(this.currentPage); // Gọi phương thức để tải danh sách chi tiết sản phẩm
-  }
-
-  // Phương thức để lấy danh sách sản phẩm với phân trang
-  getProducts(page: number): void {
-    this.productService.getProducts(this.currentPage, this.size).subscribe(
+  // Phương thức để lấy danh sách ảnh chi tiết sản phẩm với phân trang
+  getProducts(): void {
+    this.productService.getProducts(this.currentPage, this.size, this.idChiTietSanPham).subscribe(
       (response: any) => {
         if (response.status) {
           this.products = response.result.content.content; // Lưu danh sách sản phẩm
           this.totalPages = response.result.content.totalPages; // Cập nhật tổng số trang
         }
         console.log(this.products);
-        
+
       },
       (error) => {
         console.error('Lỗi khi gọi API danh sách sản phẩm:', error);
       }
     );
   }
-
-  // Phương thức để lấy danh sách chi tiết sản phẩm
-  getProductDetails(page:number): void {
-    this.productService.getChiTietSanPham(this.currentPage,this.size).subscribe(
-      response=> {
-        console.log('ctsp',response)
-        if  ( response && response.status) {
-          this.productDetails = response.result.content.body; // Lưu danh sách chi tiết sản phẩm
-          console.log('danh sách chi tiết sản phám', this.productDetails);
+  create(): void {
+    if (this.urlAnh === null|| this.urlAnh.trim() === '') {
+      this.validate = true;
+    } else {
+      const anh = {
+        idChiTietSanPham: this.idChiTietSanPham,
+        urlAnh: this.urlAnh
+      }
+      this.productService.create(anh).subscribe(
+        response => {
+          this.showSuccessMessage('Thêm thành công!');
+          this.getProducts();
+          this.resetForm();
+        },
+        error => {
+          this.handleError(error);
         }
-      },
-      (error) => {
-        console.error('Lỗi khi gọi API danh sách chi tiết sản phẩm:', error);
-      }
-    );  
-  }
-
-  // Phương thức để thêm hoặc cập nhật sản phẩm
-  
-
-  // Phương thức để khởi tạo lại form
-  resetForm(): void {
-    this.newAnhChiTiet = {
-      id: null,
-      urlAnh: '',
-      chiTietSanPhamId: null // Reset khóa ngoại
-    };
-  }
-
-  // Phương thức để chuyển trang
-  changePage(page: number): void {
-    if (page >= 0 && page < this.totalPages) {
-      this.currentPage = page; // Cập nhật trang hiện tại
-      this.getProducts(this.currentPage); // Tải lại danh sách sản phẩm cho trang mới
-      this.getProductDetails(this.currentPage);
+      )
     }
   }
-
-  
-  onFileSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
+  update(id: number): void {
+    if (this.urlAnh === null|| this.urlAnh.trim() === '') {
+      this.validate = true;
+    } else {
+      const anh = {
+        idChiTietSanPham: this.idChiTietSanPham,
+        urlAnh: this.urlAnh
+      }
+      this.productService.update(id, anh).subscribe(
+        response => {
+          this.showSuccessMessage('Cập nhật thành công!');
+          this.getProducts();
+          this.resetForm();
+        },
+        error => {
+          this.handleError(error);
+        }
+      )
+    }
+  }
+  detail(id: number): void {
+    this.productService.detail(id).subscribe(
+      data => {
+        this.idAnhDetail = data.result.content.id
+        this.urlAnh = data.result.content.urlAnh;
+      },
+      error => {
+        this.handleError(error);
+      }
+    )
+  }
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
       const reader = new FileReader();
-
       reader.onload = (e: any) => {
-        this.newAnhChiTiet.urlANh = e.target.result; // Lưu URL ảnh vào đối tượng nhân viên
+        this.urlAnh = e.target.result;
       };
-      reader.readAsDataURL(file); // Đọc file và tạo URL
+      reader.readAsDataURL(file);
     }
   }
-  // Phương thức để chỉnh sửa sản phẩm
-  showDetail(product: any): void {
-    this.newAnhChiTiet = { ...product }; // Sao chép thông tin sản phẩm vào form
-    this.updateAnhChiTietData.id = product.id;
-    this.chiTietSanPhamId = product.chiTietSanPhamId; // Cập nhật chiTietSanPhamId
+  // =================== Thông báo ===================
 
-  }
-   // Phương thức để xử lý sự kiện chọn file
-   createAnhChiTiet(): void {
-    this.productService.addProduct(this.newAnhChiTiet, this.chiTietSanPhamId).subscribe(
-      (response) => {
-        this.newAnhChiTiet = {};
-        Swal.fire({
-          title: 'Thành công!',
-          text: 'Ảnh chi tiết sản phẩm đã được thêm thành công.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
-        this.getProducts(this.currentPage);
-        this.getProductDetails(this.currentPage);
-      },
-      (error) => {
-        Swal.fire({
-          title: 'Lỗi!',
-          text: 'Có lỗi xảy ra trong quá trình thêm mới ảnh chi tiết sản phẩm.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-      }
-    );
-  }
-  updateAnhChiTiet(id: number): void {
-    this.productService.updateProduct(id, this.newAnhChiTiet).subscribe(() => {
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Ảnh chi tiết sản phẩm đã được cập nhật thành công.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-      this.getProducts(this.currentPage);
-      this.getProductDetails(this.currentPage);
-      this.updateAnhChiTietData = {};
-    }, error => {
-      Swal.fire({
-        title: 'Lỗi!',
-        text: 'Có lỗi xảy ra trong quá trình cập nhật ảnh chi tiết sản phẩm.',
-        icon: 'error',
-        confirmButtonText: 'OK'
-      });
-      console.log('Có lỗi trong quá trình cập nhật', error);
+  showSuccessMessage(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Thành công!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
     });
   }
+
+  showErrorMessage(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Thất bại!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
+  showWarningMessage(message: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Thất bại!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+  // ================= Xử lý lỗi =================
+  private handleError(error: any): void {
+    let errorMessage = 'Có lỗi xảy ra';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi từ phía client
+      errorMessage = `Lỗi: ${error.error.message}`;
+    } else {
+      // Lỗi từ phía server
+      errorMessage = `${error.error}`;
+    }
+    this.showErrorMessage(errorMessage);
+  }
+  resetForm():void{
+    this.urlAnh='';
+    this.idAnhDetail = 0;
+  }
+
 }

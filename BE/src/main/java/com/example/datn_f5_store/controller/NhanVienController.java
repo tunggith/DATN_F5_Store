@@ -73,17 +73,8 @@ public class NhanVienController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@Valid @RequestBody NhanVienRequest request, BindingResult result) {
-        if (result.hasErrors()) {
-            // Tạo đối tượng chứa lỗi
-            Map<String, String> errors = new HashMap<>();
-            result.getFieldErrors().forEach(fieldError ->
-                    errors.put(fieldError.getField(), fieldError.getDefaultMessage()));
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-        // Xử lý khi không có lỗi
-        DataResponse response = nhanVienService.create(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<?> create(@Valid @RequestBody NhanVienRequest request) {
+        return new ResponseEntity<>(nhanVienService.create(request),HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")

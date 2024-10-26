@@ -206,5 +206,16 @@ public class ChiTietSanPhamController {
             return ResponseEntity.ok(isDuplicate);
 
         }
+    @GetMapping("/getall-phan_trangKm")
+    public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+
+        // Gọi service để lấy dữ liệu đã phân trang
+        Page<ChiTietSanPhamEntity> pageResult = ctsp_Sevice.getAllPhanTrangKm(page, pageSize);
+
+        // Trả về đối tượng Page, bao gồm dữ liệu và thông tin phân trang
+        return ResponseEntity.ok(pageResult);
+    }
 
     }

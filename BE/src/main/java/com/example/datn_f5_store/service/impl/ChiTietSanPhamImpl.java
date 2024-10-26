@@ -194,6 +194,11 @@ public class ChiTietSanPhamImpl {
         ));
     }
 
+    public Page<ChiTietSanPhamEntity> getAllPhanTrangKm(int currentPage, int pageSize) {
+        Pageable pageable = PageRequest.of(currentPage, pageSize);
+        return repo_ctsp.findAll(  pageable);
+    }
+
     public ChiTietSanPhamEntity getChiTietSanPhamById(Integer id) {
         return repo_ctsp.findById(id).get();
     }

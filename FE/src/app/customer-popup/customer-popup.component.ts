@@ -16,7 +16,7 @@ export class CustomerPopupComponent implements OnInit {
   selectedCustomerId: number | null = null;
   customer = {
     ten: '',
-    gioiTinh: '',
+    gioiTinh: 'Nam',
     ngayThangNamSinh: '',
     email: '',
     sdt: ''

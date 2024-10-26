@@ -131,103 +131,92 @@ onSearch(): void {
 
 
 
-  // hàm thêm, xóa khuyến mãi vào sản phẩm
-  onCheckboxChange(chiTietSanPham : any, event: any) {
-    if (!this.selectedKhuyenMai || !this.selectedKhuyenMai.id) {
-      alert('Khuyến mãi lỗi, vui lòng thử lại');
-      return;
-    }
-    const isChecked = event.target.checked;
-    if (isChecked) {
-      // Thêm sản phẩm vào khuyến mãi chi tiết
-      const formData = {
-        khuyenMai: { id: this.selectedKhuyenMai.id },
-        chiTietSanPham: { id: chiTietSanPham.id }
-      };
-      this.khuyenMaiChiTietSanPhamService.createKhuyenMaiChiTietSanPham(formData).subscribe(
-        (response) => {
-          if (response.status) {
-            Swal.fire({
-              title: 'F5 Store xin thông báo : ',
-              text: response.result.content,
-              icon: 'success',
-              confirmButtonText: 'OK',
-              customClass: {
-                confirmButton: 'custom-confirm-button'
-              }
-            });
-            chiTietSanPham.selected = true; 
-            this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
-            this.saveSelectionsToLocalStorage(); 
-            this.fetchKhuyenMaiDetail(this.selectedKhuyenMaiId);
-            this.fetchChiTietSanPhams();    
-          } else {
-            Swal.fire({
-              title: 'F5 Store xin thông báo : ',
-              text: response.result.content,
-              icon: 'error',
-              confirmButtonText: 'OK',
-              customClass: {
-                confirmButton: 'custom-confirm-button'
-              }
-            });
-            chiTietSanPham.selected = false;
-            this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
-            this.saveSelectionsToLocalStorage(); 
-            this.fetchChiTietSanPhams();
-          }
-        },
-        (error) => {
+ // hàm thêm, xóa khuyến mãi vào sản phẩm
+onCheckboxChange(chiTietSanPham : any, event: any) {
+  if (!this.selectedKhuyenMai || !this.selectedKhuyenMai.id) {
+    alert('Khuyến mãi lỗi, vui lòng thử lại');
+    return;
+  }
+  
+  const isChecked = event.target.checked;
+  
+  if (isChecked) {
+    // Thêm sản phẩm vào khuyến mãi chi tiết
+    const formData = {
+      khuyenMai: { id: this.selectedKhuyenMai.id },
+      chiTietSanPham: { id: chiTietSanPham.id }
+    };
+
+    this.khuyenMaiChiTietSanPhamService.createKhuyenMaiChiTietSanPham(formData).subscribe(
+      (response) => {
+        if (response.status) {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',
-            text:'Lỗi thêm khuyến mãi cho sản phẩm, vui lòng thử lại',
+            text: response.result.content,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-confirm-button'
+            }
+          });
+          chiTietSanPham.selected = true; 
+          
+          this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
+          this.saveSelectionsToLocalStorage(); 
+          this.fetchKhuyenMaiDetail(this.selectedKhuyenMaiId);
+          this.fetchChiTietSanPhams();
+              
+        } else {
+          Swal.fire({
+            title: 'F5 Store xin thông báo : ',
+            text: response.result.content,
             icon: 'error',
             confirmButtonText: 'OK',
             customClass: {
               confirmButton: 'custom-confirm-button'
             }
           });
-          event.target.checked = false; // Bỏ check nếu có lỗi
+          // Nếu thêm khuyến mãi không thành công, bỏ check sản phẩm này
+          chiTietSanPham.selected = false;
+          event.target.checked = false;  
+          this.saveSelectionsToLocalStorage();
+          this.fetchChiTietSanPhams(); 
+          this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
         }
-      );
-    } else {
-      // Xóa sản phẩm khỏi khuyến mãi chi tiết
-      this.khuyenMaiChiTietSanPhamService.XoaKmctsp(chiTietSanPham.id).subscribe(
-        (response) => {
-          if (response.result.content) {
-            Swal.fire({
-              title: 'F5 Store xin thông báo : ',
-              text: response.result.content,
-              icon: 'success',
-              confirmButtonText: 'OK',
-              customClass: {
-                confirmButton: 'custom-confirm-button'
-              }
-            });
-            chiTietSanPham.selected = false; // Cập nhật trạng thái checkbox
-            this.saveSelectionsToLocalStorage(); // lưu lại trạng thái
-            this.fetchChiTietSanPhams();
-            this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
-
-          
-          } else {
-            Swal.fire({
-              title: 'F5 Store xin thông báo : ',
-              text: 'Lỗi xóa khuyến mãi sản phẩm, vui lòng thử lại',
-              icon: 'error',
-              confirmButtonText: 'OK',
-              customClass: {
-                confirmButton: 'custom-confirm-button'
-              }
-            });
-            event.target.checked = true;
-            this.saveSelectionsToLocalStorage();
-            this.fetchChiTietSanPhams();
+      },
+      (error) => {
+        Swal.fire({
+          title: 'F5 Store xin thông báo : ',
+          text:'Lỗi thêm khuyến mãi cho sản phẩm, vui lòng thử lại',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'custom-confirm-button'
           }
-
-        },
-        (error) => {
-          console.log(error);
+        });
+        event.target.checked = false; // Bỏ check nếu có lỗi
+        this.saveSelectionsToLocalStorage(); // Lưu lại trạng thái sau khi có lỗi
+      }
+    );
+  } else {
+    // Xóa sản phẩm khỏi khuyến mãi chi tiết
+    this.khuyenMaiChiTietSanPhamService.XoaKmctsp(chiTietSanPham.id).subscribe(
+      (response) => {
+        if (response.result.content) {
+          Swal.fire({
+            title: 'F5 Store xin thông báo : ',
+            text: response.result.content,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-confirm-button'
+            }
+          });
+          chiTietSanPham.selected = false; // Cập nhật trạng thái checkbox
+          this.saveSelectionsToLocalStorage();
+          this.fetchChiTietSanPhams();
+          this.fetchKhuyenMaiChiTietSanPham(this.selectedKhuyenMaiId); 
+        } else {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',
             text: 'Lỗi xóa khuyến mãi sản phẩm, vui lòng thử lại',
@@ -237,30 +226,68 @@ onSearch(): void {
               confirmButton: 'custom-confirm-button'
             }
           });
+          // Nếu xóa không thành công, checkbox vẫn giữ nguyên
           event.target.checked = true;
+          chiTietSanPham.selected = true;
           this.saveSelectionsToLocalStorage();
-          this.fetchChiTietSanPhams();  // Nếu xóa thất bại, giữ lại checkbox
+          this.fetchChiTietSanPhams();
+        }
+      },
+      (error) => {
+        console.log(error);
+        Swal.fire({
+          title: 'F5 Store xin thông báo : ',
+          text: 'Lỗi xóa khuyến mãi sản phẩm, vui lòng thử lại',
+          icon: 'error',
+          confirmButtonText: 'OK',
+          customClass: {
+            confirmButton: 'custom-confirm-button'
+          }
+        });
+        event.target.checked = true;
+        chiTietSanPham.selected = true; // Giữ trạng thái checkbox nếu có lỗi
+        this.saveSelectionsToLocalStorage();
+        this.fetchChiTietSanPhams();  
       }
     );
   }
 }
 
 
-
-  loadSelectionsFromLocalStorage() {
-    const selectedProductIds = JSON.parse(localStorage.getItem('selectedProducts')) || [];
-    this.chiTietSanPhams.forEach(sp => {
-      sp.selected = selectedProductIds.includes(sp.id);
-    });
- }
-
-
- saveSelectionsToLocalStorage() {
-    const selectedProductIds = this.chiTietSanPhams
-      .filter(sp => sp.selected)
-      .map(sp => sp.id);
-    localStorage.setItem('selectedProducts', JSON.stringify(selectedProductIds));
+loadSelectionsFromLocalStorage() {
+  const selectedProductIds = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+  // Kiểm tra từng sản phẩm trên trang hiện tại
+  this.chiTietSanPhams.forEach(sp => {
+    sp.selected = selectedProductIds.includes(sp.id);
+  });
 }
+
+
+// Hàm lưu trạng thái sản phẩm vào localStorage
+saveSelectionsToLocalStorage() {
+  // Lấy danh sách ID các sản phẩm đã chọn từ localStorage
+  let allSelectedProductIds = JSON.parse(localStorage.getItem('selectedProducts')) || [];
+
+  // Lấy danh sách ID sản phẩm đã chọn trên trang hiện tại
+  const currentSelectedProductIds = this.chiTietSanPhams
+    .filter(sp => sp.selected)
+    .map(sp => sp.id);
+
+  // Lọc ra những sản phẩm chưa được chọn
+  const uncheckedProductIds = this.chiTietSanPhams
+    .filter(sp => !sp.selected)
+    .map(sp => sp.id);
+
+  // Loại bỏ các sản phẩm bị bỏ chọn khỏi danh sách
+  allSelectedProductIds = allSelectedProductIds.filter(id => !uncheckedProductIds.includes(id));
+
+  // Gộp danh sách cũ với danh sách mới và loại bỏ các ID trùng lặp
+  const updatedSelectedProductIds = [...new Set([...allSelectedProductIds, ...currentSelectedProductIds])];
+
+  // Lưu lại danh sách đã cập nhật vào localStorage
+  localStorage.setItem('selectedProducts', JSON.stringify(updatedSelectedProductIds));
+}
+
 
 
 

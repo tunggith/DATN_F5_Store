@@ -160,7 +160,7 @@ export class BanHangComponent implements OnInit {
 
   getVoucher(): void {
     this.banHangService.getVoucher().subscribe(
-      data => this.voucher = data.result.content.content,
+      data => this.voucher = data.result.content,
       this.handleError
     );
   }
@@ -259,7 +259,7 @@ export class BanHangComponent implements OnInit {
       idKhachHang: 0,
       idNhanVien: 1,
       idVoucher: this.selectedVoucherId || 0,
-      idThanhToan: 0,
+      idThanhToan: this.idThanhToan || 2,
       ma: '',
       tongTienBanDau: 0,
       phiShip: 0,
@@ -401,6 +401,7 @@ export class BanHangComponent implements OnInit {
 
   closePopup() {
     this.popup = false;
+    this.loadKhachHang();
   }
   closePopupHs() {
     this.popupHs = false;

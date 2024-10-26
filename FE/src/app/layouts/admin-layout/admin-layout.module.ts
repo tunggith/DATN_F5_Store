@@ -10,7 +10,7 @@ import { TableListComponent } from '../../hoaDon/table-list.component';
 import { IconsComponent } from '../../khuyenMai/icons.component';
 import { VoucherComponent } from '../../voucher/voucher.component';
 import { KhuyenMaiChiTietSanPhamComponent } from '../../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.component';
-import { MapsComponent } from '../../maps/maps.component';
+import { NhanVienComponent } from '../../nhan-vien/nhan-vien.component';
 import { DiaChiKhachHangComponent } from '../../dia-chi-khach-hang/dia-chi-khach-hang.component';
 import { KhachHangComponent } from '../../khach-hang/KhachHang.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
@@ -55,7 +55,7 @@ import { NotificationsComponent } from 'app/notifications/notifications.componen
     TableListComponent,
     ThongkeComponent,
     IconsComponent,
-    MapsComponent,
+    NhanVienComponent,
     KhachHangComponent,
     UpgradeComponent,
     CustomerPopupComponent,

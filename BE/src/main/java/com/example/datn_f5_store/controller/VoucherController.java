@@ -142,6 +142,12 @@ public class VoucherController {
         );
         return ResponseEntity.ok(dataResponse); // Trả về phản hồi HTTP 200 OK với dữ liệu
     }
-
-
+    @GetMapping("/get-trang-thai")
+    public ResponseEntity<Object> getTrangThai(){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var listData = voucherService.getTrangThai();
+        dataResponse.setResult(new ResultModel<>(null,listData));
+        return ResponseEntity.ok(dataResponse);
+    }
 }

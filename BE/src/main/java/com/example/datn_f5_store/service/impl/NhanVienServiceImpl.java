@@ -176,8 +176,8 @@ public class NhanVienServiceImpl implements NhanVienService {
         entity.setSdt(request.getSdt());
         entity.setDiaChi(request.getDiaChi());
         entity.setAnh(request.getAnh());
-        entity.setUsername(request.getUsername());
-        entity.setPassword(request.getPassword());
+//        entity.setUsername(request.getUsername());
+//        entity.setPassword(request.getPassword());
         entity.setNguoiTao("admin");
         entity.setThoiGianTao(new Date());
         entity.setNguoiSua(request.getNguoiSua());

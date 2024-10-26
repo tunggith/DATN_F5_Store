@@ -151,11 +151,6 @@ public class PdfExportService {
                     .setFont(boldFont));
             document.add(new Paragraph(hoaDon.getNhanVien().getTen())
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph(String.valueOf(hoaDon.getTrangThai()))
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setFontSize(18)
-                    .setFontColor(new DeviceRgb(255, 0, 0))
-                    .setFont(boldFont));
 
             document.close();
 

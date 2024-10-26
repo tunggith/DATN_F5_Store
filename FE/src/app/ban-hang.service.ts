@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BanHangService {
+  
   public url = 'http://localhost:8080/api/v1/chi_tiet_san_pham';
   public hoaDonUrl = 'http://localhost:8080/api/v1/hoa-don';
   public voucherUrl = 'http://localhost:8080/api/v1/voucher';
@@ -26,7 +27,7 @@ export class BanHangService {
     return this.http.get(`${this.hoaDonUrl}/get-chi-tiet-hoa-don/${id}`);
   }
   getVoucher(): Observable<any> {
-    return this.http.get(`${this.voucherUrl}/getAll`);
+    return this.http.get(`${this.voucherUrl}/get-trang-thai`);
   }
   getPhuongThucThanhToan(): Observable<any> {
     return this.http.get(`${this.thanhToanUrl}/getAll`);
