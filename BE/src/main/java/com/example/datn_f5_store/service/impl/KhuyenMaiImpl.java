@@ -16,7 +16,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import  com.example.datn_f5_store.response.ResultModel;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +76,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 entity.getMoTa(),
                 entity.getSoLuong(),
                 entity.getGiaTriKhuyenMai(),
-                       entity.getThoiGianBatDau(),
+                entity.getThoiGianBatDau(),
                 entity.getThoiGianKetThuc(),
                 entity.getThoiGianTao(),
                 entity.getThoiGianSua(),
@@ -116,14 +118,11 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
     @Override
     public DataResponse create(KhuyenMaiRequest khuyenMaiRequest) {
-        Date ngayHientai = new Date(); // Ngày hiện tại
-        LocalDate currentDate = ngayHientai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Chuyển đổi sang LocalDate
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("UTC")); // Lấy thời gian hiện tại theo UTC
         KhuyenMaiEntity khuyenMaiEntity = new KhuyenMaiEntity();
         try {
-            // Kiểm tra các trường dữ liệu không được null và hợp lệ
             if (checkKhuyenMai(khuyenMaiRequest)) {
                 if (!checkTrungMaKhuyenmai(khuyenMaiRequest.getMa())) {
-                    // Kiểm tra và gán giá trị từ khuyenMaiRequest
                     String ma = khuyenMaiRequest.getMa();
                     if (ma == null || ma.isEmpty()) {
                         return new DataResponse(false, new ResultModel<>(null, "Mã không được để trống"));
@@ -131,33 +130,42 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
                     }
-                    if (khuyenMaiRequest.getThoiGianBatDau().after(khuyenMaiRequest.getThoiGianKetThuc())) {
+                    if (khuyenMaiRequest.getThoiGianBatDau().isAfter(khuyenMaiRequest.getThoiGianKetThuc())) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
                     }
-                    // Gán giá trị cho khuyenMaiEntity
+
                     khuyenMaiEntity.setMa(ma);
                     khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                     khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                     khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
                     khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
                     khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
-                    khuyenMaiEntity.setThoiGianBatDau(khuyenMaiRequest.getThoiGianBatDau());
-                    khuyenMaiEntity.setThoiGianKetThuc(khuyenMaiRequest.getThoiGianKetThuc());
-                    khuyenMaiEntity.setThoiGianTao(ngayHientai);
+
+                    // Chuyển đổi thời gian bắt đầu và kết thúc sang UTC trước khi lưu
+                    LocalDateTime thoiGianBatDauUTC = khuyenMaiRequest.getThoiGianBatDau();
+
+
+                    LocalDateTime thoiGianKetThucUTC = khuyenMaiRequest.getThoiGianKetThuc();
+
+
+                    khuyenMaiEntity.setThoiGianBatDau(thoiGianBatDauUTC);
+                    khuyenMaiEntity.setThoiGianKetThuc(thoiGianKetThucUTC);
+                    khuyenMaiEntity.setThoiGianTao(Timestamp.valueOf(currentDateTime)); // Lưu theo UTC
                     khuyenMaiEntity.setNguoiTao("ADMIN");
 
-                    // Kiểm tra và cập nhật trạng thái
-                    LocalDate thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    if (thoiGianKetThuc.isBefore(currentDate)) {
-                        khuyenMaiEntity.setTrangThai("Đã hết hạn");
-                    } else if (thoiGianBatDau.isEqual(currentDate)) {
-                        khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                    } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
+                    // Kiểm tra trạng thái
+                    if (thoiGianKetThucUTC.isBefore(currentDateTime)) {
+                        khuyenMaiEntity.setTrangThai("Đã kết thúc");
+                    } else if (thoiGianBatDauUTC.isEqual(currentDateTime) || (thoiGianBatDauUTC.isBefore(currentDateTime) && thoiGianKetThucUTC.isAfter(currentDateTime))) {
                         khuyenMaiEntity.setTrangThai("Đang diễn ra");
                     } else {
                         khuyenMaiEntity.setTrangThai("Sắp diễn ra");
                     }
+
+                    // Ghi log thời gian bắt đầu và kết thúc
+                    System.out.println("Thời gian bắt đầu (UTC): " + thoiGianBatDauUTC);
+                    System.out.println("Thời gian kết thúc (UTC): " + thoiGianKetThucUTC);
+
                     // Lưu khuyến mãi
                     khuyenMaiRepository.save(khuyenMaiEntity);
                     return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi thành công"));
@@ -172,61 +180,44 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
     }
 
 
+
+
+
+
     // hàm cập nhập Khuyến mãi theo id
     @Override
     public DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id) {
-        Date currentDate = new Date();
-        LocalDate ngayHienTai = currentDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(); // Chuyển đổi sang LocalDate
-        // Láy được khuyến mãi cần cập nhập theo id
-        KhuyenMaiEntity khuyenMaiEntity = khuyenMaiRepository.findById(id).get();
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("UTC")); // Get the current time in UTC
+        KhuyenMaiEntity khuyenMaiEntity = khuyenMaiRepository.findById(id).orElse(null);
+
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
                 if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
                     return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
                 }
-                if (khuyenMaiRequest.getThoiGianBatDau().after(khuyenMaiRequest.getThoiGianKetThuc())) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
+                if (khuyenMaiRequest.getThoiGianBatDau().isAfter(khuyenMaiRequest.getThoiGianKetThuc())) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu."));
                 }
-                if(!khuyenMaiEntity.getThoiGianBatDau().after(currentDate) && khuyenMaiEntity.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")){
-                khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
-                khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
-                khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
-                khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
-                khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
-                khuyenMaiEntity.setThoiGianKetThuc(khuyenMaiRequest.getThoiGianKetThuc());
-                khuyenMaiEntity.setThoiGianSua(currentDate);
-                khuyenMaiEntity.setNguoiSua("ADMIN");
-                    LocalDate thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    if (thoiGianKetThuc.isBefore(ngayHienTai)) {
-                        khuyenMaiEntity.setTrangThai("Đã hết hạn");
-                    } else if (thoiGianBatDau.isEqual(ngayHienTai)) {
-                        khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                    } else if (thoiGianBatDau.isBefore(ngayHienTai) && thoiGianKetThuc.isAfter(ngayHienTai)) {
-                        khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                    } else {
-                        khuyenMaiEntity.setTrangThai("Sắp diễn ra");
-                    }
-                khuyenMaiRepository.save(khuyenMaiEntity);
-                return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
-                }
-                else {
+
+                // Check the status
+                if (khuyenMaiEntity != null && !khuyenMaiEntity.getThoiGianBatDau().isAfter(currentDateTime) &&
+                        khuyenMaiEntity.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")) {
+                    // Update promotion information
                     khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
                     khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                     khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
                     khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
                     khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
-                    khuyenMaiEntity.setThoiGianBatDau(khuyenMaiRequest.getThoiGianBatDau());
-                    khuyenMaiEntity.setThoiGianKetThuc(khuyenMaiRequest.getThoiGianKetThuc());
-                    khuyenMaiEntity.setThoiGianSua(currentDate);
+                    khuyenMaiEntity.setThoiGianSua(Timestamp.valueOf(currentDateTime)); // Update in UTC
                     khuyenMaiEntity.setNguoiSua("ADMIN");
-                    LocalDate thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                    if (thoiGianKetThuc.isBefore(ngayHienTai)) {
-                        khuyenMaiEntity.setTrangThai("Đã hết hạn");
-                    } else if (thoiGianBatDau.isEqual(ngayHienTai)) {
-                        khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                    } else if (thoiGianBatDau.isBefore(ngayHienTai) && thoiGianKetThuc.isAfter(ngayHienTai)) {
+
+                    // Check the status based on the updated times
+                    LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
+                    LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
+
+                    if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                        khuyenMaiEntity.setTrangThai("Đã kết thúc");
+                    } else if (thoiGianBatDau.isEqual(currentDateTime) || thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
                         khuyenMaiEntity.setTrangThai("Đang diễn ra");
                     } else {
                         khuyenMaiEntity.setTrangThai("Sắp diễn ra");
@@ -234,13 +225,46 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
                     khuyenMaiRepository.save(khuyenMaiEntity);
                     return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
+                } else {
+                    // Update promotion information for non-active promotions
+                    if (khuyenMaiEntity != null) {
+                        khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
+                        khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
+                        khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
+                        khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
+                        khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
+                        khuyenMaiEntity.setThoiGianBatDau(khuyenMaiRequest.getThoiGianBatDau());
+                        khuyenMaiEntity.setThoiGianKetThuc(khuyenMaiRequest.getThoiGianKetThuc());
+                        khuyenMaiEntity.setThoiGianSua(Timestamp.valueOf(currentDateTime)); // Update in UTC
+                        khuyenMaiEntity.setNguoiSua("ADMIN");
+
+                        // Check the status based on the updated times
+                        LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
+                        LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
+
+                        if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                            khuyenMaiEntity.setTrangThai("Đã kết thúc");
+                        } else if (thoiGianBatDau.isEqual(currentDateTime) || thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
+                            khuyenMaiEntity.setTrangThai("Đang diễn ra");
+                        } else {
+                            khuyenMaiEntity.setTrangThai("Sắp diễn ra");
+                        }
+
+                        khuyenMaiRepository.save(khuyenMaiEntity);
+                        return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
+                    } else {
+                        return new DataResponse(false, new ResultModel<>(null, "Không tìm thấy khuyến mãi với id đã cho"));
+                    }
                 }
             }
-            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ lệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
+            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
         } catch (Exception e) {
-            return new DataResponse(false, new ResultModel<>(null, "Lỗi Sửa Khuyến mãi, vui lòng thử lại"));
+            return new DataResponse(false, new ResultModel<>(null, "Đã xảy ra lỗi: " + e.getMessage()));
         }
     }
+
+
+
 
     // Hàm lấy thông tin Khuyến mãi theo id
     @Override
@@ -258,32 +282,21 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
     // hàm lọc khuyến mãi theo Ngày
     @Override
-    public Page<KhuyenMaiDto> findKhuyenMaiByDate(int page, int size, Date ngayBatDau, Date ngayKetThuc) {
+    public Page<KhuyenMaiDto> findKhuyenMaiByDate(int page, int size, LocalDateTime ngayBatDau, LocalDateTime ngayKetThuc) {
         Pageable pageable = PageRequest.of(page, size);
         Page<KhuyenMaiEntity> khuyenMaiEntities;
 
-        // Chuyển đổi Date sang LocalDate
-        LocalDate startDate = ngayBatDau != null ? ngayBatDau.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
-        LocalDate endDate = ngayKetThuc != null ? ngayKetThuc.toInstant().atZone(ZoneId.systemDefault()).toLocalDate() : null;
-
-        if (startDate == null && endDate == null) {
-            // Nếu cả Ngay bắt đầu và ngày kết thuc đều null, thì tìm tất cả khuyến mãi
+        if (ngayBatDau == null && ngayKetThuc == null) {
             khuyenMaiEntities = khuyenMaiRepository.findAll(pageable);
-        } else if (startDate != null && endDate != null) {
-            // Nếu cả hai không null, tìm khuyến mãi theo khoảng thời gian
+        } else if (ngayBatDau != null && ngayKetThuc != null) {
             khuyenMaiEntities = khuyenMaiRepository
-                    .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(
-                            Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                            Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                            pageable);
-        } else if (startDate != null) {
-            // Nếu chỉ có ngay bat dau, tìm khuyến mãi bắt đầu từ ngày đó trở đi
+                    .findAllByThoiGianBatDauGreaterThanEqualAndThoiGianKetThucLessThanEqual(ngayBatDau, ngayKetThuc, pageable);
+        } else if (ngayBatDau != null) {
             khuyenMaiEntities = khuyenMaiRepository
-                    .findAllByThoiGianBatDauGreaterThanEqual(Date.from(startDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+                    .findAllByThoiGianBatDauGreaterThanEqual(ngayBatDau, pageable);
         } else {
-            // Nếu chỉ có ngay kết thúc, tìm khuyến mãi kết thúc trước hoặc bằng ngày đó
             khuyenMaiEntities = khuyenMaiRepository
-                    .findAllByThoiGianKetThucLessThanEqual(Date.from(endDate.atStartOfDay(ZoneId.systemDefault()).toInstant()), pageable);
+                    .findAllByThoiGianKetThucLessThanEqual(ngayKetThuc, pageable);
         }
 
         return khuyenMaiEntities.map(entity -> new KhuyenMaiDto(
@@ -303,6 +316,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 entity.getTrangThai()
         ));
     }
+
 
 
     // hàm check trùng mã Khuyến mãi
@@ -347,31 +361,42 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
     }
 
 
-    // hàm tự động cap nhap khuyến mãi khi đã hết hạn
+    // hàm tự động cap nhap khuyến mãi khi Đã kết thúc
     @Override
     @Scheduled(cron = "0 0 12 * * ?")
     public void CapNhapTrangThaiKhuyenMaiDhh() {
         try {
-            // khai báo thời gian hiện tại
-            Date currentDate = new Date();
-            // lấy ra tất cả Khuyến mãi
+            // Khai báo thời gian hiện tại với LocalDateTime
+            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+            // Lấy ra tất cả Khuyến mãi
             List<KhuyenMaiEntity> khuyenMaiEntities = khuyenMaiRepository.findAll();
 
             for (KhuyenMaiEntity khuyenMai : khuyenMaiEntities) {
-                // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại thì cập nhập lại trạng thái
-                if (khuyenMai.getThoiGianKetThuc() != null && khuyenMai.getThoiGianKetThuc().before(currentDate)) {
-                    khuyenMai.setTrangThai("Đã hết hạn");
+                // Lấy thời gian bắt đầu và kết thúc từ LocalDateTime
+                LocalDateTime thoiGianBatDau = khuyenMai.getThoiGianBatDau();
+                LocalDateTime thoiGianKetThuc = khuyenMai.getThoiGianKetThuc();
+
+                // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại thì cập nhật lại trạng thái
+                if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
+
+                    khuyenMai.setTrangThai("Đã kết thúc");
                     khuyenMaiRepository.save(khuyenMai);
                 }
-                if (khuyenMai.getThoiGianKetThuc() != null && khuyenMai.getThoiGianBatDau() != null
-                        && !khuyenMai.getThoiGianBatDau().after(currentDate) &&
-                        !khuyenMai.getThoiGianKetThuc().before(currentDate)
+
+                // Kiểm tra nếu Khuyến mãi đang trong khoảng thời gian hiện tại và trạng thái là "Sắp diễn ra"
+                if (thoiGianBatDau != null && thoiGianKetThuc != null
+                        && !thoiGianBatDau.isAfter(currentDateTime)
+                        && !thoiGianKetThuc.isBefore(currentDateTime)
                         && khuyenMai.getTrangThai().trim().equalsIgnoreCase("Sắp diễn ra")) {
+                    System.out.println("set đang diễn ra: " + khuyenMai.getMa());
                     khuyenMai.setTrangThai("Đang diễn ra");
                     khuyenMaiRepository.save(khuyenMai);
                 }
+
+                // Kiểm tra nếu số lượng đã hết
                 if (khuyenMai.getSoLuong() == 0) {
-                    khuyenMai.setTrangThai("Không hoạt động");
+
+                    khuyenMai.setTrangThai("Đã hết");
                     khuyenMaiRepository.save(khuyenMai);
                 }
             }
@@ -379,34 +404,46 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
             e.printStackTrace();
         }
     }
+
+
     @Override
-    public Boolean CapNhapTrangThaiKhuyenMai(Integer id) throws DataNotFoundException {
-        Date ngayHienTai = new Date();
-        LocalDate currentDate = ngayHienTai.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(id).orElseThrow(
-                () -> new DataNotFoundException("Không thể cập nhập trạng thái với id : "+ id)
-        );
-        LocalDate thoiGianBatDau = khuyenMai.getThoiGianBatDau().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate thoiGianKetThuc = khuyenMai.getThoiGianKetThuc().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") || khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
-            khuyenMai.setTrangThai("Không hoạt động");
+    public DataResponse CapNhapTrangThaiKhuyenMai(Integer id){
+        // Lấy thời gian hiện tại
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
+        // Tìm khuyến mãi theo ID
+        KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(id).get();
+
+        LocalDateTime thoiGianBatDau = khuyenMai.getThoiGianBatDau();
+        LocalDateTime thoiGianKetThuc = khuyenMai.getThoiGianKetThuc();
+
+        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra") ||
+                khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")) {
+            khuyenMai.setTrangThai("Đã kết thúc");
             khuyenMaiRepository.save(khuyenMai);
-            return true;
+            return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái khuyến mãi thành Đã kết thúc" ));
         }
-        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Không hoạt động")){
-            if (thoiGianKetThuc.isBefore(currentDate)) {
-                khuyenMai.setTrangThai("Đã hết hạn");
-            } else if (thoiGianBatDau.isEqual(currentDate)) {
+
+        if (khuyenMai.getTrangThai().trim().equalsIgnoreCase("Đã kết thúc")) {
+            if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                return new DataResponse(false, new ResultModel<>(null, "Khuyến mãi đã kết thúc,Không thể đổi trạng thái " ));
+            } else if (thoiGianBatDau.isEqual(currentDateTime)) {
                 khuyenMai.setTrangThai("Đang diễn ra");
-            } else if (thoiGianBatDau.isBefore(currentDate) && thoiGianKetThuc.isAfter(currentDate)) {
+                khuyenMaiRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công thành Đang diễn ra" ));
+            } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
                 khuyenMai.setTrangThai("Đang diễn ra");
+                khuyenMaiRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công Đang diễn ra" ));
             } else {
                 khuyenMai.setTrangThai("Sắp diễn ra");
+                khuyenMaiRepository.save(khuyenMai);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi trạng thái thành công Sắp diễn ra" ));
             }
-            khuyenMaiRepository.save(khuyenMai);
-            return true;
         }
-        return false;
+        return new DataResponse(false, new ResultModel<>(null, "Lỗi khi đổi trạng thái" ));
     }
+
+
 
 }

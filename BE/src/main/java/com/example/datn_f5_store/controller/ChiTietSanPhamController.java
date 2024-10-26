@@ -214,7 +214,7 @@ public class ChiTietSanPhamController {
     @GetMapping("/getall-phan_trangKm")
     public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
 
         // Gọi service để lấy dữ liệu đã phân trang
         Page<ChiTietSanPhamEntity> pageResult = ctsp_Sevice.getAllPhanTrangKm(page, pageSize);

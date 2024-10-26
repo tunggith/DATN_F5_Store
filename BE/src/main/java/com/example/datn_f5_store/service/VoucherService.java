@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import com.example.datn_f5_store.response.DataResponse;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -20,10 +21,10 @@ public interface VoucherService {
    DataResponse createVoucher(VoucherRequest voucher);
    DataResponse updateVoucher(Integer id, VoucherRequest voucher) throws DataNotFoundException;
    VoucherEntity finById(Integer id) throws DataNotFoundException;
-   Boolean CapNhapTrangThaiVoucher(Integer id) throws DataNotFoundException;
+   DataResponse CapNhapTrangThaiVoucher(Integer id) ;
    boolean checkTrungMaVoucher(String ma);
    void CapNhapTrangThaiVoucherDhh();
-   Page<VoucherDto> findVoucherByDate(int page, int size, Date start, Date end);
+   Page<VoucherDto> findVoucherByDate(int page, int size, LocalDateTime start, LocalDateTime end);
    Page<VoucherDto> findByTenOrMa(int page, int size, String tim);
    Page<VoucherDto> findByTrangThai(int page, int size, String trangThai);
    List<VoucherDto> getTrangThai();

@@ -4,6 +4,7 @@ import { debounceTime } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import * as moment from 'moment-timezone';
 
 
 @Component({
@@ -12,6 +13,11 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./voucher.component.scss']
 })
 export class VoucherComponent implements OnInit {
+
+  convertToLocalTime(dateString: string): string {
+    return moment(dateString).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm'); // Thay đổi múi giờ tùy thuộc vào địa phương
+  }
+  
   vouchers: any[] = [];
   searchForm: FormGroup;
   voucherForm: FormGroup; // Thêm FormGroup cho form thêm/sửa
@@ -45,8 +51,8 @@ export class VoucherComponent implements OnInit {
       kieuGiamGia: ['$'], // Giá trị mặc định
       giaTriGiamToiDa: [''],
       giaTriHoaDonToiThieu: [''],
-      thoiGianBatDau: [''],
-      thoiGianKetThuc: [''],
+      thoiGianBatDau: new Date,
+      thoiGianKetThuc: new Date,
       moTa: [''],
       soLuong: [''],
       nguoiTao: [''],
@@ -107,8 +113,8 @@ export class VoucherComponent implements OnInit {
     const voucherData = this.voucherForm.value;
 
     // Format lại ngày trước khi gửi lên API
-    voucherData.thoiGianBatDau = this.formatDate(voucherData.thoiGianBatDau);
-    voucherData.thoiGianKetThuc = this.formatDate(voucherData.thoiGianKetThuc);
+    voucherData.thoiGianBatDau = voucherData.thoiGianBatDau;
+    voucherData.thoiGianKetThuc = voucherData.thoiGianKetThuc;
 
     console.log('Dữ liệu từ form:', voucherData);
 
@@ -119,6 +125,7 @@ export class VoucherComponent implements OnInit {
     } else {
         this.createVoucher(voucherData);
     }
+    console.log( voucherData.thoiGianBatDau,  voucherData.thoiGianKetThuc);
 }
 
 updateVoucher(voucherData: any): void {
@@ -177,20 +184,22 @@ editVoucher(voucher: any): void {
     this.voucherForm.get('thoiGianBatDau').enable();
 
     // Format lại ngày trước khi patch vào form
-    voucher.thoiGianBatDau = this.formatDate(voucher.thoiGianBatDau);
-    voucher.thoiGianKetThuc = this.formatDate(voucher.thoiGianKetThuc);
+    voucher.thoiGianBatDau = voucher.thoiGianBatDau;
+    voucher.thoiGianKetThuc = voucher.thoiGianKetThuc;
 
     console.log('Trước khi patch, thoiGianBatDau:', voucher.thoiGianBatDau);
 
     // Patch dữ liệu vào form
     this.voucherForm.patchValue({
-        ...voucher,
-
+        ...voucher
     });
 
 
     console.log('Giá trị form sau khi patch:', this.voucherForm.value);
 }
+
+
+
 
 
 
@@ -228,8 +237,8 @@ editVoucher(voucher: any): void {
       error => {
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
-          text: 'Đổi trạng thái thành công',
-          icon: 'success',
+          text: 'Lỗi khi đổi trạng thái, Vui lòng thử lại',
+          icon: 'error',
           confirmButtonText: 'OK',
           customClass: {
             confirmButton: 'custom-confirm-button'
@@ -248,17 +257,10 @@ editVoucher(voucher: any): void {
     this.currentVoucher = null; // Đặt lại voucher hiện tại
   }
 
-  formatDate(date: string): string {
-    let d = new Date(date);
-    let month = '' + (d.getMonth() + 1); // Tháng (1-12)
-    let day = '' + d.getDate(); // Ngày (1-31)
-    let year = d.getFullYear(); // Năm
 
-    if (month.length < 2) month = '0' + month; // Thêm số 0 vào tháng nếu cần
-    if (day.length < 2) day = '0' + day; // Thêm số 0 vào ngày nếu cần
+ 
 
-    return [year, month, day].join('-'); // Trả về định dạng yyyy-MM-dd
-}
+
 
 
 
@@ -268,19 +270,19 @@ editVoucher(voucher: any): void {
       // Tìm theo ten/ma
       this.voucherService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
         this.vouchers = response.result.content;
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });
     } else if (trangThai && !searchKey && !fromDate && !toDate) {
       // Tìm theo trạng thái
       this.voucherService.timTheoTrangThai(this.page, this.size, trangThai).subscribe((response) => {
         this.vouchers = response.result.content;
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });
     } else if ((fromDate || toDate) && !searchKey && !trangThai) {
       // Tìm theo ngày
       this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
         this.vouchers = response.result.content;
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
         console.log('du lieu vc ngày : ', this.vouchers);
       });
 } else if (searchKey && (fromDate || toDate) && !trangThai) {
@@ -289,7 +291,7 @@ editVoucher(voucher: any): void {
         this.vouchers = response.result.content.filter(voucher =>
           (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey)) 
         );
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });   
     }else if (!searchKey && (fromDate || toDate) && trangThai) {
       // Tìm theo ngày và Trạng thái
@@ -297,7 +299,7 @@ editVoucher(voucher: any): void {
         this.vouchers = response.result.content.filter(voucher =>
            voucher.trangThai === trangThai
         );    
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });   
     }else if (searchKey && !(fromDate || toDate) && trangThai) {
       // Tìm theo ten/ma và trạng thái
@@ -305,7 +307,7 @@ editVoucher(voucher: any): void {
         this.vouchers = response.result.content.filter(voucher =>
           voucher.trangThai === trangThai
         );
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });   
     }else if (searchKey && (fromDate || toDate) && trangThai) {
       // Tìm tất cả
@@ -313,7 +315,7 @@ editVoucher(voucher: any): void {
         this.vouchers = response.result.content.filter(voucher =>
           (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey)) && voucher.trangThai === trangThai
         );
-        this.totalPages = response.result.content.totalPages;
+        this.totalPages = response.result.pagination.totalPage;
       });   
     }else {
       // nếu tất cả trống thì findAll
