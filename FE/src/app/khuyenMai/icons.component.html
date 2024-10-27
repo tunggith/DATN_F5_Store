@@ -210,36 +210,35 @@
                 </button>
               </form>
             </div>
-          
           </div>
       </div>
+
       <div class="col-md-6">
-          <div class="product-table">
-                <div class="card shadow">
     <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-      <h4>Danh sách Sản phẩm</h4>
+      <h5>Danh sách Sản phẩm</h5>
       <input type="text" class="form-control w-50" placeholder="Tìm theo tên hoặc mã sản phẩm..." [(ngModel)]="searchTerm" (keyup)="onSearch()" />
     </div>
     <div class="card-body">
       <table class="table table-hover">
         <thead class="thead-light">
           <tr>
+            <th class="text-center">Áp dụng khuyến mãi</th>
             <th>Mã Sản phẩm</th>
             <th>Tên Sản phẩm</th>
             <th>Tên Chi tiết</th>
             <th>Giá tiền</th>
-            <th class="text-center">Áp dụng khuyến mãi</th>
+           
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let sp of chiTietSanPhams">
+            <td class="text-center">
+              <input type="checkbox" [checked]="sp.selected" [disabled]="sp.isDisabled" (change)="onCheckboxChange(sp, $event)" />
+            </td>
             <td>{{ sp.ma }}</td>
             <td>{{ sp.sanPham.ten }}</td>
             <td>{{ sp.ten }}</td>
             <td>{{ sp.donGia | currency }}</td>
-            <td class="text-center">
-              <input type="checkbox" [checked]="sp.selected" [disabled]="sp.isDisabled" (change)="onCheckboxChange(sp, $event)" />
-            </td>
           </tr>
           <tr *ngIf="chiTietSanPhams.length === 0">
             <td colspan="5" class="text-center">Không có sản phẩm bạn tìm</td>
@@ -248,34 +247,31 @@
       </table>
 
       <!-- Pagination -->
-      <div class="paginationrd text-center my-3">
-        <button *ngIf="pageSp > 0" (click)="prevPageSp()" class="btn btn-dark btn-sm">
-          <i class="material-icons">chevron_left</i>
-        </button>
-        <ng-container *ngIf="totalPageSp > 0">
-          <button *ngFor="let num of [].constructor(totalPageSp); let i = index"
-                  (click)="goToPageSp(i)"
-                  [disabled]="i === pageSp"
-                  class="btn btn-dark btn-sm mx-1">
-            {{ i + 1 }}
-          </button>
-        </ng-container>
-        <button *ngIf="pageSp < totalPageSp - 1" (click)="nextPageSp()" class="btn btn-dark btn-sm">
-          <i class="material-icons">chevron_right</i>
-        </button>
+      <div class="pagination-container">
+        <div class="paginationr">
+            <button *ngIf="pageSp > 0" (click)="prevPageSp()" >
+                <i class="material-icons">arrow_back_ios</i>
+            </button>  
+    
+            <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
+            <span class="current-page"> Trang {{ pageSp + 1 }} / {{ totalPageSp }}</span>
+    
+            <button *ngIf="pageSp < totalPageSp - 1" (click)="nextPageSp()" >
+                <i class="material-icons">arrow_forward_ios</i>
+            </button>
         </div>
-        </div>
-        </div>
-          </div>  
-      </div>
-  </div>
+    </div>
+         </div>
+       </div>
+    </div>  
+    
+
 
   <!-- Phần Bảng Voucher và Banner Khuyến Mãi Chi Tiết Sản Phẩm -->
   <div class="row mt-4">
       <div class="col-md-12">
-          <div class="voucher-table">
             <h4 class="mt-4">Danh Sách Khuyến Mãi</h4>
-            <div class="table-container">
+            <div class="table-responsive">
               <table class="table table-striped">
                   <thead>
                       <tr>
@@ -302,7 +298,7 @@
                           <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
                           <td>{{ khuyenMai.moTa }}</td>
                           <td>{{ khuyenMai.trangThai }}</td>
-                          <td>
+                          <td class="button-container">
                               <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)">
                                   <i class="material-icons">add_task</i> 
                               </button>
@@ -317,34 +313,25 @@
           
             
           
-            <div class="pagination-container">
-              <div class="paginationr">
-                  <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-pagination">
-                      <i class="material-icons">chevron_left</i>
-                  </button>  
-                  <!-- Hiển thị các số trang -->
-                  <ng-container *ngIf="totalPages > 0">
-                      <button *ngFor="let num of [].constructor(totalPages); let i = index"
-                              (click)="goToPage(i)" 
-                              [disabled]="i === page" 
-                              class="btn btn-pagination">
-                          {{ i + 1 }}
-                      </button>
-                  </ng-container>
-                  
-                  <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-pagination">
-                      <i class="material-icons">chevron_right</i>
-                  </button>
-              </div>
+          <div class="pagination-container">
+            <div class="paginationr">
+                <button *ngIf="page > 0" (click)="prevPage()" >
+                    <i class="material-icons">arrow_back_ios</i>
+                </button>  
+          
+                <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
+                <span class="current-page"> Trang {{ page + 1 }}  /  {{ totalPages }} </span>
+          
+                <button *ngIf="page < totalPages - 1" (click)="nextPage()" >
+                    <i class="material-icons">arrow_forward_ios</i>
+                </button>
+            </div>
           </div>
           
       <div class="col-md-12">
           <div class="banner">
             <div class="col-md-12">
-              <div class="card shadow">
-                <div class="card-header bg-success text-white">
                   <h4>Sản phẩm được áp dụng khuyến mãi</h4>
-                </div>
                 <div class="card-body">
                   <table class="table table-striped">
                     <thead>
@@ -381,8 +368,6 @@
                   </table>
                 </div>
               </div>
-            </div>
           </div>
-      </div>
   </div>
 </div>

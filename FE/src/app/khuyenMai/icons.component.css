@@ -72,54 +72,37 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #ffcc00;
-}
-
-.btn-warning {
-  background-color: #ffc107;
-  color: white;
-}
-
-.btn-warning:hover {
-  background-color: #ffcc00;
-}
-
 .btn-danger {
-  background-color: #dc3545;
-  color: white;
+  background-color: #dc3545; /* Màu nền mặc định của btn-danger */
 }
 
 .btn-danger:hover {
-  background-color: #ffcc00;
+  background-color: #c82333; /* Màu nền tối hơn khi hover */
 }
 
-/* Table styles */
-.table {
-  width: 100%;
-  margin-bottom: 1rem;
-  border-collapse: collapse;
+.btn-warning {
+  background-color: #ffc107; /* Màu nền mặc định của btn-warning */
 }
+
+.btn-warning:hover {
+  background-color: #e0a800; /* Màu nền tối hơn khi hover */
+}
+
+.btn-primary {
+  background-color: #007bff; /* Màu nền mặc định của btn-primary */
+}
+
+.btn-primary:hover {
+  background-color: #0069d9; /* Màu nền tối hơn khi hover */
+}
+
+
+
 
 .table-bordered {
   border: 1px solid #dee2e6;
 }
 
-.table th,
-.table td {
-  padding: 12px;
-  text-align: left;
-  border: 1px solid #dee2e6;
-}
-
-.table th {
-  background-color: #ffffff;
-}
 
 /* Pagination styles */
 .paginationd {
@@ -150,17 +133,21 @@ select:focus {
 }
 
 .btn-icon {
-  width: 40px; /* Chiều rộng của nút */
-  height: 40px; /* Chiều cao của nút */
+  width: 50px; /* Chiều rộng của nút */
+  height: 50px; /* Chiều cao của nút */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0; /* Loại bỏ padding */
   border-radius: 4px; /* Đường viền nút */
+  background-color: #007bff; /* Màu nền nút */
+  color: white; /* Màu chữ nút */
+  border: none; /* Bỏ viền */
+  cursor: pointer; /* Con trỏ khi hover */
 }
 
 .btn-icon i {
-  font-size: 24px; /* Kích thước biểu tượng */
+  font-size: 35px; /* Kích thước biểu tượng */
   margin: 0;
 }
 
@@ -172,44 +159,102 @@ select:focus {
 
 .pagination-container {
   display: flex;
-  justify-content: center; /* Căn giữa cho container */
-  margin-top: 1rem; /* Khoảng cách trên cho container */
+  justify-content: center; /* Center the container */
+  margin-top: 1rem; /* Space above the container */
 }
 
 .paginationr {
-  display: flex;
-  align-items: center; /* Căn giữa dọc cho các nút */
-  border-radius: 5px; /* Góc tròn cho khung */
-  background-color: #f8f9fa; /* Màu nền cho khung */
-  padding: 10px 15px; /* Padding cho khung */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+  display: flex; /* Align buttons in a row */
+  align-items: center; /* Center items vertically */
 }
 
-.btn-pagination {
-  background-color: #007bff; /* Màu nền cho nút */
-  color: #ffffff; /* Màu chữ */
-  border: none; /* Xóa viền cho nút */
-  border-radius: 5px; /* Góc tròn cho nút */
-  padding: 10px 15px; /* Padding cho nút */
-  margin: 0 5px; /* Khoảng cách giữa các nút */
-  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+.pagination button {
+  border: none; /* Remove border */
+  background-color: #ffffff; /* Background color */
+  padding: 10px 15px; /* More horizontal padding for larger click area */
+  border-radius: 5px; /* Round corners */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  cursor: pointer; /* Pointer cursor on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
 }
 
-.btn-pagination:hover {
-  background-color: #0056b3; /* Màu nền khi di chuột qua */
+.pagination button:hover {
+  background-color: #f0f0f0; /* Light grey on hover */
+  transform: scale(1.1); /* Slightly increase size on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
 }
 
-.btn-pagination:disabled {
-  background-color: #c0c0c0; /* Màu nền cho nút bị vô hiệu hóa */
-  cursor: not-allowed; /* Con trỏ khi nút bị vô hiệu hóa */
+.pagination button i {
+  font-size: 24px; /* Icon size */
+  color: #333; /* Icon color */
+  transition: color 0.3s, transform 0.3s; /* Smooth color transition */
 }
 
-.table-container {
-  max-height: 400px; /* Chiều cao tối đa cho bảng */
-  overflow-y: auto; /* Kích hoạt thanh cuộn dọc */
-  border: 1px solid #dee2e6; /* Đường viền cho bảng */
-  border-radius: 0.25rem; /* Bo góc */
+.pagination button:hover i {
+  color: #007bff; /* Change icon color on hover */
+  transform: translateY(-2px); /* Slightly move up on hover for effect */
 }
+
+.current-page {
+  margin: 0 15px; /* Spacing around the current page text */
+  font-size: 16px; /* Font size for the current page indicator */
+  color: #555; /* Text color */
+}
+
+.pagination button:disabled {
+  background-color: #c0c0c0; /* Background color for disabled button */
+  cursor: not-allowed; /* Not-allowed cursor for disabled button */
+  box-shadow: none; /* Remove shadow for disabled state */
+}
+
+.pagination button:disabled i {
+  color: #666; /* Change icon color for disabled state */
+}
+
+
+.table-responsive {
+  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  table-layout: auto;
+}
+
+
+th,td{
+  white-space: nowrap;
+}
+.table thead{
+  background-color: #dc3545;
+    color: #ffff;
+    font-weight: bold;
+}
+
+table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f8f9fa; /* Light background for better contrast */
+}
+
+.card-body{
+  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  table-layout: auto;
+}
+.button-container {
+  display: flex; /* Sử dụng Flexbox để sắp xếp các nút trên cùng một hàng */
+  flex-wrap: nowrap; /* Ngăn không cho các nút xuống dòng */
+  gap: 10px; /* Khoảng cách giữa các nút */
+}
+.btn-icon:hover {
+  background-color: #0056b3; /* Màu nền khi hover */
+}
+
+
+
+
 
 
 

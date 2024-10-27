@@ -172,7 +172,6 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 // Kiểm tra nếu có Khuyến mãi nào có trạng thái là "Chưa áp dụng" và Thời gian bắt đầu bằng hoặc nhỏ hơn với thời gian hiện tại
                 if (khuyenMaictsp.getTrangThai().equalsIgnoreCase("Chưa áp dụng") &&
                         thoiGianBatDau != null && !thoiGianBatDau.isAfter(currentDateTime)) {
-
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         double soTienDuocGiam = khuyenMaictsp.getChiTietSanPham().getDonGia() * (khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100.0);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - soTienDuocGiam);
@@ -187,8 +186,18 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                 }
 
+
                 // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại
                 if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
+                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
+                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                    }
+                    chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
+                    iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
+                }
+                if (khuyenMaictsp.getKhuyenMai().getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
