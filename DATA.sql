@@ -104,10 +104,10 @@ select*from ANH_CHI_TIET_SAN_PHAM
 
 INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT,ROLES, USERNAME, [PASSWORD], TRANG_THAI) VALUES
 ('KH001', 'Khách vãng lai', null,null, null, null, null, null,null ,null,null),
-('KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@example.com', 'anh2.jpg', '0987654321','CUSTOMER', N'tranthib', 'password456', N'đang hoạt động'),
-('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@example.com', 'anh3.jpg', '0909123456','CUSTOMER', N'phamvanc', 'password789', N'đang hoạt động'),
-('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@example.com', 'anh4.jpg', '0911223344', N'lethid','CUSTOMER', 'password101', N'đang hoạt động'),
-('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@example.com', 'anh5.jpg', '0933445566', N'vovane','CUSTOMER', 'password202', N'đang hoạt động');
+('KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@gmail.com.com', 'anh2.jpg', '0987654321','CUSTOMER', N'tranthib', 'password456', N'Đang hoạt động'),
+('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@gmail.com', 'anh3.jpg', '0909123456','CUSTOMER', N'phamvanc', 'password789', N'Đang hoạt động'),
+('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@gmail.com', 'anh4.jpg', '0911223344', N'lethid','CUSTOMER', 'password101', N'Đang hoạt động'),
+('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@gmail.com', 'anh5.jpg', '0933445566', N'vovane','CUSTOMER', 'password202', N'Đang hoạt động');
 
 INSERT INTO DIA_CHI_KHACH_HANG (ID_KHACH_HANG,SO_NHA, DUONG, PHUONG_XA, QUAN_HUYEN, TINH_THANH, QUOC_GIA, LOAI_DIA_CHI, TRANG_THAI) VALUES
 (2, N'123', N'Nguyễn Trãi', N'Phường 1', N'Quận 1', N'TP. Hồ Chí Minh', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
