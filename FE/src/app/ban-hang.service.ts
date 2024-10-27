@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -14,12 +14,36 @@ export class BanHangService {
   public khachHangUrl = 'http://localhost:8080/api/v1/khach-hang';
   private exportHoaDonUrl = 'http://localhost:8080/api/v1/pdf/download';
   private lichSuHoaDonUrl = 'http://localhost:8080/api/v1/lich-su-hoa-don';
+  private thuocTinhUrl = 'http://localhost:8080/api/v1';
 
   constructor(private http: HttpClient) { }
   //phương thức gọi api lấy danh sách sản phẩm
-  getSanPham(pageSize: number, pageNumber: number, keyword?: string): Observable<any> {
-    return this.http.get(`${this.url}/get-by-trang-thai?size=${pageSize}&page=${pageNumber}&keyword=${keyword}`);
-  }
+  getSanPham(pageSize: number, pageNumber: number, keyword?: string, sizeId?: string, mauSacId?: string, thuongHieuId?: string, xuatXuId?: string, gioiTinhId?: string): Observable<any> {
+    let params = new HttpParams()
+        .set('size', pageSize.toString())
+        .set('page', pageNumber.toString());
+
+    if (keyword) {
+        params = params.set('keyword', keyword);
+    }
+    if (mauSacId) {
+        params = params.set('mauSac', mauSacId);
+    }
+    if (sizeId) {
+        params = params.set('sizeSpct', sizeId);
+    }
+    if (thuongHieuId) {
+        params = params.set('thuongHieu', thuongHieuId);
+    }
+    if (xuatXuId) {
+        params = params.set('xuatXu', xuatXuId);
+    }
+    if (gioiTinhId) {
+        params = params.set('gioiTinh', gioiTinhId);
+    }
+
+    return this.http.get(`${this.url}/get-by-trang-thai`, { params });
+}
   getHoaDon(): Observable<any> {
     return this.http.get(`${this.hoaDonUrl}/getAll`);
   }
@@ -79,5 +103,19 @@ export class BanHangService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.put(`${this.hoaDonUrl}/update-dia-chi-nhan-hang/${id}`, hoaDon, { headers });
   }
-
+  getSize():Observable<any>{
+    return this.http.get(`${this.thuocTinhUrl}/size/getAll`);
+  }
+  getMauSac():Observable<any>{
+    return this.http.get(`${this.thuocTinhUrl}/mau-sac/getAll`);
+  }
+  getThuongHieu():Observable<any>{
+    return this.http.get(`${this.thuocTinhUrl}/thuong-hieu/getAll`);
+  }
+  getXuatXu():Observable<any>{
+    return this.http.get(`${this.thuocTinhUrl}/xuat-xu/getAll`);
+  }
+  getGioiTinh():Observable<any>{
+    return this.http.get(`${this.thuocTinhUrl}/gioi-tinh/getAll`);
+  }
 }

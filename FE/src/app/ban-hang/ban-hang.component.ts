@@ -3,8 +3,9 @@ import { FormControl } from '@angular/forms';
 import { BanHangService } from 'app/ban-hang.service';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 import { error } from 'console';
+import * as e from 'express';
 import { response } from 'express';
-import { data } from 'jquery';
+import { data, event } from 'jquery';
 import { map, Observable, startWith, switchMap } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -29,8 +30,10 @@ export class BanHangComponent implements OnInit {
   tienTraLai: number = 0;
   tienKhachDuaInvalid: boolean = false;
   voucher: any[] = [];
+  voucherControl = new FormControl('');
+  filteredVoucher: Observable<string[]>;
   phuongThucThanhToan: any[] = [];
-  icon: string = 'toggle_off';
+  icon: string = 'toggle_on';
   checkHoaDon: boolean = false;
   selectedVoucherId: number | null = null;
   idThanhToan: number = 0;
@@ -80,7 +83,11 @@ export class BanHangComponent implements OnInit {
     giaSpctHienTai: 0,
     trangThai: ''
   };
-
+  sizeId: string = '';
+  mauSacId: string = '';
+  thuongHieuId: string = '';
+  xuatXuId: string = '';
+  gioiTinhId: string = '';
   constructor(private banHangService: BanHangService, private giaoHangNhanhService: GiaoHangNhanhService) { }
 
   ngOnInit() {
@@ -92,29 +99,42 @@ export class BanHangComponent implements OnInit {
     this.getByTrangThai();
     this.loadKhachHang();
     this.loadProvinces();
+    this.getSize();
+    this.getMauSac();
+    this.getThuongHieu();
+    this.getXuatXu();
+    this.getGioiTinh();
   }
   //chuyển tab
   selectTab(tabName: string) {
     this.activeTab = tabName;
   }
   toggleIcon() {
-    this.icon = this.icon === 'toggle_off' ? 'toggle_on' : 'toggle_off';
+    this.icon = this.icon === 'toggle_on' ? 'toggle_off' : 'toggle_on';
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
   }
 
   // ====================== Lấy dữ liệu bán hàng ====================
 
-  getSanPham(pageSize: number = 0, pageNumber: number = 5, keyword: string = ''): void {
-    this.banHangService.getSanPham(pageSize, pageNumber, keyword).subscribe(
+  getSanPham(pageSize: number = 0, pageNumber: number = 5): void {
+    const sizeId = this.sizeId || '';
+    const mauSacId = this.mauSacId || '';
+    const thuongHieuId = this.thuongHieuId || '';
+    const xuatXuId = this.xuatXuId || '';
+    const gioiTinhId = this.gioiTinhId || '';
+    const keyWord = this.searchTerm || '';
+
+    this.banHangService.getSanPham(pageSize, pageNumber, keyWord, sizeId, mauSacId, thuongHieuId, xuatXuId, gioiTinhId).subscribe(
       data => {
         this.product = data.result.content.content;
         this.pagination = data.result.pagination;
       },
-      this.handleError // Xử lý lỗi dùng phương thức riêng
+      error => this.handleError(error)
     );
   }
+
   searchProduct(): void {
-    this.getSanPham(0, 5, this.searchTerm);
+    this.getSanPham();
   }
 
   getHoaDon(): void {
@@ -158,12 +178,7 @@ export class BanHangComponent implements OnInit {
     );
   }
 
-  getVoucher(): void {
-    this.banHangService.getVoucher().subscribe(
-      data => this.voucher = data.result.content,
-      this.handleError
-    );
-  }
+
 
   getPhuongThucThanhToan(): void {
     this.banHangService.getPhuongThucThanhToan().subscribe(
@@ -182,39 +197,7 @@ export class BanHangComponent implements OnInit {
     }
   }
 
-  onInputChange(event: any): void {
-    const selectedValue = event.target.value;
-    const selectedVoucher = this.voucher.find(v => v.ten === selectedValue);
-    this.selectedVoucherId = selectedVoucher ? selectedVoucher.id : null;
 
-    if (selectedVoucher) {
-      let discountValue: number;
-
-      // Kiểm tra kiểu giảm giá của voucher
-      if (selectedVoucher.kieuGiamGia === '%') {
-        // Nếu là phần trăm, tính giá trị giảm dựa trên phần trăm
-        discountValue = this.tongTienBanDau * (selectedVoucher.giaTriVoucher / 100);
-      } else {
-        // Nếu là giảm tiền trực tiếp, lấy giá trị của voucher
-        discountValue = selectedVoucher.giaTriVoucher;
-      }
-
-      // Đảm bảo giảm giá không vượt quá giá trị tối đa mà voucher cho phép
-      const finalDiscount = Math.min(discountValue, selectedVoucher.giaTriGiamToiDa);
-
-      // Kiểm tra điều kiện áp dụng voucher (nếu cần)
-      if (this.tongTienBanDau >= selectedVoucher.giaTriHoaDonToiThieu) {
-        // Tính tổng tiền sau khi áp dụng voucher
-        this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
-      } else {
-        // Nếu không đạt điều kiện, tổng tiền không thay đổi
-        this.tongTienSauVoucher = this.tongTienBanDau;
-      }
-    } else {
-      // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
-      this.tongTienSauVoucher = this.tongTienBanDau;
-    }
-  }
   //lấy phương thức thanh toán
   getIdThanhToan(idThanhToan: number): void {
     this.idThanhToan = idThanhToan;
@@ -420,22 +403,34 @@ export class BanHangComponent implements OnInit {
     this.banHangService.updateKhachHang(idHoaDon, idKhachHang).subscribe();
   }
   //==================Thanh toán hóa đơn==================
+
   thanhtoanHoaDon(idHoaDon: number): void {
     if (this.tienKhachDua < this.tongTienSauVoucher) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
+
+    // Nếu idGiaoHang là 1 thì mới gọi submitAddress và kiểm tra địa chỉ
+    if (this.idGiaoHang === 1) {
+      this.submitAddress();
+
+      if (this.diaChiNhanHang === null || this.diaChiNhanHang === '') {
+        return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
+      }
+    }
+
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
-      idKhachHang: this.idKhachHang || 1, // Cập nhật giá trị thực tế của khách hàng
-      idNhanVien: 1, // Cập nhật giá trị thực tế của nhân viên
+      idKhachHang: this.idKhachHang || 1,
+      idNhanVien: 1,
       idVoucher: this.selectedVoucherId || null,
-      idThanhToan: this.idThanhToan || 2, // Phương thức thanh toán mặc định
-      ma: this.hoaDonChiTietMoi.hoaDon.ma, // Mã hóa đơn chi tiết hiện tại
+      idThanhToan: this.idThanhToan || 2,
+      ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
       tongTienSauVoucher: 0,
-      tenNguoiNhan: this.tenKhachHang, // Tên khách hàng// Thời gian tạo hóa đơn
+      tenNguoiNhan: this.tenKhachHang,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
+      diaChiNhanHang: this.diaChiNhanHang
     };
 
     // Gọi service để thanh toán hóa đơn
@@ -445,6 +440,7 @@ export class BanHangComponent implements OnInit {
         this.getHoaDon(); // Cập nhật lại danh sách hóa đơn sau khi thanh toán
         this.getSanPham(); // Cập nhật lại danh sách sản phẩm
         this.getByTrangThai();
+        this.icon = 'toggle_off';
       },
       error => {
         this.handleError(error); // Xử lý lỗi nếu có
@@ -452,6 +448,7 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
+
   onKeyworkChange(event: Event): void {
     const input = event.target as HTMLInputElement; // Lấy giá trị từ event
     this.keywork = input.value; // Gán giá trị vào keywork
@@ -478,7 +475,7 @@ export class BanHangComponent implements OnInit {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
       data => {
         this.trangThaiHoaDon = data.result.content.trangThai;
-        if (this.trangThaiHoaDon != 'đã hủy') {
+        if (this.trangThaiHoaDon != 'Đã hủy') {
           this.isHidden = false;
         } else {
           this.isHidden = true;
@@ -633,10 +630,11 @@ export class BanHangComponent implements OnInit {
         phiShip: this.phiVanChuyen
       };
       console.log(this.phiVanChuyen);
+      console.log(this.activeInvoidID);
       // Gọi API để cập nhật địa chỉ nhận hàng
-      this.banHangService.updateDiaChiNhanHang(this.hoaDonChoId, hoaDon).subscribe(
+      this.banHangService.updateDiaChiNhanHang(this.activeInvoidID, hoaDon).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật địa chỉ thành công');
+          //this.showSuccessMessage('cập nhật địa chỉ thành công');
         },
         error => {
           console.error('Cập nhật địa chỉ thất bại:', error);
@@ -664,7 +662,6 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
-
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -686,7 +683,58 @@ export class BanHangComponent implements OnInit {
       console.log('ID Khách Hàng:', this.idKhachHang); // Kiểm tra ID Khách Hàng
     }
   }
+  //========load voucher===========
+  getVoucher(): void {
+    this.banHangService.getVoucher().subscribe(
+      data => {
+        this.voucher = data.result.content;
+        this.filteredVoucher = this.voucherControl.valueChanges.pipe(
+          startWith(''),
+          map(voucher => this._filterVoucher(voucher || '')),
+        );
+      },
+      error => {
+        console.log('lỗi khi lấy dữ liệu voucher', error);
+      }
+    );
+  }
+  private _filterVoucher(value: string): string[] {
+    const filterVoucher = value.toLocaleLowerCase();
+    return this.voucher.filter(voucher => (voucher.ten && voucher.ten.toLowerCase().includes(filterVoucher)))
+  }
+  onChangeVoucher(event: any) {
+    const selectedTen = event.option.value;
+    const selectedVoucher = this.voucher.find(voucher => voucher.ten === selectedTen);
 
+    if (selectedVoucher) {
+      this.selectedVoucherId = selectedVoucher.id;
+      let discountValue: number;
+
+      // Kiểm tra kiểu giảm giá của voucher
+      if (selectedVoucher.kieuGiamGia === '%') {
+        // Nếu là phần trăm, tính giá trị giảm dựa trên phần trăm
+        discountValue = this.tongTienBanDau * (selectedVoucher.giaTriVoucher / 100);
+      } else {
+        // Nếu là giảm tiền trực tiếp, lấy giá trị của voucher
+        discountValue = selectedVoucher.giaTriVoucher;
+      }
+
+      // Đảm bảo giảm giá không vượt quá giá trị tối đa mà voucher cho phép
+      const finalDiscount = Math.min(discountValue, selectedVoucher.giaTriGiamToiDa);
+
+      // Kiểm tra điều kiện áp dụng voucher (nếu cần)
+      if (this.tongTienBanDau >= selectedVoucher.giaTriHoaDonToiThieu) {
+        // Tính tổng tiền sau khi áp dụng voucher
+        this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
+      } else {
+        // Nếu không đạt điều kiện, tổng tiền không thay đổi
+        this.tongTienSauVoucher = this.tongTienBanDau;
+      }
+    } else {
+      // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
+      this.tongTienSauVoucher = this.tongTienBanDau;
+    }
+  }
   // ================= Xử lý lỗi =================
   private handleError(error: any): void {
     let errorMessage = 'Có lỗi xảy ra';
@@ -707,5 +755,71 @@ export class BanHangComponent implements OnInit {
     this.tienKhachDua = 0;
     this.tienTraLai = 0;
     this.hasError = true;
+  }
+  //=========call thuộc tính==============
+  size: any[] = [];
+  getSize(): void {
+    this.banHangService.getSize().subscribe(
+      data => {
+        this.size = data.result.content;
+      }
+    )
+  }
+  mauSac: any[] = [];
+  getMauSac(): void {
+    this.banHangService.getMauSac().subscribe(
+      data => {
+        this.mauSac = data.result.content;
+      }
+    )
+  }
+  thuongHieu: any[] = [];
+  getThuongHieu(): void {
+    this.banHangService.getThuongHieu().subscribe(
+      data => {
+        this.thuongHieu = data.result.content;
+      }
+    )
+  }
+  xuatXu: any[] = [];
+  getXuatXu(): void {
+    this.banHangService.getXuatXu().subscribe(
+      data => {
+        this.xuatXu = data.result.content;
+      }
+    )
+  }
+  gioiTinh: any[] = [];
+  getGioiTinh(): void {
+    this.banHangService.getGioiTinh().subscribe(
+      data => {
+        this.gioiTinh = data.result.content;
+      }
+    )
+  }
+  //========chọn thuộc tính===============
+  onChangeSize(event: any) {
+    this.sizeId = event.target.value || '';
+    this.getSanPham();
+  }
+
+  onChangeMauSac(event: any) {
+    this.mauSacId = event.target.value || '';
+    this.getSanPham();
+  }
+
+  onChangeThuongHieu(event: any) {
+    this.thuongHieuId = event.target.value || '';
+    this.getSanPham();
+  }
+
+  onChangeXuatXu(event: any) {
+    this.xuatXuId = event.target.value || '';
+    this.getSanPham();
+  }
+
+  onChangeGioiTinh(event: any) {
+    this.gioiTinhId = event.target.value || '';
+    this.getSanPham();
   }
 }

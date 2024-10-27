@@ -49,13 +49,13 @@ export class NhanVienComponent implements OnInit {
 
     constructor(private mapsService: MapsService, private giaoHangNhanhService: GiaoHangNhanhService, private datePipe: DatePipe, private fb: FormBuilder) {
         this.nhanVienForm = this.fb.group({
-            ma: ['', Validators.required],
+            ma: [''],
             ten: ['', Validators.required],
             ngayThangNamSinh: ['', [Validators.required, this.validateAge]],
             sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
             diaChi: [{ value: '', disabled: true }],
-            // username: ['', Validators.required],
-            // password: ['', Validators.required],
+            username: [''],
+            password: [''],
             email: ['', [Validators.required, Validators.email]],
             anh: [''],
             gioiTinh: ['1'],

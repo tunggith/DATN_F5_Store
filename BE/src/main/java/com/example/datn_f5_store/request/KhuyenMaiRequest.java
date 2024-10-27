@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @Getter
 @Setter
@@ -47,10 +48,10 @@ public class KhuyenMaiRequest {
     private Integer giaTriKhuyenMai;
 
     @NotNull(message = "Thời gian bắt đầu không được trống.")
-    private Date thoiGianBatDau;
+    private LocalDateTime thoiGianBatDau;
 
     @NotNull(message = "Thời gian kết thúc không được trống.")
-    private Date thoiGianKetThuc;
+    private LocalDateTime  thoiGianKetThuc;
 
     @NotNull(message = "Thời gian tạo không được trống.")
     private Date thoiGianTao;

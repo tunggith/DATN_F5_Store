@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface INhanVienRepository extends JpaRepository<NhanVienEntity, Integer> {
     Page<NhanVienEntity> getByTenContainingOrMaContaining(String ten, String ma, Pageable pageable);
+    NhanVienEntity getByUsernameAndPassword(String username,String password);
+    NhanVienEntity getByEmail(String email);
 }

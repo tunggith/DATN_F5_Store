@@ -52,8 +52,7 @@
 .create-client {
     display: flex;
     justify-content: space-between;
-    margin: 20px 0;
-    margin-left: 10px;
+    margin-left: 35px;
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
@@ -159,7 +158,6 @@
 
 .cart {
     padding: 20px;
-    border-bottom: 0.5px solid rgb(193, 174, 174);
     text-align: center;
 }
 
@@ -173,22 +171,8 @@
     color: #7f8c8d;
 }
 
-.cash {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    height: 55px;
-}
-
-.payment button {
-    border: none;
-    background-color: rgb(96, 213, 96);
-    border-radius: 10px;
-    color: #ffff;
-    cursor: pointer;
-}
-
 .payment button:hover {
-    background-color: rgb(59, 177, 59);
+    background-color: rgb(243, 69, 69);
 }
 
 .profile-pay {
@@ -197,24 +181,34 @@
 }
 
 .voucher {
-    width: 50%;
-    text-align: center;
-    margin-top: 20px;
-    padding-left: 0;
+    background-color: #fff;
+    width: 25%;
+    text-align: left;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+.card-header .form-select {
+    width: 120px;
+    margin-left: 10px;
+    border: 0;
+    border-radius: 10px;
 }
 
 .voucher input {
     margin-left: 10px;
-    border: 0.5px solid gray;
-    border-radius: 10px;
+    border: none;
+    border-bottom: 0.5px solid gray;
     height: 30px;
 }
 
 .voucher button {
+    color: #ffff;
     height: 30px;
     border: none;
-    background-color: #91e658;
-    border-radius: 40%;
+    background-color: rgb(244, 25, 25);
+    border-radius: 10%;
     margin-left: 10px;
 }
 
@@ -228,13 +222,19 @@
     height: 30px;
     border: 0.5px solid gray;
     border-radius: 10px;
-    margin-left: -17px;
+}
+
+.voucher div {
+    margin-top: 10px;
+}
+
+.address {
+    width: 70%;
+    background-color: #ffff;
 }
 
 .cash-client {
-    border: none;
-    width: 200px;
-    border-bottom: 0.3px solid gray;
+    width: 120px;
 }
 
 .card-header {
@@ -245,7 +245,7 @@
     border-radius: 10px;
     border: 0.5px solid gainsboro;
     background-color: rgb(214, 206, 206);
-    margin-left: 70%;
+    margin-left: 5%;
     width: 200px;
 }
 
@@ -298,10 +298,6 @@
     color: gray;
 }
 
-.thanh-toan {
-    width: 50%;
-}
-
 .error-border {
     border-bottom: 1px solid red;
     background-color: #ffe6e6;
@@ -344,7 +340,6 @@ datalist {
 }
 
 .giao-hang {
-    margin-left: 173px;
     margin-top: 10px;
 }
 
@@ -361,6 +356,9 @@ datalist {
 .danh-sach-hoa-don {
     background-color: #fff;
     padding: 10px;
+}
+.danh-sach-hoa-don .row .table{
+    margin: 10px;
 }
 
 .button-select {
@@ -688,13 +686,12 @@ datalist {
     margin-left: 20px;
 }
 
-.form_address .mb-3 input,.form_address .mb-3 select {
+.form_address .mb-3 input,
+.form_address .mb-3 select {
     width: 300px;
 }
 
 .example-form {
-    margin-top: -15px;
-    margin-left: 20px;
     min-width: 100px;
     max-width: 200px;
     width: 100%;
@@ -704,12 +701,23 @@ datalist {
     width: 100%;
 }
 
+.combox .example-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.combox .example-full-width {
+    width: 100%;
+}
+
 /* Media Queries cho màn hình điện thoại */
 @media (max-width: 768px) {
     .tab {
         flex-direction: column;
         gap: 10px;
     }
+
     .profile-client {
         width: 100%;
         margin-left: 0;

@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -36,9 +37,9 @@ public class VoucherEntity {
     @Column(name = "GIA_TRI_HOA_DON_TOI_THIEU")
     private Integer giaTriHoaDonToiThieu;
     @Column(name = "THOI_GIAN_BAT_DAU")
-    private Date thoiGianBatDau;
+    private LocalDateTime thoiGianBatDau;
     @Column(name = "THOI_GIAN_KET_THUC")
-    private Date thoiGianKetThuc;
+    private LocalDateTime thoiGianKetThuc;
     @Column(name = "MOTA")
     private String moTa;
     @Column(name = "SO_LUONG")

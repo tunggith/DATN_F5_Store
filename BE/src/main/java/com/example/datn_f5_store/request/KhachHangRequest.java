@@ -52,12 +52,7 @@ public class KhachHangRequest {
     @NotBlank(message = "Số điện thoại không được để trống")
     @Size(min = 10, max = 11, message = "Số điện thoại phải có từ 10 đến 11 ký tự")
     private String sdt;
-
-    @NotBlank(message = "Username không được để trống")
     private String userName;
-
-    @NotBlank(message = "Password không được để trống")
-    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
 
     private String trangThai;
