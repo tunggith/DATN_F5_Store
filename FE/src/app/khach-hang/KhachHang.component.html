@@ -25,13 +25,6 @@
                                         </div>
                                     </div>
                                 </div> 
-                                <div class="mt-2">
-                                    <div class="">
-                                        <label class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" name="sdt"
-                                            placeholder="Nhập số điện thoại" required [(ngModel)]="newKhachHang.sdt">
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <div>
@@ -45,10 +38,12 @@
                                     <input type="date" class="form-control" id="ngayThangNamSinh"
                                         [(ngModel)]="newKhachHang.ngayThangNamSinh" name="ngayThangNamSinh" required>
                                 </div>
-                                <div class="mt-4">
-                                    <label class="form-label">Vai trò</label>
-                                    <input type="text" class="form-control" placeholder="Nhập vai trò khách hàng" name="roles"
-                                        required [(ngModel)]="newKhachHang.roles">
+                                <div class="mt-2">
+                                    <div class="">
+                                        <label class="form-label">Số điện thoại</label>
+                                        <input type="text" class="form-control" name="sdt"
+                                            placeholder="Nhập số điện thoại" required [(ngModel)]="newKhachHang.sdt">
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
@@ -146,7 +141,6 @@
                             <th scope="col" style="white-space: nowrap;">Email</th>
                             <th scope="col" style="white-space: nowrap;">Ảnh</th>
                             <th scope="col" style="white-space: nowrap;">Số điện thoại</th>
-                            <th scope="col"style="white-space: nowrap;">Vai trò</th>
                                 <!-- <th scope="col"style="white-space: nowrap;">Password</th> -->
                             <th scope="col" style="white-space: nowrap;">Trạng thái</th>
                             <th scope="col">Thao tác</th>
@@ -167,9 +161,6 @@
                                         style="width: 50px; height: 50px; object-fit: cover;border-radius: 40px;">
                                 </td>
                                 <td>{{ customer.sdt }}</td>
-                                <!-- <td>{{ customer.userName }}</td>
-                                    <td>{{ customer.password }}</td> -->
-                                <td>{{ customer.roles }}</td>
                                 <td>{{ customer.trangThai}}</td>
                                 <td style="width: 220px;">
                                     <button (click)="showDetail(customer)" class="btn btn-dark-blue">

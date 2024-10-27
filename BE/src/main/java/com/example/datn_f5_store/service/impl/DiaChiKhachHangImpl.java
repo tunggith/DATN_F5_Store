@@ -75,6 +75,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 throw new NullPointerException("Địa chỉ không tồn tại");
             }
             diaChiKhachHangResquest.setId(id);
+            diaChiKhachHangResquest.setSdt(diaChi.getSdt());
             return this.saveOfUpdate(diaChi, diaChiKhachHangResquest);
         } else {
             return new DataResponse(false, new ResultModel<>(null, "Dữ liệu đầu vào lỗi"));
