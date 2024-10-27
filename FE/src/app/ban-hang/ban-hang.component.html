@@ -20,7 +20,7 @@
                         </app-customer-popup>
                         <div class="profile-client">
                             <form class="example-form">
-                                <input type="text" placeholder="Nhập hoặc chọn voucher..." [formControl]="myControl"
+                                <input type="text" placeholder="Nhập hoặc chọn khách hàng...." [formControl]="myControl"
                                     [matAutocomplete]="auto">
                                 <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
                                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ten">
@@ -308,12 +308,12 @@
                         <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
-                    <button *ngIf="trangThaiHoaDon==='chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
+                    <button *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
-                    <button *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
+                    <button *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
                     <button
-                        *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='đang giao hàng' &&!isHidden"
+                        *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div style="display:inline-block;width:100%;overflow-x:hidden;" *ngIf="!isHidden">
                         <div class="row main-timeline10">
@@ -376,6 +376,7 @@
                         <th scope="col">Tên khách hàng</th>
                         <th scope="col">Giao hàng</th>
                         <th scope="col">Phương thức thanh toán</th>
+                        <th scope="col">Hình thức thanh toán</th>
                         <th scope="col">Thời gian tạo</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Trạng thái</th>
@@ -389,6 +390,8 @@
                             <td *ngIf="hoaDon.giaoHang==1">có</td>
                             <td *ngIf="hoaDon.giaoHang==0">không</td>
                             <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
+                            <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
+                            <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
                             <td>{{hoaDon.tongTienSauVoucher}}</td>
                             <td class="button-select">

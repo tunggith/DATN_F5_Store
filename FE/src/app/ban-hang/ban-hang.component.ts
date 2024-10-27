@@ -46,6 +46,7 @@ export class BanHangComponent implements OnInit {
   hoaDonCho: any[] = [];
   hoaDonChoId: number = 0;
   trangThaiHoaDon: string = '';
+  hinhThucThanhToan: string = '';
   maHoaDonCho: string = '';
   keywork: string = '';
   pageHoaDonCt: number = 0;
@@ -418,15 +419,17 @@ export class BanHangComponent implements OnInit {
         return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
       }
     }
-
+    console.log(this.tenKhachHang);
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
       idKhachHang: this.idKhachHang || 1,
       idNhanVien: 1,
       idVoucher: this.selectedVoucherId || null,
       idThanhToan: this.idThanhToan || 2,
+      hinhThucThanhToan: 0,
       ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
+      phiShip:this.phiVanChuyen,
       tongTienSauVoucher: 0,
       tenNguoiNhan: this.tenKhachHang,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
@@ -475,6 +478,7 @@ export class BanHangComponent implements OnInit {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
       data => {
         this.trangThaiHoaDon = data.result.content.trangThai;
+        this.hinhThucThanhToan = data.result.content.hinhThucThanhToan;
         if (this.trangThaiHoaDon != 'Đã hủy') {
           this.isHidden = false;
         } else {
@@ -491,7 +495,7 @@ export class BanHangComponent implements OnInit {
   }
   updateTrangThaiHoaDon(id: number): void {
     if (this.diaChiNhanHang == null && this.trangThaiHoaDon == 'đã xác nhận' && this.idGiaoHang === 1) {
-      this.showWarningMessage("hóa đơn chưa có địa chỉ nhận hàng, vui lòng nhập");
+      this.showWarningMessage("Hóa đơn chưa có địa chỉ nhận hàng, vui lòng nhập");
     } else {
       this.banHangService.updateTrangThaiHoaDon(id).subscribe(
         response => {
@@ -537,7 +541,6 @@ export class BanHangComponent implements OnInit {
   onTinhThanhChange(event: any): void {
     const provinceId = event.target.value;
     this.selectedTinhThanh = provinceId;  // Lưu ID tỉnh/thành
-    console.log(this.selectedTinhThanh);
     this.tinhThanh = this.provinces.find(p => p.ProvinceID === Number(provinceId))?.ProvinceName || '';  // Gán tên tỉnh/thành
 
     this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
@@ -559,7 +562,6 @@ export class BanHangComponent implements OnInit {
   onQuanHuyenChange(event: any): void {
     const districtId = event.target.value;
     this.selectedQuanHuyen = districtId;  // Lưu ID quận/huyện
-    console.log(this.selectedQuanHuyen);
     this.quanHuyen = this.districts.find(d => d.DistrictID === Number(districtId))?.DistrictName || '';  // Gán tên quận/huyện
 
     this.giaoHangNhanhService.getWards(districtId).subscribe(
@@ -606,7 +608,6 @@ export class BanHangComponent implements OnInit {
 
     this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
       response => {
-        console.log('Phí vận chuyển:', response);
         // Xử lý phí vận chuyển ở đây
         this.phiVanChuyen = response.data.total;
       },
@@ -629,8 +630,6 @@ export class BanHangComponent implements OnInit {
         diaChiNhanHang: this.diaChiNhanHang,
         phiShip: this.phiVanChuyen
       };
-      console.log(this.phiVanChuyen);
-      console.log(this.activeInvoidID);
       // Gọi API để cập nhật địa chỉ nhận hàng
       this.banHangService.updateDiaChiNhanHang(this.activeInvoidID, hoaDon).subscribe(
         response => {
@@ -680,6 +679,7 @@ export class BanHangComponent implements OnInit {
 
     if (selectedKhachHang) {
       this.idKhachHang = selectedKhachHang.id; // Gán id cho idKhachHang
+      this.tenKhachHang = selectedKhachHang.ten;
       console.log('ID Khách Hàng:', this.idKhachHang); // Kiểm tra ID Khách Hàng
     }
   }

@@ -24,6 +24,7 @@ public class HoaDonRequest {
     private Integer idVoucher; // ID của voucher (nếu có)
 
     private Integer idThanhToan; // ID của phương thức thanh toán
+    private Integer hinhThucThanhToan;
 
     private String ma; // Mã của hóa đơn
 

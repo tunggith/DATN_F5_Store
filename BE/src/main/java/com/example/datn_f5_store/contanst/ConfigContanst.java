@@ -58,6 +58,7 @@ public class ConfigContanst {
         public static final String ID_NHAN_VIEN = "ID_NHAN_VIEN";
         public static final String ID_VOUCHER = "ID_VOUCHER";
         public static final String ID_THANH_TOAN = "ID_PHUONG_THUC_THANH_TOAN";
+        public static final String HINH_THUC_THANH_TOAN = "HINH_THUC_THANH_TOAN";
         public static final String MA = "MA";
         public static final String TONG_TIEN_BAN_DAU = "TONG_TIEN_BAN_DAU";
         public static final String TONG_TIEN_SAU_VOUCHER = "TONG_TIEN_THANH_TOAN";
