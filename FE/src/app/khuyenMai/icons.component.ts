@@ -47,7 +47,7 @@ export class IconsComponent implements OnInit {
   searchTerm: string = '';
   page: number = 0; 
   size: number = 5;
-  sizeSp: number = 4;
+  sizeSp: number = 5;
   pageSp: number = 0; 
   totalPages: 0;
   totalPageSp: 0;
@@ -230,37 +230,73 @@ createKhuyenMai() {
 
 
 
-// hàm đổi trạng thái
+
   capNhapKm(khuyenMaiId: number): void {
     const khuyenMai = { id: khuyenMaiId };
+  
+    // Gọi API cập nhật trạng thái khuyến mãi
     this.khuyenMaiService.capnhap(khuyenMai).subscribe(
       response => {
-        if(response.status){
-        // Xử lý phản hồi từ API nếu cần
-        Swal.fire({
-          title: 'F5 Store xin thông báo : ',
-          text: response.result.content,
-          icon: 'success',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'custom-confirm-button'
-          }
-        });
-        this.loadKhuyenMais();
-      }else{
-        Swal.fire({
-          title: 'F5 Store xin thông báo : ',
-          text: response.result.content,
-          icon: 'error',
-          confirmButtonText: 'OK',
-          customClass: {
-            confirmButton: 'custom-confirm-button'
-          }
-        });
-        this.loadKhuyenMais();
-      }
+        if (response.status) {
+          // Hiển thị thông báo thành công
+          Swal.fire({
+            title: 'F5 Store xin thông báo : ',
+            text: response.result.content,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-confirm-button'
+            }
+          });
+          this.loadKhuyenMais();
+          // Lưu trạng thái hiện tại vào localStorage trước khi cập nhật
+          this.saveSelectionsToLocalStorage();
+  
+          // Lấy chi tiết khuyến mãi sản phẩm theo id khuyến mãi
+        this.khuyenMaiSanPhamChiTietService.getByKm(khuyenMaiId).subscribe(
+          (response: DataResponse<any>) => {
+            if (response.status) {
+            // lấy danh sách chi tiết sản phẩm có trong khuyến mãi sản phẩm
+              const chiTietSanPhamList = response.result.content.content; 
+
+              // Kiểm tra nếu chi tiết sản phẩm có tồn tại
+              if (Array.isArray(chiTietSanPhamList) && chiTietSanPhamList.length > 0) {
+                // gán chiTietSanPhams = chi tiết sản phẩm có trong danh sách khuyến maĩ
+                this.chiTietSanPhams = chiTietSanPhamList.map(item => item.chiTietSanPham);
+                console.log('Danh sách sản phẩm:', this.chiTietSanPhams);
+                this.chiTietSanPhams.forEach(sanPham => {
+                  sanPham.selected = false; // Bỏ tick
+                });
+                this.saveSelectionsToLocalStorage();
+                this.fetchChiTietSanPhams();
+                this.fetchKhuyenMaiChiTietSanPham();
+                this.loadSelectionsFromLocalStorage();
+                this.loadKhuyenMais();
+              } else {
+                console.error('Không có sản phẩm nào trong danh sách.');
+              }
+            } else {
+              console.error('Không tìm thấy thông tin chi tiết sản phẩm khuyến mãi.');
+            }
+          },
+          (error) => console.error('Lỗi khi gọi API chi tiết sản phẩm khuyến mãi:', error)
+        );
+        } else {
+          // Hiển thị thông báo lỗi
+          Swal.fire({
+            title: 'F5 Store xin thông báo : ',
+            text: response.result.content,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            customClass: {
+              confirmButton: 'custom-confirm-button'
+            }
+          });
+          this.loadKhuyenMais();
+        }
       },
       error => {
+        // Xử lý lỗi khi gọi API
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
           text: 'Lỗi khi đổi trạng thái',
@@ -274,6 +310,11 @@ createKhuyenMai() {
       }
     );
   }
+  
+
+
+
+
   
 
 
@@ -461,7 +502,6 @@ fetchKhuyenMaiChiTietSanPham() {
   );
 }
 
-
  // hàm thêm, xóa khuyến mãi vào sản phẩm
 onCheckboxChange(chiTietSanPham : any, event: any) {
   const isChecked = event.target.checked;
@@ -477,7 +517,7 @@ onCheckboxChange(chiTietSanPham : any, event: any) {
     });
     event.target.checked = false;
     this.saveSelectionsToLocalStorage(); 
-    return;
+    this.fetchChiTietSanPhams();
   }
   if (isChecked) {
     // Thêm sản phẩm vào khuyến mãi chi tiết

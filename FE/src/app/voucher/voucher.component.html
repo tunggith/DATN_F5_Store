@@ -176,8 +176,8 @@
 
 
   <hr />
-  <div class="table-container"> 
-  <table class="table table-bordered voucher-table">
+  <div class="table-responsive"> 
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>Mã Voucher</th>
@@ -222,22 +222,19 @@
 </div>
 
 
-  <div class="pagination">
-    <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-secondary">
-      <i class="material-icons">chevron_left</i>
-    </button>  
-    <!-- Hiển thị các số trang -->
-    <ng-container *ngIf="totalPages > 0">
-      <button *ngFor="let num of [].constructor(totalPages); let i = index"
-              (click)="goToPage(i)" 
-              [disabled]="i === page" 
-              class="btn btn-secondary">
-        {{ i + 1 }}
+  
+<div class="pagination-container">
+  <div class="paginationr">
+      <button *ngIf="page > 0" (click)="prevPage()" >
+          <i class="material-icons">arrow_back_ios</i>
+      </button>  
+
+      <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
+      <span class="current-page"> Trang {{ page + 1 }}  /  {{ totalPages }} </span>
+
+      <button *ngIf="page < totalPages - 1" (click)="nextPage()" >
+          <i class="material-icons">arrow_forward_ios</i>
       </button>
-    </ng-container>
-    
-    <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-secondary">
-      <i class="material-icons">chevron_right</i>
-    </button>
   </div>
 </div>
+
