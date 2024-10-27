@@ -7,14 +7,18 @@ import com.example.datn_f5_store.request.NhanVienRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.NhanVienService;
+import com.example.datn_f5_store.service.sendEmail.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NhanVienServiceImpl implements NhanVienService {
@@ -22,6 +26,8 @@ public class NhanVienServiceImpl implements NhanVienService {
     //Inject cac respository can thiet cho nhan vien
     @Autowired
     private INhanVienRepository nhanVienRepo;
+    @Autowired
+    private SendEmailService sendEmailService;
 
     @Override
     public Page<NhanVienDto> getAll(int page, int size) {
@@ -88,8 +94,19 @@ public class NhanVienServiceImpl implements NhanVienService {
         if (!this.checkNhanVien(request)){
             //check trung ma nhan vien
             if (!this.checkDuplicate(request)){
+                request.setUsername(request.getEmail());
+                request.setPassword(this.generatePassword());
                 //luu hoac cap nhat nhan vien
-                return this.saveOfUpdate(new NhanVienEntity(), request);
+                DataResponse response = this.saveOfUpdate(new NhanVienEntity(), request);
+                if(response.isStatus()){
+                    String toEmail = request.getEmail();
+                    String username = request.getUsername();
+                    String password = request.getPassword();
+                    sendEmailService.sendSimpleEmail(toEmail,username,password);
+                    return response;
+                }else {
+                    return  response;
+                }
             } else {
                 return new DataResponse(false, new ResultModel<>(null, "Mã nhân viên đã tồn tại!"));
             }
@@ -140,7 +157,7 @@ public class NhanVienServiceImpl implements NhanVienService {
         }
     }
 
-    //kiem tra dau vao san pham
+    //kiem tra dau vao
     private boolean checkNhanVien(NhanVienRequest request){
         boolean check = false;
         //kiem tra ma nhan vien
@@ -183,6 +200,20 @@ public class NhanVienServiceImpl implements NhanVienService {
         entity.setNguoiSua(request.getNguoiSua());
         entity.setThoiGianSua(request.getThoiGianSua());
         entity.setTrangThai(request.getTrangThai());
+    }
+    public String generatePassword() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("mmss");
+        String timeFormat = now.format(dateTimeFormatter);
+        String uuidPart = UUID.randomUUID().toString().substring(0, 5);
+        return uuidPart + timeFormat;
+    }
+    public String generateMaNhanVien() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("mmss");
+        String timeFormat = now.format(dateTimeFormatter);
+        String uuidPart = UUID.randomUUID().toString().substring(0, 2);
+        return "NV"+ uuidPart + timeFormat;
     }
 }
 

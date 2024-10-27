@@ -165,18 +165,34 @@ public class ChiTietSanPhamImpl {
         return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
     }
 
-    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(int page, int size, String keyword) {
+    public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(
+            int page, int size, String keyword,
+            String mauSac,String sizeSpct,String thuongHieu,
+            String xuatXu, String gioiTinh) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChiTietSanPhamEntity> chiTietSanPham;
         if (keyword == null || keyword.trim().isEmpty()) {
             // Nếu keyword là null hoặc chuỗi trống, chỉ lọc theo trạng thái
-            chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai("Còn hàng", "Đang hoạt động", pageable);
+            chiTietSanPham = repo_ctsp.findByTrangThaiAndSanPhamTrangThai(
+                    "Còn hàng",
+                    "Đang hoạt động",
+                    mauSac,
+                    sizeSpct,
+                    thuongHieu,
+                    xuatXu,
+                    gioiTinh,
+                    pageable);
         } else {
             // Nếu có keyword, thêm điều kiện tìm kiếm theo keyword
             chiTietSanPham = repo_ctsp.getByTrangThai(
                     "Còn hàng",
                     "Đang hoạt động",
                     keyword,
+                    mauSac,
+                    sizeSpct,
+                    thuongHieu,
+                    xuatXu,
+                    gioiTinh,
                     pageable);
         }
 

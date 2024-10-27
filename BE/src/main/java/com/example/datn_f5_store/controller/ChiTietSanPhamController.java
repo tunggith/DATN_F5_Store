@@ -163,11 +163,16 @@ public class ChiTietSanPhamController {
     public ResponseEntity<Object> getByTrangThai(
             @Parameter(name = "size")@RequestParam(defaultValue = "0")Integer size,
             @Parameter(name = "page")@RequestParam(defaultValue = "5")Integer page,
-            @Parameter(name = "keyword")@RequestParam(required = false) String keyword
+            @Parameter(name = "keyword")@RequestParam(required = false) String keyword,
+            @Parameter(name = "mauSac")@RequestParam(required = false) String mauSac,
+            @Parameter(name = "sizeSpct")@RequestParam(required = false) String sizeSpct,
+            @Parameter(name = "thuongHieu")@RequestParam(required = false) String thuongHieu,
+            @Parameter(name = "xuatXu")@RequestParam(required = false) String xuatXu,
+            @Parameter(name = "gioiTinh")@RequestParam(required = false) String gioiTinh
     ){
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
-        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,keyword);
+        var listSanPham = ctsp_Sevice.getByTrangThaiSanPhamAndTrangThai(size,page,keyword, mauSac, sizeSpct, thuongHieu, xuatXu, gioiTinh);
         dataResponse.setResult(new ResultModel<>(
                 new PagingModel(page,size,listSanPham.getTotalElements(),listSanPham.getTotalPages()),listSanPham
         ));
@@ -209,7 +214,7 @@ public class ChiTietSanPhamController {
     @GetMapping("/getall-phan_trangKm")
     public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
+            @RequestParam(value = "pageSize", defaultValue = "4") int pageSize) {
 
         // Gọi service để lấy dữ liệu đã phân trang
         Page<ChiTietSanPhamEntity> pageResult = ctsp_Sevice.getAllPhanTrangKm(page, pageSize);

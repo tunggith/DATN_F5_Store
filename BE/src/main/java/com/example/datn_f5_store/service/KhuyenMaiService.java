@@ -9,6 +9,7 @@ import com.example.datn_f5_store.response.DataResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -19,8 +20,8 @@ public interface KhuyenMaiService {
     DataResponse create(KhuyenMaiRequest khuyenMaiRequest);
     DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id);
     KhuyenMaiEntity findById(Integer id);
-    Page<KhuyenMaiDto> findKhuyenMaiByDate(int page, int size, Date start, Date end);
+    Page<KhuyenMaiDto> findKhuyenMaiByDate(int page, int size, LocalDateTime start, LocalDateTime end);
     public void CapNhapTrangThaiKhuyenMaiDhh();
 
-    public Boolean CapNhapTrangThaiKhuyenMai(Integer id) throws DataNotFoundException;
+    public DataResponse CapNhapTrangThaiKhuyenMai(Integer id);
 }

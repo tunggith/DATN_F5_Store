@@ -95,6 +95,9 @@ public class KhachHangServiceImpl implements KhachHangService {
 
             // Lưu khách hàng vào database
             khachHangRepository.save(khachHang);
+            return new DataResponse(true, new ResultModel<>(null, "Create successfully"));
+
+
             // Gửi email thông báo
 
             DataResponse emailResponse = sendEmailService.sendSimpleEmail(khachHangRequest.getEmail(), username, password);
