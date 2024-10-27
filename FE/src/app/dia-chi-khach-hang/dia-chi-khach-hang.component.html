@@ -31,7 +31,7 @@
                       <div>
                         <label for="" class="form-label">Tỉnh thành</label>
                         <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="tinhThanh" [(ngModel)]="diaChiMoi.selectedTinhThanh" (change)="onTinhThanhChange($event)">
+                          name="tinhThanh" [(ngModel)]="selectedTinhThanh" (change)="onTinhThanhChange($event)">
                           <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }}</option>
                         </select>
                       </div>
@@ -42,7 +42,7 @@
                       <div>
                         <label for="" class="form-label">Quận huyện</label>
                         <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="quanHuyen" [(ngModel)]="diaChiMoi.selectedQuanHuyen" (change)="onQuanHuyenChange($event)">
+                          name="quanHuyen" [(ngModel)]="selectedQuanHuyen" (change)="onQuanHuyenChange($event)">
                           <option *ngFor="let district of districts" [value]="district.DistrictID">{{ district.DistrictName }}</option>
                         </select>
                       </div>
@@ -53,7 +53,7 @@
                       <div>
                         <label for="" class="form-label">Phường xã</label>
                         <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="phuongXa" [(ngModel)]="diaChiMoi.selectedPhuongXa" (change)="onPhuongXaChange($event)">
+                          name="phuongXa" [(ngModel)]="selectedPhuongXa" (change)="onPhuongXaChange($event)">
                           <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
                         </select>
                       </div>

@@ -116,8 +116,7 @@ export class DiaChiKhachHangComponent implements OnInit {
   diaChiDetail(id: number): void {
     this.diaChiKhachHangService.chiTietDiaChi(id).subscribe(response => {
         this.diaChiMoi = response.result.content;
-
-        // Lấy danh sách các tỉnh thành
+        console.log(this.diaChiMoi.tinhThanh);     // Lấy danh sách các tỉnh thành
         this.giaoHangNhanhService.getProvinces().subscribe((provinces: any) => {
             this.provinces = provinces.data;
             const province = this.provinces.find(province => province.ProvinceID === Number(this.diaChiMoi.tinhThanh));
@@ -195,6 +194,7 @@ export class DiaChiKhachHangComponent implements OnInit {
     this.diaChiMoi.phuongXa = this.phuongXa;
     this.diaChiMoi.quanHuyen = this.quanHuyen;
     this.diaChiMoi.tinhThanh = this.tinhThanh;
+    console.log(this.diaChiMoi.phuongXa);
     const diaChiData = {
       // idKhachHang: this.idKhachHang,
       // soNha: '',
