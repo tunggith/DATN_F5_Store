@@ -2,6 +2,7 @@ import { response } from 'express';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CustomerService } from './KhachHang.service';
 import { DatePipe } from '@angular/common';
+import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 
 declare var $: any;
 import Swal from 'sweetalert2';
