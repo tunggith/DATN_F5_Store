@@ -21,6 +21,7 @@ public class HoaDonDto {
     private NhanVienEntity nhanVien;
     private VoucherEntity voucher;
     private PhuongThucThanhToanEntity thanhToan;
+    private Integer hinhThucThanhToan;
     private String ma;
     private Double tongTienBanDau;
     private Double phiShip;

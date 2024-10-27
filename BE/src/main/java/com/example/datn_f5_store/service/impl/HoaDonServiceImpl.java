@@ -77,6 +77,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 entity.getNhanVien(),
                 entity.getVoucher(),
                 entity.getThanhToan(),
+                entity.getHinhThucThanhToan(),
                 entity.getMa(),
                 entity.getTongTienBanDau(),
                 entity.getPhiShip(),
@@ -185,6 +186,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                         entity.getNhanVien(),
                         entity.getVoucher(),
                         entity.getThanhToan(),
+                        entity.getHinhThucThanhToan(),
                         entity.getMa(),
                         entity.getTongTienBanDau(),
                         entity.getPhiShip(),
@@ -273,10 +275,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
                 double giaTriVoucher = 0.0;
                 if (voucher.getKieuGiamGia().equals("%")) {
-                    System.out.println(hoaDon.getTongTienBanDau());
-                    System.out.println(voucher.getGiaTriVoucher());
                     giaTriVoucher = hoaDon.getTongTienBanDau() * (voucher.getGiaTriVoucher() / 100.0);
-                    System.out.println(giaTriVoucher);
                 } else {
                     giaTriVoucher = voucher.getGiaTriVoucher();
                 }
@@ -293,7 +292,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 throw new RuntimeException("Không thể thanh toán hóa đơn 0đ!");
             }
             // Cập nhật trạng thái của hóa đơn
-            request.setTrangThai("Chờ xác nhận");
+            if(request.getHinhThucThanhToan()==0){
+                request.setTrangThai("Đã xác nhận");
+            }else {
+                request.setTrangThai("Chờ xác nhận");
+            }
             request.setMa(hoaDon.getMa());
             request.setIdNhanVien(hoaDon.getNhanVien().getId());
             request.setTongTienBanDau(hoaDon.getTongTienBanDau());
@@ -513,6 +516,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 entity.getNhanVien(),
                 entity.getVoucher(),
                 entity.getThanhToan(),
+                entity.getHinhThucThanhToan(),
                 entity.getMa(),
                 entity.getTongTienBanDau(),
                 entity.getPhiShip(),
@@ -653,8 +657,10 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
         PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
         entity.setThanhToan(thanhToan);
+        entity.setHinhThucThanhToan(request.getHinhThucThanhToan());
         entity.setMa(request.getMa());
         entity.setTongTienBanDau(request.getTongTienBanDau());
+        entity.setPhiShip(request.getPhiShip());
         entity.setTongTienSauVoucher(request.getTongTienSauVoucher());
         entity.setTenNguoiNhan(request.getTenNguoiNhan());
         entity.setSdtNguoiNhan(request.getSdtNguoiNhan());

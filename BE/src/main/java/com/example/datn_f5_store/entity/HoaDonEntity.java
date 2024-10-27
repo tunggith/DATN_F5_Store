@@ -32,6 +32,8 @@ public class HoaDonEntity {
     @ManyToOne
     @JoinColumn(name = ConfigContanst.HoaDon.ID_THANH_TOAN)
     private PhuongThucThanhToanEntity thanhToan;
+    @Column(name = ConfigContanst.HoaDon.HINH_THUC_THANH_TOAN)
+    private Integer hinhThucThanhToan;
     @Column(name = ConfigContanst.HoaDon.MA)
     private String ma;
     @Column(name = ConfigContanst.HoaDon.TONG_TIEN_BAN_DAU)
