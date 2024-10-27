@@ -8,11 +8,12 @@
 /* Body styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f8f9fa;
+  background-color: #ffffff; 
 }
 
 /* Container styles */
 .container {
+  background-color: #ffffff; 
   max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
@@ -20,7 +21,7 @@ body {
 
 /* Header styles */
 h4 {
-  color: #333;
+  color: #003366;
   margin-bottom: 20px;
 }
 
@@ -77,7 +78,7 @@ select:focus {
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #ffcc00;
 }
 
 .btn-warning {
@@ -86,7 +87,7 @@ select:focus {
 }
 
 .btn-warning:hover {
-  background-color: #e0a800;
+  background-color: #ffcc00;
 }
 
 .btn-danger {
@@ -95,7 +96,7 @@ select:focus {
 }
 
 .btn-danger:hover {
-  background-color: #c82333;
+  background-color: #ffcc00;
 }
 
 /* Table styles */
@@ -117,7 +118,7 @@ select:focus {
 }
 
 .table th {
-  background-color: #f2f2f2;
+  background-color: #ffffff;
 }
 
 /* Pagination styles */
@@ -202,6 +203,14 @@ select:focus {
   background-color: #c0c0c0; /* Màu nền cho nút bị vô hiệu hóa */
   cursor: not-allowed; /* Con trỏ khi nút bị vô hiệu hóa */
 }
+
+.table-container {
+  max-height: 400px; /* Chiều cao tối đa cho bảng */
+  overflow-y: auto; /* Kích hoạt thanh cuộn dọc */
+  border: 1px solid #dee2e6; /* Đường viền cho bảng */
+  border-radius: 0.25rem; /* Bo góc */
+}
+
 
 
 

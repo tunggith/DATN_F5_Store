@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { KhuyenMaiService } from './khuyen-mai.service';
-import { ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 import { KhuyenMaiSanPhamChiTietService } from '../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.service';
 import { DataResponse } from '../models/data-response.model';
 import Swal from 'sweetalert2';
@@ -38,7 +35,7 @@ export class IconsComponent implements OnInit {
     thoiGianBatDau: new Date(),
     thoiGianKetThuc: new Date(),
     thoiGianTao: new Date(),
-    thoiGianSua: undefined,
+    thoiGianSua: new Date(),
     nguoiTao: '',
     nguoiSua: '',
     trangThai: ''
@@ -65,10 +62,7 @@ export class IconsComponent implements OnInit {
 
   constructor(
     private khuyenMaiService: KhuyenMaiService, 
-    private changeDetectorRef: ChangeDetectorRef,
-    private router: Router,
     private fb: FormBuilder,
-    private CommonModule: CommonModule,
     private khuyenMaiSanPhamChiTietService: KhuyenMaiSanPhamChiTietService
   ) {}
 
@@ -358,7 +352,7 @@ onDateChange(event: Event, type: string) {
       this.currentKhuyenMai.thoiGianKetThuc = inputDate; // Gán trực tiếp giá trị cho thoiGianKetThuc
   }
 
-  const displayId = type === 'batDau' ? 'thoiGianBatDauDisplay' : 'thoiGianKetThucDisplay';
+  const displayId = type === 'batDau' ? 'thoiGianBatDauInput' : 'thoiGianKetThucInput';
   const displayElement = document.getElementById(displayId) as HTMLInputElement;
 
   if (displayElement) {
@@ -509,7 +503,8 @@ onCheckboxChange(chiTietSanPham : any, event: any) {
           chiTietSanPham.selected = true; 
           this.saveSelectionsToLocalStorage(); 
           this.fetchChiTietSanPhams();
-          this.fetchKhuyenMaiChiTietSanPham(); 
+          this.fetchKhuyenMaiChiTietSanPham();
+          this.loadKhuyenMais(); 
         } else {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',

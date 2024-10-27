@@ -258,12 +258,6 @@ editVoucher(voucher: any): void {
   }
 
 
- 
-
-
-
-
-
   searchVouchers(values: any): void {
     const { searchKey, fromDate, toDate, trangThai } = values;
     if (searchKey && !fromDate && !toDate && !trangThai) {
