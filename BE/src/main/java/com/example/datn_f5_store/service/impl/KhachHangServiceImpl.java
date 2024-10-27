@@ -54,6 +54,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getEmail(),
                 khachHangEntity.getAnh(),
                 khachHangEntity.getSdt(),
+                khachHangEntity.getUserName(),
+                khachHangEntity.getPassword(),
                 khachHangEntity.getRoles(),
                 khachHangEntity.getTrangThai()
         ));
@@ -247,6 +249,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHang.setEmail(khachHangRequest.getEmail());
                 khachHang.setAnh(khachHangRequest.getAnh());
                 khachHang.setSdt(khachHangRequest.getSdt());
+                khachHang.setUserName(khachHangRequest.getUserName());
+                khachHang.setPassword(khachHangRequest.getPassword());
                 khachHang.setRoles(khachHangRequest.getRoles());
                 khachHang.setTrangThai(khachHangRequest.getTrangThai());
 
@@ -286,6 +290,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                         entity.getEmail(),
                         entity.getAnh(),
                         entity.getSdt(),
+                        entity.getUserName(),
+                        entity.getPassword(),
                         entity.getRoles(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
@@ -310,6 +316,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getEmail(),
                 khachHangEntity.getAnh(),
                 khachHangEntity.getSdt(),
+                khachHangEntity.getUserName(),
+                khachHangEntity.getPassword(),
                 khachHangEntity.getRoles(),
                 khachHangEntity.getTrangThai()
         ));
@@ -340,6 +348,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                         entity.getEmail(),
                         entity.getAnh(),
                         entity.getSdt(),
+                        entity.getUserName(),
+                        entity.getPassword(),
                         entity.getRoles(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
