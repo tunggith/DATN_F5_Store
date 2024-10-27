@@ -51,7 +51,7 @@
       <div class="col-md-6">
           <div class="form-container">
             <div class="border rounded p-4 mb-4">
-              <h4 class="mb-3">{{ isEditing ? 'Sửa Khuyến Mãi' : 'Thêm Khuyến Mãi' }}</h4>
+             
               <form #form="ngForm" (ngSubmit)="isEditing ? editKhuyenMai() : createKhuyenMai()">
                 <div class="row">
                   <div class="col-md-4">
@@ -121,7 +121,7 @@
                         min="1"
                         #soLuong="ngModel">
                       <div *ngIf="soLuong.invalid && (soLuong.dirty || soLuong.touched)" class="error-message">
-                        <div *ngIf="soLuong.errors?.required">Số lượng không được để trống.</div>
+                        <div *ngIf="soLuong.errors?.required">Số lượng không hợp lệ.</div>
                         <div *ngIf="soLuong.errors?.min">Số lượng phải lớn hơn 0.</div>
                       </div>
                     </div>
@@ -161,7 +161,7 @@
                     required 
                     #thoiGianBatDau="ngModel" [disabled]="currentKhuyenMai.trangThai === 'Đang diễn ra'">
                   <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)" class="error-message">
-                    <div *ngIf="thoiGianBatDau.errors?.required">Thời gian bắt đầu không được để trống.</div>
+                    <div *ngIf="thoiGianBatDau.errors?.required">Thời gian bắt đầu không hợp lệ</div>
                   </div>
                 </div>
               </div>
@@ -217,7 +217,7 @@
           <div class="product-table">
                 <div class="card shadow">
     <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-      <h3>Danh sách Sản phẩm</h3>
+      <h4>Danh sách Sản phẩm</h4>
       <input type="text" class="form-control w-50" placeholder="Tìm theo tên hoặc mã sản phẩm..." [(ngModel)]="searchTerm" (keyup)="onSearch()" />
     </div>
     <div class="card-body">
@@ -228,7 +228,7 @@
             <th>Tên Sản phẩm</th>
             <th>Tên Chi tiết</th>
             <th>Giá tiền</th>
-            <th class="text-center">Thêm khuyến mãi</th>
+            <th class="text-center">Áp dụng khuyến mãi</th>
           </tr>
         </thead>
         <tbody>
@@ -275,43 +275,46 @@
       <div class="col-md-12">
           <div class="voucher-table">
             <h4 class="mt-4">Danh Sách Khuyến Mãi</h4>
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Mã</th>
-                  <th>Tên</th>
-                  <th>Kiểu Khuyến Mãi</th>
-                  <th>Số Lượng</th>
-                  <th>Giá Trị</th>
-                  <th>Thời Gian Bắt Đầu</th>
-                  <th>Thời Gian Kết Thúc</th>
-                  <th>Mô Tả</th>
-                  <th>Trạng thái</th>
-                  <th>Thao Tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let khuyenMai of khuyenMais">
-                  <td>{{ khuyenMai.ma }}</td>
-                  <td>{{ khuyenMai.ten }}</td>
-                  <td>{{ khuyenMai.kieuKhuyenMai }}</td>
-                  <td>{{ khuyenMai.soLuong }}</td>
-                  <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
-                  <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy HH:mm' }}</td>
-                  <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
-                  <td>{{ khuyenMai.moTa }}</td>
-                  <td>{{ khuyenMai.trangThai }}</td>
-                  <td>
-                    <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)">
-                      <i class="material-icons">check</i> 
-                    </button>
-                    <button class="btn btn-danger btn-icon" (click)="capNhapKm(khuyenMai.id)">
-                      <i class="material-icons">swap_horiz</i>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-container">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th>Mã</th>
+                          <th>Tên</th>
+                          <th>Kiểu Khuyến Mãi</th>
+                          <th>Số Lượng</th>
+                          <th>Giá Trị</th>
+                          <th>Thời Gian Bắt Đầu</th>
+                          <th>Thời Gian Kết Thúc</th>
+                          <th>Mô Tả</th>
+                          <th>Trạng thái</th>
+                          <th>Hành động</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let khuyenMai of khuyenMais">
+                          <td>{{ khuyenMai.ma }}</td>
+                          <td>{{ khuyenMai.ten }}</td>
+                          <td>{{ khuyenMai.kieuKhuyenMai }}</td>
+                          <td>{{ khuyenMai.soLuong }}</td>
+                          <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
+                          <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ khuyenMai.moTa }}</td>
+                          <td>{{ khuyenMai.trangThai }}</td>
+                          <td>
+                              <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)">
+                                  <i class="material-icons">add_task</i> 
+                              </button>
+                              <button class="btn btn-danger btn-icon" (click)="capNhapKm(khuyenMai.id)">
+                                  <i class="material-icons">swap_horiz</i>
+                              </button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          
             
           
             <div class="pagination-container">
@@ -340,7 +343,7 @@
             <div class="col-md-12">
               <div class="card shadow">
                 <div class="card-header bg-success text-white">
-                  <h3>Sản phẩm được áp dụng khuyến mãi</h3>
+                  <h4>Sản phẩm được áp dụng khuyến mãi</h4>
                 </div>
                 <div class="card-body">
                   <table class="table table-striped">

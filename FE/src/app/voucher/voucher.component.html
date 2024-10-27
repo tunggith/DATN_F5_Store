@@ -128,7 +128,7 @@
           <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
           <!-- Nếu trạng thái là "Đang diễn ra", hiển thị giá trị và không cho phép sửa -->
           <div *ngIf="voucherForm.get('trangThai').value === 'Đang diễn ra'">
-            <input type="date" id="thoiGianBatDau" class="form-control" required
+            <input type="datetime-local" id="thoiGianBatDau" class="form-control" required
               [value]="voucherForm.get('thoiGianBatDau').value"
               readonly />
           </div>
@@ -176,7 +176,7 @@
 
 
   <hr />
-
+  <div class="table-container"> 
   <table class="table table-bordered voucher-table">
     <thead>
       <tr>
@@ -209,7 +209,7 @@
         <td>{{ voucher.trangThai }}</td>
         <td>
           <button class="btn btn-edit" (click)="editVoucher(voucher)">
-            <i class="material-icons">edit</i> Sửa
+            <i class="material-icons">edit</i> Chọn Voucher
           </button>
           <button class="btn btn-update" (click)="capNhap(voucher.id)"
           [disabled]="voucher.trangThai === 'Đã hết hạn'">
@@ -219,7 +219,7 @@
       </tr>
     </tbody>
   </table>
-  
+</div>
 
 
   <div class="pagination">
