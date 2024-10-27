@@ -14,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -46,8 +48,7 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getEmail(),
                 khachHangEntity.getAnh(),
                 khachHangEntity.getSdt(),
-                khachHangEntity.getUserName(),
-                khachHangEntity.getPassword(),
+                khachHangEntity.getRoles(),
                 khachHangEntity.getTrangThai()
         ));
     }
@@ -64,9 +65,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
             throw new BadRequestException("Email đã tồn tại, không thể thêm mới!");
         }
-        if (khachHangRepository.existsByUserName(khachHangRequest.getUserName())) {
-            throw new BadRequestException("Username đã tồn tại, không thể thêm mới!");
-        }
         if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
             throw new BadRequestException("Email phải có đuôi @gmail.com");
         }
@@ -79,16 +77,15 @@ public class KhachHangServiceImpl implements KhachHangService {
             khachHang.setNgayThangNamSinh(khachHangRequest.getNgayThangNamSinh());
             khachHang.setEmail(khachHangRequest.getEmail());
             khachHang.setSdt(khachHangRequest.getSdt());
+            khachHang.setRoles(khachHangRequest.getRoles());
             khachHang.setAnh(khachHangRequest.getAnh());
-            khachHang.setUserName(khachHangRequest.getUserName());
-            khachHang.setPassword(khachHangRequest.getPassword());
-            khachHang.setTrangThai("đang hoạt động");
+            khachHang.setTrangThai("Đang hoạt động");
 
             khachHangRepository.save(khachHang);
-            return new DataResponse(true,new ResultModel<>(null,"create successfully"));
+            return new DataResponse(true,new ResultModel<>(null,"Create successfully"));
         } catch (Exception e) {
             e.printStackTrace();
-            return new DataResponse(false, new ResultModel<>(null,"create exception"));
+            return new DataResponse(false, new ResultModel<>(null,"Create exception"));
         }
     }
 
@@ -98,15 +95,26 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (request.getTen() == null || request.getTen().isEmpty()) {
             throw new BadRequestException("Tên khách hàng không được để trống");
         }
+        if(request.getRoles() == null || request.getRoles().isEmpty()){
+            throw new BadRequestException("Vai trò không được để trống");
+        }
         if (request.getNgayThangNamSinh() == null) {
             throw new BadRequestException("Ngày sinh không được để trống");
         }
+        // Kiểm tra tuổi
+        Date birthDate = request.getNgayThangNamSinh();
+        int age = hamTinhTuoi(birthDate);
+        if (age < 2 ) {
+            throw new BadRequestException("Tuổi phải lớn hơn 2");
+        }
+        validateNgaySinh(request.getNgayThangNamSinh());
         if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             throw new BadRequestException("Email không hợp lệ");
         }
         if (request.getSdt() == null || !request.getSdt().matches("^\\d{10}$")) {
             throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
         }
+
         var ma = this.generateMaKhachHang();
         KhachHangEntity khachHang = new KhachHangEntity();
         khachHang.setMa(ma);
@@ -114,10 +122,33 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setGioiTinh(request.getGioiTinh());
         khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
         khachHang.setEmail(request.getEmail());
+        khachHang.setAnh(request.getAnh());
         khachHang.setSdt(request.getSdt());
-        khachHang.setTrangThai("đang hoạt động");
+        khachHang.setRoles(request.getRoles());
+        khachHang.setTrangThai("Đang hoạt động");
         khachHangRepository.save(khachHang);
-        return new DataResponse(true,new ResultModel<>(null,"create khach hang successfull"));
+        return new DataResponse(true,new ResultModel<>(null,"Create khách hàng successfull"));
+    }
+
+    private int hamTinhTuoi(Date birthDate) {
+        Calendar birthCal = Calendar.getInstance();
+        birthCal.setTime(birthDate);
+
+        Calendar todayCal = Calendar.getInstance();
+        int age = todayCal.get(Calendar.YEAR) - birthCal.get(Calendar.YEAR);
+
+        // Kiểm tra nếu ngày sinh chưa đến trong năm hiện tại
+        if (todayCal.get(Calendar.DAY_OF_YEAR) < birthCal.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        // Nguyễn Ngọc Hiển
+        return age;
+    }
+    private void validateNgaySinh(Date ngaySinh) throws BadRequestException {
+        Date ngayHienTai = new Date(); // Dùng để lấy ngày hiện tại
+        if (ngaySinh.after(ngayHienTai)) {
+            throw new BadRequestException("Ngày sinh phải là ngày hiện tại");
+        }
     }
 
     // Phương thức để sinh mã khách hàng
@@ -143,6 +174,29 @@ public class KhachHangServiceImpl implements KhachHangService {
             if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
                 throw new BadRequestException("Email phải có đuôi @gmail.com");
             }
+
+            if (khachHangRequest.getTen() == null || khachHangRequest.getTen().isEmpty()) {
+                throw new BadRequestException("Tên khách hàng không được để trống");
+            }
+            if (khachHangRequest.getRoles() == null || khachHangRequest.getRoles().isEmpty()) {
+                throw new BadRequestException("Vai trò khách hàng không được để trống");
+            }
+            if (khachHangRequest.getNgayThangNamSinh() == null) {
+                throw new BadRequestException("Ngày sinh không được để trống");
+            }
+            // Kiểm tra tuổi
+            Date birthDate = khachHangRequest.getNgayThangNamSinh();
+            int age = hamTinhTuoi(birthDate);
+            if (age < 2 ) {
+                throw new BadRequestException("Tuổi phải lớn hơn 2");
+            }
+            validateNgaySinh(khachHangRequest.getNgayThangNamSinh());
+            if (khachHangRequest.getEmail() == null || !khachHangRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                throw new BadRequestException("Email không hợp lệ");
+            }
+            if (khachHangRequest.getSdt() == null || !khachHangRequest.getSdt().matches("^\\d{10}$")) {
+                throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
+            }
             try {
                 khachHang.setMa(khachHangRequest.getMa());
                 khachHang.setTen(khachHangRequest.getTen());
@@ -151,18 +205,17 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHang.setEmail(khachHangRequest.getEmail());
                 khachHang.setAnh(khachHangRequest.getAnh());
                 khachHang.setSdt(khachHangRequest.getSdt());
-                khachHang.setUserName(khachHangRequest.getUserName());
-                khachHang.setPassword(khachHangRequest.getPassword());
+                khachHang.setRoles(khachHangRequest.getRoles());
                 khachHang.setTrangThai(khachHangRequest.getTrangThai());
 
                 khachHangRepository.save(khachHang);
-                return new DataResponse(true,new ResultModel<>(null,"update succesfully"));
+                return new DataResponse(true,new ResultModel<>(null,"Update succesfully"));
             } catch (Exception e) {
                 e.printStackTrace();
-                return new DataResponse(false,new ResultModel<>(null,"update exception"));
+                return new DataResponse(false,new ResultModel<>(null,"Update exception"));
             }
         } else {
-            throw new BadRequestException("khách hàng không tồn tại");
+            throw new BadRequestException("Khách hàng không tồn tại");
         }
     }
 
@@ -181,7 +234,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         return listKhachHang.stream()
                 .filter(khachHang -> khachHang.getId()!=1)
-                .filter(khachHang->"đang hoạt động".equals(khachHang.getTrangThai()))
+                .filter(khachHang->"Đang hoạt động".equals(khachHang.getTrangThai()))
                 .map(entity->new KhachHangDto(
                         entity.getId(),
                         entity.getMa(),
@@ -191,8 +244,7 @@ public class KhachHangServiceImpl implements KhachHangService {
                         entity.getEmail(),
                         entity.getAnh(),
                         entity.getSdt(),
-                        entity.getUserName(),
-                        entity.getPassword(),
+                        entity.getRoles(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
     }
@@ -216,8 +268,7 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getEmail(),
                 khachHangEntity.getAnh(),
                 khachHangEntity.getSdt(),
-                khachHangEntity.getUserName(),
-                khachHangEntity.getPassword(),
+                khachHangEntity.getRoles(),
                 khachHangEntity.getTrangThai()
         ));
     }
@@ -225,10 +276,10 @@ public class KhachHangServiceImpl implements KhachHangService {
     @Override
     public DataResponse updateTrangThai(Integer id) {
         KhachHangEntity khachHang = khachHangRepository.findById(id).orElse(null);
-        if(khachHang.getTrangThai().equals("không hoạt động")){
-            khachHang.setTrangThai("đang hoạt động");
-        }else if(khachHang.getTrangThai().equals("đang hoạt động")){
-            khachHang.setTrangThai("không hoạt động");
+        if(khachHang.getTrangThai().equals("Không hoạt động")){
+            khachHang.setTrangThai("Đang hoạt động");
+        }else if(khachHang.getTrangThai().equals("Đang hoạt động")){
+            khachHang.setTrangThai("Không hoạt động");
         }
         khachHangRepository.save(khachHang);
         return new DataResponse(true,new ResultModel<>(null,khachHang)) ;
@@ -236,7 +287,7 @@ public class KhachHangServiceImpl implements KhachHangService {
 
     @Override
     public List<KhachHangDto> getByTrangThai() {
-        List<KhachHangEntity> khachHangEntities = khachHangRepository.findByTrangThai("đang hoạt động");
+        List<KhachHangEntity> khachHangEntities = khachHangRepository.findByTrangThai("Đang hoạt động");
         return khachHangEntities.stream()
                 .map(entity -> new KhachHangDto(
                         entity.getId(),
@@ -247,8 +298,7 @@ public class KhachHangServiceImpl implements KhachHangService {
                         entity.getEmail(),
                         entity.getAnh(),
                         entity.getSdt(),
-                        entity.getUserName(),
-                        entity.getPassword(),
+                        entity.getRoles(),
                         entity.getTrangThai()
                 )).collect(Collectors.toList());
     }

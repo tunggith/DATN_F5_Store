@@ -21,6 +21,7 @@ public class DiaChiKhachHangResquest {
     private Integer idKhachHang;
     private String soNha;
 
+    private String sdt;
     private String duong;
     private String phuongXa;
 
