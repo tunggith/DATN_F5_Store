@@ -1,6 +1,6 @@
 <div class="popup">
     <div class="content">
-        <span class="close" style="color: rgb(255, 0, 0);" (click)="close()">X</span>
+        <span class="close" (click)="close()" style="color: rgb(25, 0, 255);">X</span>
         <form id="customerForm" (ngSubmit)="createDiaChi()" #customerForm="ngForm">
             <div class="row">
                 <div class="col-sm-4">
@@ -28,44 +28,37 @@
             <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
-                        <div>
-                            <label for="" class="form-label">Tỉnh thành</label>
-                            <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="tinhThanh" [(ngModel)]="diaChiMoi.selectedTinhThanh"
-                                (change)="onTinhThanhChange($event)">
-                                <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{
-                                    province.ProvinceName }}</option>
-                            </select>
-                        </div>
+                      <div>
+                        <label for="" class="form-label">Tỉnh thành</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="tinhThanh" [(ngModel)]="diaChiMoi.selectedTinhThanh" (change)="onTinhThanhChange($event)">
+                          <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }}</option>
+                        </select>
+                      </div>
                     </div>
-                </div>
-                <div class="col-sm-4">
+                  </div>
+                  <div class="col-sm-4">
                     <div class="mb-3">
-                        <div>
-                            <label for="" class="form-label">Quận huyện</label>
-                            <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="quanHuyen" [(ngModel)]="diaChiMoi.selectedQuanHuyen"
-                                (change)="onQuanHuyenChange($event)">
-                                <option *ngFor="let district of districts" [value]="district.DistrictID">{{
-                                    district.DistrictName }}</option>
-                            </select>
-                        </div>
+                      <div>
+                        <label for="" class="form-label">Quận huyện</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="quanHuyen" [(ngModel)]="diaChiMoi.selectedQuanHuyen" (change)="onQuanHuyenChange($event)">
+                          <option *ngFor="let district of districts" [value]="district.DistrictID">{{ district.DistrictName }}</option>
+                        </select>
+                      </div>
                     </div>
-                </div>
-                <div class="col-sm-4">
+                  </div>
+                  <div class="col-sm-4">
                     <div class="mb-3">
-                        <div>
-                            <label for="" class="form-label">Phường xã</label>
-                            <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="phuongXa" [(ngModel)]="diaChiMoi.selectedPhuongXa"
-                                (change)="onPhuongXaChange($event)">
-                                <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}
-                                </option>
-                            </select>
-                        </div>
+                      <div>
+                        <label for="" class="form-label">Phường xã</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="phuongXa" [(ngModel)]="diaChiMoi.selectedPhuongXa" (change)="onPhuongXaChange($event)">
+                          <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
+                        </select>
+                      </div>
                     </div>
-                </div>
-
+                  </div>
 
             </div>
             <div class="row">
@@ -113,12 +106,12 @@
                 <div class="button-action" style="text-align: center;">
                     <div style="display: inline-block; margin-right: 10px;">
                         <button type="submit" class="btn-submit">
-                            <i class="material-icons">person_add</i> Thêm
+                            <i class="material-icons">add_location_alt</i> Thêm địa chỉ
                         </button>
                     </div>
                     <div style="display: inline-block;">
                         <button (click)="updateDiaChi()" class="btn-submit" type="submit" [disabled]="!idKhachHang">
-                            <i class="material-icons">update</i> Cập Nhật
+                            <i class="material-icons">update</i> Cập nhật địa chỉ
                         </button>
                     </div>
                 </div>

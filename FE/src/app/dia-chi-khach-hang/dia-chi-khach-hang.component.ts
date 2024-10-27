@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output  } from '@angular/core';
 import { DiaChiKhachHangService } from './dia-chi-khach-hang.service';
 import Swal from 'sweetalert2';
 import { error, log } from 'console';
@@ -13,6 +13,7 @@ import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 export class DiaChiKhachHangComponent implements OnInit {
   @Output() closePopup = new EventEmitter<void>();
   @Input() idKhachHang !: number;
+
   //Địa chỉ khách hàng
   customersDiaChi: any[] = [];
   phuongXa: string = '';
@@ -116,8 +117,22 @@ export class DiaChiKhachHangComponent implements OnInit {
     this.diaChiKhachHangService.chiTietDiaChi(id).subscribe(
       response=>{
         this.diaChiMoi = response.result.content;
-      }
-    )
+      
+        this.giaoHangNhanhService.getProvinces().subscribe((provinces: any) => {
+          const province = provinces.data.find(province => province.ProvinceID === Number(this.diaChiMoi.tinhThanh));
+        this.diaChiMoi.tinhThanh = province ? province.ProvinceName : '';
+      });
+
+      this.giaoHangNhanhService.getDistricts(Number(this.diaChiMoi.tinhThanh)).subscribe((districtsData: any) => {
+        const district = districtsData.data.find(district => district.DistrictID === Number(this.diaChiMoi.quanHuyen));
+        this.diaChiMoi.quanHuyen = district ? district.DistrictName : '';
+      });
+
+      this.giaoHangNhanhService.getWards(Number(this.diaChiMoi.quanHuyen)).subscribe((wardsData: any) => {
+        const ward = wardsData.data.find(ward => ward.WardCode === this.diaChiMoi.phuongXa);
+        this.diaChiMoi.phuongXa = ward ? ward.WardName : '';
+      });
+    });
   }
   createDiaChi(): void {
     this.diaChiMoi.phuongXa = this.selectedPhuongXa;
