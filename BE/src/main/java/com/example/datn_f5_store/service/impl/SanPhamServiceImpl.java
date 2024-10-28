@@ -251,4 +251,12 @@ public class SanPhamServiceImpl implements ISanPhamService {
         entity.setId(request.getId());
         entity.setTen(request.getTen());
     }
+
+    @Override
+    public Page<SanPhamEntity> filterSanPham(Long thuongHieuId, Long xuatXuId, Long gioiTinhId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return sanPhamRepo.filterSanPham(thuongHieuId, xuatXuId, gioiTinhId, pageable);
+    }
+
 }
+

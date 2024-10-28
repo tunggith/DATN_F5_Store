@@ -109,23 +109,30 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     Page<ChiTietSanPhamReponse> searchByTenOrMa(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("""
-        select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-            ctsp.id,
-            ctsp.sanPham,
-            ctsp.mauSac,
-            ctsp.size,
-            ctsp.ma,
-            ctsp.ten,
-            ctsp.donGia,
-            ctsp.soLuong,
-            ctsp.trangThai
-        ) 
-        from ChiTietSanPhamEntity ctsp 
-        where ctsp.donGia >= :minPrice and ctsp.donGia <= :maxPrice
-    """)
-    Page<ChiTietSanPhamReponse> filterByPrice(@Param("minPrice") Double minPrice,
-                                              @Param("maxPrice") Double maxPrice,
-                                              Pageable pageable);
+    select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
+        ctsp.id,
+        ctsp.sanPham,
+        ctsp.mauSac,
+        ctsp.size,
+        ctsp.ma,
+        ctsp.ten,
+        ctsp.donGia,
+        ctsp.soLuong,
+        ctsp.trangThai
+    ) 
+    from ChiTietSanPhamEntity ctsp 
+    where ctsp.sanPham.id = :sanPhamId 
+    and (:donGia is null or ctsp.donGia = :donGia)
+    and (:mauSacId is null or ctsp.mauSac.id = :mauSacId)
+    and (:sizeId is null or ctsp.size.id = :sizeId)
+""")
+    Page<ChiTietSanPhamReponse> filterBySanPhamAndPriceAndAttributes(
+            @Param("sanPhamId") Long sanPhamId,
+            @Param("donGia") Double donGia,
+            @Param("mauSacId") Long mauSacId,
+            @Param("sizeId") Long sizeId,
+            Pageable pageable);
+
 
 
     @Query("""
@@ -157,5 +164,23 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("keyword") String keyword,
             Pageable pageable);
     boolean existsByMaOrTen(String ma, String ten);
+
+
+    boolean existsBySanPhamIdAndMauSacIdAndSizeId(Long sanPhamId, Long mauSacId, Long sizeId);
+
+
+    @Query("""
+    SELECT COUNT(ctsp) > 0
+    FROM ChiTietSanPhamEntity ctsp
+    WHERE ctsp.sanPham.id = :sanPhamId
+    AND ctsp.mauSac.id = :mauSacId
+    AND ctsp.size.id = :sizeId
+    AND ctsp.id <> :chiTietSanPhamId
+""")
+    boolean existsBySanPhamIdAndMauSacIdAndSizeIdAndNotId(
+            @Param("sanPhamId") Long sanPhamId,
+            @Param("mauSacId") Long mauSacId,
+            @Param("sizeId") Long sizeId,
+            @Param("chiTietSanPhamId") Long chiTietSanPhamId);
 
 }

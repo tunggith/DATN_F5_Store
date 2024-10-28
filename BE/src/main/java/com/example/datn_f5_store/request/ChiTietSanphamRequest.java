@@ -1,9 +1,6 @@
 package com.example.datn_f5_store.request;
 
 
-import com.example.datn_f5_store.entity.MauSacEntity;
-import com.example.datn_f5_store.entity.SanPhamEntity;
-import com.example.datn_f5_store.entity.SizeEntity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,10 +25,10 @@ public class ChiTietSanphamRequest {
     @NotNull(message = "Kích thước không được để trống.")
     private Integer idSize;
 
-    @NotBlank(message = "Mã không được để trống.")
+//    @NotBlank(message = "Mã không được để trống.")
     private String ma;
 
-    @NotBlank(message = "Tên không được để trống.")
+//    @NotBlank(message = "Tên không được để trống.")
     private String ten;
 
     @NotNull(message = "Đơn giá không được để trống.")

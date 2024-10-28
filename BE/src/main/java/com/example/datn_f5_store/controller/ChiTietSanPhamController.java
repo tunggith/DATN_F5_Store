@@ -40,7 +40,7 @@ public class ChiTietSanPhamController {
     IMauSacRepository repo_mauSac;
     @Autowired
     ISizeRepository repo_size;
-    @Autowired
+    @Autowired  
     ISanPhamRepository repo_sanPham;
     @Autowired
     ChiTietSanPhamImpl ctsp_Sevice;
@@ -139,22 +139,21 @@ public class ChiTietSanPhamController {
     }
 
 //    ttt
-    @GetMapping("/filterByPrice")
-    public ResponseEntity<?> filterByPrice(
-            @RequestParam(value = "minPrice", defaultValue = "0") Double minPrice,
-            @RequestParam(value = "maxPrice", required = false) Double maxPrice,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+@GetMapping("/filterChiTietSanPham")
+public ResponseEntity<?> filterChiTietSanPham(
+        @RequestParam(value = "sanPhamId") Long sanPhamId,
+        @RequestParam(value = "donGia" , required = false ) Double donGia,
+        @RequestParam(value = "mauSacId", required = false) Long mauSacId,
+        @RequestParam(value = "sizeId", required = false) Long sizeId,
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "5") int size) {
 
-        // Nếu maxPrice không được cung cấp, mặc định là Double.MAX_VALUE
-        if (maxPrice == null) {
-            maxPrice = Double.MAX_VALUE;
-        }
+    // Gọi service để lọc theo ID sản phẩm và giá
+    Page<ChiTietSanPhamReponse> result = ctsp_Sevice.filterBySanPhamAndPriceAndAttributes(sanPhamId, donGia, mauSacId, sizeId, page, size);
+    return ResponseEntity.ok(result);
+}
 
-        // Gọi service để lọc theo giá
-        Page<ChiTietSanPhamReponse> result = ctsp_Sevice.filterByPrice(minPrice, maxPrice, page, size);
-        return ResponseEntity.ok(result);
-    }
+
     @GetMapping("/getAllKm")
     public List<ChiTietSanPhamEntity> getallkm(){
         return chiTietSanPhamRepository.findAll();
@@ -194,18 +193,7 @@ public class ChiTietSanPhamController {
         }
 
 
-        @GetMapping("/check-trung")
-        public ResponseEntity<Boolean> checkTrungChiTietSanPham (
-                @RequestParam Integer idSanPham,
-                @RequestParam Integer idMauSac,
-                @RequestParam Integer idSize,
-                @RequestParam String ma,
-                @RequestParam String ten){
 
-            boolean isDuplicate = repo_ctsp.checkTrung(idSanPham, idMauSac, idSize, ma, ten);
-            return ResponseEntity.ok(isDuplicate);
-
-        }
     @GetMapping("/getall-phan_trangKm")
     public ResponseEntity<Page<ChiTietSanPhamEntity>> getAllPhanTrang(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -218,4 +206,25 @@ public class ChiTietSanPhamController {
         return ResponseEntity.ok(pageResult);
     }
 
+    @GetMapping("/check-trung")
+    public ResponseEntity<Boolean> checkTrungChiTietSanPham(
+            @RequestParam("idSanPham") Long idSanPham,
+            @RequestParam("idMauSac") Long idMauSac,
+            @RequestParam("idSize") Long idSize) {
+        boolean isDuplicate = ctsp_Sevice.isDuplicate(idSanPham, idMauSac, idSize);
+        return ResponseEntity.ok(isDuplicate);
     }
+
+    @GetMapping("/check-trung/update")
+    public ResponseEntity<Boolean> checkTrungChiTietSanPham(
+            @RequestParam Long sanPhamId,
+            @RequestParam Long mauSacId,
+            @RequestParam Long sizeId,
+            @RequestParam Long chiTietSanPhamId) {
+        boolean isDuplicate = ctsp_Sevice.isDuplicateChiTietSanPham(sanPhamId, mauSacId, sizeId, chiTietSanPhamId);
+        return ResponseEntity.ok(isDuplicate);
+    }
+
+
+
+}

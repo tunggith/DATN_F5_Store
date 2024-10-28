@@ -19,6 +19,7 @@ import { CustomerService } from './khach-hang/KhachHang.service';
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
+    
   ],
   declarations: [
     AppComponent,
