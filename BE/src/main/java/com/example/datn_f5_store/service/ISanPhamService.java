@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.service;
 
 import com.example.datn_f5_store.dto.SanPhamDto;
+import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,5 @@ public interface ISanPhamService {
     List<SanPhamDto> findById(Integer id);
 
 
+    Page<SanPhamEntity> filterSanPham(Long thuongHieuId, Long xuatXuId, Long gioiTinhId, int page, int size);
 }

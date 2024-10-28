@@ -160,10 +160,12 @@ public class ChiTietSanPhamImpl {
     }
 
 
-    public Page<ChiTietSanPhamReponse> filterByPrice(Double minPrice, Double maxPrice, int page, int size) {
+    public Page<ChiTietSanPhamReponse> filterBySanPhamAndPriceAndAttributes(Long sanPhamId, Double donGia, Long mauSacId, Long sizeId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return repo_ctsp.filterByPrice(minPrice, maxPrice, pageable);
+        return repo_ctsp.filterBySanPhamAndPriceAndAttributes(sanPhamId, donGia, mauSacId, sizeId, pageable);
     }
+
+
 
     public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(
             int page, int size, String keyword,
@@ -222,4 +224,12 @@ public class ChiTietSanPhamImpl {
     public boolean isChiTietSanPhamExists(String ma, String ten) {
         return repo_ctsp.existsByMaOrTen(ma, ten);
     }
+
+    public boolean isDuplicate(Long idSanPham, Long idMauSac, Long idSize) {
+        return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeId(idSanPham, idMauSac, idSize);
+    }
+    public boolean isDuplicateChiTietSanPham(Long sanPhamId, Long mauSacId, Long sizeId, Long chiTietSanPhamId) {
+        return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeIdAndNotId(sanPhamId, mauSacId, sizeId, chiTietSanPhamId);
+    }
+
 }

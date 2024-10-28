@@ -1,67 +1,622 @@
-/* Trong sanpham.component.css */
-.invalid-field {
-    border-color: red !important; /* Đổi màu viền cho các trường không hợp lệ */
+.color-size-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  max-height: 200px; /* Đặt chiều cao tối đa để tránh tràn */
+  overflow-y: auto; /* Cuộn dọc nếu nội dung vượt quá chiều cao */
 }
 
-.text-danger {
-    color: red; /* Màu chữ thông báo lỗi */
+.color-size-item {
+  display: flex;
+  align-items: center;
 }
+
+.color-size-item input {
+  margin-right: 8px;
+}
+
+
+.modal-body {
+  max-height: 400px; /* Hoặc một giá trị cố định phù hợp */
+  overflow-y: auto; /* Cuộn dọc nếu nội dung quá dài */
+}
+.modal-dialog {
+  max-width: 600px; /* Đặt chiều rộng tối đa */
+  max-height: 90vh; /* Chiều cao tối đa là 90% chiều cao của viewport */
+}
+
+
+
+/* Nền overlay chung cho tất cả modal */
+.custom-modal-overlay, .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Z-index cho lớp phủ */
+  overflow: hidden; /* Loại bỏ thanh cuộn */
+}
+
+/* Nội dung modal */
+.custom-modal, .modal-content {
+  background: #fff;
+  border-radius: 20px; /* Bo tròn modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  width: 90%;
+  padding: 20px;
+  position: relative;
+  overflow-y: hidden; /* Loại bỏ thanh cuộn dọc */
+  max-height: 80vh; /* Giới hạn chiều cao */
+  z-index: 1001; /* Z-index cho nội dung modal */
+}
+
+/* Header của modal */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 20px;
+  color: #333;
+}
+
+/* Nút đóng */
+.close, .btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.close:hover, .btn-close:hover {
+  color: #333;
+}
+
+/* Định dạng bảng */
 .table {
-    width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng của container */
-    table-layout: auto; /* Cố định bố cục bảng */
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
 }
-.table-responsive{
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
-th, td {
-    white-space: nowrap; /* Ngăn không cho nội dung xuống dòng */
-    padding: 0 10px; /* Thêm khoảng cách cho các ô */
-    text-align: center; /* Căn trái cho nội dung */
+
+.table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+  color: #333;
 }
-.btn-action{
-    background-color: #ffff;
-    height: 50px;
-    margin-left: 5px;
-    border: 0px;
-    font-size: 15px;
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
 }
-.btn-action:hover{
-    font-size: 20px;
+
+/* Nút hành động trong bảng */
+.btn-action {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
 }
-.btn-action i:hover{
-    font-size: 25px;
+
+.btn-action:hover {
+  background-color: #0056b3;
 }
+
+/* Nút chính trong modal */
+.btn-primary {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px; /* Bo tròn nút */
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Định dạng form trong modal */
+.form-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px; /* Bo tròn các ô nhập liệu */
+}
+
+/* Khoảng cách giữa các mục trong form */
+.mb-3 {
+  margin-bottom: 16px;
+}
+
+/* Nút đóng modal */
+button.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+}
+
+button.close-btn:hover {
+  color: #333;
+}
+
+/* Định dạng bảng */
+.table-responsive {
+  margin-bottom: 20px;
+}
+
+/* Nút điều hướng trang */
+.pagination {
+  margin-top: 20px;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  padding: 8px 12px;
+  border: 1px solid #007bff;
+  color: #007bff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Nút Đóng */
+button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 20px; /* Bo tròn nút đóng */
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px; /* Đặt một khoảng cách trên nút đóng */
+}
+
+button:hover {
+  background-color: #c82333;
+}
+
+/* Đặt vị trí của nút đóng */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+  color: #333; /* Màu khi hover */
+}
+/* Đặt vị trí của nút đóng ở góc trên bên phải */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+  z-index: 1002; /* Đảm bảo nút đóng luôn trên các phần tử khác */
+}
+
+.close-btn:hover {
+  color: #333; /* Màu khi hover */
+}
+
+/* Modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Nội dung modal */
+.modal-content {
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  width: 90%;
+  padding: 20px;
+  z-index: 1001;
+}
+
+/* Định dạng bảng */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th, .table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.table-responsive {
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Định dạng các nút hành động trong bảng */
+.btn-action {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.btn-action:hover {
+  background-color: #0056b3;
+}
+
+/* Nút điều hướng trang */
+.pagination {
+  margin-top: 20px;
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  padding: 8px 12px;
+  border: 1px solid #007bff;
+  color: #007bff;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed; /* Để spinner nằm ở giữa màn hình */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8); /* Màu nền mờ để làm nổi bật spinner */
+  z-index: 1000; /* Đảm bảo nó hiển thị phía trên mọi thành phần khác */
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border: 0.4rem solid rgba(0, 0, 0, 0.1);
+  border-top: 0.4rem solid #007bff; /* Màu xanh */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 16px; /* Khoảng cách dưới nút */
+}
+.custom-modal {
+  max-width: 80%; /* Điều chỉnh kích thước modal theo tỷ lệ màn hình */
+  width: 100%;
+}
+
+.custom-modal-content {
+  height: 70vh; /* Chiều cao modal (80% chiều cao viewport) */
+}
+
+
 .custom-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .custom-modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 600px;
-    max-width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
 }
 
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 18px;
+}
+
+.modal-body {
+  padding: 15px;
+}
+
+.form-label {
+  font-weight: bold;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
 }
 
 .close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
+
+/* Áp dụng cho tất cả các button */
+button {
+  color: #d0ecc7b2; /* Màu chữ mặc định */
+  background-color:#004085 ; /* Màu nền trong suốt */
+  border: none; /* Loại bỏ đường viền */
+  outline: none; /* Loại bỏ outline khi focus */
+  cursor: pointer; /* Thay đổi con trỏ khi hover */
+  transition: color 0.3s ease, background-color 0.3s ease; /* Hiệu ứng chuyển màu mượt mà */
+}
+
+/* Hiệu ứng hover cho tất cả các button */
+button:hover {
+  color: #ffcc00; /* Màu chữ khi hover */
+  background-color: #003366; /* Màu nền khi hover */
+}
+
+.card-s{
+  background-color: #003366;
+  color: ff;
+
+}
+
+/* CSS chính cho thẻ card */
+.card {
+  border: none;
+  border-radius: 12px; /* Bo tròn góc thẻ */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  overflow: hidden; /* Đảm bảo nội dung không vượt quá kích thước thẻ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng khi hover */
+  background-color: #ffffff; /* Màu nền trắng */
+  color: #003366; /* Màu chữ mặc định */
+}
+
+/* CSS cho phần header của thẻ */
+.card-header {
+  padding: 16px;
+  background-color: #003366; /* Màu nền xanh đậm */
+  color: #ffcc00; /* Màu chữ vàng */
+  border-top-left-radius: 12px; /* Bo góc trên trái */
+  border-top-right-radius: 12px; /* Bo góc trên phải */
+  display: flex;
+  justify-content: space-between; /* Khoảng cách giữa các thành phần bên trong */
+  align-items: center; /* Căn giữa các thành phần */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+/* CSS khi hover vào toàn bộ thẻ */
+.card:hover {
+  transform: translateY(-5px); /* Nâng thẻ lên khi hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn */
+  background-color: #003366; /* Đổi màu nền thành xanh đậm */
+  color: #ffcc00; /* Đổi màu chữ thành vàng */
+}
+
+/* Đảm bảo các thành phần bên trong cũng thay đổi màu */
+.card:hover .card-header,
+.card:hover h4,
+.card:hover p,
+.card:hover button {
+  color: #ffcc00; /* Màu chữ vàng khi hover */
+}
+
+/* CSS cho tiêu đề của thẻ */
+.card-header h4 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: inherit; /* Đảm bảo kế thừa màu sắc từ thẻ cha */
+}
+
+/* CSS cho phần mô tả bên trong header */
+.card-header p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: inherit; /* Đảm bảo kế thừa màu sắc từ thẻ cha */
+}
+
+/* CSS cho nội dung bên trong card */
+.card-body {
+  padding: 20px;
+  background-color: #f9f9f9; /* Màu nền sáng cho phần nội dung */
+  border-bottom-left-radius: 12px; /* Bo góc dưới trái */
+  border-bottom-right-radius: 12px; /* Bo góc dưới phải */
+  color: #003366; /* Màu chữ mặc định */
+  transition: color 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+/* CSS chính cho pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+  border-radius: 0.25rem;
+}
+
+/* CSS cho từng phần tử trong pagination */
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  color: #003366;
+  background-color: #ffffff;
+  border: 1px solid #003366;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* CSS khi hover vào link */
+.page-link:hover {
+  background-color: #ffcc00;
+  color: #003366;
+  border-color: #ffcc00;
+}
+
+/* CSS cho trạng thái "disabled" */
+.page-item.disabled .page-link {
+  color: #999999;
+  background-color: #f0f0f0;
+  border-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* CSS cho trang hiện tại */
+.page-item.disabled .page-link span {
+  color: #ffffff;
+  background-color: #003366;
+  border-color: #003366;
+  cursor: default;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* CSS cho trạng thái khi active */
+.page-item.active .page-link {
+  background-color: #003366;
+  color: #ffffff;
+  border-color: #003366;
+  cursor: default;
 }

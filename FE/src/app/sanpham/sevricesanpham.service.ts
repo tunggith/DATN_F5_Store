@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SevricesanphamService {
+ 
   private apiUrl = 'http://localhost:8080/api/v1'; // URL gốc API cho sản phẩm
   private apispct = 'http://localhost:8080/api/v1/chi_tiet_san_pham';  // URL gốc API cho sản phẩm
   private defaultSize = 3;  // Kích thước mặc định là 3
@@ -83,6 +84,7 @@ export class SevricesanphamService {
     return this.http.get<any>(`${this.apispct}/${id}`);
   }
 
+
   // Thêm màu sắc
   addMauSac(mauSac: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/mau-sac/create`, mauSac);
@@ -107,10 +109,52 @@ export class SevricesanphamService {
 
 // Trong sanPhamService
 
-  checkTrungChiTietSanPham(idSanPham: number, idMauSac: number, idSize: number, ma: string, ten: string): Observable<boolean> {
-    const url = `http://localhost:8080/api/v1/chi_tiet_san_pham/check-trung?idSanPham=${idSanPham}&idMauSac=${idMauSac}&idSize=${idSize}&ma=${ma}&ten=${ten}`;
-    return this.http.get<boolean>(url);
+
+  getSanPhambyid(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/san-pham/details/${id}`);
   }
 
 
+  filterChiTietSanPham(sanPhamId: number, donGia: number | undefined, mauSacId: number | null, sizeId: number | null, page: number, size: number): Observable<any> {
+    let url = `${this.apispct}/filterChiTietSanPham?sanPhamId=${sanPhamId}&page=${page}&size=${size}`;
+  
+    if (donGia !== undefined) {
+      url += `&donGia=${donGia}`;
+    }
+    if (mauSacId !== null) {
+      url += `&mauSacId=${mauSacId}`;
+    }
+    if (sizeId !== null) {
+      url += `&sizeId=${sizeId}`;
+    }
+  
+    return this.http.get<any>(url);
+  }
+  
+  checkTrungChiTietSanPham(idSanPham: number, idMauSac: number, idSize: number): Observable<boolean> {
+    const url = `${this.apispct}/check-trung?idSanPham=${idSanPham}&idMauSac=${idMauSac}&idSize=${idSize}`;
+    return this.http.get<boolean>(url);
+  }
+  
+  checkTrungChiTietSanPhamupdate(idSanPham: number, idMauSac: number, idSize: number, chiTietSanPhamId: number): Observable<boolean> {
+    const url = `${this.apispct}/check-trung/update?sanPhamId=${idSanPham}&mauSacId=${idMauSac}&sizeId=${idSize}&chiTietSanPhamId=${chiTietSanPhamId}`;
+    return this.http.get<boolean>(url);
+  }
+  
+  
+  filterSanPham(thuongHieuId?: number, xuatXuId?: number, gioiTinhId?: number, page: number = 0, size: number = 5): Observable<any> {
+    let url = `${this.apiUrl}/san-pham/filter?page=${page}&size=${size}`;
+    if (thuongHieuId) {
+      url += `&thuongHieuId=${thuongHieuId}`;
+    }
+    if (xuatXuId) {
+      url += `&xuatXuId=${xuatXuId}`;
+    }
+    if (gioiTinhId) {
+      url += `&gioiTinhId=${gioiTinhId}`;
+    }
+    return this.http.get<any>(url);
 }
+
+  
+}  

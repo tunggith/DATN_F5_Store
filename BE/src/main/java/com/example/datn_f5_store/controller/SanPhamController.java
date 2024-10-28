@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.controller;
 
+import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
@@ -7,6 +8,7 @@ import com.example.datn_f5_store.request.SanPhamRequest;
 import com.example.datn_f5_store.service.ISanPhamService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:4200") // Cho phép các yêu cầu từ nguồn khác (ở đây là Angular frontend) truy cập vào API
 @RestController // Đánh dấu lớp này là một Rest Controller cho phép xử lý các yêu cầu HTTP
@@ -106,5 +111,26 @@ public class SanPhamController {
     @PutMapping("/update/{id}")
     private ResponseEntity<Object> update(@RequestBody SanPhamRequest request, @PathVariable Integer id){
         return new ResponseEntity<>(sanPhamService.update(request, id), HttpStatus.OK); // Trả về HTTP 200 OK sau khi cập nhật thành công
+    }
+
+
+    @GetMapping("/filter")
+    public ResponseEntity<Map<String, Object>> filterSanPham(
+            @RequestParam(required = false) Long thuongHieuId,
+            @RequestParam(required = false) Long xuatXuId,
+            @RequestParam(required = false) Long gioiTinhId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<SanPhamEntity> pageSanPham = sanPhamService.filterSanPham(thuongHieuId, xuatXuId, gioiTinhId, page, size);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", pageSanPham.getContent());
+        response.put("currentPage", pageSanPham.getNumber());
+        response.put("totalItems", pageSanPham.getTotalElements());
+        response.put("totalPages", pageSanPham.getTotalPages());
+        response.put("pageSize", pageSanPham.getSize());
+
+        return ResponseEntity.ok(response);
     }
 }
