@@ -94,6 +94,7 @@ public class NhanVienServiceImpl implements NhanVienService {
         if (!this.checkNhanVien(request)){
             //check trung ma nhan vien
             if (!this.checkDuplicate(request)){
+                request.setMa(this.generateMaNhanVien());
                 request.setUsername(request.getEmail());
                 request.setPassword(this.generatePassword());
                 //luu hoac cap nhat nhan vien

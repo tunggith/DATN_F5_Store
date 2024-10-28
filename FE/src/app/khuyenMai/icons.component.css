@@ -167,7 +167,10 @@ select:focus {
   display: flex; /* Align buttons in a row */
   align-items: center; /* Center items vertically */
 }
-
+.paginationr button{
+  border: 0px;
+  background-color: #fff;
+}
 .pagination button {
   border: none; /* Remove border */
   background-color: #ffffff; /* Background color */

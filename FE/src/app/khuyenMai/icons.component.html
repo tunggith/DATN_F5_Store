@@ -214,9 +214,9 @@
       </div>
 
       <div class="col-md-6">
-    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-      <h5>Danh sách Sản phẩm</h5>
-      <input type="text" class="form-control w-50" placeholder="Tìm theo tên hoặc mã sản phẩm..." [(ngModel)]="searchTerm" (keyup)="onSearch()" />
+    <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #dc3545;">
+      <h5 style="margin-left: 5px;">Danh sách Sản phẩm</h5>
+      <input style="border: 0;color: #fff;" type="text" class="form-control w-50" placeholder="Tìm theo tên hoặc mã sản phẩm..." [(ngModel)]="searchTerm" (keyup)="onSearch()" />
     </div>
     <div class="card-body">
       <table class="table table-hover">
@@ -238,7 +238,7 @@
             <td>{{ sp.ma }}</td>
             <td>{{ sp.sanPham.ten }}</td>
             <td>{{ sp.ten }}</td>
-            <td>{{ sp.donGia | currency }}</td>
+            <td>{{ sp.donGia | currency:'VND' }}</td>
           </tr>
           <tr *ngIf="chiTietSanPhams.length === 0">
             <td colspan="5" class="text-center">Không có sản phẩm bạn tìm</td>
@@ -254,7 +254,7 @@
             </button>  
     
             <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
-            <span class="current-page"> Trang {{ pageSp + 1 }} / {{ totalPageSp }}</span>
+            <span class="current-page"> Page {{ pageSp + 1 }} of {{ totalPageSp }}</span>
     
             <button *ngIf="pageSp < totalPageSp - 1" (click)="nextPageSp()" >
                 <i class="material-icons">arrow_forward_ios</i>

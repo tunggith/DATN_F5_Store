@@ -26,7 +26,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public DataResponse changePassword(NhanVienRequest request) {
-        NhanVienEntity entity = nhanVienRepository.getByEmail(request.getEmail());
+        NhanVienEntity entity = nhanVienRepository.getByUsernameAndPassword(request.getUsername(), request.getPassword());
         if(entity!=null){
             entity.setPassword(request.getPassword());
             nhanVienRepository.save(entity);

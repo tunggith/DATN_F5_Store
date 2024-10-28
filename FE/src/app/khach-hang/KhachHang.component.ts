@@ -6,8 +6,6 @@ import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 
 declare var $: any;
 import Swal from 'sweetalert2';
-import { error, log } from 'console';
-
 
 @Component({
   selector: 'app-notifications',
