@@ -419,7 +419,6 @@ export class BanHangComponent implements OnInit {
         return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
       }
     }
-    console.log(this.tenKhachHang);
     // Cập nhật thông tin hóa đơn để thanh toán
     const hoaDonData = {
       idKhachHang: this.idKhachHang || 1,

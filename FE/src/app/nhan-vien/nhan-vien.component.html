@@ -26,21 +26,21 @@
                             <div class="address-dropdowns">
                                 <div class="dropdown-item">
                                     <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
-                                    <select class="form-control" id="tinhThanh" formControlName="tinhThanh" (change)="onTinhThanhChange($event)" required>
+                                    <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh" formControlName="tinhThanh" (change)="onTinhThanhChange($event)" required>
                                         <option value="" disabled selected>Chọn tỉnh thành</option>
                                         <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
                                     </select>
                                 </div>
                                 <div class="dropdown-item">
                                     <label for="quanHuyen" class="form-label">Quận/ huyện</label>
-                                    <select class="form-control" id="quanHuyen" formControlName="quanHuyen" (change)="onQuanHuyenChange($event)" required>
+                                    <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen" formControlName="quanHuyen" (change)="onQuanHuyenChange($event)" required>
                                         <option value="" disabled selected>Chọn quận huyện</option>
                                         <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
                                     </select>
                                 </div>
                                 <div class="dropdown-item">
                                     <label for="phuongXa" class="form-label">Phường/ xã</label>
-                                    <select class="form-control" id="phuongXa" formControlName="phuongXa" (change)="onPhuongXaChange($event)" required>
+                                    <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa" formControlName="phuongXa" (change)="onPhuongXaChange($event)" required>
                                         <option value="" disabled selected>Chọn phường xã</option>
                                         <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}</option>
                                     </select>

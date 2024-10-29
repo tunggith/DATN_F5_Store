@@ -113,7 +113,6 @@ export class DiaChiKhachHangComponent implements OnInit {
   diaChiDetail(id: number): void {
     this.diaChiKhachHangService.chiTietDiaChi(id).subscribe(response => {
         this.diaChiMoi = response.result.content;
-
         // Tìm tỉnh thành tương ứng
         const province = this.provinces.find(p => p.ProvinceName === this.diaChiMoi.tinhThanh);
         this.selectedTinhThanh = province ? province.ProvinceID : null;

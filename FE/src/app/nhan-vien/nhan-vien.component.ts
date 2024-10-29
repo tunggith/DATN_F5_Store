@@ -4,6 +4,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 import Swal from 'sweetalert2';
 import {DatePipe} from '@angular/common';
+import { response } from 'express';
 
 declare const google: any;
 
@@ -363,10 +364,33 @@ export class NhanVienComponent implements OnInit {
 
     // Hiển thị thông tin nhân viên lên form
     showDetail(nhanVien: any) {
+
         this.newNhanVien = {...nhanVien}; // Sao chép thông tin của nhân viên vào newNhanVien
         this.newNhanVien.ngayThangNamSinh = this.formatDate(nhanVien.ngayThangNamSinh); // Định dạng lại ngày sinh
-        this.updateNhanVienData.id = nhanVien.id; // Lưu ID của nhân viên cần cập nhật
-
+        this.newNhanVien.diaChi = nhanVien.diaChi;
+        this.updateNhanVienData.id = nhanVien.id;
+        const [phuongXa,quanHuyen,tinhThanh] = this.newNhanVien.diaChi.split(",").map(part=>part.trim());
+        console.log(tinhThanh,quanHuyen,phuongXa);
+        const privince = this.provinces.find(p=>p.ProvinceName===tinhThanh);
+        this.selectedTinhThanh = privince ? privince.ProvinceID : null;
+        if(this.selectedTinhThanh){
+            this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+                data => {
+                    this.districts = data['data'];
+                    const district = this.districts.find(d=> d.DistrictName===quanHuyen);
+                    this.selectedQuanHuyen = district ? district.DistrictID : null;
+                    if(this.selectedQuanHuyen){
+                        this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+                            data=>{
+                                this.wards = data['data'];
+                                const ward = this.wards.find(w=>w.WardName===phuongXa);
+                                this.selectedPhuongXa = ward ? ward.WardCode : null;
+                            }
+                        );
+                    }
+                }
+            );
+        }
         // Cập nhật nhanVienForm với thông tin nhân viên
         this.nhanVienForm.patchValue(this.newNhanVien);
 

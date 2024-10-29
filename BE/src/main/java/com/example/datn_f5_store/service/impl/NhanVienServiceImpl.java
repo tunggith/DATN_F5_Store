@@ -145,6 +145,12 @@ public class NhanVienServiceImpl implements NhanVienService {
         return new DataResponse(false, new ResultModel<>(null, "Nhân viên không tồn tại")); // Cập nhật để dùng ResultModel
     }
 
+    @Override
+    public NhanVienEntity detail(Integer id) {
+        NhanVienEntity nhanVien = nhanVienRepo.findById(id).orElse(null);
+        return nhanVien;
+    }
+
     //phuong thuc luu va update nhan vien
     private DataResponse saveOfUpdate(NhanVienEntity entity, NhanVienRequest request) {
         try {

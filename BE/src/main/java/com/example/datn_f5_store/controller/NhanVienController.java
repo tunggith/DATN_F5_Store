@@ -88,4 +88,12 @@ public class NhanVienController {
         DataResponse response = nhanVienService.delete(id);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<Object> detail(@Parameter(name = "id")@PathVariable Integer id){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = nhanVienService.detail(id);
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.service;
 
 import com.example.datn_f5_store.dto.NhanVienDto;
+import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.request.NhanVienRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import org.springframework.data.domain.Page;
@@ -11,4 +12,5 @@ public interface NhanVienService {
     DataResponse create(NhanVienRequest nhanVienRequest);
     DataResponse update(NhanVienRequest nhanVienRequest, Integer id);
     DataResponse delete(Integer id); // Thêm phương thức xóa
+    NhanVienEntity detail(Integer id);
 }
