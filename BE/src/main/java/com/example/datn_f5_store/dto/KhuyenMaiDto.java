@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -30,8 +30,8 @@ public class KhuyenMaiDto {
     private Integer giaTriKhuyenMai;
 
 
-    private Date thoiGianBatDau;
-    private Date thoiGianKetThuc;
+    private LocalDateTime thoiGianBatDau;
+    private LocalDateTime thoiGianKetThuc;
     private Date thoiGianTao;
     private Date thoiGianSua;
     private String nguoiTao;

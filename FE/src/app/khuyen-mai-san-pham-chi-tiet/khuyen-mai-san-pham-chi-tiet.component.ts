@@ -112,6 +112,7 @@ fetchChiTietSanPhams() {
   );
 }
 
+
 loadSanPhamTimKiems(): void {
   this.khuyenMaiChiTietSanPhamService.timTheoTenHoacMa(this.searchTerm,this.page, this.size)
     .subscribe(response => {
@@ -137,7 +138,6 @@ onCheckboxChange(chiTietSanPham : any, event: any) {
     alert('Khuyến mãi lỗi, vui lòng thử lại');
     return;
   }
-  
   const isChecked = event.target.checked;
   
   if (isChecked) {

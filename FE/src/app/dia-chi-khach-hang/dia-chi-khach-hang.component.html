@@ -1,61 +1,79 @@
 <div class="popup">
     <div class="content">
-        <span class="close" (click)="close()">×</span>
+        <span class="close" (click)="close()" style="color: rgb(25, 0, 255);">X</span>
         <form id="customerForm" (ngSubmit)="createDiaChi()" #customerForm="ngForm">
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số nhà</label>
                         <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha"
                             [(ngModel)]="diaChiMoi.soNha" required>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Đường</label>
                         <input type="text" class="form-control" placeholder="Nhập đường" name="duong"
                             [(ngModel)]="diaChiMoi.duong" required>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
-                        <label class="form-label">Phường xã</label>
-                        <input type="text" class="form-control" placeholder="Nhập phường xã" name="phuongXa"
-                            [(ngModel)]="diaChiMoi.phuongXa" required>
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
+                            [(ngModel)]="diaChiMoi.sdt" required>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
-                        <label class="form-label">Quận huyện</label>
-                        <input type="text" class="form-control" placeholder="Nhập quận huyện" name="quanHuyen"
-                            [(ngModel)]="diaChiMoi.quanHuyen" required>
+                      <div>
+                        <label for="" class="form-label">Tỉnh thành</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="tinhThanh" [(ngModel)]="selectedTinhThanh" (change)="onTinhThanhChange($event)">
+                          <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }}</option>
+                        </select>
+                      </div>
                     </div>
-                </div>
-                <div class="col-sm-3">
+                  </div>
+                  <div class="col-sm-4">
                     <div class="mb-3">
-                        <label class="form-label">Tỉnh thành</label>
-                        <input type="text" class="form-control" placeholder="Nhập tỉnh thành" name="tinhThanh"
-                            [(ngModel)]="diaChiMoi.tinhThanh" required>
+                      <div>
+                        <label for="" class="form-label">Quận huyện</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="quanHuyen" [(ngModel)]="selectedQuanHuyen" (change)="onQuanHuyenChange($event)">
+                          <option *ngFor="let district of districts" [value]="district.DistrictID">{{ district.DistrictName }}</option>
+                        </select>
+                      </div>
                     </div>
-                </div>
-                <div class="col-sm-3">
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="mb-3">
+                      <div>
+                        <label for="" class="form-label">Phường xã</label>
+                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
+                          name="phuongXa" [(ngModel)]="selectedPhuongXa" (change)="onPhuongXaChange($event)">
+                          <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Quốc gia</label>
                         <input type="text" class="form-control" placeholder="Nhập quốc gia" name="quocGia"
                             [(ngModel)]="diaChiMoi.quocGia" required>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Loại địa chỉ</label>
                         <div class="form-check">
-                            <input class="form-check-radio" type="radio" id="loaiDiaChiNhaRieng"
-                                [(ngModel)]="diaChiMoi.loaiDiaChi" name="loaiDiaChi" value="Nhà riêng" required
-                                checked>
+                            <input class="form-check-radio" type="radio" id="loaiDiaChiNhaRieng" style="width: 20px;"
+                                [(ngModel)]="diaChiMoi.loaiDiaChi" name="loaiDiaChi" value="Nhà riêng" required checked>
                             <label class="form-check-label" for="loaiDiaChiNhaRieng" style="margin-right: 20px;">Nhà
                                 riêng</label>
                         </div>
@@ -67,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Trạng thái</label>
                         <div class="form-check">
@@ -77,23 +95,22 @@
                                 dụng</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-radio" type="radio" name="trangThai" value="ngừng sử dụng"
+                            <input class="form-check-radio" type="radio" name="trangThai" value="Ngừng sử dụng"
                                 id="editKhongConSuDung" [(ngModel)]="diaChiMoi.trangThai">
-                            <label class="form-check-label" for="editKhongConSuDung">ngừng
+                            <label class="form-check-label" for="editKhongConSuDung">Ngừng
                                 sử dụng</label>
                         </div>
                     </div>
                 </div>
-                <div class="button-action">
+                <div class="button-action" style="text-align: center;">
                     <div style="display: inline-block; margin-right: 10px;">
                         <button type="submit" class="btn-submit">
-                            <i class="material-icons">person_add</i> Thêm
+                            <i class="material-icons">add_location_alt</i> Thêm địa chỉ
                         </button>
                     </div>
                     <div style="display: inline-block;">
-                        <button (click)="updateDiaChi()" class="btn-submit"
-                            type="submit" [disabled]="!idDiaChi">
-                            <i class="material-icons">update</i> Cập Nhật
+                        <button (click)="updateDiaChi()" class="btn-submit" type="submit" [disabled]="!idKhachHang">
+                            <i class="material-icons">update</i> Cập nhật địa chỉ
                         </button>
                     </div>
                 </div>
@@ -102,14 +119,15 @@
         <!-- Table hiển thị dữ liệu khách hàng -->
         <div class="table-responsive">
             <table class="table table-hover">
-                <thead style="background-color: red; color: #fff;">
+                <thead style="background-color: #003366; color: #fff;">
                     <tr>
                         <th>STT</th>
                         <th>Số nhà</th>
                         <th>Đường</th>
-                        <th>Phường xã</th>
+                        <th>Số điện thoại</th>
+                        <th>Tỉnh thành </th> 
                         <th>Quận huyện</th>
-                        <th>Tỉnh thành </th>
+                        <th>Phường xã</th>
                         <th>Quốc gia</th>
                         <th>Loại địa chỉ</th>
                         <th>Trạng thái</th>
@@ -121,14 +139,15 @@
                         <td>{{ i + 1 }}</td>
                         <td>{{ customerAddress.soNha }}</td>
                         <td>{{ customerAddress.duong }}</td>
-                        <td>{{ customerAddress.phuongXa }}</td>
+                        <td>{{ customerAddress.sdt }}</td>
+                        <td>{{ customerAddress.tinhThanh }}</td> 
                         <td>{{ customerAddress.quanHuyen }}</td>
-                        <td>{{ customerAddress.tinhThanh }}</td>
+                        <td>{{ customerAddress.phuongXa }}</td>
                         <td>{{ customerAddress.quocGia }}</td>
                         <td>{{ customerAddress.loaiDiaChi }}</td>
                         <td>{{ customerAddress.trangThai }}</td>
                         <td>
-                            <button (click)="diaChiDetail(customerAddress.id)" class="btn btn-info">
+                            <button (click)="diaChiDetail(customerAddress.id)" class="btn dark-blue">
                                 <i class="material-icons">visibility</i>
                             </button>
                         </td>

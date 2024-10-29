@@ -1,7 +1,7 @@
 package com.example.datn_f5_store.controller;
 
 
-import com.example.datn_f5_store.dto.KhuyenMaiDto;
+
 import com.example.datn_f5_store.dto.VoucherDto;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -63,17 +64,12 @@ public class VoucherController {
         return new ResponseEntity<>(voucherService.updateVoucher(id,voucher), HttpStatus.OK);
     }
 
-    // api sửa trạng thái voucher theo id
     @PutMapping("/capNhapTrangThai")
-    public ResponseEntity<?> CapNhapTrangThaiVoucher(@PathParam("id") Integer id){
-        try {
-            voucherService.CapNhapTrangThaiVoucher(id);
-            return ResponseEntity.ok("Cập nhập trạng thái thành công");
-        }catch (Exception e){
-            String error = "Cập nhập trạng thái thất bại, vui lòng kiểm tra lại";
-            return ResponseEntity.badRequest().body(error);
-        }
+    public ResponseEntity<?> CapNhapTrangThaiVoucher(@PathParam("id")  Integer id)  {
+        return new ResponseEntity<>(voucherService.CapNhapTrangThaiVoucher(id), HttpStatus.OK);
     }
+
+    // api sửa trạng thái voucher theo id
 
 
     @GetMapping("/searchByTenOrMa")
@@ -103,8 +99,8 @@ public class VoucherController {
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
             @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayBatDau, // Ngày bắt đầu
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayKetThuc // Ngày kết thúc
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime ngayBatDau, // Ngày bắt đầu
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime ngayKetThuc // Ngày kết thúc
     ) {
         try {
             // Gọi service để tìm Voucher theo ngày bắt đầu và kết thúc

@@ -36,8 +36,6 @@ public class KhachHangRequest {
     @NotBlank(message = "Tên không được để trống")
     @Size(min = 3, message = "Tên phải có ít nhất 3 ký tự")
     private String ten;
-
-
     private String gioiTinh;
 
     @NotNull(message = "Ngày sinh không được để trống")
@@ -47,17 +45,15 @@ public class KhachHangRequest {
     @Email(message = "Email không hợp lệ")
     private String email;
 
+    @NotBlank(message = "Vai trò không được để trống")
+    private String roles;
     private String anh;
 
     @NotBlank(message = "Số điện thoại không được để trống")
     @Size(min = 10, max = 11, message = "Số điện thoại phải có từ 10 đến 11 ký tự")
     private String sdt;
 
-    @NotBlank(message = "Username không được để trống")
     private String userName;
-
-    @NotBlank(message = "Password không được để trống")
-    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
 
     private String trangThai;

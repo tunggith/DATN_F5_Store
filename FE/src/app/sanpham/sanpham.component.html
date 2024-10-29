@@ -231,8 +231,7 @@
     <!-- Bảng thông tin sản phẩm -->
     <div class="card">
       <div class="card-header card-s">
-        <h4 class="card-title"> Danh Sach Thông tin sản phẩm</h4>
-        <p class="card-category">Danh sách sản phẩm </p>
+        <h4 class="card-title">  Danh sách thông tin sản phẩm</h4>
       </div>
       <div class="card-body">
         <input type="text" class="form-control mb-3" placeholder="Tìm kiếm sản phẩm theo tên hoặc mã" [(ngModel)]="searchTerm" (ngModelChange)="onSearch($event)">
@@ -316,6 +315,8 @@
 
   
 
+
+
 <!-- Modal Chi Tiết Sản Phẩm -->
 <div *ngIf="isChiTietModalOpen"  class="modal-overlay">
   <div class="modal-content">
@@ -373,9 +374,10 @@
             <td>{{ chiTiet.trangThai }}</td>
             <td>
               <button class="btn  btn-sm" (click)="openUpdateProductDetailModal(chiTiet.id)">Cập nhật</button>
-              <button class="btn btn-secondary btn-sm" (click)="openPopup(chiTiet.id)">
-                <i class="material-icons">add_photo_alternate</i>
-              </button>
+             <!-- Nút mở modal -->
+             <button type="button"  (click)="chonSphinh(chiTiet.id)" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#uploadImageModal">
+              <i class="material-icons">add_photo_alternate</i> Chọn Ảnh
+            </button>
             </td>
           </tr>
         </tbody>
@@ -595,10 +597,46 @@
       </div>
   </div>
 </div>
-
-
-
   </div>
 </div>
 
 
+<!-- Modal Chọn Ảnh -->
+<div class="modal fade" id="uploadImageModal" tabindex="-1" role="dialog" aria-labelledby="uploadImageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+      <h5 class="modal-title" id="uploadImageModalLabel">
+        Chọn Ảnh cho  <b>Sản Phẩm</b> {{selectedSanPhamName}}  <b>màu</b>: {{SanPhamChiTietbyid?.mauSac?.ten}} <b>size</b> : {{SanPhamChiTietbyid?.size?.ten}}
+      </h5>
+      
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Input để chọn nhiều ảnh -->
+        <div class="form-group">
+          <label for="imageInput">Chọn ảnh:</label>
+          <input type="file" id="imageInput" class="form-control-file" (change)="onFilesSelected($event)" accept="image/*" multiple />
+        </div>
+
+        <!-- Hiển thị danh sách tất cả ảnh đã chọn -->
+        <div *ngIf="selectedImages.length > 0" class="image-preview mt-3">
+          <label>Ảnh đã chọn:</label>
+          <div class="row">
+            <!-- Hiển thị từng ảnh trong một cột -->
+            <div class="col-md-3" *ngFor="let image of selectedImages">
+              <img [src]="image" alt="Ảnh đã chọn" class="img-fluid mb-2" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" (click)="saveImages()">Lưu Ảnh</button>
+      </div>
+    </div>
+  </div>
+</div>

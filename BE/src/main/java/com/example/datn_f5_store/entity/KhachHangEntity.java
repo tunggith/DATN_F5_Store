@@ -34,6 +34,7 @@ public class KhachHangEntity {
     private String anh;
     @Column(name = ConfigContanst.KhachHang.SDT)
     private String sdt;
+    private String roles;
     @Column(name = ConfigContanst.KhachHang.USERNAME)
     private String userName;
     @Column(name = ConfigContanst.KhachHang.PASSWORD)

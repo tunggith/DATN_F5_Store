@@ -26,7 +26,7 @@
 
   /* Định dạng cho header của card */
   .card-header {
-    background-color: #e63946;
+    background-color: #003366;
     /* Màu nền cho header */
     color: white;
     /* Màu chữ trắng */
@@ -78,9 +78,9 @@
 
   /* Thay đổi viền khi input được focus */
   .form-control:focus {
-    border-color: #e63946;
+    border-color: #00197b;
     /* Màu viền khi focus */
-    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(28, 0, 151, 0.449);
     /* Bóng nhẹ khi focus */
   }
 
@@ -134,7 +134,7 @@
 
   /* Định dạng cho select khi được focus */
   .custom-select:focus {
-    border-color: #e63946;
+    border-color: #00197b;
     /* Thay đổi màu viền khi focus */
     box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
     /* Bóng khi focus */
@@ -144,7 +144,7 @@
 
   /* Định dạng cho select khi hover */
   .custom-select:hover {
-    border-color: #e63946;
+    border-color: #00197b;
     /* Thay đổi màu viền khi hover */
   }
 
@@ -184,9 +184,9 @@
   /* Hiệu ứng khi hover và focus */
   .form-select:hover,
   .form-select:focus {
-    border-color: #dc3545;
+    border-color: #00197b;
     /* Đổi màu viền khi hover hoặc focus */
-    box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+    box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
     /* Hiệu ứng shadow */
     outline: none;
     /* Bỏ outline mặc định */
@@ -237,7 +237,7 @@
   .pagination {
     justify-content: center;
     /* Căn giữa phân trang */
-    margin-top: 20px;
+    margin-top: 10px;
     /* Khoảng cách trên phân trang */
   }
   .pagination button{
@@ -257,7 +257,7 @@
   }
 
   .btn-submit {
-    background-color: #4CAF50;
+    background-color: #000a77;
     /* Màu nền xanh lá cây */
     color: white;
     /* Màu chữ trắng */
@@ -282,7 +282,7 @@
   }
 
   .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #ffcc00;
     /* Màu nền khi di chuột qua nút */
   }
 
@@ -377,10 +377,78 @@
     table-layout: auto; /* Cột tự điều chỉnh kích thước dựa trên nội dung */
   }
   .table thead{
-    background-color: #dc3545;
+    background-color: #003366;
     color: #ffff;
     font-weight: bold;
   }
   th,td{
     white-space: nowrap;
   }
+  .upload-container {
+    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
+    justify-content: center; /* Căn giữa các phần tử con theo chiều ngang */
+    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+    flex-direction: column; /* Đặt hướng của các phần tử con theo cột */
+}
+
+.image-upload-container {
+    position: relative; /* Định vị phần tử cha tương đối để các phần tử con có thể định vị tuyệt đối trong nó */
+    cursor: pointer; /* Thay đổi con trỏ thành hình tay khi di chuột qua để người dùng biết có thể click */
+    width: 150px; /* Chiều rộng của vùng tải ảnh */
+    height: 150px; /* Chiều cao của vùng tải ảnh */
+    border-radius: 50%; /* Tạo hiệu ứng hình tròn cho vùng tải ảnh */
+    overflow: hidden; /* Ẩn phần nội dung tràn ra ngoài hình tròn */
+    border: 2px solid #ccc; /* Đặt viền xung quanh vùng tải ảnh với màu xám nhạt */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng bóng để làm nổi bật phần tử */
+    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
+    justify-content: center; /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều ngang */
+    align-items: center; /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều dọc */
+    background-color: #f8f8f8; /* Đặt màu nền cho vùng tải ảnh */
+}
+
+.image-preview img {
+    width: 100%; /* Ảnh chiếm toàn bộ chiều rộng của vùng preview */
+    height: 100%; /* Ảnh chiếm toàn bộ chiều cao của vùng preview */
+    object-fit: cover; /* Đảm bảo ảnh được cắt và điền đầy vùng preview mà không làm méo hình */
+    border-radius: 50%; /* Tạo hiệu ứng hình tròn cho ảnh hiển thị */
+}
+
+.upload-label {
+    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
+    justify-content: center; /* Căn giữa các phần tử con theo chiều ngang */
+    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
+    width: 100%; /* Chiều rộng của phần tử chiếm 100% chiều rộng của phần tử cha */
+    height: 100%; /* Chiều cao của phần tử chiếm 100% chiều cao của phần tử cha */
+    font-size: 24px; /* Kích thước chữ là 24 pixel */
+    color: #ccc; /* Màu chữ là màu xám nhạt (#ccc) */
+    border-radius: 50%; /* Tạo góc tròn cho phần tử, làm cho nó giống như một hình tròn */
+    position: absolute; /* Định vị phần tử theo vị trí tuyệt đối để nó nằm trên vùng tải ảnh */
+    top: 0; /* Đặt phần tử ở cạnh trên cùng của phần tử cha */
+    left: 0; /* Đặt phần tử ở cạnh trái cùng của phần tử cha */
+    background-color: rgba(255, 255, 255, 0.7); /* Nền trắng mờ với độ trong suốt 70% để làm nổi bật biểu tượng tải lên */
+}
+
+.upload-label i.material-icons {
+    font-size: 60px; /* Kích thước biểu tượng là 48 pixel */
+}
+
+input[type="file"] {
+    display: none; /* Ẩn input file để người dùng không thấy nó, mà thay vào đó sử dụng label và hình ảnh để tương tác */
+}
+
+.btn-dark-blue {
+  background-color: #003366; /* Màu xanh thẫm */
+  color: white; /* Màu chữ trắng */
+  border: none; /* Không có đường viền */
+}
+
+.btn-dark-blue:hover {
+  background-color: #ffcc00; /* Màu nền tối hơn khi hover */
+  color: white; /* Màu chữ vẫn trắng khi hover */
+}
+.error-message {
+  color: red; /* Màu sắc cho thông báo lỗi */
+  font-size: 0.9em; /* Kích thước chữ nhỏ hơn một chút */
+}
+
+

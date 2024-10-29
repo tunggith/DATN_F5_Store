@@ -11,6 +11,9 @@ export class SevricesanphamService {
   private apispct = 'http://localhost:8080/api/v1/chi_tiet_san_pham';  // URL gốc API cho sản phẩm
   private defaultSize = 3;  // Kích thước mặc định là 3
 
+  // private apiUrl = 'http://localhost:8080/api/v1/anh-chi-tiet-san-pham/create';
+
+
   constructor(private http: HttpClient) { }
 
   // Hàm để tạo hoặc cập nhật sản phẩm
@@ -108,8 +111,6 @@ export class SevricesanphamService {
 
 
 // Trong sanPhamService
-
-
   getSanPhambyid(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/san-pham/details/${id}`);
   }
@@ -156,5 +157,16 @@ export class SevricesanphamService {
     return this.http.get<any>(url);
 }
 
-  
+uploadAnh(idSpct: number, selectedImage: string | ArrayBuffer): Observable<any> {
+  const payload = {
+    idChiTietSanPham: idSpct,
+    urlAnh: selectedImage
+  };
+  return this.http.post(`${this.apiUrl}/anh-chi-tiet-san-pham/create`, payload);
+}
+
+getImagesByProductId(idSpct: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/anh-chi-tiet-san-pham/get-by-san-pham/${idSpct}?page=0&size=100`);
+}
+
 }  

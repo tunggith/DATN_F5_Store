@@ -1,10 +1,8 @@
 package com.example.datn_f5_store.service.impl;
 import com.example.datn_f5_store.dto.KhuyenMaiChiTietSanPhamDto;
-import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.KhuyenMaiChiTietSanPham;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
-import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IKhuyenMaiChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IKhuyenMaiRepository;
@@ -20,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import  com.example.datn_f5_store.response.ResultModel;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -78,13 +78,17 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
             KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPham.getKhuyenMai().getId()).get();
             if (khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Chưa áp dụng") || khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
-            }else {
+            } if(khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Đã kết thúc") || khuyenMai.getTrangThai().equalsIgnoreCase("Đã kết thúc")){
+
+                iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
+            }
+            else {
+
                 if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$")) {
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() + khuyenMai.getGiaTriKhuyenMai());
                 } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%")) {
                     double giaTriGiam = ((double) khuyenMai.getGiaTriKhuyenMai() / 100);
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() / (1 - giaTriGiam));
-                    System.out.println("gia cua sp sau khi cap nhap : " + chiTietSanPham.getDonGia() + khuyenMai.getKieuKhuyenMai());
                 }
                 chiTietSanPhamRepository.save(chiTietSanPham);  // Cập nhật lại giá trong DB
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
@@ -98,7 +102,6 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
     // hàm thêm khuyến mãi vào sản phẩm
     @Override
     public DataResponse createKhuyenMaictsp(KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest) {
-        Date ngayHientai = new Date();
         // Lấy ra Khuyến mãi và Sản Phầm Chi tiết theo id
         KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPhamRequest.getKhuyenMai().getId()).orElseThrow(() -> new RuntimeException("Khuyến mãi không tồn tại"));
         ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(khuyenMaiChiTietSanPhamRequest.getChiTietSanPham().getId()).orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại"));
@@ -112,8 +115,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
             if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
                 return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
             }
-            if(khuyenMai.getTrangThai().equalsIgnoreCase("Đã hết hạn")){
-                return new DataResponse(false, new ResultModel<>(null, "Mã khuyến mãi "+ khuyenMai.getMa() +" đã hết hạn, không thể áp dụng"));
+            if(khuyenMai.getTrangThai().equalsIgnoreCase("Đã kết thúc")){
+                return new DataResponse(false, new ResultModel<>(null, "Mã khuyến mãi "+ khuyenMai.getMa() +" đã kết thúc, không thể áp dụng"));
             }
             if (khuyenMai.getSoLuong() == 0 || khuyenMai.getSoLuong() == null){
                 return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getMa() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
@@ -143,7 +146,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 chiTietSanPhamRepository.save(chiTietSanPham);
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
                 khuyenMaiRepository.save(khuyenMai);
-                khuyenMaiChiTietSanPham.setTrangThai("Đang hoạt động");
+                khuyenMaiChiTietSanPham.setTrangThai("Đang áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
@@ -157,57 +160,58 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
     @Scheduled(cron = "0 0 12 * * ?")
     public void upDateTrangThaiKhuyenMaiCtSp() {
         try {
-            // khai báo thời gian hiện tại
-            Date currentDate = new Date();
-            // lấy ra tất cả Khuyến mãi
+            // Khai báo thời gian hiện tại
+            LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+
             List<KhuyenMaiChiTietSanPham> khuyenMaiChiTietSanPhams = iKhuyenMaiChiTietSanPhamRepository.findAll();
             for (KhuyenMaiChiTietSanPham khuyenMaictsp : khuyenMaiChiTietSanPhams) {
-                // Kiểm tra nếu có Khuyến mãi nào có trạng thái là "Chưa áp dụng" và Thời gian bắt đầu bằng hoặc nhỏ hơn với thời gian hiện tại thì cập nhập lại trạng thái và set lại giá
-                if (khuyenMaictsp.getTrangThai().equalsIgnoreCase("Chưa áp dụng") && khuyenMaictsp.getKhuyenMai().getThoiGianBatDau() != null && !khuyenMaictsp.getKhuyenMai().getThoiGianBatDau().after(currentDate)) {
+                // Lấy thời gian bắt đầu và kết thúc của khuyến mãi
+                LocalDateTime thoiGianBatDau = khuyenMaictsp.getKhuyenMai().getThoiGianBatDau();
+                LocalDateTime thoiGianKetThuc = khuyenMaictsp.getKhuyenMai().getThoiGianKetThuc();
+
+                // Kiểm tra nếu có Khuyến mãi nào có trạng thái là "Chưa áp dụng" và Thời gian bắt đầu bằng hoặc nhỏ hơn với thời gian hiện tại
+                if (khuyenMaictsp.getTrangThai().equalsIgnoreCase("Chưa áp dụng") &&
+                        thoiGianBatDau != null && !thoiGianBatDau.isAfter(currentDateTime)) {
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         double soTienDuocGiam = khuyenMaictsp.getChiTietSanPham().getDonGia() * (khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100.0);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - soTienDuocGiam);
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     }
-                    khuyenMaictsp.setTrangThai("Đang hoạt động");
+
+                    khuyenMaictsp.setTrangThai("Đang áp dụng");
                     iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
                     khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
                     khuyenMaictsp.setTrangThai("Đang diễn ra");
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                 }
-                // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại thì cập nhập lại trạng thái
-                if (khuyenMaictsp.getKhuyenMai().getThoiGianKetThuc() != null && khuyenMaictsp.getKhuyenMai().getThoiGianKetThuc().before(currentDate)) {
+
+
+                // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại
+                if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
                     }
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
-                    khuyenMaictsp.getKhuyenMai().setTrangThai("Đã hết hạn");
-                    khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
-                    khuyenMaictsp.setTrangThai("Đã hết hạn");
-                    iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
+                    iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
-                if (khuyenMaictsp.getKhuyenMai().getTrangThai() != null && khuyenMaictsp.getKhuyenMai().getTrangThai().trim().equalsIgnoreCase("Không hoạt động")) {
-                     if ( !khuyenMaictsp.getKhuyenMai().getThoiGianBatDau().after(currentDate) &&
-                            !khuyenMaictsp.getKhuyenMai().getThoiGianKetThuc().before(currentDate)) {
-                         if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
-                             khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
-                         } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                             khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
-                         }
-                         chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
-                         iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
-                     }else {
-                         iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
-                     }
+                if (khuyenMaictsp.getKhuyenMai().getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
+                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
+                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                    }
+                    chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
+                    iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
 }

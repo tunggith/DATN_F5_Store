@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -32,9 +33,9 @@ public class KhuyenMaiEntity {
     @Column(name = ConfigContanst.KhuyenMai.GIA_TRI_KHUYEN_MAI)
     private Integer giaTriKhuyenMai;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_BAT_DAU)
-    private Date thoiGianBatDau;
+    private LocalDateTime  thoiGianBatDau;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_KET_THUC)
-    private Date thoiGianKetThuc;
+    private LocalDateTime thoiGianKetThuc;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_TAO)
     private Date thoiGianTao;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_SUA)

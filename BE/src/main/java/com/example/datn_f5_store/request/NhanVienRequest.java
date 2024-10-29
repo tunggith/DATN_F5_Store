@@ -20,7 +20,6 @@ public class NhanVienRequest {
 
     private Integer id;
 
-    @NotEmpty(message = "Mã không được để trống")
     private String ma;
 
     @NotEmpty(message = "Tên không được để trống")
@@ -43,15 +42,17 @@ public class NhanVienRequest {
 
     private String anh;
 
-    @NotEmpty(message = "Username không được để trống")
     private String username;
 
-    @NotEmpty(message = "Password không được để trống")
     private String password;
 
     private String nguoiTao;
+
     private Date thoiGianTao;
+
     private String nguoiSua;
+
     private Date thoiGianSua;
+
     private String trangThai;
 }

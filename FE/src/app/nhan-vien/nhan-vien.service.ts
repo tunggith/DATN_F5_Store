@@ -50,5 +50,8 @@ export class MapsService {
   deleteNhanVien(id: number): Observable<any>{
     return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
+  detailNhanVien(id:number):Observable<any>{
+    return this.http.get(`${this.apiUrl}/detail/${id}`);
+  }
 
 }

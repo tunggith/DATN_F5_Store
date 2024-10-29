@@ -2,6 +2,7 @@ package com.example.datn_f5_store.controller;
 
 import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
+import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
 import com.example.datn_f5_store.service.KhuyenMaiService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,6 +28,8 @@ import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -106,6 +109,7 @@ public class KhuyenMaiController {
                                      @RequestBody KhuyenMaiRequest khuyenMaiRequest) {
         return new ResponseEntity<>(khuyenMaiService.update(khuyenMaiRequest, id), HttpStatus.OK);
     }
+
     @GetMapping("/finById/{id}")
     private ResponseEntity<DataResponse> finById(@Parameter(name = "id") @PathVariable Integer id) {
         try {
@@ -142,8 +146,8 @@ public class KhuyenMaiController {
     public ResponseEntity<DataResponse> findByDate(
             @RequestParam(defaultValue = "0") Integer page, // Số trang hiện tại
             @RequestParam(defaultValue = "5") Integer size, // Kích thước trang
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayBatDau, // Ngày bắt đầu
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date ngayKetThuc // Ngày kết thúc
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime ngayBatDau, // Ngày bắt đầu
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") LocalDateTime ngayKetThuc // Ngày kết thúc
     ) {
         try {
             // Gọi service để tìm khuyến mãi theo ngày bắt đầu và kết thúc
@@ -164,15 +168,14 @@ public class KhuyenMaiController {
     }
 
 
+
     // api cập nhập trạng thái Khuyến mãi
+
+
     @PutMapping("/capNhapTrangThai")
-    public ResponseEntity<?> CapNhapTrangThaiKhuyenMai(@PathParam("id") Integer id){
-        try {
-            khuyenMaiService.CapNhapTrangThaiKhuyenMai(id);
-            return ResponseEntity.ok("Cập nhập trạng thái thành công");
-        }catch (Exception e){
-            String error = "Cập nhập trạng thái thất bại, vui lòng kiểm tra lại";
-            return ResponseEntity.badRequest().body(error);
-        }
+    private ResponseEntity<?> CapNhapTrangThaiKhuyenMai(@Parameter(name = "id")  Integer id
+                                    ) {
+        return new ResponseEntity<>(khuyenMaiService.CapNhapTrangThaiKhuyenMai(id), HttpStatus.OK);
     }
+
 }

@@ -1,8 +1,9 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header card-header-danger">
-                <h3 class="card-title"><i class="material-icons">group_add</i> Quản lý khách hàng</h3>
+            <div class="card-header">
+                <h3 class="card-title" style="color: #ffffff;"><i class="material-icons">group_add</i> Quản lý khách
+                    hàng</h3>
             </div>
             <div class="card-body">
                 <form id="customerForm" (ngSubmit)="createKhachHang()" #customerForm="ngForm">
@@ -77,12 +78,12 @@
                                 <input style="margin-right: 12px;" type="radio" id="trangThaiHoatDong"
                                     [(ngModel)]="newKhachHang.trangThai" name="trangThai" value="Đang hoạt động"
                                     required>
-                                <label for="trangThaiHoatDong" style="margin-right: 20px;">đang hoạt động</label>
+                                <label for="trangThaiHoatDong" style="margin-right: 20px;">Đang hoạt động</label>
                             </div>
                             <div>
                                 <input style="margin-right: 12px;" type="radio" id="trangThaiKhongHoatDong"
                                     [(ngModel)]="newKhachHang.trangThai" name="trangThai" value="Không hoạt động">
-                                <label for="trangThaiKhongHoatDong">không hoạt động</label>
+                                <label for="trangThaiKhongHoatDong">Không hoạt động</label>
                             </div>
                         </div>
                     </div>
@@ -172,6 +173,7 @@
                         </tbody>
                     </table>
                 </div>
+
                 <div class="pagination">
                     <button [disabled]="currentPage === 0" (click)="goToPage(currentPage - 1)">
                         <i class="material-icons">arrow_back_ios</i>
@@ -181,6 +183,7 @@
                         <i class="material-icons">arrow_forward_ios</i>
                     </button>
                 </div>
+
                 <app-dia-chi-khach-hang *ngIf="popup" [idKhachHang]="idKhachHang" (closePopup)="closePopup()"></app-dia-chi-khach-hang>
             </div>
         </div>

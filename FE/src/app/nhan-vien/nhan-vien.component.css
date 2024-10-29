@@ -15,9 +15,16 @@
     border-top-right-radius: 8px;
 }
 
+.card-header-custom {
+    background-color: #003366; /* Thay đổi mã màu theo nhu cầu */
+    color: #fff; /* Màu chữ */
+}
+
 .card-title {
     font-size: 1.5rem;
-    margin: 0;
+    /* Kích thước chữ */
+    font-weight: bold;
+    /* Đậm chữ */
 }
 
 .form-row {
@@ -37,7 +44,7 @@
 
 .form-control {
     width: 100%;
-    padding: 10px;
+    padding: 5px; /* Giảm từ 10px xuống 8px */
     border: 1px solid #ced4da;
     border-radius: 4px;
 }
@@ -64,6 +71,7 @@
     width: 100%;
     margin-top: 20px;
     border-collapse: collapse;
+    font-family: 'Roboto';
 }
 
 .table th, .table td {
@@ -72,15 +80,21 @@
     border-bottom: 1px solid #dee2e6;
 }
 
-.table th {
-    background-color: #f8f9fa;
-}
+/*.table th {*/
+/*    background-color: #f8f9fa;*/
+/*}*/
 
-.table tr:hover {
+.table tbody tr:hover {
     background-color: #f1f1f1;
 }
+
+.table thead {
+    background-color: #003366;
+    color: white;
+}
+
 .btn-submit, .btn-update, .btn-delete {
-    background-color: #007bff; /* Màu nền chính */
+    background-color: #003366; /* Màu nền chính */
     color: #fff; /* Màu chữ */
     border: none;
     padding: 10px 20px;
@@ -91,7 +105,7 @@
 }
 
 .btn-submit:hover, .btn-update:hover, .btn-delete:hover {
-    background-color: #0056b3; /* Màu nền khi hover */
+    background-color: #ffcc00; /* Màu nền khi hover */
 }
 
 .btn-update {
@@ -128,21 +142,21 @@
 }
 
 .btn-toggle {
-    background-color: #28a745;        /* Màu nền nút đổi trạng thái */
+    background-color: #003366;        /* Màu nền nút đổi trạng thái */
     color: white;                     /* Màu chữ */
 }
 
 .btn-info {
-    background-color: #007bff;        /* Màu nền nút thông tin */
+    background-color: #003366;        /* Màu nền nút thông tin */
     color: white;                     /* Màu chữ */
 }
 
 .btn-info:hover {
-    background-color: #0056b3;        /* Màu nền khi hover (nút thông tin) */
+    background-color: #ffcc00;        /* Màu nền khi hover (nút thông tin) */
 }
 
 .btn-toggle:hover {
-    background-color: #218838;        /* Màu nền khi hover (nút đổi trạng thái) */
+    background-color: #ffcc00;        /* Màu nền khi hover (nút đổi trạng thái) */
 }
 
 .btn:active {
@@ -198,23 +212,65 @@
 }
 .form-row {
     display: flex;               /* Sử dụng flexbox để căn chỉnh */
-    align-items: center;        /* Căn giữa các thành phần theo chiều dọc */
+    align-items: center;         /* Căn giữa các thành phần theo chiều dọc */
+    justify-content: space-between; /* Chia đều khoảng cách giữa các thành phần */
 }
 
-.upload-container {
-    margin-right: 10px;         /* Khoảng cách giữa ô upload và hình ảnh */
-    flex: 1;                    /* Chiếm không gian còn lại */
+.upload-container, .address-container {
+    flex: 1;                     /* Để mỗi container chiếm một nửa chiều rộng */
+    max-width: 50%;              /* Đảm bảo không vượt quá 50% */
+}
+
+.address-dropdowns {
+    display: flex;                 /* Sử dụng flexbox để sắp xếp các dropdown */
+    margin-right: 15px;            /* Khoảng cách giữa các dropdown */
+}
+
+.dropdown-item {
+    flex: 1;                      /* Mỗi dropdown chiếm một phần bằng nhau */
+}
+
+
+.image-upload-container {
+    position: relative;          /* Để có thể định vị ô input upload */
+    width: 150px;                /* Chiều rộng khung hình tròn */
+    height: 150px;               /* Chiều cao khung hình tròn */
+    border-radius: 50%;          /* Bo tròn thành hình tròn */
+    overflow: hidden;            /* Ẩn phần hình ảnh vượt ra ngoài khung tròn */
+    border: 2px solid #ced4da;   /* Đặt đường viền cho khung */
+    display: flex;               /* Sử dụng flexbox để căn giữa hình ảnh */
+    justify-content: center;     /* Căn giữa hình ảnh */
+    align-items: center;         /* Căn giữa hình ảnh theo chiều dọc */
+    cursor: pointer;             /* Con trỏ khi di chuột lên */
+}
+
+.image-upload-container input[type="file"] {
+    position: absolute;          /* Đặt ô input ở vị trí tuyệt đối */
+    width: 100%;                 /* Chiếm toàn bộ chiều rộng của container */
+    height: 100%;                /* Chiếm toàn bộ chiều cao của container */
+    opacity: 0;                  /* Ẩn ô input */
+    cursor: pointer;             /* Hiển thị con trỏ khi di chuột lên */
 }
 
 .image-preview {
-    display: flex;              /* Sử dụng flexbox cho hình ảnh */
-    align-items: center;        /* Căn giữa hình ảnh */
+    width: 100%;                 /* Chiều rộng của hình ảnh chiếm 100% khung */
+    height: 100%;                /* Chiều cao của hình ảnh chiếm 100% khung */
 }
 
 .image-preview img {
-    max-width: 100px;           /* Chiều rộng tối đa cho hình ảnh */
-    max-height: 100px;          /* Chiều cao tối đa cho hình ảnh */
-    object-fit: cover;          /* Cắt ảnh để vừa khung */
-    border-radius: 5px;        /* Bo góc nhẹ cho hình ảnh */
-    margin-left: 10px;          /* Khoảng cách từ ô upload đến hình ảnh */
+    width: 100%;                 /* Chiều rộng của hình ảnh chiếm 100% khung */
+    height: 100%;                /* Chiều cao của hình ảnh chiếm 100% khung */
+    object-fit: cover;           /* Cắt ảnh để vừa khung */
 }
+
+.upload-label {
+    position: absolute;          /* Định vị label */
+    top: 50%;                    /* Căn giữa theo chiều dọc */
+    left: 50%;                   /* Căn giữa theo chiều ngang */
+    transform: translate(-50%, -50%); /* Để căn chính xác vào giữa */
+    font-weight: bold;           /* Đậm chữ */
+    pointer-events: none;        /* Không cho phép tương tác với label */
+}
+
+
+

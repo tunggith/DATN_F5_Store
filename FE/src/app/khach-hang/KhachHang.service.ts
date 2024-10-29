@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +30,7 @@ export class CustomerService {
   updateTrangThai(id:number):Observable<any>{
     return this.http.put(`${this.baseUrl}/update-trang-thai/${id}`,{});
   }
+  
   
 
 }

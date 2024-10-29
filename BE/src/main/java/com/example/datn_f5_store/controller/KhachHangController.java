@@ -86,7 +86,7 @@ public class KhachHangController {
 
     @PostMapping("/addKhachHang")
     public ResponseEntity<Object> addKhachHang(@RequestBody @Valid KhachHangRequest request) throws BadRequestException {
-        return new ResponseEntity<>(khachHangService.addKhachHang(request),HttpStatus.OK);
+        return new ResponseEntity<>(khachHangService.create(request),HttpStatus.OK);
     }
 
 
@@ -94,6 +94,7 @@ public class KhachHangController {
     public ResponseEntity<Object> updateKhachHang(
             @Parameter(name = "id")@PathVariable Integer id,
             @RequestBody KhachHangRequest khachHangRequest) throws BadRequestException {
+        System.out.println("Cập nhật khách hàng với ID: " + id);
         return new ResponseEntity<>(khachHangService.updateKhachHang(id,khachHangRequest),HttpStatus.OK);
     }
 

@@ -478,7 +478,7 @@ button:hover {
 
 /* Áp dụng cho tất cả các button */
 button {
-  color: #d0ecc7b2; /* Màu chữ mặc định */
+  color: #fff; /* Màu chữ mặc định */
   background-color:#004085 ; /* Màu nền trong suốt */
   border: none; /* Loại bỏ đường viền */
   outline: none; /* Loại bỏ outline khi focus */
@@ -494,7 +494,7 @@ button:hover {
 
 .card-s{
   background-color: #003366;
-  color: ff;
+  color: #fff;
 
 }
 
@@ -513,7 +513,7 @@ button:hover {
 .card-header {
   padding: 16px;
   background-color: #003366; /* Màu nền xanh đậm */
-  color: #ffcc00; /* Màu chữ vàng */
+  color: #fff;
   border-top-left-radius: 12px; /* Bo góc trên trái */
   border-top-right-radius: 12px; /* Bo góc trên phải */
   display: flex;
@@ -527,33 +527,17 @@ button:hover {
   transform: translateY(-5px); /* Nâng thẻ lên khi hover */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn */
   background-color: #003366; /* Đổi màu nền thành xanh đậm */
-  color: #ffcc00; /* Đổi màu chữ thành vàng */
-}
-
-/* Đảm bảo các thành phần bên trong cũng thay đổi màu */
-.card:hover .card-header,
-.card:hover h4,
-.card:hover p,
-.card:hover button {
-  color: #ffcc00; /* Màu chữ vàng khi hover */
+  color:#fff; /* Đổi màu chữ thành vàng */
 }
 
 /* CSS cho tiêu đề của thẻ */
 .card-header h4 {
   margin: 0;
+  color: #fff;
   font-size: 1.5rem;
   font-weight: bold;
   color: inherit; /* Đảm bảo kế thừa màu sắc từ thẻ cha */
 }
-
-/* CSS cho phần mô tả bên trong header */
-.card-header p {
-  margin: 0;
-  font-size: 0.9rem;
-  font-style: italic;
-  color: inherit; /* Đảm bảo kế thừa màu sắc từ thẻ cha */
-}
-
 /* CSS cho nội dung bên trong card */
 .card-body {
   padding: 20px;
@@ -620,3 +604,6 @@ button:hover {
   border-color: #003366;
   cursor: default;
 }
+
+
+

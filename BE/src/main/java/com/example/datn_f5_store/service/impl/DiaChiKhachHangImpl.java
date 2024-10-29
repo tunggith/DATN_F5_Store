@@ -51,6 +51,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 entity.getQuanHuyen(),
                 entity.getTinhThanh(),
                 entity.getQuocGia(),
+                entity.getSdt(),
                 entity.getLoaiDiaChi(),
                 entity.getTrangThai()
         ));
@@ -62,7 +63,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
             return this.saveOfUpdate(new DiaChiKhachHangEntity(), diaChiKhachHangResquest);
         }else {
 //            return new DataResponse(false,new ResultModel<>(null,"dữ liệu không hợp lệ"));
-            throw new RuntimeException("dữ liệu không hợp lệ");
+            throw new RuntimeException("Dữ liệu không hợp lệ");
         }
     }
 
@@ -71,12 +72,13 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         if (!checkDiaChi(diaChiKhachHangResquest)) {
             DiaChiKhachHangEntity diaChi = diaChiKhachHangRepository.findById(id).orElse(null);
             if (diaChi == null) {
-                throw new NullPointerException("dịa chỉ không tồn tại");
+                throw new NullPointerException("Địa chỉ không tồn tại");
             }
             diaChiKhachHangResquest.setId(id);
+            diaChiKhachHangResquest.setSdt(diaChi.getSdt());
             return this.saveOfUpdate(diaChi, diaChiKhachHangResquest);
         } else {
-            return new DataResponse(false, new ResultModel<>(null, "dữ liệu đầu vào lỗi"));
+            return new DataResponse(false, new ResultModel<>(null, "Dữ liệu đầu vào lỗi"));
         }
     }
     @Override
@@ -86,6 +88,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         return listKhachHang.map(entity -> new DiaChiKhachHangDto(
                         entity.getId(),
                         entity.getSoNha(),
+                        entity.getSdt(),
                         entity.getDuong(),
                         entity.getPhuongXa(),
                         entity.getQuanHuyen(),
@@ -139,6 +142,7 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         KhachHangEntity khachHang = khachHangRepository.findById(request.getIdKhachHang()).orElse(null);
         entity.setKhackHang(khachHang);
         entity.setSoNha(request.getSoNha());
+        entity.setSdt(request.getSdt());
         entity.setDuong(request.getDuong());
         entity.setPhuongXa(request.getPhuongXa());
         entity.setQuanHuyen(request.getQuanHuyen());

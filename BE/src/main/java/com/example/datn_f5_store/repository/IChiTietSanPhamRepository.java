@@ -150,19 +150,44 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     """)
     Page<ChiTietSanPhamEntity> finByTTSp( String keyword, Pageable pageable);
 
+    @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
+            "ctsp.trangThai = :chiTietSanPham " +
+            "AND ctsp.sanPham.trangThai = :sanPham " +
+            "AND (:mauSac IS NULL OR ctsp.mauSac.id = :mauSac) " +
+            "AND (:size IS NULL OR ctsp.size.id = :size) " +
+            "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
+            "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
     Page<ChiTietSanPhamEntity> findByTrangThaiAndSanPhamTrangThai(
-            String chiTietSanPham,
-            String sanPham,
+            @Param("chiTietSanPham") String chiTietSanPham,
+            @Param("sanPham") String sanPham,
+            @Param("mauSac") String mauSac,
+            @Param("size") String size,
+            @Param("thuongHieu") String thuongHieu,
+            @Param("xuatXu") String xuatXu,
+            @Param("gioiTinh") String gioiTinh,
             Pageable pageable);
     @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
-            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%) " +
+            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%)" +
             "AND ctsp.trangThai = :trangThai " +
-            "AND ctsp.sanPham.trangThai = :sanPhamTrangThai")
+            "AND ctsp.sanPham.trangThai = :sanPhamTrangThai " +
+            "AND (:mauSac IS NULL OR ctsp.mauSac.id = :mauSac) " +
+            "AND (:size IS NULL OR ctsp.size.id = :size) " +
+            "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
+            "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
     Page<ChiTietSanPhamEntity> getByTrangThai(
             @Param("trangThai") String trangThai,
             @Param("sanPhamTrangThai") String sanPhamTrangThai,
             @Param("keyword") String keyword,
+            @Param("mauSac") String mauSac,
+            @Param("size") String size,
+            @Param("thuongHieu") String thuongHieu,
+            @Param("xuatXu") String xuatXu,
+            @Param("gioiTinh") String gioiTinh,
             Pageable pageable);
+
+
     boolean existsByMaOrTen(String ma, String ten);
 
 

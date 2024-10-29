@@ -1,277 +1,373 @@
-<div class="container mt-5">
-  <h2 class="text-center mb-4">Quản Lý Khuyến Mãi</h2>
 
 
- <!-- Phần lọc Khuyến mãi -->
-<form [formGroup]="searchForm" class="search-form mb-4">
-  <div class="border rounded p-4 mb-4">
-    <h4 class="mb-3">Lọc Khuyến mãi</h4>
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Tìm theo tên hoặc mã"
-          formControlName="searchKey"
-          (input)="searchVouchers(searchForm.value)"
-        />
-      </div>
+<!-- Sua giao dien -->
 
-      <div class="col-md-6">
-        <label for="trangThai">Trạng thái</label>
-        <select id="trangThai" class="form-control" formControlName="trangThai" (change)="searchVouchers(searchForm.value)">
-          <option value="">Tất cả</option>
-          <option value="Đang diễn ra">Đang diễn ra</option>
-          <option value="Không hoạt động">Không hoạt động</option>
-          <option value="Đã hết hạn">Đã hết hạn</option>
-          <option value="Sắp diễn ra">Sắp diễn ra</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row mb-4">
-      <div class="col-md-6">
-        <label for="fromDate">Từ ngày</label>
-        <input
-          type="date"
-          class="form-control"
-          formControlName="fromDate"
-          (change)="searchVouchers(searchForm.value)"
-        />
-      </div>
-      <div class="col-md-6">
-        <label for="toDate">Đến ngày</label>
-        <input
-          type="date"
-          class="form-control"
-          formControlName="toDate"
-          (change)="searchVouchers(searchForm.value)"
-        />
-      </div>
-    </div>
-  </div>
-</form>
-
-
-
-
-  <!-- Form thêm/sửa khuyến mãi -->
-  <div class="border rounded p-4 mb-4">
-    <h4 class="mb-3">{{ isEditing ? 'Sửa Khuyến Mãi' : 'Thêm Khuyến Mãi' }}</h4>
-    <form #form="ngForm" (ngSubmit)="isEditing ? editKhuyenMai() : createKhuyenMai()">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="ma">Mã</label>
-            <input 
-              type="text" 
-              id="ma" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.ma" 
-              name="ma" 
-              required 
-              #ma="ngModel">
-            <div *ngIf="ma.invalid && (ma.dirty || ma.touched)" class="error-message">
-              <div *ngIf="ma.errors?.required">Mã không được để trống.</div>
+<div class="container">
+  <!-- Phần Lọc -->
+  <div class="row">
+      <div class="col-md-12">
+        <form [formGroup]="searchForm" class="search-form mb-4">
+          <div class="border rounded p-4 mb-4">
+            <h4 class="mb-3">Lọc Khuyến mãi</h4>
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Tìm theo tên hoặc mã"
+                  formControlName="searchKey"
+                />
+              </div>
+      
+              <div class="col-md-6">
+             
+                <select id="trangThai" class="form-control" formControlName="trangThai">
+                  <option value="">Tất cả</option>
+                  <option value="Đang diễn ra">Đang diễn ra</option>
+                  <option value="Đã hết">Đã hết</option>
+                  <option value="Đã kết thúc">Đã kết thúc</option>
+                  <option value="Sắp diễn ra">Sắp diễn ra</option>
+                </select>
+              </div>
+            </div>
+      
+            <div class="row mb-4">
+              <div class="col-md-6">
+                <label for="fromDate">Từ ngày</label>
+                <input type="datetime-local" class="form-control" formControlName="fromDate" required />
+              </div>
+              <div class="col-md-6">
+                <label for="toDate">Đến ngày</label>
+                <input type="datetime-local" class="form-control" formControlName="toDate" required />
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="ten">Tên</label>
-            <input 
-              type="text" 
-              id="ten" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.ten" 
-              name="ten" 
-              required 
-              #ten="ngModel">
-            <div *ngIf="ten.invalid && (ten.dirty || ten.touched)" class="error-message">
-              <div *ngIf="ten.errors?.required">Tên không được để trống.</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="kieuKhuyenMai">Kiểu Khuyến Mãi</label>
-            <select 
-              id="kieuKhuyenMai" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.kieuKhuyenMai" 
-              name="kieuKhuyenMai" 
-              required 
-              #kieuKhuyenMai="ngModel">
-              <option value="">Chọn kiểu khuyến mãi</option>
-              <option value="$">$</option>
-              <option value="%">%</option>
-            </select>
-            <div *ngIf="kieuKhuyenMai.invalid && (kieuKhuyenMai.dirty || kieuKhuyenMai.touched)" class="error-message">
-              <div *ngIf="kieuKhuyenMai.errors?.required">Kiểu khuyến mãi không được để trống.</div>
-            </div>
-          </div>
-        </div>
+        </form> 
       </div>
-  
-      <div class="row">
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="moTa">Mô Tả</label>
-            <input 
-              type="text" 
-              id="moTa" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.moTa" 
-              name="moTa">
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="soLuong">Số Lượng</label>
-            <input 
-              type="number" 
-              id="soLuong" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.soLuong" 
-              name="soLuong" 
-              required 
-              min="1"
-              #soLuong="ngModel">
-            <div *ngIf="soLuong.invalid && (soLuong.dirty || soLuong.touched)" class="error-message">
-              <div *ngIf="soLuong.errors?.required">Số lượng không được để trống.</div>
-              <div *ngIf="soLuong.errors?.min">Số lượng phải lớn hơn 0.</div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="form-group">
-            <label for="giaTriKhuyenMai">Giá Trị Khuyến Mãi</label>
-            <input 
-              type="number" 
-              id="giaTriKhuyenMai" 
-              class="form-control" 
-              [(ngModel)]="currentKhuyenMai.giaTriKhuyenMai" 
-              name="giaTriKhuyenMai" 
-              required 
-              min="1"
-              #giaTriKhuyenMai="ngModel">
-            <div *ngIf="giaTriKhuyenMai.invalid && (giaTriKhuyenMai.dirty || giaTriKhuyenMai.touched)" class="error-message">
-              <div *ngIf="giaTriKhuyenMai.errors?.required">Giá trị khuyến mãi không được để trống.</div>
-              <div *ngIf="giaTriKhuyenMai.errors?.min">Giá trị khuyến mãi phải lớn hơn 0.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-  
-      <div class="form-group" >
-        <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
-        <input 
-          type="date" 
-          id="thoiGianBatDauInput" 
-          class="form-control" 
-          [(ngModel)]="currentKhuyenMai.thoiGianBatDau" 
-          name="thoiGianBatDau" 
-          (change)="onDateChange($event, 'batDau')" 
-          required 
-          #thoiGianBatDau="ngModel" [disabled]="currentKhuyenMai.trangThai === 'Đang diễn ra'">
-        <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)" class="error-message">
-          <div *ngIf="thoiGianBatDau.errors?.required">Thời gian bắt đầu không được để trống.</div>
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
-        <input 
-          type="date" 
-          id="thoiGianKetThucInput" 
-          class="form-control" 
-          [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" 
-          name="thoiGianKetThuc" 
-          (change)="onDateChange($event, 'ketThuc')" 
-          required 
-          #thoiGianKetThuc="ngModel">
-        <div *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)" class="error-message">
-          <div *ngIf="thoiGianKetThuc.errors?.required">Thời gian kết thúc không được để trống.</div>
-        </div>
-      </div>
-  
-      <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
-        <i class="material-icons" style="vertical-align: middle;">add</i>
-        {{ isEditing ? 'Cập Nhật' : 'Thêm Khuyến Mãi' }}
-      </button>
-      <button type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
-        <i class="material-icons" style="vertical-align: middle;">cancel</i>
-        Hủy
-      </button>
-    </form>
   </div>
 
-  <hr>
+  <!-- Phần Thêm/Sửa Khuyến Mãi và Bảng Sản Phẩm Chi Tiết -->
+  <div class="row mt-4">
+      <div class="col-md-6">
+          <div class="form-container">
+            <div class="border rounded p-4 mb-4">
+             
+              <form #form="ngForm" (ngSubmit)="isEditing ? editKhuyenMai() : createKhuyenMai()">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="ma">Mã</label>
+                      <input 
+                        type="text" 
+                        id="ma" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.ma" 
+                        name="ma" 
+                        required 
+                        #ma="ngModel">
+                      <div *ngIf="ma.invalid && (ma.dirty || ma.touched)" class="error-message">
+                        <div *ngIf="ma.errors?.required">Mã không được để trống.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="ten">Tên</label>
+                      <input 
+                        type="text" 
+                        id="ten" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.ten" 
+                        name="ten" 
+                        required 
+                        #ten="ngModel">
+                      <div *ngIf="ten.invalid && (ten.dirty || ten.touched)" class="error-message">
+                        <div *ngIf="ten.errors?.required">Tên không được để trống.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label for="kieuKhuyenMai">Kiểu Khuyến Mãi</label>
+                      <select 
+                        id="kieuKhuyenMai" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.kieuKhuyenMai" 
+                        name="kieuKhuyenMai" 
+                        required 
+                        #kieuKhuyenMai="ngModel">
+                        <option value="">Chọn kiểu khuyến mãi</option>
+                        <option value="$">$</option>
+                        <option value="%">%</option>
+                      </select>
+                      <div *ngIf="kieuKhuyenMai.invalid && (kieuKhuyenMai.dirty || kieuKhuyenMai.touched)" class="error-message">
+                        <div *ngIf="kieuKhuyenMai.errors?.required">Kiểu khuyến mãi không được để trống.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="soLuong">Số Lượng</label>
+                      <input 
+                        type="number" 
+                        id="soLuong" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.soLuong" 
+                        name="soLuong" 
+                        required 
+                        min="1"
+                        #soLuong="ngModel">
+                      <div *ngIf="soLuong.invalid && (soLuong.dirty || soLuong.touched)" class="error-message">
+                        <div *ngIf="soLuong.errors?.required">Số lượng không hợp lệ.</div>
+                        <div *ngIf="soLuong.errors?.min">Số lượng phải lớn hơn 0.</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="giaTriKhuyenMai">Giá Trị Khuyến Mãi</label>
+                      <input 
+                        type="number" 
+                        id="giaTriKhuyenMai" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.giaTriKhuyenMai" 
+                        name="giaTriKhuyenMai" 
+                        required 
+                        min="1"
+                        #giaTriKhuyenMai="ngModel">
+                      <div *ngIf="giaTriKhuyenMai.invalid && (giaTriKhuyenMai.dirty || giaTriKhuyenMai.touched)" class="error-message">
+                        <div *ngIf="giaTriKhuyenMai.errors?.required">Giá trị khuyến mãi không được để trống.</div>
+                        <div *ngIf="giaTriKhuyenMai.errors?.min">Giá trị khuyến mãi phải lớn hơn 0.</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-  <!-- Bảng hiển thị danh sách khuyến mãi -->
-  <h4 class="mt-4">Danh Sách Khuyến Mãi</h4>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Mã</th>
-        <th>Tên</th>
-        <th>Kiểu Khuyến Mãi</th>
-        <th>Số Lượng</th>
-        <th>Giá Trị</th>
-        <th>Thời Gian Bắt Đầu</th>
-        <th>Thời Gian Kết Thúc</th>
-        <th>Mô Tả</th>
-        <th>Trạng thái</th>
-        <th>Thao Tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let khuyenMai of khuyenMais">
-        <td>{{ khuyenMai.ma }}</td>
-        <td>{{ khuyenMai.ten }}</td>
-        <td>{{ khuyenMai.kieuKhuyenMai }}</td>
-        <td>{{ khuyenMai.soLuong }}</td>
-        <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
-        <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy' }}</td>
-        <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy' }}</td>
-        <td>{{ khuyenMai.moTa }}</td>
-        <td>{{ khuyenMai.trangThai }}</td>
-        <td>
-          <button class="btn btn-warning btn-sm" (click)="onEdit(khuyenMai)">
-            <i class="material-icons">edit</i> Sửa
-          </button>
-          <button class="btn btn-danger btn-sm" (click)="capNhapKm(khuyenMai.id)"
-          [disabled]="khuyenMai.trangThai === 'Đã hết hạn' || khuyenMai.soLuong === 0">
-            <i class="material-icons">swap_horiz</i> Đổi trạng thái
-          </button>
-          <button 
-          class="btn btn-primary btn-sm" 
-          (click)="redirectToAddKmct(khuyenMai)" 
-          [disabled]="khuyenMai.trangThai === 'Đã hết hạn' || khuyenMai.trangThai === 'Không hoạt động'">
-          <i class="material-icons">add</i> Thêm khuyến mãi cho sản phẩm
-        </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 
-  <div class="paginationr">
-    <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-secondary">
-      <i class="material-icons">chevron_left</i>
-    </button>  
-    <!-- Hiển thị các số trang -->
-    <ng-container *ngIf="totalPages > 0">
-      <button *ngFor="let num of [].constructor(totalPages); let i = index"
-              (click)="goToPage(i)" 
-              [disabled]="i === page" 
-              class="btn btn-secondary">
-        {{ i + 1 }}
-      </button>
-    </ng-container>
+            <div class="row"> 
+              <div class="col-md-6">
+                <div class="form-group" >
+                  <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
+                  <input 
+                    type="datetime-local" 
+                    id="thoiGianBatDauInput" 
+                    class="form-control" 
+                    [(ngModel)]="currentKhuyenMai.thoiGianBatDau" 
+                    name="thoiGianBatDau" 
+                    (change)="onDateChange($event, 'batDau')" 
+                    required 
+                    #thoiGianBatDau="ngModel" [disabled]="currentKhuyenMai.trangThai === 'Đang diễn ra'">
+                  <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)" class="error-message">
+                    <div *ngIf="thoiGianBatDau.errors?.required">Thời gian bắt đầu không hợp lệ</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
+                  <input 
+                    type="datetime-local" 
+                    id="thoiGianKetThucInput" 
+                    class="form-control" 
+                    [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" 
+                    name="thoiGianKetThuc" 
+                    (change)="onDateChange($event, 'ketThuc')" 
+                    required 
+                    #thoiGianKetThuc="ngModel">
+                  <div *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)" class="error-message">
+                    <div *ngIf="thoiGianKetThuc.errors?.required">Thời gian kết thúc không được để trống.</div>
+                  </div>
+                </div>
+              </div>
+            
+              </div>
+
+                <div class="row"> 
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="moTa">Mô Tả</label>
+                      <input 
+                        type="text" 
+                        id="moTa" 
+                        class="form-control" 
+                        [(ngModel)]="currentKhuyenMai.moTa" 
+                        name="moTa">
+                    </div>
+                  </div>
+                </div>
+            
+                <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
+                  <i class="material-icons" style="vertical-align: middle;">add</i>
+                  {{ isEditing ? 'Cập Nhật' : 'Thêm Khuyến Mãi' }}
+                </button>
+                <button type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
+                  <i class="material-icons" style="vertical-align: middle;">cancel</i>
+                  Hủy
+                </button>
+              </form>
+            </div>
+          </div>
+      </div>
+
+      <div class="col-md-6">
+    <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #dc3545;">
+      <h5 style="margin-left: 5px;">Danh sách Sản phẩm</h5>
+      <input style="border: 0;color: #fff;" type="text" class="form-control w-50" placeholder="Tìm theo tên hoặc mã sản phẩm..." [(ngModel)]="searchTerm" (keyup)="onSearch()" />
+    </div>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th class="text-center">Áp dụng khuyến mãi</th>
+            <th>Mã Sản phẩm</th>
+            <th>Tên Sản phẩm</th>
+            <th>Tên Chi tiết</th>
+            <th>Giá tiền</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let sp of chiTietSanPhams">
+            <td class="text-center">
+              <input type="checkbox" [checked]="sp.selected" [disabled]="sp.isDisabled" (change)="onCheckboxChange(sp, $event)" />
+            </td>
+            <td>{{ sp.ma }}</td>
+            <td>{{ sp.sanPham.ten }}</td>
+            <td>{{ sp.ten }}</td>
+            <td>{{ sp.donGia | currency:'VND' }}</td>
+          </tr>
+          <tr *ngIf="chiTietSanPhams.length === 0">
+            <td colspan="5" class="text-center">Không có sản phẩm bạn tìm</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination-container">
+        <div class="paginationr">
+            <button *ngIf="pageSp > 0" (click)="prevPageSp()" >
+                <i class="material-icons">arrow_back_ios</i>
+            </button>  
     
-    <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-secondary">
-      <i class="material-icons">chevron_right</i>
-    </button>
-</div>
+            <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
+            <span class="current-page"> Page {{ pageSp + 1 }} of {{ totalPageSp }}</span>
+    
+            <button *ngIf="pageSp < totalPageSp - 1" (click)="nextPageSp()" >
+                <i class="material-icons">arrow_forward_ios</i>
+            </button>
+        </div>
+    </div>
+         </div>
+       </div>
+    </div>  
+    
 
+
+  <!-- Phần Bảng Voucher và Banner Khuyến Mãi Chi Tiết Sản Phẩm -->
+  <div class="row mt-4">
+      <div class="col-md-12">
+            <h4 class="mt-4">Danh Sách Khuyến Mãi</h4>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th>Mã</th>
+                          <th>Tên</th>
+                          <th>Kiểu Khuyến Mãi</th>
+                          <th>Số Lượng</th>
+                          <th>Giá Trị</th>
+                          <th>Thời Gian Bắt Đầu</th>
+                          <th>Thời Gian Kết Thúc</th>
+                          <th>Mô Tả</th>
+                          <th>Trạng thái</th>
+                          <th>Hành động</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let khuyenMai of khuyenMais">
+                          <td>{{ khuyenMai.ma }}</td>
+                          <td>{{ khuyenMai.ten }}</td>
+                          <td>{{ khuyenMai.kieuKhuyenMai }}</td>
+                          <td>{{ khuyenMai.soLuong }}</td>
+                          <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
+                          <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
+                          <td>{{ khuyenMai.moTa }}</td>
+                          <td>{{ khuyenMai.trangThai }}</td>
+                          <td class="button-container">
+                              <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)">
+                                  <i class="material-icons">add_task</i> 
+                              </button>
+                              <button class="btn btn-danger btn-icon" (click)="capNhapKm(khuyenMai.id)">
+                                  <i class="material-icons">swap_horiz</i>
+                              </button>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          
+            
+          
+          <div class="pagination-container">
+            <div class="paginationr">
+                <button *ngIf="page > 0" (click)="prevPage()" >
+                    <i class="material-icons">arrow_back_ios</i>
+                </button>  
+          
+                <!-- Hiển thị thông báo trang hiện tại trên tổng trang -->
+                <span class="current-page"> Trang {{ page + 1 }}  /  {{ totalPages }} </span>
+          
+                <button *ngIf="page < totalPages - 1" (click)="nextPage()" >
+                    <i class="material-icons">arrow_forward_ios</i>
+                </button>
+            </div>
+          </div>
+          
+      <div class="col-md-12">
+          <div class="banner">
+            <div class="col-md-12">
+                  <h4>Sản phẩm được áp dụng khuyến mãi</h4>
+                <div class="card-body">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Mã</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Tên sản phẩm chi tiết</th>
+                        <th>Màu sắc</th>
+                        <th>Size</th> 
+                        <th>Thương hiệu</th>
+                        <th>Giới tính</th>
+                        <th>Số lượng</th>
+                        <th>Giá sau khuyến mãi</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngIf="!khuyenMaiChiTietSanPhams || khuyenMaiChiTietSanPhams.length === 0">
+                        <td colspan="9" class="text-center">Chưa có sản phẩm nào áp dụng khuyến mãi.</td>
+                      </tr>
+                      <tr *ngFor="let km of khuyenMaiChiTietSanPhams">
+                        <td>{{ km.chiTietSanPham.ma }}</td>
+                        <td>{{ km.chiTietSanPham.sanPham.ten }}</td>
+                        <td>{{ km.chiTietSanPham.ten }}</td>
+                        <td>{{ km.chiTietSanPham.mauSac.ten }}</td>
+                        <td>{{ km.chiTietSanPham.size.ten }}</td>
+                        <td>{{ km.chiTietSanPham.sanPham.thuongHieu.ten }}</td>
+                        <td>{{ km.chiTietSanPham.sanPham.gioiTinh.ten }}</td>
+                        <td>{{ km.chiTietSanPham.soLuong }}</td>
+                        <td>{{ km.chiTietSanPham.donGia | currency }}</td>
+                        <td>{{km.trangThai}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+          </div>
+  </div>
 </div>

@@ -69,7 +69,7 @@ button {
 
 /* CSS chung cho tất cả các nút */
 .btn-submit {
-    background-color: #4CAF50;
+    background-color: #003366;
     /* Màu nền chính */
     color: white;
     /* Màu chữ */
@@ -91,7 +91,7 @@ button {
 
 /* Hiệu ứng khi hover lên nút */
 .btn-submit:hover {
-    background-color: #45a049;
+    background-color: #b9a817;
     /* Màu nền khi hover */
 }
 
@@ -104,7 +104,7 @@ button {
 
 /* Hiệu ứng riêng cho nút "Cập Nhật Địa Chỉ Khách Hàng" khi bị disabled */
 button[disabled] {
-    background-color: #4CAF50;
+    background-color: #b9a817;
     /* Màu nền cho nút bị disable */
     cursor: not-allowed;
     /* Đổi con trỏ chuột khi bị disable */
@@ -114,3 +114,144 @@ button[disabled] {
     color: #f1f1f1;
     /* Màu icon khi hover */
 }
+/* Định dạng cho select */
+.custom-select {
+    /* display: block; */
+    width: 100%;
+    /* Đặt chiều rộng cho select */
+    padding: 10px;
+    /* Khoảng đệm bên trong */
+    font-size: 16px;
+    /* Kích thước chữ */
+    line-height: 1.5;
+    /* Khoảng cách giữa các dòng */
+    color: #495057;
+    /* Màu chữ */
+    background-color: #fff;
+    /* Màu nền trắng */
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23495057' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    border: 1px solid #ced4da;
+    /* Đặt viền cho select */
+    border-radius: 4px;
+    /* Bo tròn góc */
+    transition: border-color 0.2s, box-shadow 0.2s;
+    /* Hiệu ứng khi focus */
+    appearance: none;
+    /* Ẩn mũi tên mặc định của select */
+  }
+
+  /* Định dạng cho select khi được focus */
+  .custom-select:focus {
+    border-color: #00197b;
+    /* Thay đổi màu viền khi focus */
+    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
+    /* Bóng khi focus */
+    outline: none;
+    /* Xóa outline mặc định */
+  }
+
+  /* Định dạng cho select khi hover */
+  .custom-select:hover {
+    border-color: #00197b;
+    /* Thay đổi màu viền khi hover */
+  }
+
+  /* Định dạng cho select khi disabled */
+  .custom-select:disabled {
+    background-color: #e9ecef;
+    /* Màu nền cho select khi bị khóa */
+  }
+
+  /* Định dạng thẻ select */
+  .form-select {
+    appearance: none;
+    /* Bỏ mặc định style */
+    -webkit-appearance: none;
+    /* Bỏ mặc định style trên Safari */
+    -moz-appearance: none;
+    /* Bỏ mặc định style trên Firefox */
+    background-color: #ffffff;
+    /* Màu nền trắng */
+    border: 1px solid #ced4da;
+    /* Đường viền xám nhạt */
+    border-radius: 5px;
+    /* Bo góc cho thẻ */
+    padding: 10px;
+    /* Khoảng cách bên trong */
+    font-size: 16px;
+    /* Kích thước chữ */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    /* Hiệu ứng chuyển đổi */
+    width: 100%;
+    /* Đặt chiều rộng là 100% của container */
+    max-width: 400px;
+    /* Đặt chiều rộng tối đa, có thể thay đổi theo nhu cầu */
+    height: 42px;
+  }
+
+  /* Hiệu ứng khi hover và focus */
+  .form-select:hover,
+  .form-select:focus {
+    border-color: #00197b;
+    /* Đổi màu viền khi hover hoặc focus */
+    box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
+    /* Hiệu ứng shadow */
+    outline: none;
+    /* Bỏ outline mặc định */
+  }
+
+  /* Định dạng cho placeholder */
+  .form-select option {
+    color: #999;
+    /* Màu cho placeholder */
+  }
+
+  /* Định dạng cho các lựa chọn */
+  .form-select option:not(:first-child) {
+    color: #333;
+    /* Màu cho các lựa chọn */
+  }
+
+  /* Tùy chọn cho select có icon */
+  .select-wrapper {
+    position: relative;
+    /* Để chứa icon */
+  }
+
+  .select-wrapper::after {
+    content: '\25BC';
+    /* Mũi tên xuống */
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* Không cho phép click vào icon */
+    color: #ced4da;
+    /* Màu của mũi tên */
+  }
+    /* Định dạng cho nhãn */
+    .form-label {
+        font-weight: bold;
+        /* Chữ đậm */
+        margin-bottom: 5px;
+        /* Khoảng cách dưới nhãn */
+        color: #333;
+        /* Màu chữ */
+      }
+      .btn.dark-blue {
+        background-color: #002244; /* Màu xanh thẫm */
+        color: white; /* Màu chữ trắng */
+        border: none; /* Không có viền */
+        padding: 10px 15px; /* Thêm padding để nút trông đẹp hơn */
+        border-radius: 5px; /* Bo góc cho nút */
+        cursor: pointer; /* Đổi con trỏ khi hover */
+    }
+    
+    .btn.dark-blue:hover {
+        background-color: #001A30; /* Màu xanh thẫm hơn khi hover */
+    }
+    

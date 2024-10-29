@@ -20,17 +20,13 @@
                         </app-customer-popup>
                         <div class="profile-client">
                             <form class="example-form">
-                                <mat-form-field class="example-full-width" appearance="fill">
-                                    <mat-label>Khách hàng</mat-label>
-                                    <input type="text" placeholder="Nhập tên, sdt, emal" aria-label="Number" matInput
-                                        [formControl]="myControl" [matAutocomplete]="auto">
-                                    <mat-autocomplete #auto="matAutocomplete"
-                                        (optionSelected)="onOptionSelected($event)">
-                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ten">
-                                            {{option.ten}}
-                                        </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
+                                <input type="text" placeholder="Nhập hoặc chọn khách hàng...." [formControl]="myControl"
+                                    [matAutocomplete]="auto">
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ten">
+                                        {{option.ten}}
+                                    </mat-option>
+                                </mat-autocomplete>
                             </form>
                             <div class="create-client">
                                 <i class="material-icons" (click)="openPopup()">person_add</i>
@@ -102,6 +98,33 @@
                             <h4 class="card-title">Danh sách sản phẩm</h4>
                             <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
                                 (input)="searchProduct()">
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeSize($event)">
+                                <option value="" selected style="text-align: center;">- - - All - - -</option>
+                                <option *ngFor="let size of size" [value]="size.id">{{size.ten}}</option>
+                            </select>
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeMauSac($event)">
+                                <option value="" selected style="text-align: center;">- - - All - - -</option>
+                                <option *ngFor="let mauSac of mauSac" [value]="mauSac.id">{{mauSac.ten}}</option>
+                            </select>
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeThuongHieu($event)">
+                                <option value="" selected style="text-align: center;">- - - All - - -</option>
+                                <option *ngFor="let thuongHieu of thuongHieu" [value]="thuongHieu.id">{{thuongHieu.ten}}
+                                </option>
+                            </select>
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeXuatXu($event)">
+                                <option value="" selected style="text-align: center;">- - - All - - -</option>
+                                <option *ngFor="let xuatXu of xuatXu" [value]="xuatXu.id">{{xuatXu.ten}}</option>
+                            </select>
+                            <select class="form-select" aria-label="Default select example"
+                                (change)="onChangeGioiTinh($event)">
+                                <option value="" selected style="text-align: center;">- - - All - - -</option>
+                                <option *ngFor="let gioiTinh of gioiTinh" [value]="gioiTinh.id">{{gioiTinh.ten}}
+                                </option>
+                            </select>
                         </div>
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
@@ -177,7 +200,7 @@
                     </div>
                     <div>
                         <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                            <option selected disabled>---chọn phương thức thanh toán</option>
+                            <option selected disabled>---Chọn phương thức thanh toán</option>
                             <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
                                 {{phuongThuc.tenPhuongThuc}}</option>
                         </select>
@@ -189,12 +212,15 @@
                             </i></span>
                     </div>
                     <div class="combo-box">
-                        <input type="text" id="comboInput" list="options" placeholder="Nhập hoặc chọn voucher..."
-                            (input)="onInputChange($event)" />
-                        <datalist id="options">
-                            <option *ngFor="let voucher of voucher" [value]="voucher.ten" [attr.data-id]="voucher.id">
-                            </option>
-                        </datalist>
+                        <form class="example-form">
+                            <input type="text" placeholder="Nhập hoặc chọn voucher..." [formControl]="voucherControl"
+                                [matAutocomplete]="voucherAuto">
+                            <mat-autocomplete #voucherAuto="matAutocomplete" (optionSelected)="onChangeVoucher($event)">
+                                <mat-option *ngFor="let voucher of filteredVoucher | async" [value]="voucher.ten">
+                                    {{voucher.ten}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </form>
                     </div>
                     <div class="payment">
                         <button (click)="thanhtoanHoaDon(activeInvoidID)"><i class="material-icons">payments</i>Thanh
@@ -282,12 +308,12 @@
                         <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
-                    <button *ngIf="trangThaiHoaDon==='chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
+                    <button *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
-                    <button *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
+                    <button *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
                     <button
-                        *ngIf="trangThaiHoaDon==='đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='đang giao hàng' &&!isHidden"
+                        *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div style="display:inline-block;width:100%;overflow-x:hidden;" *ngIf="!isHidden">
                         <div class="row main-timeline10">
@@ -339,7 +365,6 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"><i class="material-icons">search</i></span>
                 <input type="text" class="form-control" placeholder="Nhập mã hóa đơn or tên khách hàng"
                     (input)="onKeyworkChange($event)">
             </div>
@@ -351,6 +376,7 @@
                         <th scope="col">Tên khách hàng</th>
                         <th scope="col">Giao hàng</th>
                         <th scope="col">Phương thức thanh toán</th>
+                        <th scope="col">Hình thức thanh toán</th>
                         <th scope="col">Thời gian tạo</th>
                         <th scope="col">Tổng tiền</th>
                         <th scope="col">Trạng thái</th>
@@ -364,6 +390,8 @@
                             <td *ngIf="hoaDon.giaoHang==1">có</td>
                             <td *ngIf="hoaDon.giaoHang==0">không</td>
                             <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
+                            <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
+                            <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
                             <td>{{hoaDon.tongTienSauVoucher}}</td>
                             <td class="button-select">

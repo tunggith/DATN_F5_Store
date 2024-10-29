@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -28,9 +29,9 @@ public class VoucherDto {
     private String kieuGiamGia;
     private Integer giaTriGiamToiDa;
     private Integer giaTriHoaDonToiThieu;
-    private Date thoiGianBatDau;
+    private LocalDateTime thoiGianBatDau;
 
-    private Date thoiGianKetThuc;
+    private LocalDateTime thoiGianKetThuc;
 
     private String moTa;
 
