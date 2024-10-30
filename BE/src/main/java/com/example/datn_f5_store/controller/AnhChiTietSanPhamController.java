@@ -6,6 +6,7 @@ import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IAnhChiTietSanPhamService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/anh-chi-tiet-san-pham")
 public class AnhChiTietSanPhamController {

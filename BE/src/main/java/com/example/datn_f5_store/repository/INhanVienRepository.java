@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface INhanVienRepository extends JpaRepository<NhanVienEntity, Integer> {
     Page<NhanVienEntity> getByTenContainingOrMaContaining(String ten, String ma, Pageable pageable);
     NhanVienEntity getByUsernameAndPassword(String username,String password);
+    Optional<NhanVienEntity> findByUsername(String username);
 }

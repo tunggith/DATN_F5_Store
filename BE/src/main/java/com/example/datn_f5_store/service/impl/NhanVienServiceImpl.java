@@ -8,10 +8,15 @@ import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.NhanVienService;
 import com.example.datn_f5_store.service.sendEmail.SendEmailService;
+import com.example.datn_f5_store.until.validate.ValidationUtils;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -148,6 +153,17 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public NhanVienEntity detail(Integer id) {
         NhanVienEntity nhanVien = nhanVienRepo.findById(id).orElse(null);
+        return nhanVien;
+    }
+
+    @Override
+    @Transactional
+    public UserDetails loadUserByUserName(String username) {
+        ValidationUtils.validateString(username);
+        NhanVienEntity nhanVien = nhanVienRepo.findByUsername(username)
+                .orElseThrow(()-> new EntityNotFoundException("không tìm thấy người dùng"));
+        System.out.println("đang tải người dùng: {}"+username);
+        System.out.println("vai trò: {}"+nhanVien.getRole());
         return nhanVien;
     }
 

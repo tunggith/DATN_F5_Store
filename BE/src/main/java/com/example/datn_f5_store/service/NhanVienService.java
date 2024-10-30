@@ -5,6 +5,7 @@ import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.request.NhanVienRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface NhanVienService {
     Page<NhanVienDto> getAll(int page, int size);
@@ -13,4 +14,5 @@ public interface NhanVienService {
     DataResponse update(NhanVienRequest nhanVienRequest, Integer id);
     DataResponse delete(Integer id); // Thêm phương thức xóa
     NhanVienEntity detail(Integer id);
+    UserDetails loadUserByUserName(String username);
 }
