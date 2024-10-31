@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SecurityService } from './security.service';
 import { AuthService } from 'app/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-security',
@@ -10,7 +11,8 @@ import { AuthService } from 'app/auth.service';
 export class SecurityComponent implements OnInit{
   constructor(
     private securityService: SecurityService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ){}
   ngOnInit(): void {
   }
@@ -21,6 +23,7 @@ export class SecurityComponent implements OnInit{
       response => {
         this.authService.setToken(response.token, response.role); // Lưu token và role
         alert('Login thành công');
+        this.router.navigate(['/ban-hang']);
       },
       error => {
         console.error('Login thất bại', error);

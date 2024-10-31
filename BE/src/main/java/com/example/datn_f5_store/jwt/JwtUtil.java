@@ -16,6 +16,8 @@ public class JwtUtil {
     private String SECRET_KEY;
     @Value("${jwt.expiration}")
     private long EXPIRATION_TIME;
+    @Value("${REFRESH_EXPIRATION_TIME}")
+    private long REFRESH_EXPIRATION_TIME;
 
     public String generateToken(String username, String role) {
         Map<String, Object> claims = new HashMap<>();
@@ -55,6 +57,22 @@ public class JwtUtil {
     public boolean validateToken(String token, String username) {
         String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
+    }
+    public boolean validateRefreshToken(String refreshToken) {
+        try {
+            Claims claims = extractClaims(refreshToken);
+            return !isTokenExpired(refreshToken); // Kiểm tra xem refresh token có hết hạn không
+        } catch (Exception e) {
+            return false; // Nếu có lỗi khi xác thực, coi như token không hợp lệ
+        }
+    }
+    public String getUsernameFromToken(String token) {
+        try {
+            return extractUsername(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -16,6 +16,7 @@ export class BanHangService {
   private exportHoaDonUrl = 'http://localhost:8080/api/v1/pdf/download';
   private lichSuHoaDonUrl = 'http://localhost:8080/api/v1/lich-su-hoa-don';
   private thuocTinhUrl = 'http://localhost:8080/api/v1';
+  public nhanVienUrl = 'http://localhost:8080/api/nhan-vien/find-by-username';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -120,5 +121,8 @@ export class BanHangService {
   }
   getGioiTinh():Observable<any>{
     return this.http.get(`${this.thuocTinhUrl}/gioi-tinh/getAll`);
+  }
+  getNhanVien(username:string):Observable<any>{
+    return this.http.get(`${this.nhanVienUrl}/${username}`);
   }
 }

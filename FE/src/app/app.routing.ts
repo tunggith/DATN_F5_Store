@@ -3,13 +3,23 @@ import { CommonModule, } from '@angular/common';
 import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { SecurityComponent } from './layouts/security/security.component';
 
 const routes: Routes =[
   {
     path: '',
-    redirectTo: 'ban-hang',
+    redirectTo: 'login',
     pathMatch: 'full',
-  }, {
+  },
+  {
+    path: 'login', // Đường dẫn cho trang login
+    component: SecurityComponent, // Component cho trang login
+  },
+  {
+    path: 'security', // Đường dẫn cho SecurityComponent
+    loadChildren: () => import('./layouts/security/security.module').then(m => m.SecurityModule), // Load SecurityModule
+  },
+  {
     path: '',
     component: AdminLayoutComponent,
     children: [{

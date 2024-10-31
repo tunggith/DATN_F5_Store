@@ -76,7 +76,8 @@ export class BanHangComponent implements OnInit {
     idKhachHang: 0,
     idNhanVien: 0
   };
-
+  userName: string='';
+  idNhanVien:string='';
   hoaDonChiTietMoi: any = {
     hoaDon: 0,
     chiTietSanPham: 0,
@@ -108,12 +109,13 @@ export class BanHangComponent implements OnInit {
     this.toggleIcon();
     this.getByTrangThai();
     this.loadKhachHang();
-    // this.loadProvinces();
+    this.loadProvinces();
     this.getSize();
     this.getMauSac();
     this.getThuongHieu();
     this.getXuatXu();
     this.getGioiTinh();
+    this.getNhanVien();
   }
   //chuyển tab
   selectTab(tabName: string) {
@@ -250,7 +252,7 @@ export class BanHangComponent implements OnInit {
   createHoaDon(): void {
     const hoaDonData = {
       idKhachHang: 0,
-      idNhanVien: 1,
+      idNhanVien: this.idNhanVien,
       idVoucher: this.selectedVoucherId || 0,
       idThanhToan: this.idThanhToan || 2,
       ma: '',
@@ -829,5 +831,14 @@ export class BanHangComponent implements OnInit {
   onChangeGioiTinh(event: any) {
     this.gioiTinhId = event.target.value || '';
     this.getSanPham();
+  }
+  //=======lấy id nhân viên==========
+  getNhanVien():void{
+    this.banHangService.getNhanVien(this.authServie.getUsername()).subscribe(
+      data =>{
+        this.idNhanVien = data.result.content.id;
+        console.log(this.idKhachHang);
+      }
+    )
   }
 }

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class UserController {
@@ -43,6 +45,30 @@ public class UserController {
         loginResponse.setToken(token);
         loginResponse.setRole(role);
         return ResponseEntity.ok(loginResponse);
+    }
+    @PostMapping("/refresh-token")
+    private ResponseEntity<Object> login(@RequestBody Map<String,String> request){
+        String refreshToken = request.get("refreshToken");
+            // Kiểm tra tính hợp lệ của refreshToken
+        if (refreshToken != null && jwtUtil.validateRefreshToken(refreshToken)) {
+            // Lấy thông tin người dùng từ refreshToken
+            String username = jwtUtil.getUsernameFromToken(refreshToken);
+
+            // Tạo accessToken mới
+            String role = userDetailsService.loadUserByUsername(username).getAuthorities()
+                    .stream().findFirst().orElse(null).getAuthority();
+            String newAccessToken = jwtUtil.generateToken(username, role);
+
+            // Tạo phản hồi và trả về
+            Map<String, String> response = Map.of(
+                    "token", newAccessToken,
+                    "role", role
+            );
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token không hợp lệ hoặc đã hết hạn");
+        }
     }
 
     @PostMapping("reset-password")

@@ -1,454 +1,507 @@
-  .row {
-    margin-bottom: 20px;
-  }
+.row {
+  margin-bottom: 20px;
+}
 
-  h2 {
-    margin-bottom: 15px;
-  }
+h2 {
+  margin-bottom: 15px;
+}
 
-  /* Định dạng cho toàn bộ trang */
-  body {
-    background-color: #f8f9fa;
-    /* Màu nền nhẹ nhàng */
-    font-family: Arial, sans-serif;
-    /* Phông chữ dễ đọc */
-  }
+/* Định dạng cho toàn bộ trang */
+body {
+  background-color: #f8f9fa;
+  /* Màu nền nhẹ nhàng */
+  font-family: Arial, sans-serif;
+  /* Phông chữ dễ đọc */
+}
 
-  /* Định dạng cho card */
-  .card {
-    border: none;
-    /* Xóa viền của card */
-    border-radius: 8px;
-    /* Bo tròn góc của card */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Thêm bóng cho card */
-  }
+/* Định dạng cho card */
+.card {
+  border: none;
+  /* Xóa viền của card */
+  border-radius: 8px;
+  /* Bo tròn góc của card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Thêm bóng cho card */
+}
 
-  /* Định dạng cho header của card */
-  .card-header {
-    background-color: #003366;
-    /* Màu nền cho header */
-    color: white;
-    /* Màu chữ trắng */
-    padding: 15px 20px;
-    /* Padding cho header */
-    border-top-left-radius: 8px;
-    /* Bo tròn góc trái trên */
-    border-top-right-radius: 8px;
-    /* Bo tròn góc phải trên */
-  }
+/* Định dạng cho header của card */
+.card-header {
+  background-color: #003366;
+  /* Màu nền cho header */
+  color: white;
+  /* Màu chữ trắng */
+  padding: 15px 20px;
+  /* Padding cho header */
+  border-top-left-radius: 8px;
+  /* Bo tròn góc trái trên */
+  border-top-right-radius: 8px;
+  /* Bo tròn góc phải trên */
+}
 
-  /* Định dạng cho tiêu đề trong card */
-  .card-title {
-    font-size: 1.5rem;
-    /* Kích thước chữ */
-    font-weight: bold;
-    /* Đậm chữ */
-  }
+/* Định dạng cho tiêu đề trong card */
+.card-title {
+  font-size: 1.5rem;
+  /* Kích thước chữ */
+  font-weight: bold;
+  /* Đậm chữ */
+}
 
-  /* Định dạng cho form */
-  #customerForm {
-    background-color: white;
-    /* Nền trắng cho form */
-    border-radius: 8px;
-    /* Bo tròn góc cho form */
-    padding: 20px;
-    /* Padding cho form */
-    margin-bottom: 20px;
-    /* Khoảng cách giữa form và bảng */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Bóng cho form */
-  }
+/* Định dạng cho form */
+#customerForm {
+  background-color: white;
+  /* Nền trắng cho form */
+  border-radius: 8px;
+  /* Bo tròn góc cho form */
+  padding: 20px;
+  /* Padding cho form */
+  margin-bottom: 20px;
+  /* Khoảng cách giữa form và bảng */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Bóng cho form */
+}
 
-  /* Định dạng cho các label trong form */
-  .form-label {
-    font-weight: bold;
-    /* Đậm chữ cho label */
-  }
+/* Định dạng cho các label trong form */
+.form-label {
+  font-weight: bold;
+  /* Đậm chữ cho label */
+}
 
-  /* Định dạng cho các input trong form */
-  .form-control {
-    border-radius: 4px;
-    /* Bo tròn góc cho input */
-    border: 1px solid #ced4da;
-    /* Viền cho input */
-    transition: border-color 0.2s;
-    /* Hiệu ứng chuyển tiếp cho viền */
-  }
+/* Định dạng cho các input trong form */
+.form-control {
+  border-radius: 4px;
+  /* Bo tròn góc cho input */
+  border: 1px solid #ced4da;
+  /* Viền cho input */
+  transition: border-color 0.2s;
+  /* Hiệu ứng chuyển tiếp cho viền */
+}
 
-  /* Thay đổi viền khi input được focus */
-  .form-control:focus {
-    border-color: #00197b;
-    /* Màu viền khi focus */
-    box-shadow: 0 0 0 0.2rem rgba(28, 0, 151, 0.449);
-    /* Bóng nhẹ khi focus */
-  }
+/* Thay đổi viền khi input được focus */
+.form-control:focus {
+  border-color: #00197b;
+  /* Màu viền khi focus */
+  box-shadow: 0 0 0 0.2rem rgba(28, 0, 151, 0.449);
+  /* Bóng nhẹ khi focus */
+}
 
-  /* Định dạng cho nút */
-  .btn {
-    border-radius: 4px;
-    /* Bo tròn góc cho nút */
-    padding: 10px 15px;
-    /* Padding cho nút */
-  }
-  /* Định dạng cho ảnh trong bảng */
-  .table img {
-    border-radius: 50%;
-    /* Bo tròn ảnh */
-  }
+/* Định dạng cho nút */
+.btn {
+  border-radius: 4px;
+  /* Bo tròn góc cho nút */
+  padding: 10px 15px;
+  /* Padding cho nút */
+}
 
-  /* Định dạng cho các nút trong bảng */
-  .btn-warning:hover {
-    background-color: #ec971f;
-    /* Thay đổi màu khi hover */
-  }
+/* Định dạng cho ảnh trong bảng */
+.table img {
+  border-radius: 50%;
+  /* Bo tròn ảnh */
+}
 
-  /* Định dạng cho select */
-  .custom-select {
-    /* display: block; */
-    width: 100%;
-    /* Đặt chiều rộng cho select */
-    padding: 10px;
-    /* Khoảng đệm bên trong */
-    font-size: 16px;
-    /* Kích thước chữ */
-    line-height: 1.5;
-    /* Khoảng cách giữa các dòng */
-    color: #495057;
-    /* Màu chữ */
-    background-color: #fff;
-    /* Màu nền trắng */
-    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23495057' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    border: 1px solid #ced4da;
-    /* Đặt viền cho select */
-    border-radius: 4px;
-    /* Bo tròn góc */
-    transition: border-color 0.2s, box-shadow 0.2s;
-    /* Hiệu ứng khi focus */
-    appearance: none;
-    /* Ẩn mũi tên mặc định của select */
-  }
+/* Định dạng cho các nút trong bảng */
+.btn-warning:hover {
+  background-color: #ec971f;
+  /* Thay đổi màu khi hover */
+}
 
-  /* Định dạng cho select khi được focus */
-  .custom-select:focus {
-    border-color: #00197b;
-    /* Thay đổi màu viền khi focus */
-    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
-    /* Bóng khi focus */
-    outline: none;
-    /* Xóa outline mặc định */
-  }
+/* Định dạng cho select */
+.custom-select {
+  /* display: block; */
+  width: 100%;
+  /* Đặt chiều rộng cho select */
+  padding: 10px;
+  /* Khoảng đệm bên trong */
+  font-size: 16px;
+  /* Kích thước chữ */
+  line-height: 1.5;
+  /* Khoảng cách giữa các dòng */
+  color: #495057;
+  /* Màu chữ */
+  background-color: #fff;
+  /* Màu nền trắng */
+  background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23495057' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  border: 1px solid #ced4da;
+  /* Đặt viền cho select */
+  border-radius: 4px;
+  /* Bo tròn góc */
+  transition: border-color 0.2s, box-shadow 0.2s;
+  /* Hiệu ứng khi focus */
+  appearance: none;
+  /* Ẩn mũi tên mặc định của select */
+}
 
-  /* Định dạng cho select khi hover */
-  .custom-select:hover {
-    border-color: #00197b;
-    /* Thay đổi màu viền khi hover */
-  }
+/* Định dạng cho select khi được focus */
+.custom-select:focus {
+  border-color: #00197b;
+  /* Thay đổi màu viền khi focus */
+  box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
+  /* Bóng khi focus */
+  outline: none;
+  /* Xóa outline mặc định */
+}
 
-  /* Định dạng cho select khi disabled */
-  .custom-select:disabled {
-    background-color: #e9ecef;
-    /* Màu nền cho select khi bị khóa */
-  }
+/* Định dạng cho select khi hover */
+.custom-select:hover {
+  border-color: #00197b;
+  /* Thay đổi màu viền khi hover */
+}
 
-  /* Định dạng thẻ select */
-  .form-select {
-    appearance: none;
-    /* Bỏ mặc định style */
-    -webkit-appearance: none;
-    /* Bỏ mặc định style trên Safari */
-    -moz-appearance: none;
-    /* Bỏ mặc định style trên Firefox */
-    background-color: #ffffff;
-    /* Màu nền trắng */
-    border: 1px solid #ced4da;
-    /* Đường viền xám nhạt */
-    border-radius: 5px;
-    /* Bo góc cho thẻ */
-    padding: 10px;
-    /* Khoảng cách bên trong */
-    font-size: 16px;
-    /* Kích thước chữ */
-    transition: border-color 0.3s, box-shadow 0.3s;
-    /* Hiệu ứng chuyển đổi */
-    width: 100%;
-    /* Đặt chiều rộng là 100% của container */
-    max-width: 400px;
-    /* Đặt chiều rộng tối đa, có thể thay đổi theo nhu cầu */
-    height: 42px;
-  }
+/* Định dạng cho select khi disabled */
+.custom-select:disabled {
+  background-color: #e9ecef;
+  /* Màu nền cho select khi bị khóa */
+}
 
-  /* Hiệu ứng khi hover và focus */
-  .form-select:hover,
-  .form-select:focus {
-    border-color: #00197b;
-    /* Đổi màu viền khi hover hoặc focus */
-    box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
-    /* Hiệu ứng shadow */
-    outline: none;
-    /* Bỏ outline mặc định */
-  }
+/* Định dạng thẻ select */
+.form-select {
+  appearance: none;
+  /* Bỏ mặc định style */
+  -webkit-appearance: none;
+  /* Bỏ mặc định style trên Safari */
+  -moz-appearance: none;
+  /* Bỏ mặc định style trên Firefox */
+  background-color: #ffffff;
+  /* Màu nền trắng */
+  border: 1px solid #ced4da;
+  /* Đường viền xám nhạt */
+  border-radius: 5px;
+  /* Bo góc cho thẻ */
+  padding: 10px;
+  /* Khoảng cách bên trong */
+  font-size: 16px;
+  /* Kích thước chữ */
+  transition: border-color 0.3s, box-shadow 0.3s;
+  /* Hiệu ứng chuyển đổi */
+  width: 100%;
+  /* Đặt chiều rộng là 100% của container */
+  max-width: 400px;
+  /* Đặt chiều rộng tối đa, có thể thay đổi theo nhu cầu */
+  height: 42px;
+}
 
-  /* Định dạng cho placeholder */
-  .form-select option {
-    color: #999;
-    /* Màu cho placeholder */
-  }
+/* Hiệu ứng khi hover và focus */
+.form-select:hover,
+.form-select:focus {
+  border-color: #00197b;
+  /* Đổi màu viền khi hover hoặc focus */
+  box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
+  /* Hiệu ứng shadow */
+  outline: none;
+  /* Bỏ outline mặc định */
+}
 
-  /* Định dạng cho các lựa chọn */
-  .form-select option:not(:first-child) {
-    color: #333;
-    /* Màu cho các lựa chọn */
-  }
+/* Định dạng cho placeholder */
+.form-select option {
+  color: #999;
+  /* Màu cho placeholder */
+}
 
-  /* Tùy chọn cho select có icon */
-  .select-wrapper {
-    position: relative;
-    /* Để chứa icon */
-  }
+/* Định dạng cho các lựa chọn */
+.form-select option:not(:first-child) {
+  color: #333;
+  /* Màu cho các lựa chọn */
+}
 
-  .select-wrapper::after {
-    content: '\25BC';
-    /* Mũi tên xuống */
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    /* Không cho phép click vào icon */
-    color: #ced4da;
-    /* Màu của mũi tên */
-  }
+/* Tùy chọn cho select có icon */
+.select-wrapper {
+  position: relative;
+  /* Để chứa icon */
+}
 
-  /* Định dạng cho nhãn */
-  .form-label {
-    font-weight: bold;
-    /* Chữ đậm */
-    margin-bottom: 5px;
-    /* Khoảng cách dưới nhãn */
-    color: #333;
-    /* Màu chữ */
-  }
+.select-wrapper::after {
+  content: '\25BC';
+  /* Mũi tên xuống */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Không cho phép click vào icon */
+  color: #ced4da;
+  /* Màu của mũi tên */
+}
 
-  /* Định dạng phân trang */
-  .pagination {
-    justify-content: center;
-    /* Căn giữa phân trang */
-    margin-top: 10px;
-    /* Khoảng cách trên phân trang */
-  }
-  .pagination button{
-    border: 0px;
-    background-color: #ffff;
-  }
-  .pagination button i{
-    font-size: 17px;
-  }
-  .pagination button i:hover{
-    font-size: 25px;
-  }
+/* Định dạng cho nhãn */
+.form-label {
+  font-weight: bold;
+  /* Chữ đậm */
+  margin-bottom: 5px;
+  /* Khoảng cách dưới nhãn */
+  color: #333;
+  /* Màu chữ */
+}
 
-  .form-check-radio {
-    margin-right: 17px;
-    /* Thay đổi giá trị 10px theo ý muốn để tạo khoảng cách */
-  }
+/* Định dạng phân trang */
+.pagination {
+  justify-content: center;
+  /* Căn giữa phân trang */
+  margin-top: 10px;
+  /* Khoảng cách trên phân trang */
+}
 
-  .btn-submit {
-    background-color: #000a77;
-    /* Màu nền xanh lá cây */
-    color: white;
-    /* Màu chữ trắng */
-    border: none;
-    /* Không viền */
-    padding: 10px 15px;
-    /* Khoảng cách bên trong nút */
-    text-align: center;
-    /* Canh giữa văn bản */
-    text-decoration: none;
-    /* Không gạch chân văn bản */
-    display: inline-flex;
-    /* Hiển thị dưới dạng flex để canh chỉnh icon và chữ */
-    align-items: center;
-    /* Canh giữa icon và chữ theo chiều dọc */
-    border-radius: 5px;
-    /* Bo tròn các góc */
-    transition: background-color 0.3s;
-    /* Hiệu ứng chuyển màu nền */
-    cursor: pointer;
-    /* Hiển thị con trỏ chuột dạng tay khi di chuột qua nút */
-  }
+.pagination button {
+  border: 0px;
+  background-color: #ffff;
+}
 
-  .btn-submit:hover {
-    background-color: #ffcc00;
-    /* Màu nền khi di chuột qua nút */
-  }
+.pagination button i {
+  font-size: 17px;
+}
 
-  .btn-submit i {
-    margin-right: 5px;
-    /* Khoảng cách giữa icon và chữ */
-  }
+.pagination button i:hover {
+  font-size: 25px;
+}
 
-  /* Container cho tìm kiếm */
+.form-check-radio {
+  margin-right: 17px;
+  /* Thay đổi giá trị 10px theo ý muốn để tạo khoảng cách */
+}
+
+.btn-submit {
+  background-color: #000a77;
+  /* Màu nền xanh lá cây */
+  color: white;
+  /* Màu chữ trắng */
+  border: none;
+  /* Không viền */
+  padding: 10px 15px;
+  /* Khoảng cách bên trong nút */
+  text-align: center;
+  /* Canh giữa văn bản */
+  text-decoration: none;
+  /* Không gạch chân văn bản */
+  display: inline-flex;
+  /* Hiển thị dưới dạng flex để canh chỉnh icon và chữ */
+  align-items: center;
+  /* Canh giữa icon và chữ theo chiều dọc */
+  border-radius: 5px;
+  /* Bo tròn các góc */
+  transition: background-color 0.3s;
+  /* Hiệu ứng chuyển màu nền */
+  cursor: pointer;
+  /* Hiển thị con trỏ chuột dạng tay khi di chuột qua nút */
+}
+
+.btn-submit:hover {
+  background-color: #ffcc00;
+  /* Màu nền khi di chuột qua nút */
+}
+
+.btn-submit i {
+  margin-right: 5px;
+  /* Khoảng cách giữa icon và chữ */
+}
+
+/* Container cho tìm kiếm */
+.search-container {
+  display: flex;
+  /* Sử dụng flexbox để căn giữa và sắp xếp các phần tử */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+  margin-bottom: 20px;
+  /* Khoảng cách dưới cùng */
+}
+
+/* Input tìm kiếm */
+.search-input {
+  flex: 1;
+  /* Chiếm toàn bộ không gian còn lại */
+  padding: 10px;
+  /* Khoảng cách bên trong */
+  border: 1px solid #ccc;
+  /* Đường viền */
+  border-radius: 4px;
+  /* Bo góc */
+  font-size: 16px;
+  /* Kích thước font chữ */
+  transition: border 0.3s;
+  /* Hiệu ứng chuyển tiếp khi thay đổi border */
+}
+
+/* Hiệu ứng khi focus vào input */
+.search-input:focus {
+  border-color: #007bff;
+  /* Đổi màu border khi focus */
+  outline: none;
+  /* Xóa outline mặc định */
+}
+
+/* Nút tìm kiếm */
+.search-button {
+  padding: 10px 15px;
+  /* Khoảng cách bên trong */
+  margin-left: 10px;
+  /* Khoảng cách bên trái */
+  background-color: #007bff;
+  /* Màu nền */
+  color: white;
+  /* Màu chữ */
+  border: none;
+  /* Không có đường viền */
+  border-radius: 4px;
+  /* Bo góc */
+  cursor: pointer;
+  /* Con trỏ chuột thành hình tay khi hover */
+  transition: background-color 0.3s;
+  /* Hiệu ứng chuyển tiếp khi thay đổi màu nền */
+}
+
+/* Hiệu ứng khi hover vào nút */
+.search-button:hover {
+  background-color: #0056b3;
+  /* Màu nền khi hover */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .search-container {
-    display: flex;
-    /* Sử dụng flexbox để căn giữa và sắp xếp các phần tử */
-    align-items: center;
-    /* Căn giữa theo chiều dọc */
-    margin-bottom: 20px;
-    /* Khoảng cách dưới cùng */
+    flex-direction: column;
+    /* Đặt các phần tử theo chiều dọc trên màn hình nhỏ */
+    align-items: stretch;
+    /* Căng đầy chiều ngang */
   }
 
-  /* Input tìm kiếm */
   .search-input {
-    flex: 1;
-    /* Chiếm toàn bộ không gian còn lại */
-    padding: 10px;
-    /* Khoảng cách bên trong */
-    border: 1px solid #ccc;
-    /* Đường viền */
-    border-radius: 4px;
-    /* Bo góc */
-    font-size: 16px;
-    /* Kích thước font chữ */
-    transition: border 0.3s;
-    /* Hiệu ứng chuyển tiếp khi thay đổi border */
+    margin-bottom: 10px;
+    /* Khoảng cách dưới cho input */
   }
+}
 
-  /* Hiệu ứng khi focus vào input */
-  .search-input:focus {
-    border-color: #007bff;
-    /* Đổi màu border khi focus */
-    outline: none;
-    /* Xóa outline mặc định */
-  }
+.table-responsive {
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  /* Nút tìm kiếm */
-  .search-button {
-    padding: 10px 15px;
-    /* Khoảng cách bên trong */
-    margin-left: 10px;
-    /* Khoảng cách bên trái */
-    background-color: #007bff;
-    /* Màu nền */
-    color: white;
-    /* Màu chữ */
-    border: none;
-    /* Không có đường viền */
-    border-radius: 4px;
-    /* Bo góc */
-    cursor: pointer;
-    /* Con trỏ chuột thành hình tay khi hover */
-    transition: background-color 0.3s;
-    /* Hiệu ứng chuyển tiếp khi thay đổi màu nền */
-  }
+.table {
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
+  table-layout: auto;
+  /* Cột tự điều chỉnh kích thước dựa trên nội dung */
+}
 
-  /* Hiệu ứng khi hover vào nút */
-  .search-button:hover {
-    background-color: #0056b3;
-    /* Màu nền khi hover */
-  }
+.table thead {
+  background-color: #03009a;
+  color: #ffff;
+  font-weight: bold;
+}
 
-  /* Responsive */
-  @media (max-width: 768px) {
-    .search-container {
-      flex-direction: column;
-      /* Đặt các phần tử theo chiều dọc trên màn hình nhỏ */
-      align-items: stretch;
-      /* Căng đầy chiều ngang */
-    }
+th,
+td {
+  white-space: nowrap;
+}
 
-    .search-input {
-      margin-bottom: 10px;
-      /* Khoảng cách dưới cho input */
-    }
-  }
-
-  .table-responsive {
-    overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-    -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  .table {
-    width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
-    table-layout: auto; /* Cột tự điều chỉnh kích thước dựa trên nội dung */
-  }
-  .table thead{
-    background-color: #003366;
-    color: #ffff;
-    font-weight: bold;
-  }
-  th,td{
-    white-space: nowrap;
-  }
-  .upload-container {
-    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
-    justify-content: center; /* Căn giữa các phần tử con theo chiều ngang */
-    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
-    flex-direction: column; /* Đặt hướng của các phần tử con theo cột */
+.upload-container {
+  display: flex;
+  /* Sử dụng Flexbox để sắp xếp các phần tử con */
+  justify-content: center;
+  /* Căn giữa các phần tử con theo chiều ngang */
+  align-items: center;
+  /* Căn giữa các phần tử con theo chiều dọc */
+  flex-direction: column;
+  /* Đặt hướng của các phần tử con theo cột */
 }
 
 .image-upload-container {
-    position: relative; /* Định vị phần tử cha tương đối để các phần tử con có thể định vị tuyệt đối trong nó */
-    cursor: pointer; /* Thay đổi con trỏ thành hình tay khi di chuột qua để người dùng biết có thể click */
-    width: 150px; /* Chiều rộng của vùng tải ảnh */
-    height: 150px; /* Chiều cao của vùng tải ảnh */
-    border-radius: 50%; /* Tạo hiệu ứng hình tròn cho vùng tải ảnh */
-    overflow: hidden; /* Ẩn phần nội dung tràn ra ngoài hình tròn */
-    border: 2px solid #ccc; /* Đặt viền xung quanh vùng tải ảnh với màu xám nhạt */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Thêm hiệu ứng bóng để làm nổi bật phần tử */
-    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
-    justify-content: center; /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều ngang */
-    align-items: center; /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều dọc */
-    background-color: #f8f8f8; /* Đặt màu nền cho vùng tải ảnh */
+  position: relative;
+  /* Định vị phần tử cha tương đối để các phần tử con có thể định vị tuyệt đối trong nó */
+  cursor: pointer;
+  /* Thay đổi con trỏ thành hình tay khi di chuột qua để người dùng biết có thể click */
+  width: 150px;
+  /* Chiều rộng của vùng tải ảnh */
+  height: 150px;
+  /* Chiều cao của vùng tải ảnh */
+  border-radius: 50%;
+  /* Tạo hiệu ứng hình tròn cho vùng tải ảnh */
+  overflow: hidden;
+  /* Ẩn phần nội dung tràn ra ngoài hình tròn */
+  border: 2px solid #ccc;
+  /* Đặt viền xung quanh vùng tải ảnh với màu xám nhạt */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Thêm hiệu ứng bóng để làm nổi bật phần tử */
+  display: flex;
+  /* Sử dụng Flexbox để sắp xếp các phần tử con */
+  justify-content: center;
+  /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều ngang */
+  align-items: center;
+  /* Căn giữa nội dung bên trong vùng tải ảnh theo chiều dọc */
+  background-color: #f8f8f8;
+  /* Đặt màu nền cho vùng tải ảnh */
 }
 
 .image-preview img {
-    width: 100%; /* Ảnh chiếm toàn bộ chiều rộng của vùng preview */
-    height: 100%; /* Ảnh chiếm toàn bộ chiều cao của vùng preview */
-    object-fit: cover; /* Đảm bảo ảnh được cắt và điền đầy vùng preview mà không làm méo hình */
-    border-radius: 50%; /* Tạo hiệu ứng hình tròn cho ảnh hiển thị */
+  width: 100%;
+  /* Ảnh chiếm toàn bộ chiều rộng của vùng preview */
+  height: 100%;
+  /* Ảnh chiếm toàn bộ chiều cao của vùng preview */
+  object-fit: cover;
+  /* Đảm bảo ảnh được cắt và điền đầy vùng preview mà không làm méo hình */
+  border-radius: 50%;
+  /* Tạo hiệu ứng hình tròn cho ảnh hiển thị */
 }
 
 .upload-label {
-    display: flex; /* Sử dụng Flexbox để sắp xếp các phần tử con */
-    justify-content: center; /* Căn giữa các phần tử con theo chiều ngang */
-    align-items: center; /* Căn giữa các phần tử con theo chiều dọc */
-    width: 100%; /* Chiều rộng của phần tử chiếm 100% chiều rộng của phần tử cha */
-    height: 100%; /* Chiều cao của phần tử chiếm 100% chiều cao của phần tử cha */
-    font-size: 24px; /* Kích thước chữ là 24 pixel */
-    color: #ccc; /* Màu chữ là màu xám nhạt (#ccc) */
-    border-radius: 50%; /* Tạo góc tròn cho phần tử, làm cho nó giống như một hình tròn */
-    position: absolute; /* Định vị phần tử theo vị trí tuyệt đối để nó nằm trên vùng tải ảnh */
-    top: 0; /* Đặt phần tử ở cạnh trên cùng của phần tử cha */
-    left: 0; /* Đặt phần tử ở cạnh trái cùng của phần tử cha */
-    background-color: rgba(255, 255, 255, 0.7); /* Nền trắng mờ với độ trong suốt 70% để làm nổi bật biểu tượng tải lên */
+  display: flex;
+  /* Sử dụng Flexbox để sắp xếp các phần tử con */
+  justify-content: center;
+  /* Căn giữa các phần tử con theo chiều ngang */
+  align-items: center;
+  /* Căn giữa các phần tử con theo chiều dọc */
+  width: 100%;
+  /* Chiều rộng của phần tử chiếm 100% chiều rộng của phần tử cha */
+  height: 100%;
+  /* Chiều cao của phần tử chiếm 100% chiều cao của phần tử cha */
+  font-size: 24px;
+  /* Kích thước chữ là 24 pixel */
+  color: #ccc;
+  /* Màu chữ là màu xám nhạt (#ccc) */
+  border-radius: 50%;
+  /* Tạo góc tròn cho phần tử, làm cho nó giống như một hình tròn */
+  position: absolute;
+  /* Định vị phần tử theo vị trí tuyệt đối để nó nằm trên vùng tải ảnh */
+  top: 0;
+  /* Đặt phần tử ở cạnh trên cùng của phần tử cha */
+  left: 0;
+  /* Đặt phần tử ở cạnh trái cùng của phần tử cha */
+  background-color: rgba(255, 255, 255, 0.7);
+  /* Nền trắng mờ với độ trong suốt 70% để làm nổi bật biểu tượng tải lên */
 }
 
 .upload-label i.material-icons {
-    font-size: 60px; /* Kích thước biểu tượng là 48 pixel */
+  font-size: 60px;
+  /* Kích thước biểu tượng là 48 pixel */
 }
 
 input[type="file"] {
-    display: none; /* Ẩn input file để người dùng không thấy nó, mà thay vào đó sử dụng label và hình ảnh để tương tác */
+  display: none;
+  /* Ẩn input file để người dùng không thấy nó, mà thay vào đó sử dụng label và hình ảnh để tương tác */
 }
 
 .btn-dark-blue {
-  background-color: #003366; /* Màu xanh thẫm */
-  color: white; /* Màu chữ trắng */
-  border: none; /* Không có đường viền */
+  background-color: #003366;
+  /* Màu xanh thẫm */
+  color: white;
+  /* Màu chữ trắng */
+  border: none;
+  /* Không có đường viền */
 }
 
 .btn-dark-blue:hover {
-  background-color: #ffcc00; /* Màu nền tối hơn khi hover */
-  color: white; /* Màu chữ vẫn trắng khi hover */
+  background-color: #ffcc00;
+  /* Màu nền tối hơn khi hover */
+  color: white;
+  /* Màu chữ vẫn trắng khi hover */
 }
+
 .error-message {
-  color: red; /* Màu sắc cho thông báo lỗi */
-  font-size: 0.9em; /* Kích thước chữ nhỏ hơn một chút */
+  color: red;
+  /* Màu sắc cho thông báo lỗi */
+  font-size: 0.9em;
+  /* Kích thước chữ nhỏ hơn một chút */
 }
-
-

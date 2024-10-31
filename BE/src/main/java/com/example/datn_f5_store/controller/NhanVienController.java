@@ -95,4 +95,12 @@ public class NhanVienController {
         dataResponse.setResult(new ResultModel<>(null,data));
         return ResponseEntity.ok(dataResponse);
     }
+    @GetMapping("/find-by-username/{username}")
+    public ResponseEntity<Object> findByUsername(@Parameter(name = "username")@PathVariable String username){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = nhanVienService.findByUserName(username);
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
+    }
 }
