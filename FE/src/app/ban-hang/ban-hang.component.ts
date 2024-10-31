@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { AuthService } from 'app/auth.service';
 import { BanHangService } from 'app/ban-hang.service';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 import { error } from 'console';
@@ -89,9 +90,17 @@ export class BanHangComponent implements OnInit {
   thuongHieuId: string = '';
   xuatXuId: string = '';
   gioiTinhId: string = '';
-  constructor(private banHangService: BanHangService, private giaoHangNhanhService: GiaoHangNhanhService) { }
+  token: string = '';
+  role: string = '';
+  constructor(
+    private banHangService: BanHangService,
+    private giaoHangNhanhService: GiaoHangNhanhService,
+    private authServie: AuthService
+  ) { }
 
   ngOnInit() {
+    this.token = this.authServie.getToken();
+    this.role = this.authServie.getRole();
     this.getSanPham();
     this.getHoaDon();
     this.getVoucher();
@@ -99,7 +108,7 @@ export class BanHangComponent implements OnInit {
     this.toggleIcon();
     this.getByTrangThai();
     this.loadKhachHang();
-    this.loadProvinces();
+    // this.loadProvinces();
     this.getSize();
     this.getMauSac();
     this.getThuongHieu();
@@ -428,7 +437,7 @@ export class BanHangComponent implements OnInit {
       hinhThucThanhToan: 0,
       ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
-      phiShip:this.phiVanChuyen,
+      phiShip: this.phiVanChuyen,
       tongTienSauVoucher: 0,
       tenNguoiNhan: this.tenKhachHang,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng

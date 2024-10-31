@@ -29,6 +29,9 @@ import { ThongkeComponent } from 'app/thongke/thongke.component';
 // @ts-ignore
 import { NgChartsModule } from 'ng2-charts';
 import { NotificationsComponent } from 'app/notifications/notifications.component';
+import { SecurityComponent } from 'app/security/security.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InterceptorService } from 'app/interceptor.service';
 
 
 @NgModule({
@@ -65,7 +68,8 @@ import { NotificationsComponent } from 'app/notifications/notifications.componen
     AnhChiTietSanPhamComponent,
     HistoryPopupComponent,
     NotificationsComponent,
-  ]
+    SecurityComponent,
+  ],
 })
 
 export class AdminLayoutModule {}

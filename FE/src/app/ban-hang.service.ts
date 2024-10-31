@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,9 @@ export class BanHangService {
   private lichSuHoaDonUrl = 'http://localhost:8080/api/v1/lich-su-hoa-don';
   private thuocTinhUrl = 'http://localhost:8080/api/v1';
 
-  constructor(private http: HttpClient) { }
-  //phương thức gọi api lấy danh sách sản phẩm
+  constructor(private http: HttpClient, private authService: AuthService) { }
+
+  // Phương thức gọi API lấy danh sách sản phẩm
   getSanPham(pageSize: number, pageNumber: number, keyword?: string, sizeId?: string, mauSacId?: string, thuongHieuId?: string, xuatXuId?: string, gioiTinhId?: string): Observable<any> {
     let params = new HttpParams()
         .set('size', pageSize.toString())
@@ -42,8 +44,9 @@ export class BanHangService {
         params = params.set('gioiTinh', gioiTinhId);
     }
 
-    return this.http.get(`${this.url}/get-by-trang-thai`, { params });
-}
+    return this.http.get(`${this.url}/get-by-trang-thai`, { params});
+  }
+  // Ví dụ gọi các API khác với token
   getHoaDon(): Observable<any> {
     return this.http.get(`${this.hoaDonUrl}/getAll`);
   }
