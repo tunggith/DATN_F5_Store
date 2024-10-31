@@ -13,4 +13,6 @@ public interface IAnhChiTietSanPhamService {
     DataResponse create(AnhChiTietSanPhamRequest request);
     DataResponse update(Integer id,AnhChiTietSanPhamRequest request);
     AnhChiTietSanPham detail(Integer id);
+
+    DataResponse removeAnh(Integer id);
 }

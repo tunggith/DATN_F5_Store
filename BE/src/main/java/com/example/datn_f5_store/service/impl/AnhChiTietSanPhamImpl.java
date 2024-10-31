@@ -54,6 +54,24 @@ public class AnhChiTietSanPhamImpl implements IAnhChiTietSanPhamService {
         return entity;
     }
 
+    @Override
+    public DataResponse removeAnh(Integer id) {
+        // Kiểm tra xem thực thể có tồn tại không trước khi xóa
+        Optional<AnhChiTietSanPham> entityOptional = anhChiTietSanPhamRepository.findById(id);
+
+        // Nếu tồn tại, xóa thực thể
+        if (entityOptional.isPresent()) {
+            anhChiTietSanPhamRepository.deleteById(id);
+            return new DataResponse(true, new ResultModel<>(null, "xóa thành công"));
+        } else {
+            return new DataResponse(false, null); // Trả về status lỗi
+        }
+    }
+
+
+
+
+
     private DataResponse createOfUpdate(AnhChiTietSanPham entity,AnhChiTietSanPhamRequest request){
         try {
             ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham())

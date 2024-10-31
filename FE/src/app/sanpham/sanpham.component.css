@@ -25,6 +25,29 @@
   max-height: 90vh; /* Chiều cao tối đa là 90% chiều cao của viewport */
 }
 
+/* Đặt dấu x để xóa ảnh */
+.remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remove-image:hover {
+  background-color: rgba(255, 0, 0, 0.8);
+}
+
+
 
 
 /* Nền overlay chung cho tất cả modal */
@@ -159,22 +182,6 @@
   margin-bottom: 16px;
 }
 
-/* Nút đóng modal */
-button.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #888;
-}
-
-button.close-btn:hover {
-  color: #333;
-}
-
 /* Định dạng bảng */
 .table-responsive {
   margin-bottom: 20px;
@@ -203,22 +210,7 @@ button.close-btn:hover {
   color: #fff;
 }
 
-/* Nút Đóng */
-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 20px; /* Bo tròn nút đóng */
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 20px; /* Đặt một khoảng cách trên nút đóng */
-}
 
-button:hover {
-  background-color: #c82333;
-}
 
 /* Đặt vị trí của nút đóng */
 .close-btn {
@@ -233,11 +225,12 @@ button:hover {
   transition: color 0.2s ease;
 }
 
-.close-btn:hover {
-  color: #333; /* Màu khi hover */
+.close:hover {
+  background-color: #ccc;
+  color: #333333; /* Màu khi hover */
 }
 /* Đặt vị trí của nút đóng ở góc trên bên phải */
-.close-btn {
+.close{
   position: absolute;
   top: 15px;
   right: 15px;
@@ -251,7 +244,7 @@ button:hover {
 }
 
 .close-btn:hover {
-  color: #333; /* Màu khi hover */
+  color: #eeebd9; /* Màu khi hover */
 }
 
 /* Modal overlay */
@@ -488,8 +481,9 @@ button {
 
 /* Hiệu ứng hover cho tất cả các button */
 button:hover {
-  color: #ffcc00; /* Màu chữ khi hover */
-  background-color: #003366; /* Màu nền khi hover */
+  background-color: #133352;
+  color: #ffcc00;
+  transform: scale(1);  
 }
 
 .card-s{
@@ -607,3 +601,114 @@ button:hover {
 
 
 
+/* Tạo kiểu cho phần chứa */
+.upload-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Ẩn input file gốc */
+#imageInput {
+  display: none;
+}
+
+/* Tạo kiểu cho nhãn để giống như một nút tải lên */
+.upload-label {
+  font-size: 24px;
+  color: #007bff;
+  background-color: #f8f9fa;
+  border: 2px solid #007bff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease; /* Hiệu ứng chuyển động tổng quát */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hiệu ứng khi di chuột vào nút */
+.upload-label:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: scale(1.1); /* Phóng to nhẹ khi hover */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Đổ bóng mạnh hơn */
+}
+
+/* Hiệu ứng khi nhấn nút (active) */
+.upload-label:active {
+  transform: scale(1.05); /* Thu nhỏ lại một chút khi nhấn */
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2); /* Giảm đổ bóng khi nhấn */
+}
+
+.remove-image {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remove-image:hover {
+  background-color: rgba(255, 0, 0, 0.8);
+}
+
+
+
+.fa-eye{
+  color: #033468;
+  width: 30px;
+  height: 30px;
+
+}
+
+.fa-eye:hover{
+  color: #a7a400;
+  width: 30px;
+  height: 30px;
+  transform: scale(1.5);      /* Phóng to khi hover */
+}
+
+.fa-edit{
+  color: #033468;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.fa-edit:hover{
+  color: #a7a400;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  transform: scale(1.5);      /* Phóng to khi hover */
+  
+}
+
+
+.fa-image{
+  color: #033468;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.fa-image:hover{
+  color: #a7a400;
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  transform: scale(1.5);      /* Phóng to khi hover */
+  
+}

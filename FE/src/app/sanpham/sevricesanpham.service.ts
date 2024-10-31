@@ -169,4 +169,10 @@ getImagesByProductId(idSpct: number): Observable<any> {
   return this.http.get(`${this.apiUrl}/anh-chi-tiet-san-pham/get-by-san-pham/${idSpct}?page=0&size=100`);
 }
 
+
+deleteImage(id: number): Observable<any> {
+  return this.http.delete(`${this.apiUrl}/anh-chi-tiet-san-pham/delete/${id}`);
+}
+
+
 }  
