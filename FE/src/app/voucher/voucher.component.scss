@@ -34,7 +34,7 @@
   }
   
   .btn-submit {
-    background-color: #007bff; /* Màu nền cho nút */
+    background-color: #003366; /* Màu nền cho nút */
     color: white; /* Màu chữ */
     border: none; /* Không có viền */
     border-radius: 5px; /* Bo góc cho nút */
@@ -43,22 +43,8 @@
 }
 
 .btn-submit:hover {
-    background-color: rgba(0, 123, 255, 0.8); /* Làm đậm màu nền khi hover */
+    background-color: #003366(0, 123, 255, 0.8); /* Làm đậm màu nền khi hover */
 }
-
-.btn-search {
-    background-color: #007bff; /* Màu nền cho nút tìm kiếm */
-    color: white; /* Màu chữ */
-    border: none; /* Không có viền */
-    border-radius: 5px; /* Bo góc cho nút */
-    padding: 10px 15px; /* Khoảng cách bên trong nút */
-    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển màu */
-}
-
-.btn-search:hover {
-    background-color: rgba(0, 123, 255, 0.8); /* Làm đậm màu nền khi hover */
-}
-
 
   button {
     background-color: transparent; /* Nền trong suốt */
@@ -69,7 +55,7 @@
   }
   
   button:hover {
-    color: #0056b3; /* Màu chữ khi hover */
+    color: white; /* Màu chữ khi hover */
   }
   .hidden {
     display: none; 
@@ -118,14 +104,14 @@
     padding: 10px 15px;           /* Thêm khoảng cách bên trong cho nút */
     border: none;                 /* Bỏ đường viền */
     border-radius: 5px;          /* Bo góc cho nút */
-    background-color: #007bff;   /* Màu nền của nút */
+    background-color: #003366;   /* Màu nền của nút */
     color: white;                 /* Màu chữ của nút */
     cursor: pointer;              /* Thay đổi con trỏ khi di chuột vào nút */
     transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi di chuột */
 }
 
 .btn:hover {
-  background-color: rgba(0, 123, 255, 0.8); /* Màu nền khi di chuột vào nút */
+  background-color: #003366(0, 123, 255, 0.8); /* Màu nền khi di chuột vào nút */
 }
 
 .btn:disabled {
@@ -154,8 +140,8 @@
 
 
 .btn-edit, .btn-update {
-  background-color: #007bff; /* Bootstrap primary color */
-  color: white;
+  background-color: #003366; /* Màu nền chính */
+  color: #fff; /* Màu chữ */
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
@@ -166,11 +152,12 @@
 
 /* Darken the background color on hover */
 .btn-edit:hover, .btn-update:hover {
-  background-color: rgba(0, 123, 255, 0.8); /* Darken the original color by reducing opacity */
+  background-color: #003366(0, 123, 255, 0.8); /* Darken the original color by reducing opacity */
 }
 
 .btn-update:hover {
-  background-color: rgba(0, 123, 255, 0.8); /* Darken the original yellow color */
+  background-color: #003366(0, 123, 255, 0.8);
+  color: #fff; /* Darken the original yellow color */
 }
 
 .btn-edit i, .btn-update i {
@@ -178,8 +165,8 @@
 }
 
 .table thead{
-  background-color: #dc3545;
-    color: #ffff;
+  background-color: #003366;
+    color: white;
     font-weight: bold;
 }
 .table-responsive {

@@ -192,7 +192,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
@@ -201,7 +202,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
