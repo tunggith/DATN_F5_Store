@@ -7,11 +7,13 @@ import com.example.datn_f5_store.response.LoginResponse;
 import com.example.datn_f5_store.service.IUserService;
 import com.example.datn_f5_store.service.impl.CustomUsserDetailsService;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.mail.AuthenticationFailedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,7 +38,8 @@ public class UserController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<Object> login(@RequestParam String username, @RequestParam String password) throws AuthenticationFailedException {
+        try{
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         String role = userDetailsService.loadUserByUsername(username).getAuthorities()
                 .stream().findFirst().orElse(null).getAuthority();
@@ -45,6 +48,10 @@ public class UserController {
         loginResponse.setToken(token);
         loginResponse.setRole(role);
         return ResponseEntity.ok(loginResponse);
+        } catch (AuthenticationException ex) {
+            // Ném ngoại lệ khi xác thực thất bại
+            throw new AuthenticationFailedException("Đăng nhập thất bại!");
+        }
     }
     @PostMapping("/refresh-token")
     private ResponseEntity<Object> login(@RequestBody Map<String,String> request){

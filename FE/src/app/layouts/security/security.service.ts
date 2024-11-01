@@ -11,4 +11,7 @@ export class SecurityService {
   login(username: string,password:string):Observable<any>{
     return this.http.post(`${this.baseUrl}/login?username=${username}&password=${password}`,{});
   }
+  changePassword(username:string,passwordOld:string,passwordNew:string){
+    return this.http.post(`${this.baseUrl}/reset-password?username=${username}&passwordOld=${passwordOld}&passwordNew=${passwordNew}`,{});
+  }
 }

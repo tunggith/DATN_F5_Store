@@ -31,10 +31,10 @@ public class UserServiceImpl implements IUserService {
                 nhanVienRepository.save(entity);
                 return new DataResponse(true, new ResultModel<>(null, "Đổi mật khẩu thành công!"));
             } else {
-                return new DataResponse(false, new ResultModel<>(null, "Mật khẩu cũ không đúng!"));
+                throw new RuntimeException("Mật khẩu cũ không đúng!");
             }
         } else {
-            return new DataResponse(false, new ResultModel<>(null, "Tài khoản không tồn tại!"));
+            throw new RuntimeException("Tài khoản không tồn tại!");
         }
     }
 
