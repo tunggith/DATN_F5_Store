@@ -12,4 +12,5 @@ import lombok.Setter;
 public class DataResponse {
     private boolean status;
     private ResultModel<?> result;
+
 }

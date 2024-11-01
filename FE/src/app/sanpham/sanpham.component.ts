@@ -46,6 +46,7 @@ export class SanphamComponent implements OnInit {
   searchChiTietTerm: string = '';
   isaddThuocTinhlModalOpen = false;  // Biến để điều khiển hiển thị modal
 
+  idSpct: number = 0;
   // Các thuộc tính đã có
     selectedColor: number = null; // Biến để lưu ID màu sắc đã chọn
     selectedSize: number = null; // Biến để lưu ID kích thước đã chọn
@@ -138,10 +139,12 @@ selectedGioiTinh: number = 0;
     this.filteredSanPhamList = [...this.sanPhamList];
     this.filterSanPham();
   }
-  openPopup(idChiTietSanPham:number) {
+  openPopup(idChiTietSanPham: number) {
     this.selectedSanPhamId = idChiTietSanPham;
     this.popup = true;
+    console.log("Modal opened:", this.popup); // Kiểm tra xem có log ra không
   }
+  
   closePopup() {
     this.popup = false;
   }
@@ -1248,6 +1251,238 @@ isDuplicate(list: any[], ma: string, ten: string): boolean {
 logButtonClick() {
   console.log('Nút submit đã được bấm');
 }
+
+
+
+selectedImages: (string | ArrayBuffer)[] = []; // Mảng chứa các ảnh đã chọn mới
+// Định nghĩa savedImages là mảng chứa các đối tượng với id và url
+savedImages: { id: number; url: string }[] = []; // Mảng chứa ID và URL ảnh đã lưu
+SanPhamChiTietbyid: any = [];
+CheckImageLimit: boolean = false;
+
+  // Hàm lấy chi tiết sản phẩm và tải ảnh đã lưu
+  chonSphinh(id: number) {
+    this.idSpct = id;
+    this.loadSavedImages();
+  }
+
+// Hàm lấy danh sách ảnh đã lưu của sản phẩm
+loadSavedImages() {
+  this.sanPhamService.getImagesByProductId(this.idSpct).subscribe(
+    (response: any) => {
+      const content = response.result.content.content || [];
+
+      // Kiểm tra nếu `content` là một mảng và lấy ID và URL ảnh
+      if (Array.isArray(content) && content.length > 0) {
+        this.savedImages = content.map((img: any) => ({
+          id: img.id,            // Lưu ID ảnh
+          url: img.urlAnh || ''  // Lưu URL ảnh
+        }));
+      } else {
+        this.savedImages = []; // Không có ảnh nào
+      }
+
+      console.log("Ảnh đã lưu:", this.savedImages);
+    },
+    (error) => {
+      console.error("Lỗi khi lấy danh sách ảnh:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Không thể tải ảnh đã lưu.',
+      });
+    }
+  );
+}
+
+
+
+
+  // Hàm kiểm tra xem sản phẩm có đủ ảnh chưa
+  checkImageLimit() {
+    this.sanPhamService.getImagesByProductId(this.idSpct).subscribe(
+      (response: any) => {
+        console.log('Danh sách ảnh:', response);
+
+        const imageCount = response.result.content.totalElements || 0; 
+        console.log('Số lượng ảnh:', imageCount);
+        this.CheckImageLimit = imageCount >= 3;
+        if (this.CheckImageLimit) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Đã đủ ảnh',
+            text: `Sản phẩm này đã có đủ 3 ảnh.`,
+          });
+        }
+      },
+      error => {
+        console.error("Lỗi khi lấy danh sách ảnh:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi',
+          text: 'Không thể kiểm tra số lượng ảnh hiện có.',
+        });
+      }
+    );
+  }
+
+  // Hàm xử lý khi chọn ảnh mới
+  onFilesSelected(event: any) {
+    const files = event.target.files;
+    const maxFiles = 3;
+  
+    // Kiểm tra nếu số lượng ảnh hiện tại cộng với số ảnh mới sẽ vượt quá giới hạn
+    if (this.selectedImages.length + files.length > maxFiles) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Giới hạn ảnh',
+        text: `Bạn chỉ được chọn tối đa ${maxFiles} ảnh. Hiện tại đã có ${this.selectedImages.length} ảnh.`,
+      });
+      return;
+    }
+  
+    // Thêm từng ảnh mới vào mảng `selectedImages` mà không xóa ảnh cũ
+    for (let i = 0; i < files.length && this.selectedImages.length < maxFiles; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        if (this.selectedImages.length < maxFiles) {
+          this.selectedImages.push(e.target?.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  
+  
+
+ // Hàm lưu các ảnh đã chọn
+saveImages() {
+  const maxImages = 3;
+
+  // Kiểm tra nếu không có ảnh nào được chọn
+  if (this.selectedImages.length === 0) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Chưa chọn ảnh',
+      text: 'Vui lòng chọn ảnh trước khi lưu.',
+    });
+    return;
+  }
+
+  // Lấy số lượng ảnh hiện tại
+  this.sanPhamService.getImagesByProductId(this.idSpct).subscribe(
+    (response: any) => {
+      const currentImageCount = response.result.content.totalElements || 0;
+
+      // Kiểm tra nếu tổng số ảnh sau khi thêm ảnh mới sẽ vượt quá giới hạn
+      if (currentImageCount + this.selectedImages.length > maxImages) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Đã đủ ảnh',
+          text: `Sản phẩm này đã có đủ ${maxImages} ảnh.`,
+        });
+        return;
+      }
+
+      // Nếu không vượt quá giới hạn, tiến hành lưu từng ảnh
+      const saveRequests = this.selectedImages.map(image =>
+        this.sanPhamService.uploadAnh(this.idSpct, image)
+      );
+
+      // Thực hiện tất cả các yêu cầu lưu ảnh và đợi hoàn thành
+      Promise.all(saveRequests.map(req => req.toPromise()))
+        .then(responses => {
+          console.log("Ảnh đã được lưu thành công:", responses);
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'Lưu ảnh thành công',
+            text: 'Tất cả ảnh đã được lưu thành công.',
+          });
+
+          // Xóa danh sách ảnh mới và tải lại danh sách ảnh đã lưu
+          this.selectedImages = [];
+          this.loadSavedImages();
+        })
+        .catch(error => {
+          console.error("Lỗi khi lưu ảnh:", error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi lưu ảnh',
+            text: 'Có lỗi xảy ra khi lưu ảnh. Vui lòng thử lại.',
+          });
+        });
+    },
+    error => {
+      console.error("Lỗi khi lấy danh sách ảnh:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Không thể kiểm tra số lượng ảnh hiện có.',
+      });
+    }
+  );
+}
+
+// Hàm xóa ảnh đã chọn khỏi mảng `selectedImages`
+removeSelectedImage(index: number) {
+  this.selectedImages.splice(index, 1);
+}
+
+
+// Hàm reset modal
+resetModal() {
+  this.selectedImages = []; // Xóa tất cả ảnh mới đã chọn
+  this.savedImages = []; // Xóa danh sách ảnh đã lưu (nếu cần thiết)
+  this.idSpct = 0; // Đặt lại ID sản phẩm chi tiết (tùy thuộc vào logic của bạn)
+  this.selectedSanPhamName = ''; // Đặt lại tên sản phẩm (tùy thuộc vào logic của bạn)
+  this.SanPhamChiTietbyid = {}; // Xóa chi tiết sản phẩm (tùy thuộc vào logic của bạn)
+}
+  
+
+deleteSavedImage(id: number) {
+  // Hiển thị hộp thoại xác nhận trước khi xóa ảnh
+  Swal.fire({
+      title: 'Xác nhận xóa',
+      text: 'Bạn có chắc chắn muốn xóa ảnh này?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Có!',
+      cancelButtonText: 'Không'
+  }).then((result) => {
+      if (result.isConfirmed) {
+          // Nếu người dùng xác nhận, gọi API để xóa ảnh
+          this.sanPhamService.deleteImage(id).subscribe(
+              (response: any) => {
+                  console.log("Ảnh đã được xóa thành công:", response);
+                  // Cập nhật danh sách ảnh sau khi xóa thành công
+                  this.savedImages = this.savedImages.filter(image => image.id !== id);
+                  // Hiển thị thông báo thành công
+                  Swal.fire({
+                      icon: 'success',
+                      title: 'Đã xóa ảnh',
+                      text: 'Ảnh đã được xóa thành công.',
+                  });
+              },
+              (error) => {
+                  console.error("Lỗi khi xóa ảnh:", error);
+                  Swal.fire({
+                      icon: 'error',
+                      title: 'Lỗi',
+                      text: 'Không thể xóa ảnh. Vui lòng thử lại.',
+                  });
+              }
+          );
+      }
+  });
+}
+
+
+
 
 
 } 
