@@ -295,42 +295,66 @@ export class BanHangComponent implements OnInit {
     }
   }
 
-  // ================= Chọn sản phẩm =================
+  // ================= Chọn sản phẩm ================
 
   selectProduct(idSanPham: number): void {
-    // Hiển thị hộp thoại để nhập số lượng
-    const soLuongNhap = window.prompt('Nhập số lượng sản phẩm:', '1');
-
-    // Kiểm tra nếu người dùng đã nhập số lượng
-    if (soLuongNhap !== null) {
-      const soLuong = Number(soLuongNhap);
-
-      if (!isNaN(soLuong) && soLuong > 0) {  // Kiểm tra số lượng hợp lệ
-        const selectedProduct = {
-          hoaDon: this.activeInvoidID,
-          chiTietSanPham: idSanPham,
-          ma: '',
-          soLuong: soLuong,
-          giaSpctHienTai: 0,
-          trangThai: 'Đang xử lý'
-        };
-
-        // Gọi service để chọn sản phẩm với số lượng đã nhập
-        this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
-          response => {
-            this.showSuccessMessage('Chọn sản phẩm thành công!');
-            this.getHoaDon();  // Cập nhật lại hóa đơn sau khi chọn sản phẩm
-            this.getSanPham();
+      // Hiển thị hộp thoại để nhập số lượng
+      Swal.fire({
+          title: 'Nhập số lượng sản phẩm',
+          input: 'number', // Kiểu nhập là số
+          inputPlaceholder: 'Nhập số lượng',
+          showCancelButton: true,
+          confirmButtonText: 'Xác nhận',
+          cancelButtonText: 'Hủy',
+          inputAttributes: {
+              min: '1', // Giá trị tối thiểu
+              step: '1'  // Bước nhảy
           },
-          error => {
-            this.handleError(error);
+          customClass: {
+              confirmButton: 'btn btn-success', // Thay đổi màu cho nút xác nhận
+              cancelButton: 'btn btn-danger' // Thay đổi màu cho nút hủy
+          },
+          focusConfirm: false,
+          preConfirm: (value) => {
+              const soLuong = Number(value);
+              if (isNaN(soLuong) || soLuong < 1) {
+                  Swal.showValidationMessage('Số lượng phải lớn hơn hoặc bằng 1. Vui lòng nhập lại.');
+                  return false; // Trả về false để không đóng hộp thoại
+              }
+              return value; // Trả về giá trị hợp lệ
           }
-        );
-      } else {
-        this.showErrorMessage('Số lượng không hợp lệ! Vui lòng nhập lại.');
-      }
-    }
+      }).then((result) => {
+          if (result.isConfirmed) { // Kiểm tra nếu người dùng đã nhấn "Xác nhận"
+              const soLuong = Number(result.value); // Lấy giá trị số lượng
+  
+              // Tạo đối tượng sản phẩm đã chọn
+              const selectedProduct = {
+                  hoaDon: this.activeInvoidID,
+                  chiTietSanPham: idSanPham,
+                  ma: '',
+                  soLuong: soLuong,
+                  giaSpctHienTai: 0,
+                  trangThai: 'Đang xử lý'
+              };
+  
+              // Gọi service để chọn sản phẩm với số lượng đã nhập
+              this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
+                  response => {
+                      this.showSuccessMessage('Chọn sản phẩm thành công!');
+                      this.getHoaDon();  // Cập nhật lại hóa đơn sau khi chọn sản phẩm
+                      this.getSanPham();
+                  },
+                  error => {
+                      this.handleError(error);
+                  }
+              );
+          }
+      });
   }
+  
+  
+
+
   increaseQuantity(idSanPham: number): void {
     const selectedProduct = {
       hoaDon: this.activeInvoidID,

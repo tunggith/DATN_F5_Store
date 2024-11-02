@@ -72,28 +72,14 @@ select:focus {
   transition: background-color 0.3s ease;
 }
 
-.btn-danger {
-  background-color: #dc3545; /* Màu nền mặc định của btn-danger */
-}
 
-.btn-danger:hover {
-  background-color: #c82333; /* Màu nền tối hơn khi hover */
-}
-
-.btn-warning {
-  background-color: #ffc107; /* Màu nền mặc định của btn-warning */
-}
-
-.btn-warning:hover {
-  background-color: #e0a800; /* Màu nền tối hơn khi hover */
-}
 
 .btn-primary {
-  background-color: #007bff; /* Màu nền mặc định của btn-primary */
+  background-color: #003366; /* Màu nền mặc định của btn-primary */
 }
 
 .btn-primary:hover {
-  background-color: #0069d9; /* Màu nền tối hơn khi hover */
+  background-color: #003366; /* Màu nền tối hơn khi hover */
 }
 
 
@@ -120,7 +106,7 @@ select:focus {
 }
 
 .page-link:hover {
-  background-color: #f8f9fa;
+  background-color: #003366;
   color: #0056b3;
 }
 
@@ -140,7 +126,7 @@ select:focus {
   align-items: center;
   padding: 0; /* Loại bỏ padding */
   border-radius: 4px; /* Đường viền nút */
-  background-color: #007bff; /* Màu nền nút */
+  background-color:#003366; /* Màu nền nút */
   color: white; /* Màu chữ nút */
   border: none; /* Bỏ viền */
   cursor: pointer; /* Con trỏ khi hover */
@@ -229,13 +215,13 @@ th,td{
   white-space: nowrap;
 }
 .table thead{
-  background-color: #dc3545;
+  background-color: #003366;
     color: #ffff;
     font-weight: bold;
 }
 
 table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f8f9fa; /* Light background for better contrast */
+  background-color: #003366; /* Light background for better contrast */
 }
 
 .card-body{
@@ -252,7 +238,7 @@ table-striped tbody tr:nth-of-type(odd) {
   gap: 10px; /* Khoảng cách giữa các nút */
 }
 .btn-icon:hover {
-  background-color: #0056b3; /* Màu nền khi hover */
+  background-color: #003366; /* Màu nền khi hover */
 }
 
 

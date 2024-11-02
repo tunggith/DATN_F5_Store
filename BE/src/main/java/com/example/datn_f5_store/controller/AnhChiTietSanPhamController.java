@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,20 @@ public class AnhChiTietSanPhamController {
         var data = iAnhChiTietSanPhamService.detail(id);
         dataResponse.setResult(new ResultModel<>(null,data));
         return ResponseEntity.ok(dataResponse);
+    }
+
+
+
+    // Endpoint để xóa ảnh chi tiết sản phẩm
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<DataResponse> removeAnh(@PathVariable Integer id) {
+        DataResponse response = iAnhChiTietSanPhamService.removeAnh(id);
+
+        if (response.isStatus()) { // Kiểm tra status
+            return ResponseEntity.ok(response); // Trả về HTTP 200 nếu xóa thành công
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response); // Trả về HTTP 404 nếu không tìm thấy ảnh
+        }
     }
 
 }
