@@ -31,9 +31,6 @@ import com.example.datn_f5_store.response.ResultModel;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-
-
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/v1/khuyen-mai")
 public class KhuyenMaiController {

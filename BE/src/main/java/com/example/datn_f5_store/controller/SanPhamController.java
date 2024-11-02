@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
-
-@CrossOrigin(origins = "http://localhost:4200") // Cho phép các yêu cầu từ nguồn khác (ở đây là Angular frontend) truy cập vào API
 @RestController // Đánh dấu lớp này là một Rest Controller cho phép xử lý các yêu cầu HTTP
 @RequestMapping("/api/v1/san-pham") // Định nghĩa đường dẫn gốc cho tất cả các API thuộc lớp này
 public class SanPhamController {

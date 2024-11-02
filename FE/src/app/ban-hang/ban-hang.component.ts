@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { AuthService } from 'app/auth.service';
 import { BanHangService } from 'app/ban-hang.service';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 import { error } from 'console';
@@ -75,7 +76,8 @@ export class BanHangComponent implements OnInit {
     idKhachHang: 0,
     idNhanVien: 0
   };
-
+  userName: string='';
+  idNhanVien:string='';
   hoaDonChiTietMoi: any = {
     hoaDon: 0,
     chiTietSanPham: 0,
@@ -89,9 +91,17 @@ export class BanHangComponent implements OnInit {
   thuongHieuId: string = '';
   xuatXuId: string = '';
   gioiTinhId: string = '';
-  constructor(private banHangService: BanHangService, private giaoHangNhanhService: GiaoHangNhanhService) { }
+  token: string = '';
+  role: string = '';
+  constructor(
+    private banHangService: BanHangService,
+    private giaoHangNhanhService: GiaoHangNhanhService,
+    private authServie: AuthService
+  ) { }
 
   ngOnInit() {
+    this.token = this.authServie.getToken();
+    this.role = this.authServie.getRole();
     this.getSanPham();
     this.getHoaDon();
     this.getVoucher();
@@ -105,6 +115,7 @@ export class BanHangComponent implements OnInit {
     this.getThuongHieu();
     this.getXuatXu();
     this.getGioiTinh();
+    this.getNhanVien();
   }
   //chuyển tab
   selectTab(tabName: string) {
@@ -241,7 +252,7 @@ export class BanHangComponent implements OnInit {
   createHoaDon(): void {
     const hoaDonData = {
       idKhachHang: 0,
-      idNhanVien: 1,
+      idNhanVien: this.idNhanVien,
       idVoucher: this.selectedVoucherId || 0,
       idThanhToan: this.idThanhToan || 2,
       ma: '',
@@ -452,7 +463,7 @@ export class BanHangComponent implements OnInit {
       hinhThucThanhToan: 0,
       ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
-      phiShip:this.phiVanChuyen,
+      phiShip: this.phiVanChuyen,
       tongTienSauVoucher: 0,
       tenNguoiNhan: this.tenKhachHang,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
@@ -844,5 +855,14 @@ export class BanHangComponent implements OnInit {
   onChangeGioiTinh(event: any) {
     this.gioiTinhId = event.target.value || '';
     this.getSanPham();
+  }
+  //=======lấy id nhân viên==========
+  getNhanVien():void{
+    this.banHangService.getNhanVien(this.authServie.getUsername()).subscribe(
+      data =>{
+        this.idNhanVien = data.result.content.id;
+        console.log(this.idKhachHang);
+      }
+    )
   }
 }
