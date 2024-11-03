@@ -33,6 +33,7 @@ import { SecurityComponent } from 'app/layouts/security/security.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { InterceptorService } from 'app/interceptor.service';
 import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
+import { HoaDonChoComponent } from 'app/hoa-don-cho/hoa-don-cho.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
     HistoryPopupComponent,
     NotificationsComponent,
     LoiQuyenComponent,
+    HoaDonChoComponent,
   ],
 })
 

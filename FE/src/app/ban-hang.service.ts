@@ -125,4 +125,10 @@ export class BanHangService {
   getNhanVien(username:string):Observable<any>{
     return this.http.get(`${this.nhanVienUrl}/${username}`);
   }
+  getTrangThaiCho():Observable<any>{
+    return this.http.get(`${this.hoaDonUrl}/get-by-trang-thai-cho`);
+  }
+  setTrangThai(idCho:number,idDang:number):Observable<any>{
+    return this.http.put(`${this.hoaDonUrl}/set-trang-thai?idCho=${idCho}&idDang=${idDang}`,{});
+  }
 }
