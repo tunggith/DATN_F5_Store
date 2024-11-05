@@ -42,6 +42,7 @@ export class BanHangComponent implements OnInit {
   popup: boolean = false;
   popupHs: boolean = false;
   popupHd: boolean = false;
+  popupCho:boolean=false;
   idKhachHang: number = 1;
   activeTab: string = 'taoMoi';
   hoaDonCho: any[] = [];
@@ -93,6 +94,7 @@ export class BanHangComponent implements OnInit {
   gioiTinhId: string = '';
   token: string = '';
   role: string = '';
+  trangThaiCho:any[]=[];
   constructor(
     private banHangService: BanHangService,
     private giaoHangNhanhService: GiaoHangNhanhService,
@@ -116,6 +118,7 @@ export class BanHangComponent implements OnInit {
     this.getXuatXu();
     this.getGioiTinh();
     this.getNhanVien();
+    this.getHoaDonTrangThai();
   }
   //chuyển tab
   selectTab(tabName: string) {
@@ -157,6 +160,7 @@ export class BanHangComponent implements OnInit {
           this.getChiTietHoaDon(this.hoaDon[0].id);
           this.tenKhachHang = this.hoaDon[0].id;
           this.checkHoaDon = false;
+          this.getHoaDonTrangThai();
         } else {
           this.checkHoaDon = true;
         }
@@ -289,6 +293,7 @@ export class BanHangComponent implements OnInit {
           this.getSanPham();
           this.getByTrangThai();
           this.getIdThongTinDonHang(idHoaDon);
+          this.getHoaDonTrangThai();
         },
         this.handleError
       );
@@ -405,6 +410,13 @@ export class BanHangComponent implements OnInit {
       )
     }
   }
+  getHoaDonTrangThai(){
+    this.banHangService.getTrangThaiCho().subscribe(
+      data=>{
+        this.trangThaiCho = data.result.content;
+      }
+    )
+  }
   //==================đóng mở popup=============
   openPopup() {
     this.popup = true;
@@ -417,6 +429,9 @@ export class BanHangComponent implements OnInit {
     this.hoaDonChoId = hoaDonId;
     this.popupHd = true;  // Mở popup
   }
+  openPopupCho():void{
+    this.popupCho = true;
+  }
 
   closePopup() {
     this.popup = false;
@@ -427,6 +442,10 @@ export class BanHangComponent implements OnInit {
   }
   closePopupHd() {
     this.popupHd = false;
+  }
+  closePopupCho(){
+    this.popupCho = false;
+    this.getHoaDon();
   }
   onCustomerSelected(customer: any) {
     if (customer) {

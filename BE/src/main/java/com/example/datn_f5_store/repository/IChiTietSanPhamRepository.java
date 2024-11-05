@@ -168,7 +168,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("gioiTinh") String gioiTinh,
             Pageable pageable);
     @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
-            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%)" +
+            "(ctsp.ma LIKE %:keyword% OR ctsp.sanPham.ten LIKE %:keyword%)" +
             "AND ctsp.trangThai = :trangThai " +
             "AND ctsp.sanPham.trangThai = :sanPhamTrangThai " +
             "AND (:mauSac IS NULL OR ctsp.mauSac.id = :mauSac) " +
