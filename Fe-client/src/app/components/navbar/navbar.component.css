@@ -1,0 +1,17 @@
+.logo img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.header_bottom{
+    background: #003366;
+}
+.main_menu nav ul :hover{
+    background: #0a539c;
+}
+.main_menu nav ul  li.active a{
+    background: #0a539c;
+}
+.main_menu nav  ul  li  a{
+    text-transform: none;
+}

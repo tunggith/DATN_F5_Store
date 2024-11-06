@@ -1,0 +1,8 @@
+.footer_widget li{
+    display: flex;
+}
+.footer_widget li img{
+    max-height: 30px;
+    margin-left: 5px;
+    object-fit: cover;
+}
