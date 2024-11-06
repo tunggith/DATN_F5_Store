@@ -8,12 +8,12 @@
 /* Body styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 /* Container styles */
 .container {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
@@ -75,11 +75,13 @@ select:focus {
 
 
 .btn-primary {
-  background-color: #003366; /* Màu nền mặc định của btn-primary */
+  background-color: #003366;
+  /* Màu nền mặc định của btn-primary */
 }
 
 .btn-primary:hover {
-  background-color: #003366; /* Màu nền tối hơn khi hover */
+  background-color: #003366;
+  /* Màu nền tối hơn khi hover */
 }
 
 
@@ -113,141 +115,182 @@ select:focus {
 /* Responsive styles */
 @media (max-width: 768px) {
   .col-md-6 {
-      flex: 0 0 100%;
-      max-width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
 .btn-icon {
-  width: 50px; /* Chiều rộng của nút */
-  height: 50px; /* Chiều cao của nút */
+  width: 50px;
+  /* Chiều rộng của nút */
+  height: 50px;
+  /* Chiều cao của nút */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0; /* Loại bỏ padding */
-  border-radius: 4px; /* Đường viền nút */
-  background-color:#003366; /* Màu nền nút */
-  color: white; /* Màu chữ nút */
-  border: none; /* Bỏ viền */
-  cursor: pointer; /* Con trỏ khi hover */
+  padding: 0;
+  /* Loại bỏ padding */
+  border-radius: 4px;
+  /* Đường viền nút */
+  background-color: #003366;
+  /* Màu nền nút */
+  color: white;
+  /* Màu chữ nút */
+  border: none;
+  /* Bỏ viền */
+  cursor: pointer;
+  /* Con trỏ khi hover */
 }
 
 .btn-icon i {
-  font-size: 35px; /* Kích thước biểu tượng */
+  font-size: 35px;
+  /* Kích thước biểu tượng */
   margin: 0;
 }
 
 
 /* Hiệu ứng hover */
 .btn-icon:hover {
-  opacity: 0.9; /* Giảm độ mờ khi di chuột qua */
+  opacity: 0.9;
+  /* Giảm độ mờ khi di chuột qua */
 }
 
 .pagination-container {
   display: flex;
-  justify-content: center; /* Center the container */
-  margin-top: 1rem; /* Space above the container */
+  justify-content: center;
+  /* Center the container */
+  margin-top: 1rem;
+  /* Space above the container */
 }
 
 .paginationr {
-  display: flex; /* Align buttons in a row */
-  align-items: center; /* Center items vertically */
+  display: flex;
+  /* Align buttons in a row */
+  align-items: center;
+  /* Center items vertically */
 }
-.paginationr button{
+
+.paginationr button {
   border: 0px;
   background-color: #fff;
 }
+
 .pagination button {
-  border: none; /* Remove border */
-  background-color: #ffffff; /* Background color */
-  padding: 10px 15px; /* More horizontal padding for larger click area */
-  border-radius: 5px; /* Round corners */
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
-  cursor: pointer; /* Pointer cursor on hover */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  border: none;
+  /* Remove border */
+  background-color: #ffffff;
+  /* Background color */
+  padding: 10px 15px;
+  /* More horizontal padding for larger click area */
+  border-radius: 5px;
+  /* Round corners */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  /* Smooth transitions */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow effect */
 }
 
 .pagination button:hover {
-  background-color: #f0f0f0; /* Light grey on hover */
-  transform: scale(1.1); /* Slightly increase size on hover */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  background-color: #f0f0f0;
+  /* Light grey on hover */
+  transform: scale(1.1);
+  /* Slightly increase size on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Enhanced shadow on hover */
 }
 
 .pagination button i {
-  font-size: 24px; /* Icon size */
-  color: #333; /* Icon color */
-  transition: color 0.3s, transform 0.3s; /* Smooth color transition */
+  font-size: 24px;
+  /* Icon size */
+  color: #333;
+  /* Icon color */
+  transition: color 0.3s, transform 0.3s;
+  /* Smooth color transition */
 }
 
 .pagination button:hover i {
-  color: #007bff; /* Change icon color on hover */
-  transform: translateY(-2px); /* Slightly move up on hover for effect */
+  color: #007bff;
+  /* Change icon color on hover */
+  transform: translateY(-2px);
+  /* Slightly move up on hover for effect */
 }
 
 .current-page {
-  margin: 0 15px; /* Spacing around the current page text */
-  font-size: 16px; /* Font size for the current page indicator */
-  color: #555; /* Text color */
+  margin: 0 15px;
+  /* Spacing around the current page text */
+  font-size: 16px;
+  /* Font size for the current page indicator */
+  color: #555;
+  /* Text color */
 }
 
 .pagination button:disabled {
-  background-color: #c0c0c0; /* Background color for disabled button */
-  cursor: not-allowed; /* Not-allowed cursor for disabled button */
-  box-shadow: none; /* Remove shadow for disabled state */
+  background-color: #c0c0c0;
+  /* Background color for disabled button */
+  cursor: not-allowed;
+  /* Not-allowed cursor for disabled button */
+  box-shadow: none;
+  /* Remove shadow for disabled state */
 }
 
 .pagination button:disabled i {
-  color: #666; /* Change icon color for disabled state */
+  color: #666;
+  /* Change icon color for disabled state */
 }
 
 
 .table-responsive {
-  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
 }
 
 
-th,td{
+th,
+td {
   white-space: nowrap;
 }
-.table thead{
+
+.table thead {
   background-color: #003366;
-    color: #ffff;
-    font-weight: bold;
+  color: #ffff;
+  font-weight: bold;
 }
-
 table-striped tbody tr:nth-of-type(odd) {
-  background-color: #003366; /* Light background for better contrast */
+  background-color: #003366;
+  /* Light background for better contrast */
 }
 
-.card-body{
-  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+.card-body {
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
 }
+
 .button-container {
-  display: flex; /* Sử dụng Flexbox để sắp xếp các nút trên cùng một hàng */
-  flex-wrap: nowrap; /* Ngăn không cho các nút xuống dòng */
-  gap: 10px; /* Khoảng cách giữa các nút */
+  display: flex;
+  /* Sử dụng Flexbox để sắp xếp các nút trên cùng một hàng */
+  flex-wrap: nowrap;
+  /* Ngăn không cho các nút xuống dòng */
+  gap: 10px;
+  /* Khoảng cách giữa các nút */
 }
+
 .btn-icon:hover {
-  background-color: #003366; /* Màu nền khi hover */
+  background-color: #003366;
+  /* Màu nền khi hover */
 }
-
-
-
-
-
-
-
-
-
-
-
