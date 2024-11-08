@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/nhan-vien")
 public class NhanVienController {
@@ -93,6 +92,14 @@ public class NhanVienController {
         DataResponse dataResponse = new DataResponse();
         dataResponse.setStatus(true);
         var data = nhanVienService.detail(id);
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
+    }
+    @GetMapping("/find-by-username/{username}")
+    public ResponseEntity<Object> findByUsername(@Parameter(name = "username")@PathVariable String username){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = nhanVienService.findByUserName(username);
         dataResponse.setResult(new ResultModel<>(null,data));
         return ResponseEntity.ok(dataResponse);
     }

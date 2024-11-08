@@ -258,64 +258,66 @@ editVoucher(voucher: any): void {
   }
 
 
-  searchVouchers(values: any): void {
-    const { searchKey, fromDate, toDate, trangThai } = values;
-    if (searchKey && !fromDate && !toDate && !trangThai) {
-      // Tìm theo ten/ma
-      this.voucherService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
-        this.vouchers = response.result.content;
-        this.totalPages = response.result.pagination.totalPage;
-      });
-    } else if (trangThai && !searchKey && !fromDate && !toDate) {
-      // Tìm theo trạng thái
-      this.voucherService.timTheoTrangThai(this.page, this.size, trangThai).subscribe((response) => {
-        this.vouchers = response.result.content;
-        this.totalPages = response.result.pagination.totalPage;
-      });
-    } else if ((fromDate || toDate) && !searchKey && !trangThai) {
-      // Tìm theo ngày
-      this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-        this.vouchers = response.result.content;
-        this.totalPages = response.result.pagination.totalPage;
-        console.log('du lieu vc ngày : ', this.vouchers);
-      });
-} else if (searchKey && (fromDate || toDate) && !trangThai) {
-      // Tìm theo tên/ma và ngày
-      this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-        this.vouchers = response.result.content.filter(voucher =>
-          (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey)) 
-        );
-        this.totalPages = response.result.pagination.totalPage;
-      });   
-    }else if (!searchKey && (fromDate || toDate) && trangThai) {
-      // Tìm theo ngày và Trạng thái
-      this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-        this.vouchers = response.result.content.filter(voucher =>
-           voucher.trangThai === trangThai
-        );    
-        this.totalPages = response.result.pagination.totalPage;
-      });   
-    }else if (searchKey && !(fromDate || toDate) && trangThai) {
-      // Tìm theo ten/ma và trạng thái
-      this.voucherService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
-        this.vouchers = response.result.content.filter(voucher =>
-          voucher.trangThai === trangThai
-        );
-        this.totalPages = response.result.pagination.totalPage;
-      });   
-    }else if (searchKey && (fromDate || toDate) && trangThai) {
-      // Tìm tất cả
-      this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
-        this.vouchers = response.result.content.filter(voucher =>
-          (voucher.ten.includes(searchKey) || voucher.ma.includes(searchKey)) && voucher.trangThai === trangThai
-        );
-        this.totalPages = response.result.pagination.totalPage;
-      });   
-    }else {
-      // nếu tất cả trống thì findAll
-      this.getAllVouchers();
-    }
+ // tìm kiếm and lọc
+searchVouchers(values: any): void {
+  const { searchKey, fromDate, toDate, trangThai } = values;
+
+  if (searchKey && !fromDate && !toDate && !trangThai) {
+    // Tìm theo tên/mã
+    this.voucherService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
+      this.vouchers = response.result.content;
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else if (trangThai && !searchKey && !fromDate && !toDate) {
+    // Tìm theo trạng thái
+    this.voucherService.timTheoTrangThai(this.page, this.size, trangThai).subscribe((response) => {
+      this.vouchers = response.result.content;
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else if ((fromDate || toDate) && !searchKey && !trangThai) {
+    // Tìm theo ngày
+    this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
+      this.vouchers = response.result.content;
+      this.totalPages = response.result.pagination.totalPage;
+      console.log('du lieu vc ngày : ', this.vouchers);
+    });
+  } else if (searchKey && (fromDate || toDate) && !trangThai) {
+    // Tìm theo tên/mã và ngày
+    this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
+      this.vouchers = response.result.content.filter(voucher =>
+        (voucher.ten && voucher.ten.includes(searchKey)) || (voucher.ma && voucher.ma.includes(searchKey))
+      );
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else if (!searchKey && (fromDate || toDate) && trangThai) {
+    // Tìm theo ngày và trạng thái
+    this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
+      this.vouchers = response.result.content.filter(voucher =>
+        voucher.trangThai === trangThai
+      );    
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else if (searchKey && !(fromDate || toDate) && trangThai) {
+    // Tìm theo tên/mã và trạng thái
+    this.voucherService.timTheoTenHoacMa(this.page, this.size, searchKey).subscribe((response) => {
+      this.vouchers = response.result.content.filter(voucher =>
+        voucher.trangThai === trangThai
+      );
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else if (searchKey && (fromDate || toDate) && trangThai) {
+    // Tìm tất cả
+    this.voucherService.timTheoNgay(this.page, this.size, fromDate, toDate).subscribe((response) => {
+      this.vouchers = response.result.content.filter(voucher =>
+        (voucher.ten && voucher.ten.includes(searchKey)) || (voucher.ma && voucher.ma.includes(searchKey)) && voucher.trangThai === trangThai
+      );
+      this.totalPages = response.result.pagination.totalPage;
+    });
+  } else {
+    // nếu tất cả trống thì findAll
+    this.getAllVouchers();
   }
+}
 
 
   prevPage(): void {

@@ -209,3 +209,5 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("chiTietSanPhamId") Long chiTietSanPhamId);
 
 }
+
+

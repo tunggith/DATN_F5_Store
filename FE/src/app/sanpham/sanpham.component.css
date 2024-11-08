@@ -61,8 +61,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Z-index cho lớp phủ */
-  overflow: hidden; /* Loại bỏ thanh cuộn */
+  z-index: 1000; 
+  overflow: hidden; 
 }
 
 /* Nội dung modal */
@@ -183,9 +183,7 @@
 }
 
 /* Định dạng bảng */
-.table-responsive {
-  margin-bottom: 20px;
-}
+
 
 /* Nút điều hướng trang */
 .pagination {
@@ -310,6 +308,9 @@
   overflow-y: auto;
   border-radius: 8px;
   padding: 10px;
+}
+.table-responsive {
+  margin-bottom: 20px;
 }
 
 /* Định dạng các nút hành động trong bảng */

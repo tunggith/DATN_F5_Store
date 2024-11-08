@@ -210,6 +210,16 @@ select:focus {
   table-layout: auto;
 }
 
+.table-responsive2 {
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 10px;
+}
+.table-responsive2 {
+  margin-bottom: 20px;
+}
+
 
 th,td{
   white-space: nowrap;
@@ -240,6 +250,168 @@ table-striped tbody tr:nth-of-type(odd) {
 .btn-icon:hover {
   background-color: #003366; /* Màu nền khi hover */
 }
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; 
+  overflow: hidden; 
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Đảm bảo nút nằm ở giữa */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CSS cho nút */
+.khuyen-mai-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0 5px; /* Khoảng cách giữa các nút */
+}
+
+.khuyen-mai-btn i {
+  font-size: 24px;
+}
+
+/* Nút "Thêm" - màu xanh lá */
+.btn-add {
+  background-color: #28a745;
+}
+
+.btn-add:hover {
+  background-color: #218838;
+}
+
+/* Nút "Xóa" - màu đỏ */
+.btn-remove {
+  background-color: #dc3545;
+}
+
+.btn-remove:hover {
+  background-color: #c82333;
+}
+
+
+
+/* Điều chỉnh chiều rộng của các nút */
+.khuyen-mai-btn i {
+  font-size: 18px; /* Kích thước icon nhỏ hơn */
+}
+
+.page-item {
+  margin: 0 5px;
+}
+
+.page-link {
+  color: #003366;
+  background-color: #ffffff;
+  border: 1px solid #003366;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* CSS khi hover vào link */
+.page-link:hover {
+  background-color: #ffcc00;
+  color: #003366;
+  border-color: #ffcc00;
+}
+
+/* CSS cho trạng thái "disabled" */
+.page-item.disabled .page-link {
+  color: #999999;
+  background-color: #f0f0f0;
+  border-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* CSS cho trang hiện tại */
+.page-item.disabled .page-link span {
+  color: #ffffff;
+  background-color: #003366;
+  border-color: #003366;
+  cursor: default;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* CSS cho trạng thái khi active */
+.page-item.active .page-link {
+  background-color: #003366;
+  color: #ffffff;
+  border-color: #003366;
+  cursor: default;
+}
+
+.fa fa-eye{
+  text-align: center;
+}
+
+/* Căn chỉnh nút phía trên bên phải của bảng */
+.d-flex.justify-content-between.align-items-center {
+  margin-bottom: 1rem;
+}
+
+.d-flex.justify-content-between .btn {
+  margin-left: 0.5rem; /* Thêm khoảng cách giữa các nút */
+}
+
+/* Căn chỉnh bảng và khoảng cách để phù hợp */
+.table-responsive {
+  margin-top: 1rem;
+}
+.table-title {
+  text-align: left;
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: 1rem;
+  background-color: #003366;
+  
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+
+
+
 
 
 

@@ -81,6 +81,7 @@ public class ConfigContanst {
         public static final String EMAIL = "EMAIL";
         public static final String ANH = "ANH";
         public static final String SDT = "SDT";
+        public static final String ROLES = "ROLES";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
         public static final String TRANG_THAI = "trang_thai";
@@ -117,6 +118,7 @@ public class ConfigContanst {
         public static final String SDT = "SDT";
         public static final String DIA_CHI = "DIA_CHI";
         public static final String ANH = "ANH";
+        public static final String ROLES = "ROLES";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
         public static final String THOI_GIAN_TAO = "THOI_GIAN_TAO";

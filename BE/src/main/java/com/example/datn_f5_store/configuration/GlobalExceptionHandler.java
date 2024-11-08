@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.configuration;
 
+import jakarta.mail.AuthenticationFailedException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +24,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<String> badRequest(BadRequestException be){
         return new ResponseEntity<>(be.getMessage(),HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AuthenticationFailedException.class)
+    public ResponseEntity<String> authenticationException(AuthenticationFailedException ae){
+        return new ResponseEntity<>(ae.getMessage(),HttpStatus.UNAUTHORIZED);
     }
 }
