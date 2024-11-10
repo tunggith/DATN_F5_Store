@@ -42,4 +42,6 @@ public interface IKhachHangRepository extends JpaRepository<KhachHangEntity, Int
     Page<KhachHangEntity> findByTenContainingOrMaContainingOrEmailContainingOrSdtContaining(
             String ten, String ma, String email, String sdt, Pageable pageable);
     List<KhachHangEntity> findByTrangThai(String trangThai);
+    KhachHangEntity findByUserName(String username);
+    KhachHangEntity findByUserNameAndPassword(String username,String password);
 }

@@ -26,9 +26,10 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete'
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { HistoryPopupComponent } from 'app/history-popup/history-popup.component';
 import { ThongkeComponent } from 'app/thongke/thongke.component';
-// @ts-ignore
 import { NgChartsModule } from 'ng2-charts';
 import { NotificationsComponent } from 'app/notifications/notifications.component';
+import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
+import { HoaDonChoComponent } from 'app/hoa-don-cho/hoa-don-cho.component';
 
 
 @NgModule({
@@ -65,7 +66,9 @@ import { NotificationsComponent } from 'app/notifications/notifications.componen
     AnhChiTietSanPhamComponent,
     HistoryPopupComponent,
     NotificationsComponent,
-  ]
+    LoiQuyenComponent,
+    HoaDonChoComponent,
+  ],
 })
 
 export class AdminLayoutModule {}

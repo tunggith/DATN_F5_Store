@@ -1,0 +1,110 @@
+import { Component, OnInit } from '@angular/core';
+import { SecurityService } from '../security/security.service';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import { error } from 'console';
+
+@Component({
+  selector: 'app-change-password',
+  templateUrl: './change-password.component.html',
+  styleUrls: ['./change-password.component.scss']
+})
+export class ChangePasswordComponent implements OnInit {
+  username: string = '';
+  passwordOld: string = '';
+  passwordNew: string = '';
+  passwordRequier: string = '';
+  checkUsername: boolean = false;
+  checkPasswordOld: boolean = false;
+  checkPasswordNew: boolean = false;
+  checkPasswordRequier: boolean = false;
+  constructor(private securityService: SecurityService, private router: Router) { }
+  ngOnInit(): void { }
+  exit(): void {
+    this.router.navigate(['/login']);
+  }
+  getPassword(passwordRequier: string) {
+    this.passwordRequier = passwordRequier;
+  }
+  changePassword(): void {
+    if (!this.isCheck()) {
+      return;
+    }
+    this.securityService.changePassword(this.username, this.passwordOld, this.passwordNew).subscribe(
+      response => {
+        this.showSuccessMessage('Đổi mật khẩu thành công');
+        this.router.navigate(['/login']);
+      },
+      error => {
+        this.handleError(error);
+      }
+    )
+  }
+  private isCheck(): boolean {
+    // Reset all check flags to false
+    this.checkUsername = false;
+    this.checkPasswordNew = false;
+    this.checkPasswordOld = false;
+    this.checkPasswordRequier = false;
+
+    let isValid = true; // Assume valid initially
+
+    if (!this.username) {
+      this.checkUsername = true;
+      isValid = false;
+    }
+    if (!this.passwordNew) {
+      this.checkPasswordNew = true;
+      isValid = false;
+    }
+    if (!this.passwordOld) {
+      this.checkPasswordOld = true;
+      isValid = false;
+    }
+    if (!this.passwordRequier) {
+      this.checkPasswordRequier = true;
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  private handleError(error: any): void {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Lỗi:${error.message}`;
+    } else {
+      errorMessage = `${error.error}`;
+    }
+    this.showErrorMessage(errorMessage);
+  }
+  showSuccessMessage(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Thành công!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
+  showErrorMessage(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Thất bại!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+
+  showWarningMessage(message: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Thất bại!',
+      text: message,
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
+}

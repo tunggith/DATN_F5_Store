@@ -1,0 +1,19 @@
+<div class="popup">
+    <div class="form-login">
+        <span class="close" (click)="close()">×</span>
+        <div class="logo-user">
+            <i class="fa fa-user"></i>
+        </div>
+        <form (submit)="login()">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Tên đăng nhập</label>
+                <input type="text" class="form-control" name="username" [(ngModel)]="username">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
+                <input type="password" class="form-control" name="password" [(ngModel)]="password">
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </form>
+    </div>
+</div>

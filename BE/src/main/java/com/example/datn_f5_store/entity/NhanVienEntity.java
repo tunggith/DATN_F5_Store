@@ -36,6 +36,8 @@ public class NhanVienEntity {
     private String diaChi;
     @Column(name = ConfigContanst.NhanVien.ANH)
     private String anh;
+    @Column(name = ConfigContanst.NhanVien.ROLES)
+    private String roles;
     @Column(name = ConfigContanst.NhanVien.USERNAME)
     private String username;
     @Column(name = ConfigContanst.NhanVien.PASSWORD)

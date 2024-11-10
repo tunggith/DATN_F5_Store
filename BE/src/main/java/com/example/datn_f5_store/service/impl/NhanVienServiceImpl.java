@@ -151,6 +151,12 @@ public class NhanVienServiceImpl implements NhanVienService {
         return nhanVien;
     }
 
+    @Override
+    public NhanVienEntity findByUserName(String username) {
+        NhanVienEntity nhanVien = nhanVienRepo.findByUsername(username);
+        return nhanVien;
+    }
+
     //phuong thuc luu va update nhan vien
     private DataResponse saveOfUpdate(NhanVienEntity entity, NhanVienRequest request) {
         try {

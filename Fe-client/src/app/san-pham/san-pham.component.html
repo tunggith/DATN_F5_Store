@@ -1,0 +1,344 @@
+<div class="pos_page">
+    <div class="container">
+        <div class="pos_page_inner">
+            <div class=" pos_home_section">
+                <div class="row pos_home">
+                    <div class="col-lg-3 col-md-12">
+                        <!--layere categorie"-->
+                        <div class="sidebar_widget shop_c">
+                            <div class="sidebar_widget color">
+                                <h2 (click)="toggleSizeList()">
+                                    <span class="icon" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
+                                        <i class="fa" [ngClass]="{'fa-chevron-down': !isSizeOpen, 'fa-chevron-up': isSizeOpen}"></i>
+                                      </span>
+                            
+                                    Kích thước</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                                <div class="layere_categorie" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
+                                    <ul>
+                                        <!-- Dùng *ngFor để lặp qua danh sách kích thước -->
+                                        <li *ngFor="let size of sizeList">
+                                            <input type="checkbox" id="{{ size.id }}" name="size" [value]="size.ten" (change)="onSizeChange(size)" />
+                                            <label for="{{ size.id }}">{{ size.ten }}</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--layere categorie end-->
+                        
+                                         <!-- color area start -->
+                                         <div class="sidebar_widget color">
+                                            <h2 (click)="toggleColorList()">
+                                                
+                                                <span class="icon" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
+                                                    <i class="fa" [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}"></i>
+                                                  </span>
+                                                Màu sắc</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                                            <div class="layere_categorie" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
+                                                <ul>
+                                                    <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
+                                                    <li *ngFor="let color of mauSacList">
+                                                        <input type="checkbox" id="{{ color.id }}" name="color" [value]="color.ten" (change)="onColorChange(color)" />
+                                                        <label for="{{ color.id }}">{{ color.ten }}</label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                      <!-- color area end -->
+
+
+
+
+                                    <!-- color area start -->
+                                    <div class="sidebar_widget color">
+                                        <h2 (click)="toggleXuatXuList()">
+                                            
+                                            <span class="icon" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
+                                                <i class="fa" [ngClass]="{'fa-chevron-down': !isXuatXuOpen, 'fa-chevron-up': isXuatXuOpen}"></i>
+                                            </span>
+                                            Xuất Xứ</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                                        <div class="layere_categorie" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
+                                            <ul>
+                                                <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
+                                                <li *ngFor="let xuatXu of xuatXuList">
+                                                    <input type="checkbox" id="{{ xuatXu.id }}" name="xuatXu" [value]="xuatXu.ten" (change)="onXuatXuChange(xuatXu)" />
+                                                    <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                <!-- color area end -->
+
+
+
+
+                                    <!-- color area start -->
+                                    <div class="sidebar_widget color">
+                                        <h2 (click)="toggleGioiTinhList()">
+                                            
+                                            <span class="icon" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
+                                                <i class="fa" [ngClass]="{'fa-chevron-down': !isGioiTinhOpen, 'fa-chevron-up': isGioiTinhOpen}"></i>
+                                            </span>
+                                            giới tính </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                                        <div class="layere_categorie" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
+                                            <ul>
+                                                <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
+                                                <li *ngFor="let gioiTinh of gioiTinhList">
+                                                    <input type="checkbox" id="{{ gioiTinh.id }}" name="gioiTinh" [value]="gioiTinh.ten" (change)="onGioiTinhChange(gioiTinh)" />
+                                                    <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                <!-- color area end -->
+
+
+                        <!--color area end-->
+
+                        <!--price slider start-->
+                        <div class="sidebar_widget price">
+                            <h2>Price</h2>
+                            <div class="ca_search_filters">
+
+                                <input type="text" name="text" id="amount">
+                                <div id="slider-range"></div>
+                            </div>
+                        </div>
+                        <!--price slider end-->
+
+                        <!--wishlist block start-->
+                        <div class="sidebar_widget wishlist mb-30">
+                            <div class="block_title">
+                                <h3><a href="#">Wishlist</a></h3>
+                            </div>
+                            <div class="cart_item">
+                                <div class="cart_img">
+                                    <a href="#"><img src="assets\img\cart\cart.jpg" alt=""></a>
+                                </div>
+                                <div class="cart_info">
+                                    <a href="#">lorem ipsum dolor</a>
+                                    <span class="cart_price">$115.00</span>
+                                    <span class="quantity">Qty: 1</span>
+                                </div>
+                                <div class="cart_remove">
+                                    <a title="Remove this item" href="#"><i class="fa fa-times-circle"></i></a>
+                                </div>
+                            </div>
+                            <div class="cart_item">
+                                <div class="cart_img">
+                                    <a href="#"><img src="assets\img\cart\cart2.jpg" alt=""></a>
+                                </div>
+                                <div class="cart_info">
+                                    <a href="#">Quisque ornare dui</a>
+                                    <span class="cart_price">$105.00</span>
+                                    <span class="quantity">Qty: 1</span>
+                                </div>
+                                <div class="cart_remove">
+                                    <a title="Remove this item" href="#"><i class="fa fa-times-circle"></i></a>
+                                </div>
+                            </div>
+                            <div class="block_content">
+                                <p>2 products</p>
+                                <a href="#">» My wishlists</a>
+                            </div>
+                        </div>
+                        <!--wishlist block end-->
+
+                        <!--popular tags area-->
+                        <div class="sidebar_widget tags  mb-30">
+                            <div class="block_title">
+                                <h3>popular tags</h3>
+                            </div>
+                            <div class="block_tags">
+                                <a href="#">ipod</a>
+                                <a href="#">sam sung</a>
+                                <a href="#">apple</a>
+                                <a href="#">iphone 5s</a>
+                                <a href="#">superdrive</a>
+                                <a href="#">shuffle</a>
+                                <a href="#">nano</a>
+                                <a href="#">iphone 4s</a>
+                                <a href="#">canon</a>
+                            </div>
+                        </div>
+                        <!--popular tags end-->
+
+                        <!--newsletter block start-->
+                        <div class="sidebar_widget newsletter mb-30">
+                            <div class="block_title">
+                                <h3>newsletter</h3>
+                            </div>
+                            <form action="#">
+                                <p>Sign up for your newsletter</p>
+                                <input placeholder="Your email address" type="text">
+                                <button type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                        <!--newsletter block end-->
+
+                        <!--special product start-->
+                        <div class="sidebar_widget special">
+                            <div class="block_title">
+                                <h3>Special Products</h3>
+                            </div>
+                            <div class="special_product_inner mb-20">
+                                <div class="special_p_thumb">
+                                    <a href="single-product.html"><img src="assets\img\cart\cart3.jpg" alt=""></a>
+                                </div>
+                                <div class="small_p_desc">
+                                    <div class="product_ratting">
+                                        <ul>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <h3><a href="single-product.html">Lorem ipsum dolor</a></h3>
+                                    <div class="special_product_proce">
+                                        <span class="old_price">$124.58</span>
+                                        <span class="new_price">$118.35</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="special_product_inner">
+                                <div class="special_p_thumb">
+                                    <a href="single-product.html"><img src="assets\img\cart\cart18.jpg" alt=""></a>
+                                </div>
+                                <div class="small_p_desc">
+                                    <div class="product_ratting">
+                                        <ul>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <h3><a href="single-product.html">Printed Summer</a></h3>
+                                    <div class="special_product_proce">
+                                        <span class="old_price">$124.58</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--special product end-->
+
+
+                    </div>
+                    <div class="col-lg-9 col-md-12">
+                        <!--banner slider start-->
+                        <div class="banner_slider mb-35">
+                            <img src="assets\img\banner\bannner10.jpg" alt="">
+                        </div>
+                        <!--banner slider start-->
+
+                        <!--shop toolbar start-->
+                        <div class="shop_toolbar mb-35">
+
+                            <div class="list_button">
+                                <ul class="nav" role="tablist">
+                                    <li>
+                                        <a class="active" data-toggle="tab" href="#large" role="tab"
+                                            aria-controls="large" aria-selected="true"><i
+                                                class="fa fa-th-large"></i></a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#list" role="tab" aria-controls="list"
+                                            aria-selected="false"><i class="fa fa-th-list"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="page_amount">
+                                <p>Showing 1–9 of 21 results</p>
+                            </div>
+
+                            <div class="select_option">
+                                <form action="#">
+                                    <label>Sort By</label>
+                                    <select name="orderby" id="short">
+                                        <option selected="" value="1">Position</option>
+                                        <option value="1">Price: Lowest</option>
+                                        <option value="1">Price: Highest</option>
+                                        <option value="1">Product Name:Z</option>
+                                        <option value="1">Sort by price:low</option>
+                                        <option value="1">Product Name: Z</option>
+                                        <option value="1">In stock</option>
+                                        <option value="1">Product Name: A</option>
+                                        <option value="1">In stock</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                        <!--shop toolbar end-->
+
+                        <!--shop tab sản phẩm-->
+                        <div class="shop_tab_product">
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="large" role="tabpanel">
+                                    <div class="row">
+                                        <!-- Lặp qua danh sách sanPhamPage để hiển thị từng sản phẩm -->
+                                        <div class="col-lg-4 col-md-6" *ngFor="let product of sanPhamPage">
+                                            <div class="single_product">
+                                                <div class="product_thumb">
+                                                    <!-- Hiển thị ảnh sản phẩm -->
+                                                    <a href="single-product.html"><img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm"></a>
+                                                    <div class="img_icone" *ngIf="product.mauSac">
+                                                        <img src="assets/img/cart/span-new.png" alt="Màu sắc">
+                                                    </div>
+                                                    <div class="product_action">
+                                                        <a href="#"> <i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                                    </div>
+                                                </div>
+                                                <div class="product_content">
+                                                    <!-- Hiển thị tên và giá sản phẩm -->
+                                                    <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
+                                                    <h3 class="product_title"><a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a></h3>
+                                                </div>
+                                                <div class="product_info">
+                                                    <ul>
+                                                        <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
+                                                        <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Phần phân trang -->
+                                    <div class="pagination">
+                                        <ul class="pagination-list">
+                                            <li [ngClass]="{ 'disabled': page === 0 }">
+                                                <a href="#" (click)="changePage(page - 1, $event)">Prev</a>
+                                            </li>
+                                            <li *ngFor="let p of totalPages" [ngClass]="{ 'active': p === page }">
+                                                <a href="#" (click)="changePage(p, $event)">{{ p + 1 }}</a>
+                                            </li>
+                                            <li [ngClass]="{ 'disabled': page === totalPages.length - 1 }">
+                                                <a href="#" (click)="changePage(page + 1, $event)">Next</a>
+                                            </li>
+                                         </ul>
+                                         
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <!--shop tab product end-->
+
+                   
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

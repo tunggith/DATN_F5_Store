@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -126,6 +127,43 @@ public class HoaDonServiceImpl implements IHoaDonService {
         // Lưu hóa đơn đã cập nhật
         hoaDonRepository.save(hoaDon);
         return new DataResponse(true, new ResultModel<>(null, "Cập nhật thành công!"));
+    }
+
+    @Override
+    public DataResponse editTrangThaiHoaDon(Integer idCho,Integer idDang) {
+        HoaDonEntity hoaDonCho = hoaDonRepository.findById(idCho).orElseThrow(()->new NoSuchElementException("Hóa đơn chờ thanh toán không tồn tại"));
+        hoaDonCho.setTrangThai("Đang thanh toán");
+        hoaDonRepository.save(hoaDonCho);
+        HoaDonEntity hoaDonDang = hoaDonRepository.findById(idDang).orElseThrow(()->new NoSuchElementException("Hóa đơn Đang thanh toán không tồn tại"));
+        hoaDonDang.setTrangThai("Chờ thanh toán");
+        hoaDonRepository.save(hoaDonDang);
+        return new DataResponse(true,new ResultModel<>(null,"Chọn hóa đơn thành công!"));
+    }
+
+    @Override
+    public List<HoaDonDto> getByTrangThaiCho() {
+        List<HoaDonEntity> list = hoaDonRepository.findByTrangThai("Chờ thanh toán");
+        return list.stream().map(entity-> new HoaDonDto(
+                entity.getId(),
+                entity.getKhachHang(),
+                entity.getNhanVien(),
+                entity.getVoucher(),
+                entity.getThanhToan(),
+                entity.getHinhThucThanhToan(),
+                entity.getMa(),
+                entity.getTongTienBanDau(),
+                entity.getPhiShip(),
+                entity.getTongTienSauVoucher(),
+                entity.getTenNguoiNhan(),
+                entity.getSdtNguoiNhan(),
+                entity.getEmailNguoiNhan(),
+                entity.getDiaChiNhanHang(),
+                entity.getNgayNhanDuKien(),
+                entity.getThoiGianTao(),
+                entity.getGiaoHang(),
+                entity.getGhiChu(),
+                entity.getTrangThai()
+                )).collect(Collectors.toList());
     }
 
 
@@ -224,11 +262,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
             }
             request.setTongTienBanDau(0.0);
             request.setThoiGianTao(new Date());
+            request.setHinhThucThanhToan(0);
 
             // Kiểm tra số lượng hóa đơn "đang thanh toán"
             if (hoaDonRepository.findByTrangThai("Đang thanh toán").size() >= 5) {
-//                request.setTrangThai("chờ thanh toán");
-                throw new RuntimeException("Đã tạo tới giới hạn của hóa đơn.");
+                request.setTrangThai("Chờ thanh toán");
+//                throw new RuntimeException("Đã tạo tới giới hạn của hóa đơn.");
             } else {
                 request.setTrangThai("Đang thanh toán");
             }

@@ -1,0 +1,75 @@
+/* Mặc định, danh sách màu sắc sẽ bị ẩn */
+.layere_categorie {
+    display: none;
+    transition: max-height 0.3s ease-out;
+    max-height: 0; /* Ẩn khi đóng */
+    overflow: hidden;
+  }
+  
+  /* Khi mở rộng, thay đổi để hiển thị */
+  .layere_categorie.open {
+    display: block;
+    max-height: 500px; /* Đặt chiều cao tối đa khi mở rộng */
+  }
+  
+  .layere_categorie.closed {
+    display: block;
+    max-height: 0; /* Đặt chiều cao 0 khi đóng */
+  }
+  
+  /* css lấy khoảng tiền  */
+
+  /* Styling cho các ô nhập liệu giá */
+.price-input {
+    width: 120px;
+    padding: 8px;
+    font-size: 16px;
+    text-align: center;
+    margin: 0 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+/* css phân trang */
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    align-items: center;     /* Căn giữa theo chiều dọc */
+}
+
+.pagination-list {
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-list li {
+    margin: 0 5px;
+}
+
+.pagination-list li a {
+    text-decoration: none;
+    color: #4CAF50;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #f1f1f1;
+    transition: background-color 0.3s;
+}
+
+.pagination-list li a:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination-list li.disabled a {
+    cursor: not-allowed;
+    background-color: #ddd;
+}
+
+.pagination-list li.active a {
+    background-color: #4CAF50;
+    color: white;
+}

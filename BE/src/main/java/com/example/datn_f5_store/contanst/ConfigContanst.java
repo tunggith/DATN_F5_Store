@@ -27,7 +27,7 @@ public class ConfigContanst {
         public static final String ID_MAU_SAC = "ID_MAU_SAC";
         public static final String ID_SIZE = "ID_SIZE";
         public static final String MA = "MA";
-        public static final String TEN = "TEN";
+        public static final String MO_TA = "MO_TA";
         public static final String DON_GIA = "DON_GIA";
         public static final String SO_LUONG = "SO_LUONG";
         public static final String NGAY_NHAP = "NGAY_NHAP";
@@ -81,6 +81,7 @@ public class ConfigContanst {
         public static final String EMAIL = "EMAIL";
         public static final String ANH = "ANH";
         public static final String SDT = "SDT";
+        public static final String ROLES = "ROLES";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
         public static final String TRANG_THAI = "trang_thai";
@@ -117,6 +118,7 @@ public class ConfigContanst {
         public static final String SDT = "SDT";
         public static final String DIA_CHI = "DIA_CHI";
         public static final String ANH = "ANH";
+        public static final String ROLES = "ROLES";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
         public static final String THOI_GIAN_TAO = "THOI_GIAN_TAO";

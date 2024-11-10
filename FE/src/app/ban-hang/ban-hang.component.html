@@ -31,6 +31,12 @@
                             <div class="create-client">
                                 <i class="material-icons" (click)="openPopup()">person_add</i>
                             </div>
+                            <div class="hoa-don-cho">
+                                <i class="material-icons" (click)="openPopupCho()">shopping_cart</i>
+                                <span class="bg bg-danger text-light" *ngIf="trangThaiCho.length>0"></span>
+                            </div>
+                            <app-hoa-don-cho *ngIf="popupCho" [idDang]="activeInvoidID"
+                                (closePopup)="closePopupCho()"></app-hoa-don-cho>
                         </div>
                     </div>
                     <div class="order-list" id="order-list">
@@ -65,7 +71,7 @@
                                 <tbody>
                                     <tr *ngFor="let cthd of chitietHoaDon, let i = index">
                                         <td>{{i+1}}</td>
-                                        <td>{{cthd.chiTietSanPham?.ten}}</td>
+                                        <td>{{cthd.chiTietSanPham?.sanPham?.ten}}</td>
                                         <td>{{cthd.chiTietSanPham?.sanPham?.xuatXu?.ten}}</td>
                                         <td>{{cthd.chiTietSanPham?.sanPham?.thuongHieu?.ten}}</td>
                                         <td>{{cthd.chiTietSanPham?.mauSac?.ten}}</td>
@@ -94,7 +100,7 @@
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-warning">
+                        <div class="card-header">
                             <h4 class="card-title">Danh sách sản phẩm</h4>
                             <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
                                 (input)="searchProduct()">
@@ -128,7 +134,7 @@
                         </div>
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
-                                <thead class="text-warning">
+                                <thead class="text-black">
                                     <th>Stt</th>
                                     <th>Mã</th>
                                     <th>Tên sản phẩm</th>
@@ -139,13 +145,14 @@
                                     <th>Size</th>
                                     <th>Số lượng</th>
                                     <th>Đơn giá</th>
+                                    <th>Ghi chú</th>
                                     <th>Thao tác</th>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let ctsp of product, let i = index">
                                         <td>{{i+1}}</td>
                                         <td>{{ctsp.ma}}</td>
-                                        <td>{{ctsp.ten}}</td>
+                                        <td>{{ctsp.san_pham?.ten}}</td>
                                         <td>{{ctsp.san_pham?.xuatXu?.ten}}</td>
                                         <td>{{ctsp.san_pham?.thuongHieu?.ten}}</td>
                                         <td>{{ctsp.mauSac?.ten}}</td>
@@ -153,6 +160,7 @@
                                         <td>{{ctsp.size?.ten}}</td>
                                         <td>{{ctsp.soLuong}}</td>
                                         <td>{{ctsp.donGia | currency:'VND'}}</td>
+                                        <td>{{ctsp.ten}}</td>
                                         <td><button class="select-product" (click)="selectProduct(ctsp.id)">
                                                 <i class="material-icons">add_shopping_cart</i></button></td>
                                     </tr>

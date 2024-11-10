@@ -26,7 +26,7 @@ public class ChiTietSanPhamReponse {
 
     private String ma;
 
-    private String ten;
+    private String moTa;
 
     private Double donGia;
 

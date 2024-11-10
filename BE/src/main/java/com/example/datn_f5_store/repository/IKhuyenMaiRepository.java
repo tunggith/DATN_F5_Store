@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 public interface IKhuyenMaiRepository extends JpaRepository<KhuyenMaiEntity,Integer> {
@@ -24,7 +23,7 @@ public interface IKhuyenMaiRepository extends JpaRepository<KhuyenMaiEntity,Inte
     Page<KhuyenMaiEntity> findAllByThoiGianKetThucLessThanEqual(LocalDateTime ngayKetThuc, Pageable pageable);
     KhuyenMaiEntity findByMa(String ma);
 
-    @Query("SELECT p FROM KhuyenMaiEntity p WHERE p.trangThai = ?1")
+    @Query("SELECT p FROM KhuyenMaiEntity p WHERE p.trangThai = ?1 ORDER BY p.id DESC")
     Page<KhuyenMaiEntity> findByTrangThai(String trangThai, Pageable pageable);
 
 }

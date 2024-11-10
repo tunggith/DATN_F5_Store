@@ -16,14 +16,12 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
 
     @Query("""
         select new com.example.datn_f5_store.response.ChiTietSanPhamReponse(
-
            ctsp.id,
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
-
             ctsp.ma,
-            ctsp.ten,
+            ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
             ctsp.trangThai
@@ -41,9 +39,8 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
-
             ctsp.ma,
-            ctsp.ten,
+            ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
             ctsp.trangThai
@@ -60,7 +57,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.mauSac,
             ctsp.size,
             ctsp.ma,
-            ctsp.ten,
+            ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
             ctsp.trangThai
@@ -79,7 +76,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
           AND ctsp.mauSac.id = :idMauSac 
           AND ctsp.size.id = :idSize 
           AND ctsp.ma = :ma 
-          AND ctsp.ten = :ten
+          AND ctsp.moTa = :ten
     """)
         boolean checkTrung(@Param("idSanPham") Integer idSanPham,
                            @Param("idMauSac") Integer idMauSac,
@@ -97,13 +94,13 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.size,
 
             ctsp.ma,
-            ctsp.ten,
+            ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
             ctsp.trangThai
         ) 
         from ChiTietSanPhamEntity ctsp 
-        where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
+        where lower(ctsp.moTa) like lower(concat('%', :keyword, '%')) 
           or lower(ctsp.ma) like lower(concat('%', :keyword, '%'))
     """)
     Page<ChiTietSanPhamReponse> searchByTenOrMa(@Param("keyword") String keyword, Pageable pageable);
@@ -115,7 +112,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
         ctsp.mauSac,
         ctsp.size,
         ctsp.ma,
-        ctsp.ten,
+        ctsp.moTa,
         ctsp.donGia,
         ctsp.soLuong,
         ctsp.trangThai
@@ -138,7 +135,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     @Query("""
         select ctsp
         from ChiTietSanPhamEntity ctsp 
-        where lower(ctsp.ten) like lower(concat('%', :keyword, '%')) 
+        where lower(ctsp.moTa) like lower(concat('%', :keyword, '%')) 
           or lower(ctsp.ma) like lower(concat('%', :keyword, '%'))
     """)
     Page<ChiTietSanPhamEntity> searchByTenOrMa1(@Param("keyword") String keyword, Pageable pageable);
@@ -168,7 +165,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("gioiTinh") String gioiTinh,
             Pageable pageable);
     @Query("SELECT ctsp FROM ChiTietSanPhamEntity ctsp WHERE " +
-            "(ctsp.ma LIKE %:keyword% OR ctsp.ten LIKE %:keyword%)" +
+            "(ctsp.ma LIKE %:keyword% OR ctsp.sanPham.ten LIKE %:keyword%)" +
             "AND ctsp.trangThai = :trangThai " +
             "AND ctsp.sanPham.trangThai = :sanPhamTrangThai " +
             "AND (:mauSac IS NULL OR ctsp.mauSac.id = :mauSac) " +
@@ -186,11 +183,6 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("xuatXu") String xuatXu,
             @Param("gioiTinh") String gioiTinh,
             Pageable pageable);
-
-
-    boolean existsByMaOrTen(String ma, String ten);
-
-
     boolean existsBySanPhamIdAndMauSacIdAndSizeId(Long sanPhamId, Long mauSacId, Long sizeId);
 
 
@@ -207,5 +199,14 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("mauSacId") Long mauSacId,
             @Param("sizeId") Long sizeId,
             @Param("chiTietSanPhamId") Long chiTietSanPhamId);
+
+
+    @Query("""
+    SELECT ctsp 
+    FROM ChiTietSanPhamEntity ctsp 
+    WHERE ctsp.sanPham.trangThai = :trangThai
+    ORDER BY ctsp.sanPham.id DESC
+    """)
+    List<ChiTietSanPhamEntity> findTop5ActiveProducts(@Param("trangThai") String trangThai, Pageable pageable);
 
 }

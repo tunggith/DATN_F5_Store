@@ -93,7 +93,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 chiTietSanPhamRepository.save(chiTietSanPham);  // Cập nhật lại giá trong DB
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
             }
-            return new DataResponse(true, new ResultModel<>(null, "Xóa khuyến mãi thành công, "+ chiTietSanPham.getTen() + " đã khôi phục giá ban đầu"));
+            return new DataResponse(true, new ResultModel<>(null, "Xóa khuyến mãi thành công, "+ chiTietSanPham.getMoTa() + " đã khôi phục giá ban đầu"));
         } catch (Exception e) {
             return new DataResponse(false, new ResultModel<>(null, "Xóa khuyến mãi thất bại với lỗi : "+ e));
         }
@@ -110,7 +110,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
         try {
             // kiểm tra sản phẩm đã có khuyến mãi hay chưa
             if (checkSpct.isPresent()) {
-                return new DataResponse(false, new ResultModel<>(null, chiTietSanPham.getTen() +" đã có khuyến mãi, không thể thêm khuyến mãi khác")); // nếu sản phẩm đã có khuyến mãi rồi, thông báo lỗi
+                return new DataResponse(false, new ResultModel<>(null, chiTietSanPham.getMoTa() +" đã có khuyến mãi, không thể thêm khuyến mãi khác")); // nếu sản phẩm đã có khuyến mãi rồi, thông báo lỗi
             }
             if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
                 return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
@@ -122,10 +122,10 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getMa() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
             }
             if (chiTietSanPham.getSoLuong() <= 0 || chiTietSanPham.getSoLuong() == null){
-                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMoTa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if (chiTietSanPham.getTrangThai().equalsIgnoreCase("Hết hàng")){
-                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMoTa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
@@ -151,7 +151,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
-            return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi cho " + chiTietSanPham.getTen() + " thành công!!"));
+            return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi cho " + chiTietSanPham.getMoTa() + " thành công!!"));
         }catch (Exception e){
             return new DataResponse(false, new ResultModel<>(null, "Lỗi Thêm Khuyến mãi cho sản phẩm là :" + e));
         }
@@ -192,7 +192,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
@@ -201,7 +202,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100));
+                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
+                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());

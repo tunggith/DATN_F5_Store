@@ -126,4 +126,19 @@ public class HoaDonController {
     ){
         return new ResponseEntity<>(hoaDonService.updateDiaChiNhanHang(id,request),HttpStatus.OK);
     }
+    @GetMapping("/get-by-trang-thai-cho")
+    private ResponseEntity<Object> getByTrangThaiCho(){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = hoaDonService.getByTrangThaiCho();
+        dataResponse.setResult(new ResultModel<>(null, data));
+        return ResponseEntity.ok(dataResponse);
+    }
+    @PutMapping("/set-trang-thai")
+    private ResponseEntity<Object> setTrangThai(
+            @Parameter(name = "idCho")@RequestParam Integer idCho,
+            @Parameter(name = "idDang")@RequestParam Integer idDang
+    ){
+      return new ResponseEntity<>(hoaDonService.editTrangThaiHoaDon(idCho,idDang),HttpStatus.OK);
+    }
 }

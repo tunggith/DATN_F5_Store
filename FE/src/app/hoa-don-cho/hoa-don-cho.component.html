@@ -1,0 +1,13 @@
+<div class="popup">
+    <div class="content">
+        <span class="close" (click)="close()">×</span>
+        <div class="content-top">
+            <div>Mã Hóa đơn</div>
+            <div>Action</div>
+        </div>
+        <div class="content-bottom" *ngFor="let hoaDon of hoaDonCho">
+            <div>{{hoaDon.ma}}</div>
+            <div><i class="material-icons" (click)="setTrangThai(hoaDon.id)">swap_horizontal_circle</i></div>
+        </div>
+    </div>
+</div>
