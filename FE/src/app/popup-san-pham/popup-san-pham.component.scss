@@ -1,0 +1,92 @@
+.popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+}
+
+.content {
+    padding: 5px;
+    width: 80%;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    position: relative;
+}
+
+.card-header .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.card-header {
+    display: flex;
+    background-color: #003366;
+}
+
+.card-title {
+    color: #fff;
+}
+
+.card-header input {
+    border-radius: 10px;
+    border: 0.5px solid gainsboro;
+    margin-left: 5%;
+    width: 200px;
+}
+
+.card-header .form-select {
+    width: 120px;
+    margin-left: 10px;
+    border: 0;
+    border-radius: 10px;
+}
+
+.select-product {
+    border: none;
+    background-color: #ffff;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.select-product button:hover {
+    color: rgba(0, 0, 0, 0.075);
+}
+
+.select-product i:hover {
+    font-size: 30px;
+}
+
+.pagination {
+    justify-content: center;
+}
+
+.pagination button {
+    border: none;
+    background-color: #fff;
+    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    padding: 0 5px;
+}
+
+.pagination button i:hover {
+    font-size: 25px;
+    color: gray;
+}

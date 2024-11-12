@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'app/auth.service';
 import { BanHangService } from 'app/ban-hang.service';
+import { DiaChiKhachHangService } from 'app/dia-chi-khach-hang/dia-chi-khach-hang.service';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
-import { error } from 'console';
 import * as e from 'express';
-import { response } from 'express';
-import { data, event } from 'jquery';
-import { map, Observable, startWith, switchMap } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -22,6 +20,7 @@ export class BanHangComponent implements OnInit {
   searchTerm: string = '';
   hoaDon: any[] = [];
   chitietHoaDon: any[] = [];
+  detailHoaDon: any[] = [];
   hasError: boolean = false;
   activeInvoidID: number | null = null;
   tongTienBanDau: number = 0;
@@ -42,8 +41,10 @@ export class BanHangComponent implements OnInit {
   popup: boolean = false;
   popupHs: boolean = false;
   popupHd: boolean = false;
-  popupCho:boolean=false;
+  popupCho: boolean = false;
+  popupSanPham: boolean = false;
   idKhachHang: number = 1;
+  idKhachHanghd: number = 1;
   activeTab: string = 'taoMoi';
   hoaDonCho: any[] = [];
   hoaDonChoId: number = 0;
@@ -77,8 +78,8 @@ export class BanHangComponent implements OnInit {
     idKhachHang: 0,
     idNhanVien: 0
   };
-  userName: string='';
-  idNhanVien:string='';
+  userName: string = '';
+  idNhanVien: string = '';
   hoaDonChiTietMoi: any = {
     hoaDon: 0,
     chiTietSanPham: 0,
@@ -94,17 +95,19 @@ export class BanHangComponent implements OnInit {
   gioiTinhId: string = '';
   token: string = '';
   role: string = '';
-  trangThaiCho:any[]=[];
+  trangThaiCho: any[] = [];
+  editGioHang: boolean = false;
+  editDiaChi: boolean = false;
   constructor(
     private banHangService: BanHangService,
     private giaoHangNhanhService: GiaoHangNhanhService,
-    private authServie: AuthService
+    private authServie: AuthService,
+    private diaChiKhachHangService: DiaChiKhachHangService
   ) { }
 
   ngOnInit() {
     this.token = this.authServie.getToken();
     this.role = this.authServie.getRole();
-    this.getSanPham();
     this.getHoaDon();
     this.getVoucher();
     this.getPhuongThucThanhToan();
@@ -112,11 +115,6 @@ export class BanHangComponent implements OnInit {
     this.getByTrangThai();
     this.loadKhachHang();
     this.loadProvinces();
-    this.getSize();
-    this.getMauSac();
-    this.getThuongHieu();
-    this.getXuatXu();
-    this.getGioiTinh();
     this.getNhanVien();
     this.getHoaDonTrangThai();
   }
@@ -128,30 +126,6 @@ export class BanHangComponent implements OnInit {
     this.icon = this.icon === 'toggle_on' ? 'toggle_off' : 'toggle_on';
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
   }
-
-  // ====================== Lấy dữ liệu bán hàng ====================
-
-  getSanPham(pageSize: number = 0, pageNumber: number = 5): void {
-    const sizeId = this.sizeId || '';
-    const mauSacId = this.mauSacId || '';
-    const thuongHieuId = this.thuongHieuId || '';
-    const xuatXuId = this.xuatXuId || '';
-    const gioiTinhId = this.gioiTinhId || '';
-    const keyWord = this.searchTerm || '';
-
-    this.banHangService.getSanPham(pageSize, pageNumber, keyWord, sizeId, mauSacId, thuongHieuId, xuatXuId, gioiTinhId).subscribe(
-      data => {
-        this.product = data.result.content.content;
-        this.pagination = data.result.pagination;
-      },
-      error => this.handleError(error)
-    );
-  }
-
-  searchProduct(): void {
-    this.getSanPham();
-  }
-
   getHoaDon(): void {
     this.banHangService.getHoaDon().subscribe(
       data => {
@@ -174,7 +148,6 @@ export class BanHangComponent implements OnInit {
       data => {
         this.chitietHoaDon = data.result.content;
         this.activeInvoidID = id;
-
         if (this.chitietHoaDon.length > 0) {
           const hoaDonData = data.result.content[0].hoaDon;
           this.tongTienBanDau = hoaDonData.tongTienBanDau;
@@ -190,6 +163,16 @@ export class BanHangComponent implements OnInit {
       error => {
         this.handleError(error);
         this.hasError = true;  // Nếu có lỗi xảy ra khi gọi API, báo lỗi
+      }
+    );
+  }
+  detailChiTietHoaDon(id: number) {
+    this.banHangService.getChiTietHoaDon(id).subscribe(
+      data => {
+        this.detailHoaDon = data.result.content;
+      },
+      error => {
+        this.handleError(error);
       }
     );
   }
@@ -290,7 +273,6 @@ export class BanHangComponent implements OnInit {
         response => {
           this.showSuccessMessage('Hủy hóa đơn thành công');
           this.getHoaDon();
-          this.getSanPham();
           this.getByTrangThai();
           this.getIdThongTinDonHang(idHoaDon);
           this.getHoaDonTrangThai();
@@ -299,101 +281,6 @@ export class BanHangComponent implements OnInit {
       );
     }
   }
-
-  // ================= Chọn sản phẩm ================
-
-  selectProduct(idSanPham: number): void {
-      // Hiển thị hộp thoại để nhập số lượng
-      Swal.fire({
-          title: 'Nhập số lượng sản phẩm',
-          input: 'number', // Kiểu nhập là số
-          inputPlaceholder: 'Nhập số lượng',
-          showCancelButton: true,
-          confirmButtonText: 'Xác nhận',
-          cancelButtonText: 'Hủy',
-          inputAttributes: {
-              min: '1', // Giá trị tối thiểu
-              step: '1'  // Bước nhảy
-          },
-          customClass: {
-              confirmButton: 'btn btn-success', // Thay đổi màu cho nút xác nhận
-              cancelButton: 'btn btn-danger' // Thay đổi màu cho nút hủy
-          },
-          focusConfirm: false,
-          preConfirm: (value) => {
-              const soLuong = Number(value);
-              if (isNaN(soLuong) || soLuong < 1) {
-                  Swal.showValidationMessage('Số lượng phải lớn hơn hoặc bằng 1. Vui lòng nhập lại.');
-                  return false; // Trả về false để không đóng hộp thoại
-              }
-              return value; // Trả về giá trị hợp lệ
-          }
-      }).then((result) => {
-          if (result.isConfirmed) { // Kiểm tra nếu người dùng đã nhấn "Xác nhận"
-              const soLuong = Number(result.value); // Lấy giá trị số lượng
-  
-              // Tạo đối tượng sản phẩm đã chọn
-              const selectedProduct = {
-                  hoaDon: this.activeInvoidID,
-                  chiTietSanPham: idSanPham,
-                  ma: '',
-                  soLuong: soLuong,
-                  giaSpctHienTai: 0,
-                  trangThai: 'Đang xử lý'
-              };
-  
-              // Gọi service để chọn sản phẩm với số lượng đã nhập
-              this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
-                  response => {
-                      this.showSuccessMessage('Chọn sản phẩm thành công!');
-                      this.getHoaDon();  // Cập nhật lại hóa đơn sau khi chọn sản phẩm
-                      this.getSanPham();
-                  },
-                  error => {
-                      this.handleError(error);
-                  }
-              );
-          }
-      });
-  }
-  
-  
-
-
-  increaseQuantity(idSanPham: number): void {
-    const selectedProduct = {
-      hoaDon: this.activeInvoidID,
-      chiTietSanPham: idSanPham,
-      ma: '',
-      soLuong: 1,
-      giaSpctHienTai: 0,
-      trangThai: 'Đang xử lý'
-    };
-
-    // Gọi service để chọn sản phẩm với số lượng đã nhập
-    this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
-      response => {
-        this.getHoaDon();
-        this.getSanPham();
-      },
-      error => {
-        console.log('lỗi thêm sản phẩm!');
-      }
-    );
-  }
-  decreaseQuantity(idChiTietHoaDon: number): void {
-    this.banHangService.removeSoLuongHoaDonChiTiet(idChiTietHoaDon).subscribe(
-      response => {
-        this.getHoaDon();
-        this.getSanPham();
-
-      },
-      error => {
-        this.handleError(error);
-      }
-    )
-  }
-
   //==================xóa hóa đơn chi tiết==================
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
     if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
@@ -401,7 +288,6 @@ export class BanHangComponent implements OnInit {
         response => {
           this.showSuccessMessage('xóa thành công!');
           this.getHoaDon();
-          this.getSanPham();
         },
         error => {
           this.showErrorMessage('xóa sản phẩm thất bại!');
@@ -410,14 +296,30 @@ export class BanHangComponent implements OnInit {
       )
     }
   }
-  getHoaDonTrangThai(){
+  getHoaDonTrangThai() {
     this.banHangService.getTrangThaiCho().subscribe(
-      data=>{
+      data => {
         this.trangThaiCho = data.result.content;
       }
     )
   }
   //==================đóng mở popup=============
+  openEditGioHang() {
+    this.editGioHang = true;
+    this.detailChiTietHoaDon(this.hoaDonChoId);
+    this.editDiaChi = false;
+  }
+  openEditDiaChi() {
+    this.editDiaChi = true;
+    this.loadDiaChi(this.idKhachHanghd);
+    this.editGioHang = false;
+  }
+  closeEditGioHang() {
+    this.editGioHang = false;
+  }
+  closeEditDiaChi() {
+    this.editDiaChi = false;
+  }
   openPopup() {
     this.popup = true;
   }
@@ -429,10 +331,12 @@ export class BanHangComponent implements OnInit {
     this.hoaDonChoId = hoaDonId;
     this.popupHd = true;  // Mở popup
   }
-  openPopupCho():void{
+  openPopupCho(): void {
     this.popupCho = true;
   }
-
+  openPopupSanPham(): void {
+    this.popupSanPham = true;
+  }
   closePopup() {
     this.popup = false;
     this.loadKhachHang();
@@ -443,9 +347,14 @@ export class BanHangComponent implements OnInit {
   closePopupHd() {
     this.popupHd = false;
   }
-  closePopupCho(){
+  closePopupCho() {
     this.popupCho = false;
     this.getHoaDon();
+  }
+  closePopupSanPham() {
+    this.popupSanPham = false;
+    this.getChiTietHoaDon(this.activeInvoidID);
+    this.detailChiTietHoaDon(this.hoaDonChoId);
   }
   onCustomerSelected(customer: any) {
     if (customer) {
@@ -460,6 +369,10 @@ export class BanHangComponent implements OnInit {
   //==================Thanh toán hóa đơn==================
 
   thanhtoanHoaDon(idHoaDon: number): void {
+    const isConfirmed = window.confirm("Bạn có chắc chắn muốn thanh toán hóa đơn này không?");
+    if (!isConfirmed) {
+      return; // Nếu người dùng nhấn "Cancel", dừng lại
+    }
     if (this.tienKhachDua < this.tongTienSauVoucher) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
@@ -478,13 +391,15 @@ export class BanHangComponent implements OnInit {
       idKhachHang: this.idKhachHang || 1,
       idNhanVien: 1,
       idVoucher: this.selectedVoucherId || null,
-      idThanhToan: this.idThanhToan || 2,
+      idThanhToan: this.idThanhToan || 1,
       hinhThucThanhToan: 0,
       ma: this.hoaDonChiTietMoi.hoaDon.ma,
       tongTienBanDau: this.tongTienBanDau,
       phiShip: this.phiVanChuyen,
       tongTienSauVoucher: 0,
-      tenNguoiNhan: this.tenKhachHang,
+      tenNguoiNhan: this.hoTenNguoiNhan,
+      sdtNguoiNhan: this.soDienThoai,
+      emailNguoiNhan: this.email,
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
       diaChiNhanHang: this.diaChiNhanHang
     };
@@ -493,16 +408,89 @@ export class BanHangComponent implements OnInit {
     this.banHangService.thanhToanHoaDOn(idHoaDon, hoaDonData).subscribe(
       response => {
         this.showSuccessMessage('Thanh toán hóa đơn thành công!');
-        this.getHoaDon(); // Cập nhật lại danh sách hóa đơn sau khi thanh toán
-        this.getSanPham(); // Cập nhật lại danh sách sản phẩm
+        this.getHoaDon();
         this.getByTrangThai();
         this.icon = 'toggle_off';
+        // Hiển thị hộp thoại xác nhận in hóa đơn
+        const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
+        if (printConfirm) {
+          this.downloadPdf(this.activeInvoidID);
+        }
       },
       error => {
         this.handleError(error); // Xử lý lỗi nếu có
         this.showErrorMessage('Thanh toán thất bại! Vui lòng thử lại.');
       }
     );
+  }
+  //==============load địa chỉ khách hàng nếu khách hàng có địa chỉ=====================
+  loadDiaChi(id: number): void {
+    this.diaChiKhachHangService.getAllAddresses(id, 0, 10).subscribe(
+      (response: any) => {
+        if (response.status) {
+          const diaChi = response.result.content.content[0];
+          this.soNha = diaChi.soNha;
+          this.duong = diaChi.duong;
+          this.phuongXa = diaChi.phuongXa;
+          this.quanHuyen = diaChi.quanHuyen;
+          this.tinhThanh = diaChi.tinhThanh;
+          this.diaChiDetail(diaChi.id);
+        }
+      },
+      (error) => {
+        console.error('Lỗi khi gọi API địa chỉ:', error);
+      }
+    );
+  }
+  diaChiDetail(id: number): void {
+    this.diaChiKhachHangService.chiTietDiaChi(id).subscribe(response => {
+      console.log(response);
+      this.hoTenNguoiNhan = response.result.content.khackHang.ten;
+      this.soDienThoai = response.result.content.khackHang.sdt;
+      this.email = response.result.content.khackHang.email;
+      // Tìm tỉnh thành tương ứng
+      const province = this.provinces.find(p => p.ProvinceName === this.tinhThanh);
+      this.selectedTinhThanh = province ? province.ProvinceID : null;
+
+      // Kiểm tra tỉnh thành đã được chọn chưa
+      if (this.selectedTinhThanh) {
+        this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+          data => {
+            this.districts = data['data'];
+
+            // Tìm quận huyện tương ứng
+            const district = this.districts.find(d => d.DistrictName === this.quanHuyen);
+            this.selectedQuanHuyen = district ? district.DistrictID : null;
+
+            // Kiểm tra quận huyện đã được chọn chưa
+            if (this.selectedQuanHuyen) {
+              this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+                data => {
+                  this.wards = data['data'];
+
+                  // Tìm phường/xã tương ứng
+                  const ward = this.wards.find(w => w.WardName === this.phuongXa);
+                  this.selectedPhuongXa = ward ? ward.WardCode : null;
+                  this.getShippingFee();
+                },
+                error => {
+                  console.error('Lỗi khi tải danh sách phường/xã:', error);
+                }
+              );
+            } else {
+              console.warn('Không tìm thấy quận huyện tương ứng với tên:', this.quanHuyen);
+            }
+          },
+          error => {
+            console.error('Lỗi khi tải danh sách quận huyện:', error);
+          }
+        );
+      } else {
+        console.warn('Không tìm thấy tỉnh thành tương ứng với tên:', this.tinhThanh);
+      }
+    }, error => {
+      console.error('Error fetching address details:', error);
+    });
   }
 
   onKeyworkChange(event: Event): void {
@@ -526,6 +514,65 @@ export class BanHangComponent implements OnInit {
       }
     )
   }
+  //================ tăng giảm số lượng=======================
+  increaseQuantity(idSanPham: number): void {
+    const selectedProduct = {
+      hoaDon: this.activeInvoidID,
+      chiTietSanPham: idSanPham,
+      soLuong: 1,
+      giaSpctHienTai: 0,
+    };
+
+    // Gọi service để chọn sản phẩm với số lượng đã nhập
+    this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
+      response => {
+        this.getChiTietHoaDon(this.activeInvoidID);
+      },
+      error => {
+        console.log('lỗi thêm sản phẩm!');
+      }
+    );
+  }
+  decreaseQuantity(idChiTietHoaDon: number): void {
+    this.banHangService.removeSoLuongHoaDonChiTiet(idChiTietHoaDon).subscribe(
+      response => {
+        this.getChiTietHoaDon(this.activeInvoidID);
+      },
+      error => {
+        this.handleError(error);
+      }
+    )
+  }
+  increaseQuantityhd(idSanPham: number): void {
+    const selectedProduct = {
+      hoaDon: this.hoaDonChoId,
+      chiTietSanPham: idSanPham,
+      soLuong: 1,
+      giaSpctHienTai: 0,
+    };
+
+    // Gọi service để chọn sản phẩm với số lượng đã nhập
+    this.banHangService.selectProduct(idSanPham, selectedProduct).subscribe(
+      response => {
+        this.detailChiTietHoaDon(this.hoaDonChoId);
+        this.editGioHang = true;
+      },
+      error => {
+        console.log('lỗi thêm sản phẩm!');
+      }
+    );
+  }
+  decreaseQuantityhd(idChiTietHoaDon: number): void {
+    this.banHangService.removeSoLuongHoaDonChiTiet(idChiTietHoaDon).subscribe(
+      response => {
+        this.detailChiTietHoaDon(this.hoaDonChoId);
+        this.editGioHang = true;
+      },
+      error => {
+        this.handleError(error);
+      }
+    )
+  }
   //================= chi tiết thông tin đơn hàng==================
   getIdThongTinDonHang(id: number): void {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
@@ -538,11 +585,11 @@ export class BanHangComponent implements OnInit {
           this.isHidden = true;
         }
         this.idGiaoHang = data.result.content.giaoHang;
+        this.idKhachHanghd = data.result.content.khachHang.id;
         this.hoaDonChoId = data.result.content.id;
         this.maHoaDonCho = data.result.content.ma;
         this.diaChiNhanHang = data.result.content.diaChiNhanHang;
         this.phiVanChuyen = data.result.content.phiShip;
-        console.log(this.idGiaoHang);
       }
     )
   }
@@ -561,8 +608,8 @@ export class BanHangComponent implements OnInit {
     }
   }
   //==============export hóa đơn=================
-  downloadPdf() { // ID của PDF bạn muốn tải về
-    this.banHangService.downloadPdf(this.hoaDonChoId).subscribe(blob => {
+  downloadPdf(id: number) { // ID của PDF bạn muốn tải về
+    this.banHangService.downloadPdf(id).subscribe(blob => {
       // Tạo URL từ Blob
       const url = window.URL.createObjectURL(blob);
       // Tạo link để tải xuống
@@ -675,6 +722,7 @@ export class BanHangComponent implements OnInit {
     if (this.hoTenNguoiNhan && this.soDienThoai && this.soNha && this.duong && this.phuongXa && this.quanHuyen && this.tinhThanh) {
       this.diaChiNhanHang = `${this.soNha}, ${this.duong}, ${this.phuongXa}, ${this.quanHuyen}, ${this.tinhThanh}`;
 
+      console.log(this.phiVanChuyen);
       // Tạo object hóa đơn với địa chỉ nhận hàng
       const hoaDon = {
         tenNguoiNhan: this.hoTenNguoiNhan,
@@ -683,10 +731,19 @@ export class BanHangComponent implements OnInit {
         diaChiNhanHang: this.diaChiNhanHang,
         phiShip: this.phiVanChuyen
       };
+      let id = 0;
+      if(this.activeTab==='taoMoi'){
+        id = this.activeInvoidID;
+      }else{
+        id = this.hoaDonChoId;
+      }
       // Gọi API để cập nhật địa chỉ nhận hàng
-      this.banHangService.updateDiaChiNhanHang(this.activeInvoidID, hoaDon).subscribe(
+      this.banHangService.updateDiaChiNhanHang(id, hoaDon).subscribe(
         response => {
-          //this.showSuccessMessage('cập nhật địa chỉ thành công');
+          if (this.activeTab === 'danhSachHoaDon') {
+            this.showSuccessMessage('cập nhật địa chỉ thành công');
+            this.editDiaChi = false;
+          }
         },
         error => {
           console.error('Cập nhật địa chỉ thất bại:', error);
@@ -733,7 +790,7 @@ export class BanHangComponent implements OnInit {
     if (selectedKhachHang) {
       this.idKhachHang = selectedKhachHang.id; // Gán id cho idKhachHang
       this.tenKhachHang = selectedKhachHang.ten;
-      console.log('ID Khách Hàng:', this.idKhachHang); // Kiểm tra ID Khách Hàng
+      this.loadDiaChi(this.idKhachHang);
     }
   }
   //========load voucher===========
@@ -807,78 +864,25 @@ export class BanHangComponent implements OnInit {
     this.tenKhachHang = '';
     this.tienKhachDua = 0;
     this.tienTraLai = 0;
+    this.myControl.reset();
+    this.voucherControl.reset();
     this.hasError = true;
-  }
-  //=========call thuộc tính==============
-  size: any[] = [];
-  getSize(): void {
-    this.banHangService.getSize().subscribe(
-      data => {
-        this.size = data.result.content;
-      }
-    )
-  }
-  mauSac: any[] = [];
-  getMauSac(): void {
-    this.banHangService.getMauSac().subscribe(
-      data => {
-        this.mauSac = data.result.content;
-      }
-    )
-  }
-  thuongHieu: any[] = [];
-  getThuongHieu(): void {
-    this.banHangService.getThuongHieu().subscribe(
-      data => {
-        this.thuongHieu = data.result.content;
-      }
-    )
-  }
-  xuatXu: any[] = [];
-  getXuatXu(): void {
-    this.banHangService.getXuatXu().subscribe(
-      data => {
-        this.xuatXu = data.result.content;
-      }
-    )
-  }
-  gioiTinh: any[] = [];
-  getGioiTinh(): void {
-    this.banHangService.getGioiTinh().subscribe(
-      data => {
-        this.gioiTinh = data.result.content;
-      }
-    )
-  }
-  //========chọn thuộc tính===============
-  onChangeSize(event: any) {
-    this.sizeId = event.target.value || '';
-    this.getSanPham();
-  }
-
-  onChangeMauSac(event: any) {
-    this.mauSacId = event.target.value || '';
-    this.getSanPham();
-  }
-
-  onChangeThuongHieu(event: any) {
-    this.thuongHieuId = event.target.value || '';
-    this.getSanPham();
-  }
-
-  onChangeXuatXu(event: any) {
-    this.xuatXuId = event.target.value || '';
-    this.getSanPham();
-  }
-
-  onChangeGioiTinh(event: any) {
-    this.gioiTinhId = event.target.value || '';
-    this.getSanPham();
+    this.hoTenNguoiNhan = '';
+    this.soDienThoai = '';
+    this.email = '';
+    this.soNha = '';
+    this.duong = '';
+    this.phiVanChuyen = '';
+    this.selectedTinhThanh = '';
+    this.selectedQuanHuyen = '';
+    this.selectedPhuongXa = '';
+    this.districts = []; // Xóa danh sách quận
+    this.wards = [];     // Xóa danh sách phường
   }
   //=======lấy id nhân viên==========
-  getNhanVien():void{
+  getNhanVien(): void {
     this.banHangService.getNhanVien(this.authServie.getUsername()).subscribe(
-      data =>{
+      data => {
         this.idNhanVien = data.result.content.id;
         console.log(this.idKhachHang);
       }

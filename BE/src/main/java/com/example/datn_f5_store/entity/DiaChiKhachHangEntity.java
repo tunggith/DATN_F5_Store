@@ -28,8 +28,6 @@ public class DiaChiKhachHangEntity {
     private KhachHangEntity khackHang;
     @Column(name = "SO_NHA")
     private String soNha;
-    @Column(name = "SDT")
-    private String sdt;
     @Column(name = "DUONG")
     private String duong;
     @Column(name = "PHUONG_XA")

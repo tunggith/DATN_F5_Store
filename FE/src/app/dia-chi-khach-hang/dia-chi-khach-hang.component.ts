@@ -112,50 +112,50 @@ export class DiaChiKhachHangComponent implements OnInit {
   }
   diaChiDetail(id: number): void {
     this.diaChiKhachHangService.chiTietDiaChi(id).subscribe(response => {
-        this.diaChiMoi = response.result.content;
-        // Tìm tỉnh thành tương ứng
-        const province = this.provinces.find(p => p.ProvinceName === this.diaChiMoi.tinhThanh);
-        this.selectedTinhThanh = province ? province.ProvinceID : null;
+      this.diaChiMoi = response.result.content;
+      // Tìm tỉnh thành tương ứng
+      const province = this.provinces.find(p => p.ProvinceName === this.diaChiMoi.tinhThanh);
+      this.selectedTinhThanh = province ? province.ProvinceID : null;
 
-        // Kiểm tra tỉnh thành đã được chọn chưa
-        if (this.selectedTinhThanh) {
-            this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+      // Kiểm tra tỉnh thành đã được chọn chưa
+      if (this.selectedTinhThanh) {
+        this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+          data => {
+            this.districts = data['data'];
+
+            // Tìm quận huyện tương ứng
+            const district = this.districts.find(d => d.DistrictName === this.diaChiMoi.quanHuyen);
+            this.selectedQuanHuyen = district ? district.DistrictID : null;
+
+            // Kiểm tra quận huyện đã được chọn chưa
+            if (this.selectedQuanHuyen) {
+              this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
                 data => {
-                    this.districts = data['data'];
+                  this.wards = data['data'];
 
-                    // Tìm quận huyện tương ứng
-                    const district = this.districts.find(d => d.DistrictName === this.diaChiMoi.quanHuyen);
-                    this.selectedQuanHuyen = district ? district.DistrictID : null;
-
-                    // Kiểm tra quận huyện đã được chọn chưa
-                    if (this.selectedQuanHuyen) {
-                        this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
-                            data => {
-                                this.wards = data['data'];
-
-                                // Tìm phường/xã tương ứng
-                                const ward = this.wards.find(w => w.WardName === this.diaChiMoi.phuongXa);
-                                this.selectedPhuongXa = ward ? ward.WardCode : null;
-                            },
-                            error => {
-                                console.error('Lỗi khi tải danh sách phường/xã:', error);
-                            }
-                        );
-                    } else {
-                        console.warn('Không tìm thấy quận huyện tương ứng với tên:', this.diaChiMoi.quanHuyen);
-                    }
+                  // Tìm phường/xã tương ứng
+                  const ward = this.wards.find(w => w.WardName === this.diaChiMoi.phuongXa);
+                  this.selectedPhuongXa = ward ? ward.WardCode : null;
                 },
                 error => {
-                    console.error('Lỗi khi tải danh sách quận huyện:', error);
+                  console.error('Lỗi khi tải danh sách phường/xã:', error);
                 }
-            );
-        } else {
-            console.warn('Không tìm thấy tỉnh thành tương ứng với tên:', this.diaChiMoi.tinhThanh);
-        }
+              );
+            } else {
+              console.warn('Không tìm thấy quận huyện tương ứng với tên:', this.diaChiMoi.quanHuyen);
+            }
+          },
+          error => {
+            console.error('Lỗi khi tải danh sách quận huyện:', error);
+          }
+        );
+      } else {
+        console.warn('Không tìm thấy tỉnh thành tương ứng với tên:', this.diaChiMoi.tinhThanh);
+      }
     }, error => {
-        console.error('Error fetching address details:', error);
+      console.error('Error fetching address details:', error);
     });
-}
+  }
 
 
   createDiaChi(): void {

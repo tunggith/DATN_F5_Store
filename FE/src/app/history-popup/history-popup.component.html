@@ -5,15 +5,17 @@
             <thead>
                 <tr>
                   <th scope="col">Mã hóa đơn</th>
+                  <th scope="col">Người thực hiện</th>
                   <th scope="col">Thời gian thực hiện</th>
-                  <th scope="col">trạng thái cũ</th>
-                  <th scope="col">trạng thái mới</th>
-                  <th scope="col">loại thay đổi</th>
+                  <th scope="col">Trạng thái cũ</th>
+                  <th scope="col">Trạng thái mới</th>
+                  <th scope="col">Loại thay đổi</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let history of hoaDonHistory">
                   <th>{{history.hoaDon?.ma}}</th>
+                  <th>{{history.nhanVien?.ten}}</th>
                   <td>{{history.thoiGianThucHien}}</td>
                   <td>{{history.trangThaiCu}}</td>
                   <td>{{history.trangThaiMoi}}</td>

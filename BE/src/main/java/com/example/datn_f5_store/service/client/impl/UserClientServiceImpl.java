@@ -76,7 +76,6 @@ public class UserClientServiceImpl implements UserClientService {
         // Tạo đối tượng địa chỉ khách hàng mới nếu validation thành công
         DiaChiKhachHangEntity diaChi = new DiaChiKhachHangEntity();
         diaChi.setKhackHang(khachHang);
-        diaChi.setSdt(request.getSdt());
         diaChi.setSoNha(request.getSoNha());
         diaChi.setDuong(request.getDuong());
         diaChi.setPhuongXa(request.getPhuongXa());
