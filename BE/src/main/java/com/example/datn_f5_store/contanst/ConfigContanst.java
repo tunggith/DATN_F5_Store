@@ -27,7 +27,7 @@ public class ConfigContanst {
         public static final String ID_MAU_SAC = "ID_MAU_SAC";
         public static final String ID_SIZE = "ID_SIZE";
         public static final String MA = "MA";
-        public static final String TEN = "TEN";
+        public static final String MO_TA = "MO_TA";
         public static final String DON_GIA = "DON_GIA";
         public static final String SO_LUONG = "SO_LUONG";
         public static final String NGAY_NHAP = "NGAY_NHAP";

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ISanPhamRepository extends JpaRepository<SanPhamEntity,Integer> {
     Page<SanPhamEntity> getByTenContainingOrMaContaining(String ten, String ma, Pageable pageable);
@@ -20,4 +22,9 @@ public interface ISanPhamRepository extends JpaRepository<SanPhamEntity,Integer>
                                 @Param("xuatXuId") Long xuatXuId,
                                 @Param("gioiTinhId") Long gioiTinhId,
                                 Pageable pageable);
+
+    @Query("SELECT sp FROM SanPhamEntity sp WHERE sp.trangThai = 'Đang hoạt động'")
+    List<SanPhamEntity> findProductsByStatus();
+
+
 }

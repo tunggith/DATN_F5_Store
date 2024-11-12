@@ -39,8 +39,8 @@ public class ChiTietSanPhamEntity {
     private SizeEntity size;
     @Column(name = ConfigContanst.ChiTietSanPham.MA)
     private String ma;
-    @Column(name = ConfigContanst.ChiTietSanPham.TEN)
-    private String ten;
+    @Column(name = ConfigContanst.ChiTietSanPham.MO_TA)
+    private String moTa;
     @Column(name = ConfigContanst.ChiTietSanPham.DON_GIA)
     private Double donGia;
     @Column(name = ConfigContanst.ChiTietSanPham.SO_LUONG)
