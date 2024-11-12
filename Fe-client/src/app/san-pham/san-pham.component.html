@@ -25,7 +25,27 @@
                             </div>
                         </div>
                         <!--layere categorie end-->
+                          <!-- thuonghieu area start -->
+                          <div class="sidebar_widget color">
+                            <h2 (click)="togglethuonghieuList()">
+                                
+                                <span class="icon" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
+                                    <i class="fa" [ngClass]="{'fa-chevron-down': !isthuongHieuOpen, 'fa-chevron-up': isthuongHieuOpen}"></i>
+                                  </span>
+                                Thương hiệu </h2> 
+                            <div class="layere_categorie" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
+                                <ul>
+                                   
+                                    <li *ngFor="let thuonghieu of ThuongHieuList">
+                                        <input type="checkbox" id="{{ thuonghieu.id }}" name="thuonghieu" [value]="thuonghieu.ten" (change)="onthuongHieuChage(thuonghieu)" />
+                                        <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         
+                        
+                      <!-- color area end -->
                                          <!-- color area start -->
                                          <div class="sidebar_widget color">
                                             <h2 (click)="toggleColorList()">

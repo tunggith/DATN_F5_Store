@@ -19,5 +19,38 @@ public class SanPhamClientImpl implements ISanPhamClientservice {
         return repoAnh.getallAnhSanPham( "Đang hoạt động", pageable);
     }
 
+    @Override
+    public Page<AnhChiTietSanPham> getFilteredProducts(
+            Integer gioiTinh,
+            Integer thuongHieu,
+            Integer xuatXu,
+            Double giaMin,
+            Double giaMax,
+            Integer mauSac,
+            Integer kichThuoc,
+            Pageable pageable
+    ) {
+        // Xử lý các giá trị mặc định cho giá nếu cần thiết
+        if (giaMin == null) {
+            giaMin = 0.0; // Giá tối thiểu mặc định
+        }
+        if (giaMax == null) {
+            giaMax = Double.MAX_VALUE; // Giá tối đa mặc định
+        }
+
+        // Gọi repository để lấy danh sách sản phẩm đã được lọc
+        return repoAnh.findFilteredProducts(
+                gioiTinh,
+                thuongHieu,
+                xuatXu,
+                giaMin,
+                giaMax,
+                mauSac,
+                kichThuoc,
+                "Đang hoạt động",
+                pageable
+        );
+    }
+
 
 }
