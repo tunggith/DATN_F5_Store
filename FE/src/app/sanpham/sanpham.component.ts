@@ -158,6 +158,7 @@ selectedGioiTinh: number = 0;
     this.filterChiTietSanPham();
 
   }
+  
   viewProductDetails(idSanPham: number) {
     this.idSanPhamChiTiet = idSanPham;
     this.selectSanPhamChiTiet(idSanPham); // Gọi hàm để chọn sản phẩm chi tiết

@@ -73,18 +73,29 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
     @Override
     public DataResponse XoaKhuyenMaictsp(Integer id) {
         try {
-            ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(id).get();
-            KhuyenMaiChiTietSanPham khuyenMaiChiTietSanPham = iKhuyenMaiChiTietSanPhamRepository.findByChiTietSanPhamId(chiTietSanPham.getId()).get();
-            KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPham.getKhuyenMai().getId()).get();
-            if (khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Chưa áp dụng") || khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
-                iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
-            } if(khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Đã kết thúc") || khuyenMai.getTrangThai().equalsIgnoreCase("Đã kết thúc")){
-
-                iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
+            // Kiểm tra sự tồn tại của sản phẩm
+            Optional<ChiTietSanPhamEntity> chiTietSanPhamOptional = chiTietSanPhamRepository.findById(id);
+            if (!chiTietSanPhamOptional.isPresent()) {
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm chưa có khuyến mãi, không thể xóa"));
             }
-            else {
 
-                if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$")) {
+            ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamOptional.get();
+
+            // Kiểm tra sự tồn tại của khuyến mãi chi tiết sản phẩm
+            Optional<KhuyenMaiChiTietSanPham> khuyenMaiChiTietSanPhamOptional = iKhuyenMaiChiTietSanPhamRepository.findByChiTietSanPhamId(chiTietSanPham.getId());
+            if (!khuyenMaiChiTietSanPhamOptional.isPresent()) {
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm chưa có khuyến mãi, không thể xóa"));
+            }
+
+            KhuyenMaiChiTietSanPham khuyenMaiChiTietSanPham = khuyenMaiChiTietSanPhamOptional.get();
+            KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPham.getKhuyenMai().getId()).get();
+
+            if (khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Chưa áp dụng") || khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")) {
+                iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
+            } else if (khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
+                iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
+            } else {
+                if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() + khuyenMai.getGiaTriKhuyenMai());
                 } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%")) {
                     double giaTriGiam = ((double) khuyenMai.getGiaTriKhuyenMai() / 100);
@@ -93,11 +104,13 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 chiTietSanPhamRepository.save(chiTietSanPham);  // Cập nhật lại giá trong DB
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
             }
-            return new DataResponse(true, new ResultModel<>(null, "Xóa khuyến mãi thành công, "+ chiTietSanPham.getTen() + " đã khôi phục giá ban đầu"));
+
+            return new DataResponse(true, new ResultModel<>(null, "Xóa khuyến mãi thành công, " + chiTietSanPham.getMa() + " đã khôi phục giá ban đầu"));
         } catch (Exception e) {
-            return new DataResponse(false, new ResultModel<>(null, "Xóa khuyến mãi thất bại với lỗi : "+ e));
+            return new DataResponse(false, new ResultModel<>(null, "Xóa khuyến mãi thất bại với lỗi : " + e));
         }
     }
+
 
     // hàm thêm khuyến mãi vào sản phẩm
     @Override
@@ -110,9 +123,12 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
         try {
             // kiểm tra sản phẩm đã có khuyến mãi hay chưa
             if (checkSpct.isPresent()) {
-                return new DataResponse(false, new ResultModel<>(null, chiTietSanPham.getTen() +" đã có khuyến mãi, không thể thêm khuyến mãi khác")); // nếu sản phẩm đã có khuyến mãi rồi, thông báo lỗi
+                return new DataResponse(false, new ResultModel<>(null, chiTietSanPham.getMa() +" đã có khuyến mãi, không thể thêm khuyến mãi khác")); // nếu sản phẩm đã có khuyến mãi rồi, thông báo lỗi
             }
-            if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
+            if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
+                return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
+            }
+            if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
                 return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Đã kết thúc")){
@@ -122,10 +138,10 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Số lượng khuyến mãi "+ khuyenMai.getMa() +" đã hết, vui lòng chọn mã khuyến mãi khác"));
             }
             if (chiTietSanPham.getSoLuong() <= 0 || chiTietSanPham.getSoLuong() == null){
-                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if (chiTietSanPham.getTrangThai().equalsIgnoreCase("Hết hàng")){
-                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getTen() +" đã hết, vui lòng chọn sản phẩm khác"));
+                return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
@@ -140,7 +156,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%")) {
                     double soTienDuocGiam = chiTietSanPham.getDonGia() * (khuyenMai.getGiaTriKhuyenMai() / 100.0);
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() - soTienDuocGiam);
-                } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() - khuyenMai.getGiaTriKhuyenMai());
                 }
                 chiTietSanPhamRepository.save(chiTietSanPham);
@@ -151,7 +167,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
-            return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi cho " + chiTietSanPham.getTen() + " thành công!!"));
+            return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi cho " + chiTietSanPham.getMa() + " thành công!!"));
         }catch (Exception e){
             return new DataResponse(false, new ResultModel<>(null, "Lỗi Thêm Khuyến mãi cho sản phẩm là :" + e));
         }
@@ -175,7 +191,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         double soTienDuocGiam = khuyenMaictsp.getChiTietSanPham().getDonGia() * (khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100.0);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - soTienDuocGiam);
-                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     }
 
@@ -189,7 +205,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
 
                 // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại
                 if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
-                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
@@ -199,7 +215,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
                 if (khuyenMaictsp.getKhuyenMai().getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
-                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("$")) {
+                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
