@@ -256,7 +256,7 @@
 <!-- Phần tiêu đề và nút điều khiển -->
 <div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem;">
   <div>
-    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
+    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" [disabled]="role!=='admin'">
       <i class="material-icons">visibility</i>
     </button>
     <button *ngIf="isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
@@ -273,8 +273,9 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th colspan="10" class="table-title">Danh Sách Khuyến Mãi</th>
+            <th colspan="10" class="table-title">Danh sách khuyến mãi</th>
           </tr>
+          <tr></tr>
           <tr>
             <th>Mã</th>
             <th>Tên</th>
@@ -300,10 +301,10 @@
             <td>{{ khuyenMai.moTa }}</td>
             <td>{{ khuyenMai.trangThai }}</td>
             <td class="button-container">
-              <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)">
+              <button class="btn btn-warning btn-icon" (click)="onEdit(khuyenMai)" [disabled]="role!=='admin'">
                 <i class="material-icons">add_task</i>
               </button>
-              <button class="btn btn-danger btn-icon" (click)="capNhapKm(khuyenMai.id)">
+              <button class="btn btn-danger btn-icon" (click)="capNhapKm(khuyenMai.id)" [disabled]="role!=='admin'">
                 <i class="material-icons">swap_horiz</i>
               </button>
             </td>

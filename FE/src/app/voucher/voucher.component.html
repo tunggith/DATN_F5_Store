@@ -180,7 +180,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem;">
   <div>
-    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
+    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" [disabled]="role!=='admin'">
       <i class="material-icons">visibility</i>
     </button>
     <button *ngIf="isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
@@ -222,12 +222,12 @@
         <td>{{ voucher.moTa }}</td>
         <td>{{ voucher.trangThai }}</td>
         <td>
-          <button class="btn btn-edit" (click)="editVoucher(voucher)">
-            <i class="material-icons">edit</i> Chọn Voucher
+          <button class="btn btn-edit" (click)="editVoucher(voucher)" [disabled]="role!=='admin'">
+            <i class="material-icons">edit</i>
           </button>
           <button class="btn btn-update" (click)="capNhap(voucher.id)"
-          [disabled]="voucher.trangThai === 'Đã hết hạn'">
-            <i class="material-icons">swap_horiz</i> Đổi trạng thái
+          [disabled]="voucher.trangThai === 'Đã hết hạn'||role!=='admin'">
+            <i class="material-icons">swap_horiz</i>
           </button>
         </td>
       </tr>

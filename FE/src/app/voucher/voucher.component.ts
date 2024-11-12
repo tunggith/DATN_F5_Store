@@ -17,7 +17,7 @@ export class VoucherComponent implements OnInit {
   convertToLocalTime(dateString: string): string {
     return moment(dateString).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm'); // Thay đổi múi giờ tùy thuộc vào địa phương
   }
-  
+  role:string='';
   vouchers: any[] = [];
   searchForm: FormGroup;
   voucherForm: FormGroup; // Thêm FormGroup cho form thêm/sửa
@@ -34,6 +34,7 @@ export class VoucherComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.role = localStorage.getItem('role');
     this.getAllVouchers();
     
     // Khởi tạo form tìm kiếm

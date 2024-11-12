@@ -18,7 +18,7 @@ export class IconsComponent implements OnInit {
   convertToLocalTime(dateString: string): string {
     return moment(dateString).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm'); // Thay đổi múi giờ tùy thuộc vào địa phương
   }
-
+  role:string='';
   isAddedMap: { [key: number]: boolean } = {};
 
   isFormVisible: boolean = false;
@@ -116,6 +116,7 @@ selectedGioiTinh: number = 0;
 
   ngOnInit(): void {
     
+    this.role = localStorage.getItem('role');
     this.searchForm = this.fb.group({
       searchKey: [''],
       fromDate: [''],

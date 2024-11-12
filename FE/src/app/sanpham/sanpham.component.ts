@@ -12,6 +12,7 @@ declare var window: any;
   styleUrls: ['./sanpham.component.css']
 })
 export class SanphamComponent implements OnInit {
+  role: string ='';
   sanPhamList: any[] = [];
   totalPagesSanPham: number = 0;
   pageSanPham: number = 0;
@@ -70,6 +71,7 @@ selectedGioiTinh: number = 0;
 
 
   ngOnInit() {
+    this.role = localStorage.getItem('role');
     this.sanPhamForm = this.fb.group({
       id: [null],
       maSanPham: [''],
