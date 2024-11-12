@@ -25,6 +25,7 @@ export class VoucherComponent implements OnInit {
   size = 5;
   currentVoucher: any = null;
   totalPages: number = 0;  // Để lưu voucher hiện tại đang sửa
+  isFormVisible: boolean = false;
 
   constructor(
     private voucherService: VoucherService,
@@ -107,6 +108,11 @@ export class VoucherComponent implements OnInit {
       alert('Lỗi khi tạo voucher '  );
     });
   }
+
+  toggleFormVisibility() {
+    this.isFormVisible = !this.isFormVisible;
+  }
+
 
 
   createOrUpdateVoucher(): void {

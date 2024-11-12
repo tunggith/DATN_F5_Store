@@ -1,48 +1,51 @@
+<div class="main-content">
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Quản Lý Voucher</h2>
-
   <!-- Phần lọc voucher -->
-  <form [formGroup]="searchForm" class="search-form mb-4">
-    <div class="border rounded p-4 mb-4">
-      <h4 class="mb-3">Lọc Voucher</h4>
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Tìm theo tên hoặc mã"
-            formControlName="searchKey"
-          />
+  <div class="row">
+    <div class="col-md-12">
+      <form [formGroup]="searchForm" class="search-form mb-4">
+        <div class="border rounded p-4 mb-4">
+          <h4 class="mb-3">Lọc Khuyến mãi</h4>
+          <div class="row d-flex align-items-center flex-wrap">
+  
+            <!-- Search Input -->
+            <div class="col-md-3">
+              <label for="toDate" class="d-block">Tìm theo tên hoặc mã</label>
+              <input type="text" class="form-control"  formControlName="searchKey" />
+            </div>
+  
+            <!-- Status Dropdown -->
+            <div class="col-md-3">
+              <label for="toDate" class="d-block">Trạng thái</label>
+              <select id="trangThai" class="form-control" formControlName="trangThai">
+                <option value="">Tất cả</option>
+                <option value="Đang diễn ra">Đang diễn ra</option>
+                <option value="Đã hết">Đã hết</option>
+                <option value="Đã kết thúc">Đã kết thúc</option>
+                <option value="Sắp diễn ra">Sắp diễn ra</option>
+              </select>
+            </div>
+  
+            <!-- From Date -->
+            <div class="col-md-3">
+              <label for="fromDate" class="d-block">Từ ngày</label>
+              <input type="datetime-local" class="form-control" formControlName="fromDate" required />
+            </div>
+  
+            <!-- To Date -->
+            <div class="col-md-3">
+              <label for="toDate" class="d-block">Đến ngày</label>
+              <input type="datetime-local" class="form-control" formControlName="toDate" required />
+            </div>
+  
+          </div>
         </div>
-
-        <div class="col-md-6">
-          
-          <select id="trangThai" class="form-control" formControlName="trangThai">
-            <option value="">Tất cả</option>
-            <option value="Đang diễn ra">Đang diễn ra</option>
-            <option value="Đã hết">Đã hết</option>
-            <option value="Đã kết thúc">Đã kết thúc</option>
-            <option value="Sắp diễn ra">Sắp diễn ra</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <label for="fromDate">Từ ngày</label>
-          <input type="datetime-local" class="form-control" formControlName="fromDate" required />
-        </div>
-        <div class="col-md-6">
-          <label for="toDate">Đến ngày</label>
-          <input type="datetime-local" class="form-control" formControlName="toDate" required />
-        </div>
-      </div>
+      </form>
     </div>
-  </form> 
+  </div>
 
   <!-- Form thêm/sửa voucher -->
-
-<div class="border rounded p-4 mb-4">
+<div class="border rounded p-4 mb-4" *ngIf="isFormVisible">
   <h4 class="mb-3">Thêm/Sửa Voucher</h4>
   <form [formGroup]="voucherForm" (ngSubmit)="createOrUpdateVoucher()">
     <div class="row">
@@ -175,6 +178,17 @@
 </div>
 
 
+<div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem;">
+  <div>
+    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
+      <i class="material-icons">visibility</i>
+    </button>
+    <button *ngIf="isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
+      <i class="material-icons">visibility_off</i>
+    </button>
+  </div>
+</div>
+
   <hr />
   <div class="table-responsive"> 
   <table class="table table-striped">
@@ -237,4 +251,4 @@
       </button>
   </div>
 </div>
-
+</div>

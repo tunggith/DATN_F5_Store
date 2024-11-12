@@ -9,6 +9,7 @@
 body {
   font-family: Arial, sans-serif;
   background-color: #ffffff; 
+  
 }
 
 /* Container styles */
@@ -302,20 +303,20 @@ table-striped tbody tr:nth-of-type(odd) {
 
 /* Nút "Thêm" - màu xanh lá */
 .btn-add {
-  background-color: #28a745;
+  background-color: #003366;
 }
 
 .btn-add:hover {
-  background-color: #218838;
+  background-color: #004166;
 }
 
 /* Nút "Xóa" - màu đỏ */
 .btn-remove {
-  background-color: #dc3545;
+  background-color: #003366;
 }
 
 .btn-remove:hover {
-  background-color: #c82333;
+  background-color: #004166;
 }
 
 
@@ -401,13 +402,26 @@ table-striped tbody tr:nth-of-type(odd) {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: transparent;
+ 
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
   color: #888;
   transition: color 0.2s ease;
 }
+
+.table thead th {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: white;
+  border-bottom-width: 1px;
+}
+
+.buttonv1{
+text-align: center;
+}
+
+
 
 
 
