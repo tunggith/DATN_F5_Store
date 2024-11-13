@@ -1,0 +1,186 @@
+<div class="pos_page">
+    <div class="container">
+      <div class="pos_page_inner">
+        <div class="pos_home_section">
+          <div class="row pos_home">
+            <!-- Main Content Start -->
+            <div class="col-lg-12 col-md-12">
+              <!-- Custom Image Slider Start -->
+              <div class="blockSlider mb-4">
+                <div class="slider">
+                  <div class="slider-image">
+                    <img [src]="sliderImages[currentIndex]" alt="Slider Image" />
+                  </div>
+                </div>
+              </div>
+              <!-- Custom Image Slider End -->
+               <hr>
+              <div class="featured_product mb-4">
+                <div class="icon-section">
+                    <div class="icon-item">
+                        <div class="icon">
+                            <img src="https://imgur.com/btt3CWL.png" alt="Icon 1">
+                        </div>
+                        <div class="description">
+                            <h3>Giao Hàng Nhanh</h3>
+                            <p>Nhận hàng chỉ sau 3-4 ngày</p>
+                        </div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon">
+                            <img src="https://imgur.com/3Z2CZ5X.png" alt="Icon 2">
+                        </div>
+                        <div class="description">
+                            <h3>Quà tặng hấp dẫn</h3>
+                            <p>Nhiều ưu đãi khuyến mãi hot</p>
+                        </div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon">
+                            <img src="https://imgur.com/SuAKBqs.png" alt="Icon 3">
+                        </div>
+                        <div class="description">
+                            <h3>Chất liệu chất lượng </h3>
+                            <p>Yên tâm mua sắm</p>
+                        </div>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon">
+                            <img src="https://imgur.com/NshyfGf.png" alt="Icon 3">
+                        </div>
+                        <div class="description">
+                            <h3>Hotline: 0345.97.97.97</h3>
+                            <p>Hỗ trợ bạn từ 9h00-22h00</p>
+                        </div>
+                    </div>
+                </div>
+                    <!--  rải voucher  -->
+                    <div class="featured_product mb-4">
+                        <div class="block_title text-center">
+                            <h3 class="blinking-text">khuyến mại </h3>
+                        </div>
+                    <div class="voucher-container">
+                        <div *ngFor="let voucherItem of voucher" class="voucher-card">
+                            <h3>{{ voucherItem.ten }}</h3>
+                            <p>
+                                Nhập mã <strong>{{ voucherItem.ma }}</strong><br>
+                                {{ voucherItem.moTa }}
+                            </p>
+                            <button class="copy-button" (click)="copyCode(voucherItem)">
+                                {{ voucherItem.isCopied ? 'Đã Copy' : 'Copy' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+              <!-- rải voucher end  -->
+                <hr>
+              </div>
+              <!-- New Products Start -->
+              <div class="featured_product mb-4">
+                <div class="block_title text-center">
+                    <h3 class="blinking-text">Sản Phẩm Mới</h3>
+                </div>
+                <div *ngIf="newSanPham && newSanPham.length > 0; else noData" class="product_list d-flex flex-wrap justify-content-between">
+                  <div *ngFor="let product of newSanPham" class="single_product">
+                    <div class="product_thumb">
+                      <div class="img_label">New</div>
+                      <a href="single-product.html">
+                        <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="{{ product.chiTietSanPham.ten || 'Product' }}">
+                      </a>
+                      <div class="product_action">
+                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                      </div>
+                    </div>
+                    <div class="product_content">
+                      <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
+                      <span class="mota">{{product.chiTietSanPham.moTa}}</span>
+                      <h3 class="product_title">
+                        <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
+                      </h3>
+                    </div>
+                    <div class="product_info">
+                      <ul>
+                        <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <p>Dữ liệu sản phẩm trống hoặc chưa tải.</p>
+                </ng-template>
+              </div>
+              <!-- New Products End -->
+
+              <!-- Hot Products Start -->
+              <div class="featured_product mb-4">
+                <div class="block_title text-center">
+                  <h3 class="blinking-text">Sản Phẩm Hot</h3>
+                </div>
+                <div *ngIf="HotSanPham && HotSanPham.length > 0; else noData" class="product_list d-flex flex-wrap justify-content-between">
+                  <div *ngFor="let product of HotSanPham" class="single_product">
+                    <div class="product_thumb">
+                      <div class="img_label">Hot</div>
+                      <a href="single-product.html">
+                        <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="{{ product.chiTietSanPham.ten || 'Product' }}">
+                      </a>
+                      <div class="product_action">
+                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                      </div>
+                    </div>
+                    <div class="product_content">
+                      <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
+                      <span class="mota">{{product.chiTietSanPham.moTa}}</span>
+                      <h3 class="product_title">
+                        <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
+                      </h3>
+                    </div>
+                    <div class="product_info">
+                      <ul>
+                        <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <ng-template #noData>
+                  <p>Dữ liệu sản phẩm trống hoặc chưa tải.</p>
+                </ng-template>
+              </div>
+              <!-- Hot Products End -->
+
+              <!-- Banner Area Start -->
+              <div class="banner_area mb-4">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="single_banner">
+                            <a href="#"><img src="assets/img/banner/banner7.jpg" alt="Banner Image"></a>
+                            <div class="banner_title">
+                                <p>Up to <span>40%</span> off</p>
+                                <a href="#" class="shop_now_btn">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="single_banner">
+                            <a href="#"><img src="assets/img/banner/banner8.jpg" alt="Banner Image"></a>
+                            <div class="banner_title title_2">
+                                <p>Sale off <span>30%</span></p>
+                                <a href="#" class="shop_now_btn">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+              <!-- Banner Area End -->
+
+            </div>
+            <!-- Main Content End -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

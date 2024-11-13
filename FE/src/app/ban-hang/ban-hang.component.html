@@ -11,33 +11,9 @@
             <div class="row">
                 <div class="hoa-don-create">
                     <div class="craete-invoice">
-                        <div class="create-order">
-                            <i class="material-icons">add</i>
-                            <a (click)="createHoaDon()">Tạo hóa đơn</a>
-                        </div>
                         <app-customer-popup *ngIf="popup" (closePopup)="closePopup()"
                             (customerSelected)="onCustomerSelected($event)">
                         </app-customer-popup>
-                        <div class="profile-client">
-                            <form class="example-form">
-                                <input type="text" placeholder="Nhập hoặc chọn khách hàng...." [formControl]="myControl"
-                                    [matAutocomplete]="auto">
-                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
-                                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ten">
-                                        {{option.ten}}
-                                    </mat-option>
-                                </mat-autocomplete>
-                            </form>
-                            <div class="create-client">
-                                <i class="material-icons" (click)="openPopup()">person_add</i>
-                            </div>
-                            <div class="hoa-don-cho">
-                                <i class="material-icons" (click)="openPopupCho()">shopping_cart</i>
-                                <span class="bg bg-danger text-light" *ngIf="trangThaiCho.length>0"></span>
-                            </div>
-                            <app-hoa-don-cho *ngIf="popupCho" [idDang]="activeInvoidID"
-                                (closePopup)="closePopupCho()"></app-hoa-don-cho>
-                        </div>
                     </div>
                     <div class="order-list" id="order-list">
                         <div *ngIf="!checkHoaDon">
@@ -47,6 +23,16 @@
                                 <span class="close" (click)="removeHoaDon(hoaDon.id)">x</span>
                             </div>
                         </div>
+                        <div class="create-order">
+                            <i class="material-icons" (click)="createHoaDon()" title="Tạo hóa đơn">add</i>
+                            <div class="hoa-don-cho">
+                                <i class="material-icons" (click)="openPopupCho()" title="Hóa đơn treo"
+                                    *ngIf="trangThaiCho.length>0">autorenew</i>
+                                <span class="bg bg-danger text-light" *ngIf="trangThaiCho.length>0"></span>
+                            </div>
+                        </div>
+                        <app-hoa-don-cho *ngIf="popupCho" [idDang]="activeInvoidID"
+                            (closePopup)="closePopupCho()"></app-hoa-don-cho>
                         <i *ngIf="checkHoaDon" class="material-icons">error</i>
                     </div>
                     <div class="cart">
@@ -54,7 +40,7 @@
                             <i class="material-icons">production_quantity_limits</i>
                             <p>Chưa có sản phẩm</p>
                         </div>
-                        <div *ngIf="!hasError&&!checkHoaDon">
+                        <div *ngIf="!hasError&&!checkHoaDon&&activeTab==='taoMoi'">
                             <table class="table table-hover">
                                 <thead class="text-dark">
                                     <th>Stt</th>
@@ -86,7 +72,7 @@
                                                         (click)="increaseQuantity(cthd.chiTietSanPham?.id)">add</i></button>
                                             </div>
                                         </td>
-                                        <td>{{cthd.giaSpctHienTai | currency:'VND'}}</td>
+                                        <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
                                         <td><button class="select-invoice"><i class="material-icons"
                                                     (click)="removeHoaDonChiTiet(cthd.id)">delete_forever</i></button>
                                         </td>
@@ -95,121 +81,34 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Danh sách sản phẩm</h4>
-                            <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
-                                (input)="searchProduct()">
-                            <select class="form-select" aria-label="Default select example"
-                                (change)="onChangeSize($event)">
-                                <option value="" selected style="text-align: center;">- - - All - - -</option>
-                                <option *ngFor="let size of size" [value]="size.id">{{size.ten}}</option>
-                            </select>
-                            <select class="form-select" aria-label="Default select example"
-                                (change)="onChangeMauSac($event)">
-                                <option value="" selected style="text-align: center;">- - - All - - -</option>
-                                <option *ngFor="let mauSac of mauSac" [value]="mauSac.id">{{mauSac.ten}}</option>
-                            </select>
-                            <select class="form-select" aria-label="Default select example"
-                                (change)="onChangeThuongHieu($event)">
-                                <option value="" selected style="text-align: center;">- - - All - - -</option>
-                                <option *ngFor="let thuongHieu of thuongHieu" [value]="thuongHieu.id">{{thuongHieu.ten}}
-                                </option>
-                            </select>
-                            <select class="form-select" aria-label="Default select example"
-                                (change)="onChangeXuatXu($event)">
-                                <option value="" selected style="text-align: center;">- - - All - - -</option>
-                                <option *ngFor="let xuatXu of xuatXu" [value]="xuatXu.id">{{xuatXu.ten}}</option>
-                            </select>
-                            <select class="form-select" aria-label="Default select example"
-                                (change)="onChangeGioiTinh($event)">
-                                <option value="" selected style="text-align: center;">- - - All - - -</option>
-                                <option *ngFor="let gioiTinh of gioiTinh" [value]="gioiTinh.id">{{gioiTinh.ten}}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="card-body table-responsive">
-                            <table class="table table-hover">
-                                <thead class="text-black">
-                                    <th>Stt</th>
-                                    <th>Mã</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Xuất xứ</th>
-                                    <th>Thương hiệu</th>
-                                    <th>Màu sắc</th>
-                                    <th>Giới Tính</th>
-                                    <th>Size</th>
-                                    <th>Số lượng</th>
-                                    <th>Đơn giá</th>
-                                    <th>Ghi chú</th>
-                                    <th>Thao tác</th>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let ctsp of product, let i = index">
-                                        <td>{{i+1}}</td>
-                                        <td>{{ctsp.ma}}</td>
-                                        <td>{{ctsp.san_pham?.ten}}</td>
-                                        <td>{{ctsp.san_pham?.xuatXu?.ten}}</td>
-                                        <td>{{ctsp.san_pham?.thuongHieu?.ten}}</td>
-                                        <td>{{ctsp.mauSac?.ten}}</td>
-                                        <td>{{ctsp.san_pham?.gioiTinh?.ten}}</td>
-                                        <td>{{ctsp.size?.ten}}</td>
-                                        <td>{{ctsp.soLuong}}</td>
-                                        <td>{{ctsp.donGia | currency:'VND'}}</td>
-                                        <td>{{ctsp.ten}}</td>
-                                        <td><button class="select-product" (click)="selectProduct(ctsp.id)">
-                                                <i class="material-icons">add_shopping_cart</i></button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="pagination">
-                            <button (click)="getSanPham(pagination.pageNumber - 1)"
-                                [disabled]="pagination.pageNumber === 0">
-                                <i class="material-icons">arrow_back_ios</i>
-                            </button>
-                            <span>Page {{pagination.pageNumber + 1}} of {{pagination.totalPage}}</span>
-                            <button (click)="getSanPham(pagination.pageNumber + 1)"
-                                [disabled]="pagination.pageNumber === pagination.totalPage - 1">
-                                <i class="material-icons">arrow_forward_ios</i>
-                            </button>
-                        </div>
+                    <div class="san-pham-popup">
+                        <i class="material-icons" title="Sản phẩm" (click)="openPopupSanPham()">menu</i>
                     </div>
+                    <app-popup-san-pham *ngIf="popupSanPham&&activeTab==='taoMoi'" [activeInvoiceID]="activeInvoidID"
+                        (closePopup)="closePopupSanPham()"></app-popup-san-pham>
                 </div>
             </div>
             <div class="row">
                 <div class="voucher">
+                    <form class="example-form">
+                        <input type="text" placeholder="Nhập hoặc chọn khách hàng...." [formControl]="myControl"
+                            [matAutocomplete]="auto">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)">
+                            <mat-option *ngFor="let option of filteredOptions | async" [value]="option.ten">
+                                {{option.ten}} - {{option.sdt}}
+                            </mat-option>
+                            <mat-option (click)="openPopup()">
+                                <i class="material-icons" title="Thêm khách hàng">person_add</i>
+                            </mat-option>
+                        </mat-autocomplete>
+                    </form>
                     <div>
-                        <span>Tổng tiền: {{tongTienBanDau | currency:'VND'}}</span>
-                    </div>
-                    <div style="display: flex;">
-                        <div>
-                            <span>Tiền khách đưa: </span>
-                            <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
-                                (input)="getTienTraLai(tienKhachDua)"
-                                [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
-                        </div>
-                        <div *ngIf="tienKhachDua < tongTienSauVoucher">
-                            <span class="error-text">Số tiền khách đưa không đủ!</span>
-                        </div>
-                        <div *ngIf="tienKhachDuaInvalid">
-                            <span class="error-text">Dữ liệu không hợp lệ!</span>
-                        </div>
-                    </div>
-                    <div>
-                        <span>Tổng tiền phải thanh toán: {{tongTienSauVoucher | currency:'VND'}}</span>
-                    </div>
-                    <div>
-                        <span>Tiền trả lại: {{tienTraLai}}</span>
+                        <span>Tổng tiền tạm tính: {{tongTienBanDau | number:'1.0-0' }} VNĐ</span>
                     </div>
                     <div>
                         <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                            <option selected disabled>---Chọn phương thức thanh toán</option>
-                            <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id">
+                            <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
+                                style="text-align: center;">
                                 {{phuongThuc.tenPhuongThuc}}</option>
                         </select>
                     </div>
@@ -229,6 +128,29 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </form>
+                    </div>
+                    <div style="display: flex;">
+                        <div>
+                            <span>Tiền khách đưa: </span>
+                            <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
+                                (input)="getTienTraLai(tienKhachDua)"
+                                [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
+                        </div>
+                        <div *ngIf="tienKhachDua < tongTienSauVoucher">
+                            <span class="error-text">Số tiền khách đưa không đủ!</span>
+                        </div>
+                        <div *ngIf="tienKhachDuaInvalid">
+                            <span class="error-text">Dữ liệu không hợp lệ!</span>
+                        </div>
+                    </div>
+                    <div>
+                        <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                    </div>
+                    <div>
+                        <span>Tổng tiền phải thanh toán: {{(tongTienSauVoucher||0) | number:'1.0-0' }} VNĐ</span>
+                    </div>
+                    <div>
+                        <span>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VNĐ</span>
                     </div>
                     <div class="payment">
                         <button (click)="thanhtoanHoaDon(activeInvoidID)"><i class="material-icons">payments</i>Thanh
@@ -303,24 +225,28 @@
                     <div class="page-header">
                         <h1>Thông tin đơn hàng</h1>
                         <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
-                        <button *ngIf="trangThaiHoaDon==='Hoàn thành'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
+                        <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
                             <i class="material-icons">print</i>
                         </button>
-                        <button *ngIf="trangThaiHoaDon==='chờ xác nhận' &&!isHidden"
+                        <div>
+                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                        </div>
+                        <button *ngIf="trangThaiHoaDon==='Đã xác nhận'||trangThaiHoaDon==='Chờ xác nhận' &&!isHidden"
                             (click)="removeHoaDon(hoaDonChoId)">
-                            <i class="material-icons">remove_shopping_cart</i>
+                            <i class="material-icons" title="Hủy hóa đơn">remove_shopping_cart</i>
                         </button>
-                        <h4 *ngIf="phiVanChuyen!=null">Phí vận chuyển: {{phiVanChuyen | currency:'VND'}}</h4>
                     </div>
                     <div style="justify-content: center; text-align: center;" *ngIf="isHidden">
                         <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
-                    <button *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
+                    <button style="background-color: rgb(244, 25, 25);"
+                        *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
-                    <button *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
+                    <button style="background-color: rgb(244, 25, 25);"
+                        *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
-                    <button
+                    <button style="background-color: rgb(244, 25, 25);"
                         *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div style="display:inline-block;width:100%;overflow-x:hidden;" *ngIf="!isHidden">
@@ -344,8 +270,18 @@
                                     <div class="timeline-icon">
                                         <i class="fa fa-solid fa-check"></i>
                                     </div>
+                                    <!-- Nút thao tác, mặc định ẩn -->
+                                    <div class="action-buttons" *ngIf="trangThaiHoaDon === 'Đã xác nhận'">
+                                        <button (click)="openEditGioHang()" title="Thêm sản phẩm">
+                                            <div class="material-icons">add_shopping_cart</div>
+                                        </button>
+                                        <button (click)="openEditDiaChi()" title="Sửa địa chỉ">
+                                            <div class="material-icons">edit_location_alt</div>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
 
                             <!-- Trạng thái Đang giao hàng -->
                             <div *ngIf="idGiaoHang=== 1" class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
@@ -357,7 +293,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!-- Trạng thái Hoàn thành -->
                             <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
                                 [ngClass]="{'active': trangThaiHoaDon === 'Hoàn thành'}">
@@ -371,6 +306,117 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <app-popup-san-pham *ngIf="popupSanPham&&activeTab==='danhSachHoaDon'" [activeInvoiceID]="hoaDonChoId"
+                (closePopup)="closePopupSanPham()"></app-popup-san-pham>
+            <div *ngIf="editGioHang&&activeTab==='danhSachHoaDon'">
+                <div class="material-icons" (click)="closeEditGioHang()">close</div>
+                <table class="table table-hover">
+                    <thead class="text-dark">
+                        <th>Stt</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Xuất xứ</th>
+                        <th>Thương hiệu</th>
+                        <th>Màu sắc</th>
+                        <th>Giới Tính</th>
+                        <th>Size</th>
+                        <th>Số lượng</th>
+                        <th>Tổng tiền</th>
+                        <th>Hành động</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cthd of detailHoaDon, let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.xuatXu?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.thuongHieu?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.mauSac?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.gioiTinh?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.size?.ten}}</td>
+                            <td>
+                                <div class="input-group mb-3">
+                                    <button class="input-group-text"
+                                        [disabled]="cthd.soLuong === 1 && detailHoaDon.length === 1"
+                                        (click)="decreaseQuantityhd(cthd.id)">
+                                        <i class="material-icons">remove</i></button>
+                                    <input type="text" class="form-control" [value]="cthd.soLuong" disabled>
+                                    <button class="input-group-text"><i class="material-icons"
+                                            (click)="increaseQuantityhd(cthd.chiTietSanPham?.id)">add</i></button>
+                                </div>
+                            </td>
+                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
+                            <td><button [disabled]="detailHoaDon.length === 1" (click)="removeHoaDonChiTiet(cthd.id)"
+                                    class="select-invoice"><i class="material-icons">delete_forever</i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="san-pham-popup" *ngIf="editGioHang&&activeTab==='danhSachHoaDon'">
+                <i class="material-icons" title="Sản phẩm" (click)="openPopupSanPham()">menu</i>
+            </div>
+            <div class="address" *ngIf="editDiaChi">
+                <form class="form_address" (ngSubmit)="submitAddress()">
+                    <div style="display: flex;">
+                        <div class="material-icons" (click)="closeEditDiaChi()">close</div>
+                        <button style="background-color: #fff; height: 20px; border: none;" type="submit" class="material-icons" title="Thay đổi địa chỉ">check</button>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="hoTen" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="hoTen" [(ngModel)]="hoTenNguoiNhan" name="hoTen"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="soDienThoai" [(ngModel)]="soDienThoai"
+                                name="soDienThoai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="soNha" class="form-label">Số nhà</label>
+                            <input type="text" class="form-control" id="soNha" [(ngModel)]="soNha" name="soNha"
+                                required>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="duong" class="form-label">Đường</label>
+                            <input type="text" class="form-control" id="duong" [(ngModel)]="duong" name="duong"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
+                            <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh" name="tinhThanh"
+                                (change)="onTinhThanhChange($event)" required>
+                                <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{
+                                    tinh.ProvinceName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quanHuyen" class="form-label">Quận/ huyện</label>
+                            <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen" name="quanHuyen"
+                                (change)="onQuanHuyenChange($event)" required>
+                                <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
+                                    quan.DistrictName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phuongXa" class="form-label">Phường/ xã</label>
+                            <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa" name="phuongXa"
+                                (change)="onPhuongXaChange($event)" required>
+                                <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Nhập mã hóa đơn or tên khách hàng"
@@ -401,7 +447,7 @@
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
-                            <td>{{hoaDon.tongTienSauVoucher}}</td>
+                            <td>{{hoaDon.tongTienSauVoucher| number:'1.0-0' }} VNĐ</td>
                             <td class="button-select">
                                 <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"
                                     (click)="getIdThongTinDonHang(hoaDon.id)">Chờ xác nhận</div>
@@ -427,12 +473,14 @@
                     (closePopup)="closePopupHs()"></app-history-popup>
                 <app-table-list *ngIf="popupHd" [hoaDonId]="hoaDonChoId" (closePopup)="closePopupHd()"></app-table-list>
             </div>
-            <div class="pagination">
-                <button (click)="changePage(pageHoaDonCt - 1)" [disabled]="pageHoaDonCt === 0">
+            <div class="pagination" style="text-align: center;">
+                <button style="border: 0px; background-color: #fff;" (click)="changePage(pageHoaDonCt - 1)"
+                    [disabled]="pageHoaDonCt === 0">
                     <i class="material-icons">arrow_back_ios</i>
                 </button>
                 <span>Page {{pageHoaDonCt + 1}} of {{paginationHd.totalPage}}</span>
-                <button (click)="changePage(pageHoaDonCt + 1)" [disabled]="pageHoaDonCt === paginationHd.totalPage - 1">
+                <button style="border: 0px; background-color: #fff;" (click)="changePage(pageHoaDonCt + 1)"
+                    [disabled]="pageHoaDonCt === paginationHd.totalPage - 1">
                     <i class="material-icons">arrow_forward_ios</i>
                 </button>
             </div>

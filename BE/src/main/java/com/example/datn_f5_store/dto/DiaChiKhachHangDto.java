@@ -19,7 +19,6 @@ import lombok.ToString;
 public class DiaChiKhachHangDto {
     private Integer id;
     private String soNha;
-    private String sdt;
     private String duong;
     private String phuongXa;
     private String quanHuyen;

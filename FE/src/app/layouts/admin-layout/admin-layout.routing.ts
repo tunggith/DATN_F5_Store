@@ -13,11 +13,12 @@ import { ThongkeComponent } from 'app/thongke/thongke.component';
 import { SecurityComponent } from 'app/layouts/security/security.component';
 import { authGuard } from 'app/auth.guard';
 import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
+import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'ban-hang', component: BanHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'san-pham', component: SanphamComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
-  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
+  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'khuyen-mai', component: IconsComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'nhan-vien', component: NhanVienComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'khach-hang', component: KhachHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
@@ -25,7 +26,8 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'voucher', component: VoucherComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'khuyen-mai-chi-tiet-san-pham/:id', component: KhuyenMaiChiTietSanPhamComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'dia-chi-khach-hang', component: DiaChiKhachHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
-  { path: 'khong-co-quyen-truy-cap', component: LoiQuyenComponent }
+  { path: 'khong-co-quyen-truy-cap', component: LoiQuyenComponent },
+  { path: 'popup-san-pham', component: PopupSanPhamComponent }
 ];
 
 @NgModule({

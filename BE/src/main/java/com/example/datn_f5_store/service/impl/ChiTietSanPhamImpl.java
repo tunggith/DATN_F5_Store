@@ -77,7 +77,7 @@ public class ChiTietSanPhamImpl {
                 ctspRequet.getIdMauSac(),
                 ctspRequet.getIdSize(),
                 ctspRequet.getMa(),
-                ctspRequet.getTen()
+                ctspRequet.getMoTa()
         );
 
         if (exists) {
@@ -205,7 +205,7 @@ public class ChiTietSanPhamImpl {
                 entity.getMauSac(),
                 entity.getSize(),
                 entity.getMa(),
-                entity.getTen(),
+                entity.getMoTa(),
                 entity.getDonGia(),
                 entity.getSoLuong(),
                 entity.getTrangThai()
@@ -221,9 +221,7 @@ public class ChiTietSanPhamImpl {
         return repo_ctsp.findById(id).get();
     }
 
-    public boolean isChiTietSanPhamExists(String ma, String ten) {
-        return repo_ctsp.existsByMaOrTen(ma, ten);
-    }
+
 
     public boolean isDuplicate(Long idSanPham, Long idMauSac, Long idSize) {
         return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeId(idSanPham, idMauSac, idSize);

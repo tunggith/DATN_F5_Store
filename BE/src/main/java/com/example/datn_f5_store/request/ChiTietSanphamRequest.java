@@ -29,7 +29,7 @@ public class ChiTietSanphamRequest {
     private String ma;
 
 //    @NotBlank(message = "Tên không được để trống.")
-    private String ten;
+    private String moTa;
 
     @NotNull(message = "Đơn giá không được để trống.")
     private Double donGia;

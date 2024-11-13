@@ -1,0 +1,64 @@
+.popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    right: 34%;
+    font-size: 24px;
+}
+.form-login {
+    background-color: #fff;
+    width: 35%;
+    padding: 10px;
+    border-radius: 10px;
+}
+.form-login form{
+    display: flex;
+    padding: 10px;
+}
+.form-login form div{
+    width: 100%;
+}
+.form-control {
+    width: 100%;
+}
+.image-user{
+    display: flex;
+}
+.image-user .material-icons{
+    margin-top:18%;
+    margin-left: -5%;
+    color: gray;
+}
+.material-icons:hover{
+    cursor: pointer;
+}
+.logo-user {
+    border: 1px solid gray;
+    border-radius: 50%;
+    padding: 10px;
+    width: 120px;
+    margin-bottom: 30px;
+    text-align: center;
+    margin-left: 35%;
+}
+
+.logo-user .fa {
+    color: gray;
+    font-size: 100px;
+}
+
+.btn {
+    border-radius: 5px;
+}

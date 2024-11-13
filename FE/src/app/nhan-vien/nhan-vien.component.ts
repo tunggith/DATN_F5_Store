@@ -37,7 +37,6 @@ export class NhanVienComponent implements OnInit {
     size = 5;
     currentPage: any = null;
     totalPages: number = 0;
-
     phuongXa: string = '';
     quanHuyen: string = '';
     tinhThanh: string = '';

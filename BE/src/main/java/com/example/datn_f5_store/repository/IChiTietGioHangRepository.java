@@ -19,7 +19,7 @@ public interface IChiTietGioHangRepository extends JpaRepository<ChiTietGioHangE
 select new com.example.datn_f5_store.response.ChiTietGioHangReponse(
         ctgh.id,
         ctgh.gioHang.id,
-        ctgh.chiTietSanPham.ten,
+        ctgh.chiTietSanPham.moTa,
         ctgh.soLuong
 ) from ChiTietGioHangEntity ctgh
 """)
@@ -33,11 +33,11 @@ select new com.example.datn_f5_store.response.ChiTietGioHangReponse(
     select new com.example.datn_f5_store.response.ChiTietGioHangReponse(
         ctgh.id,
         ctgh.gioHang.id,
-        ctgh.chiTietSanPham.ten,
+        ctgh.chiTietSanPham.moTa,
         ctgh.soLuong
     )
     from ChiTietGioHangEntity ctgh
-    where ctgh.chiTietSanPham.ten like %:tenSanPham%
+    where ctgh.chiTietSanPham.moTa like %:tenSanPham%
 """)
     Page<ChiTietGioHangReponse> searchByTenSanPham(
             @Param("tenSanPham") String tenSanPham,

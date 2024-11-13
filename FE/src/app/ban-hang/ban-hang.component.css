@@ -25,48 +25,13 @@
     color: #3498db;
     border-bottom: 3px solid #3498db;
 }
-
-.create-order {
-    display: flex;
-    justify-content: space-between;
-    height: 50px;
-    margin: 20px 0;
-    background-color: #f44336;
-    border: none;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    padding: 10px 20px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.create-order:hover {
-    background-color: #e66158;
-}
-
 .craete-invoice {
     display: flex;
-}
-
-.create-client {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 35px;
-    border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
-    color: #464545;
-    font-size: 15px;
-    cursor: pointer;
 }
 .hoa-don-cho{
     display: flex;
     justify-content: space-between;
-    margin-left: 35px;
     border: none;
-    border-radius: 10px;
-    padding: 10px 20px;
     color: #464545;
     font-size: 15px;
     cursor: pointer;
@@ -76,23 +41,10 @@
     height: 10px;
     border-radius: 50%;
 }
-
-.create-client button:hover {
-    font-size: 25px;
-}
-
-.profile-client {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    margin-left: 600px;
-    padding: 0 20px;
-}
-
 .order-list {
     display: flex;
     gap: 15px;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .order-list i {
@@ -101,7 +53,16 @@
     margin-left: 45%;
     color: grey;
 }
-
+.order-list .create-order i{
+    font-size: 35px;
+    margin-left: 0px;
+}
+.create-order{
+    display: flex;
+}
+.create-order .hoa-don-cho{
+    margin-left: 645%;
+}
 .order-item {
     position: relative;
     display: inline-block;
@@ -186,7 +147,11 @@
 .cart p {
     color: #7f8c8d;
 }
-
+.san-pham-popup{
+    font-size: 35px;
+    text-align: right;
+    padding: 10px;
+}
 .payment button:hover {
     background-color: rgb(243, 69, 69);
 }
@@ -296,24 +261,6 @@
 
 .select-invoice i:hover {
     font-size: 25px;
-}
-
-.pagination {
-    justify-content: center;
-}
-
-.pagination button {
-    border: none;
-    background-color: #fff;
-    border-radius: 10px;
-    width: 30px;
-    height: 30px;
-    padding: 0 5px;
-}
-
-.pagination button i:hover {
-    font-size: 25px;
-    color: gray;
 }
 
 .error-border {
@@ -664,7 +611,7 @@ datalist {
 
 .page-header button {
     border: 0;
-    background-color: #9075ab;
+    background-color: rgb(244, 25, 25);
     border-radius: 45%;
 }
 
@@ -728,6 +675,39 @@ datalist {
 
 .combox .example-full-width {
     width: 100%;
+}
+.action-buttons {
+    display: none; /* Mặc định ẩn */
+    position: absolute;
+    top: 65%; /* Hiển thị các nút bên dưới thẻ .timeline-inner */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.action-buttons button {
+    display: block;
+    margin: 5px 0;
+    padding: 5px 5px;
+    background-color: #fff;
+    color: gray;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.action-buttons button:hover {
+    cursor: pointer;
+}
+
+/* Hiển thị các nút khi hover vào .timeline */
+.timeline:hover .action-buttons {
+    display: flex;
 }
 
 /* Media Queries cho màn hình điện thoại */

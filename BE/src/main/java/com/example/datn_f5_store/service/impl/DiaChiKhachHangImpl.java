@@ -51,7 +51,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 entity.getQuanHuyen(),
                 entity.getTinhThanh(),
                 entity.getQuocGia(),
-                entity.getSdt(),
                 entity.getLoaiDiaChi(),
                 entity.getTrangThai()
         ));
@@ -75,7 +74,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 throw new NullPointerException("Địa chỉ không tồn tại");
             }
             diaChiKhachHangResquest.setId(id);
-            diaChiKhachHangResquest.setSdt(diaChi.getSdt());
             return this.saveOfUpdate(diaChi, diaChiKhachHangResquest);
         } else {
             return new DataResponse(false, new ResultModel<>(null, "Dữ liệu đầu vào lỗi"));
@@ -88,7 +86,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         return listKhachHang.map(entity -> new DiaChiKhachHangDto(
                         entity.getId(),
                         entity.getSoNha(),
-                        entity.getSdt(),
                         entity.getDuong(),
                         entity.getPhuongXa(),
                         entity.getQuanHuyen(),
@@ -142,7 +139,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         KhachHangEntity khachHang = khachHangRepository.findById(request.getIdKhachHang()).orElse(null);
         entity.setKhackHang(khachHang);
         entity.setSoNha(request.getSoNha());
-        entity.setSdt(request.getSdt());
         entity.setDuong(request.getDuong());
         entity.setPhuongXa(request.getPhuongXa());
         entity.setQuanHuyen(request.getQuanHuyen());

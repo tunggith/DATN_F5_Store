@@ -1,0 +1,72 @@
+.pos_page_inner{
+    padding: 10px;
+}
+.content-top,.content-bottom{
+    display: flex;
+}
+.content-top .left{
+    width: 45%;
+    display: flex;
+}
+.left .image{
+    width: 200px;
+    height: 200px;
+    border: 1px solid gray;
+    border-radius: 50%;
+    text-align: center;
+}
+.left label{
+    display: flex;
+}
+.left .image img{
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.left .image i{
+    font-size: 200px;
+    color: gray;
+}
+.left label:hover{
+    cursor: pointer;
+}
+.left label .icon{
+    margin-top: 180px;
+    margin-left: -50px;
+}
+.left .btn{
+    border-radius: 5px;
+}
+.left .icon i{
+    margin-top: -20px;
+}
+.right h2{
+    text-align: center;
+}
+.content-top .right,.content-bottom .right{
+    margin-left: 5%;
+    width: 50%;
+}
+.content-bottom .left{
+    width: 45%;
+}
+.content-bottom .right i{
+    color: gray;
+}
+.content-bottom .right i:hover{
+    cursor: pointer;
+}
+.gioi-tinh {
+    display: flex;
+    align-items: center;
+}
+
+.gioi-tinh label {
+    margin-right: 10px; /* Khoảng cách giữa các nhãn */
+}
+
+.gioi-tinh input[type="radio"] {
+    width: 15px;
+    margin-right: 5px; /* Khoảng cách giữa nút radio và nhãn */
+}

@@ -31,16 +31,30 @@ public interface IChiTietHoaDonRepository extends JpaRepository<ChiTietHoaDonEnt
             "    UNION ALL " +
             "    SELECT thang + 1 FROM MonthSeries WHERE thang < 12 " +
             ") " +
-            "SELECT TOP 5 sp.id AS idSP, sp.ten AS tenSP, SUM(c.so_luong) AS totalSold " +  // Sử dụng TOP 5
+            "SELECT TOP 5 ctsp.id AS idSP, sp.ten AS tenSP, SUM(c.so_luong) AS totalSold " +
             "FROM hoa_don h " +
             "LEFT JOIN chi_tiet_hoa_don c ON c.ID_HOA_DON = h.id " +
             "LEFT JOIN chi_tiet_san_pham ctsp ON c.ID_CHI_TIET_SAN_PHAM = ctsp.id " +
             "LEFT JOIN san_pham sp ON ctsp.ID_SAN_PHAM = sp.id " +
             "WHERE YEAR(h.thoi_gian_tao) = :year " +  // Chọn theo năm
             "AND h.trang_thai = 'Hoàn Thành' " +  // Chỉ lấy đơn hàng đã hoàn thành
-            "GROUP BY sp.id, sp.ten " +  // Group theo ID và tên sản phẩm
-            "ORDER BY totalSold DESC", nativeQuery = true)  // Sắp xếp theo tổng số lượng bán giảm dần
+            "GROUP BY sp.id, sp.ten, ctsp.id " +  // Thêm ctsp.id vào GROUP BY
+            "ORDER BY totalSold DESC", nativeQuery = true)
     List<Object[]> findTop5SanPhamTheoThang(@Param("year") int year);
+
+
+    @Query(value = "SELECT TOP 5 sp.id AS idSP, sp.ten AS tenSP, SUM(c.so_luong) AS totalSold " +
+            "FROM hoa_don h " +
+            "LEFT JOIN chi_tiet_hoa_don c ON c.ID_HOA_DON = h.id " +
+            "LEFT JOIN chi_tiet_san_pham ctsp ON c.ID_CHI_TIET_SAN_PHAM = ctsp.id " +
+            "LEFT JOIN san_pham sp ON ctsp.ID_SAN_PHAM = sp.id " +
+            "WHERE YEAR(h.thoi_gian_tao) = YEAR(GETDATE()) " +  // Lọc theo năm hiện tại
+            "AND MONTH(h.thoi_gian_tao) = MONTH(GETDATE()) " +  // Lọc theo tháng hiện tại
+            "AND h.trang_thai = 'Hoàn Thành' " +               // Chỉ lấy đơn hàng đã hoàn thành
+            "GROUP BY sp.id, sp.ten " +
+            "ORDER BY totalSold DESC", nativeQuery = true)
+    List<Object[]> findTop5SanPhamTheoThangHienTai();
+
 
 
 
