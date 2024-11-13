@@ -7,7 +7,7 @@ import { SanPhamService } from 'src/app/san-pham/san-pham-service.component';
   styleUrls: ['./san-pham.component.css']
 })
 export class SanPhamComponent implements OnInit {
-
+  ThuongHieuList: any[] = [];
   xuatXuList: any[] = [];
   sizeList: any[] = [];
   mauSacList: any[] = [];
@@ -24,14 +24,13 @@ export class SanPhamComponent implements OnInit {
   selectedSizes: string[] = [];
   selectedGioiTinhs: string[] = [];
   selectedXuatXu: string[] = [];
+  selectThuongHieu: string[] = [];
 // Biến để kiểm soát trạng thái mở rộng/thu lại
   isOpen: boolean = false;
   isSizeOpen: boolean = false;
   isGioiTinhOpen: boolean = false;
-  isThuongHieuOpen: boolean = false;
   isXuatXuOpen: boolean = false;
-
-
+  isthuongHieuOpen: boolean = false;
 
 
 
@@ -50,6 +49,7 @@ export class SanPhamComponent implements OnInit {
         this.loadMauSac();
         this.loadGioiTinh();
         this.loadSanPhamPhanTrang();
+        this.loadThuongHieu();
 
       }
   // ============= hàm loadata end===============
@@ -67,6 +67,18 @@ export class SanPhamComponent implements OnInit {
     );
   }
 
+  loadThuongHieu(): void {
+    this.sanPhamService.getThuongHieu().subscribe(
+      (response: any) => {
+        console.log('Phản hồi API thương hiệu:', response);
+        this.ThuongHieuList = response.result.content;
+        console.log('Danh sách thương hiệu đã tải:', this.ThuongHieuList);
+      },
+      (error) => {
+        console.error('Lỗi khi tải danh sách thương hiệu:', error);
+      }
+    );
+  }
   loadSize(): void {
     this.sanPhamService.getSize().subscribe(
       (response: any) => {
@@ -174,6 +186,10 @@ export class SanPhamComponent implements OnInit {
     this.isGioiTinhOpen = !this.isGioiTinhOpen; // Đổi trạng thái mở rộng/thu lại
   }
 
+  togglethuonghieuList(): void {
+    this.isthuongHieuOpen = !this.isthuongHieuOpen; // Đổi trạng thái mở rộng/thu lại
+  }
+
 //  sử lý khi chọn  thuộc tính
   onColorChange(color: any): void {
     if (this.selectedColors.includes(color.ten)) {
@@ -184,6 +200,19 @@ export class SanPhamComponent implements OnInit {
       this.selectedColors.push(color.ten);
     }
     console.log('Màu sắc đã chọn:', this.selectedColors);
+  }
+
+
+
+  onthuongHieuChage(ThuongHieu: any): void {
+    if (this.selectThuongHieu.includes(ThuongHieu.ten)) {
+      // Nếu thương hiệu đã có trong danh sách thì bỏ chọn
+      this.selectThuongHieu = this.selectThuongHieu.filter(c => c !== ThuongHieu.ten);
+    } else {
+      // Nếu chưa có thì thêm vào danh sách đã chọn
+      this.selectThuongHieu.push(ThuongHieu.ten);
+    }
+    console.log('thương hiệu đã chọn:', this.selectThuongHieu);
   }
 
 

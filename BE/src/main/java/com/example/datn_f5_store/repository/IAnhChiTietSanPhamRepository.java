@@ -4,12 +4,13 @@ import com.example.datn_f5_store.entity.AnhChiTietSanPham;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface IAnhChiTietSanPhamRepository extends JpaRepository<AnhChiTietSanPham,Integer> {
+public interface IAnhChiTietSanPhamRepository extends JpaRepository<AnhChiTietSanPham,Integer> , JpaSpecificationExecutor<AnhChiTietSanPham> {
     @Query("SELECT a FROM AnhChiTietSanPham a WHERE a.urlAnh LIKE %:search% ")
     Page<AnhChiTietSanPham> findBySearch(@Param("search") String search, Pageable pageable);
     Boolean existsByUrlAnh(String urlAnh);// Kiểm tra trùng tên đường dẫn
@@ -68,5 +69,39 @@ public interface IAnhChiTietSanPhamRepository extends JpaRepository<AnhChiTietSa
     ORDER BY anh.chiTietSanPham.sanPham.id DESC
     """)
     Page<AnhChiTietSanPham> getallAnhSanPham(@Param("trangThai") String trangThai, Pageable pageable);
+
+
+    @Query("""
+    SELECT anh 
+    FROM AnhChiTietSanPham anh
+    JOIN anh.chiTietSanPham chiTiet
+    JOIN chiTiet.sanPham sanPham
+    WHERE sanPham.trangThai = :trangThai
+      AND (:gioiTinh IS NULL OR sanPham.gioiTinh.id = :gioiTinh)
+      AND (:thuongHieu IS NULL OR sanPham.thuongHieu.id = :thuongHieu)
+      AND (:xuatXu IS NULL OR sanPham.xuatXu.id = :xuatXu)
+      AND (chiTiet.donGia BETWEEN :giaMin AND :giaMax)
+      AND (:mauSac IS NULL OR chiTiet.mauSac.id = :mauSac)
+      AND (:kichThuoc IS NULL OR chiTiet.size.id = :kichThuoc)
+      AND anh.id IN (
+          SELECT MIN(a.id)
+          FROM AnhChiTietSanPham a
+          JOIN a.chiTietSanPham chiTietA
+          GROUP BY chiTietA.sanPham.id
+      )
+    ORDER BY sanPham.id DESC
+""")
+    Page<AnhChiTietSanPham> findFilteredProducts(
+            @Param("gioiTinh") Integer gioiTinh,
+            @Param("thuongHieu") Integer thuongHieu,
+            @Param("xuatXu") Integer xuatXu,
+            @Param("giaMin") Double giaMin,
+            @Param("giaMax") Double giaMax,
+            @Param("mauSac") Integer mauSac,
+            @Param("kichThuoc") Integer kichThuoc,
+            @Param("trangThai") String trangThai,
+            Pageable pageable
+    );
+
 
 }

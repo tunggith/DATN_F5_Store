@@ -26,6 +26,10 @@ export class SanPhamService {
     return this.http.get(`${this.apiUrl}/gioi-tinh-getAll`);
   }
 
+  getThuongHieu(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/thuong-hieu-getAll`);
+  }
+  
   getSanPhamPhanTrang(page: number, size: number): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())

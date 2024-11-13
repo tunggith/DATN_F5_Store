@@ -103,7 +103,7 @@ public class ThongKeController {
     }
     @GetMapping("/top-san-pham/theo-thang")
     public List<Map<String, Object>> getTopSanPhamTheoThang(@RequestParam("year") int year) {
-        return seviceThongKe.getTop5SanPhamTheoThang(   year);
+        return seviceThongKe.getTop5SanPhamTheoThang(year);
     }
 
     @GetMapping("/top-san-pham/theo-quy")
