@@ -12,6 +12,7 @@ declare var window: any;
   styleUrls: ['./sanpham.component.css']
 })
 export class SanphamComponent implements OnInit {
+  role: string ='';
   sanPhamList: any[] = [];
   totalPagesSanPham: number = 0;
   pageSanPham: number = 0;
@@ -70,6 +71,7 @@ selectedGioiTinh: number = 0;
 
 
   ngOnInit() {
+    this.role = localStorage.getItem('role');
     this.sanPhamForm = this.fb.group({
       id: [null],
       maSanPham: [''],
@@ -157,6 +159,7 @@ selectedGioiTinh: number = 0;
     this.filterChiTietSanPham();
 
   }
+  
   viewProductDetails(idSanPham: number) {
     this.idSanPhamChiTiet = idSanPham;
     this.selectSanPhamChiTiet(idSanPham); // Gọi hàm để chọn sản phẩm chi tiết
@@ -1254,14 +1257,35 @@ logButtonClick() {
 selectedImages: (string | ArrayBuffer)[] = []; // Mảng chứa các ảnh đã chọn mới
 // Định nghĩa savedImages là mảng chứa các đối tượng với id và url
 savedImages: { id: number; url: string }[] = []; // Mảng chứa ID và URL ảnh đã lưu
-SanPhamChiTietbyid: any = [];
+SanPhamChiTietbyid: any = {};
 CheckImageLimit: boolean = false;
+sizeName: string = '';
+colorName: string = '';
 
-  // Hàm lấy chi tiết sản phẩm và tải ảnh đã lưu
-  chonSphinh(id: number) {
-    this.idSpct = id;
-    this.loadSavedImages();
-  }
+chonSphinh(id: number) {
+  this.idSpct = id;
+  this.loadSavedImages();
+
+  this.sanPhamService.getChiTietSanPhamById(this.idSpct).subscribe(
+    (response: any) => {
+      if (response && response.result && response.result.content) {
+        const SanPhamChiTietbyid = response.result.content;
+        
+        // Lấy tên size và màu từ dữ liệu trả về
+        this.sizeName = SanPhamChiTietbyid.size?.ten || ''; // Gán tên của size
+        this.colorName = SanPhamChiTietbyid.mauSac?.ten || ''; // Gán tên của màu
+
+        console.log("SanPhamChiTietbyid ", SanPhamChiTietbyid);
+        console.log("Size Name: ", this.sizeName);
+        console.log("Color Name: ", this.colorName);
+      }
+    },
+    (error) => {
+      console.error("Error fetching product details:", error);
+    }
+  );
+}
+  
 
 // Hàm lấy danh sách ảnh đã lưu của sản phẩm
 loadSavedImages() {
@@ -1435,7 +1459,7 @@ resetModal() {
   this.savedImages = []; // Xóa danh sách ảnh đã lưu (nếu cần thiết)
   this.idSpct = 0; // Đặt lại ID sản phẩm chi tiết (tùy thuộc vào logic của bạn)
   this.selectedSanPhamName = ''; // Đặt lại tên sản phẩm (tùy thuộc vào logic của bạn)
-  this.SanPhamChiTietbyid = {}; // Xóa chi tiết sản phẩm (tùy thuộc vào logic của bạn)
+  this.SanPhamChiTietbyid  = {}; // Xóa chi tiết sản phẩm (tùy thuộc vào logic của bạn)
 }
   
 
