@@ -449,7 +449,6 @@ getChiTietSanPhamPhanTrang(idSanPham: number, page: number = 0) {
   
 
   // Hàm chọn sản phẩm và điền vào form
-  
   selectSanPham(sanpham: any) {
     console.log('Sản phẩm được chọn:', sanpham); // Kiểm tra sản phẩm được chọn
 
