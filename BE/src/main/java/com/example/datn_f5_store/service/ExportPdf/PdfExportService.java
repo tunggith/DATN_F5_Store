@@ -103,7 +103,7 @@ public class PdfExportService {
             String diaChi = "";
             List<DiaChiKhachHangEntity> diaChiKhachHang = diaChiRepository.findByKhackHang_Id(hoaDon.getKhachHang().getId());
             if(hoaDon.getGiaoHang()==0){
-                if(!diaChiKhachHang.isEmpty()||diaChiKhachHang!= null) {
+                if(diaChiKhachHang.size()>0) {
                     DiaChiKhachHangEntity diaChiActive = diaChiKhachHang.get(0);
                     email = hoaDon.getKhachHang().getEmail();
                     sdt = hoaDon.getKhachHang().getSdt();

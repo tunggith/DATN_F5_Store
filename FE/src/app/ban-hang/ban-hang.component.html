@@ -225,7 +225,7 @@
                     <div class="page-header">
                         <h1>Thông tin đơn hàng</h1>
                         <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
-                        <button *ngIf="trangThaiHoaDon==='Hoàn thành'&&trangThaiHoaDon==='Đã xác nhận'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
+                        <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden" (click)="downloadPdf(hoaDonChoId)">
                             <i class="material-icons">print</i>
                         </button>
                         <div>
