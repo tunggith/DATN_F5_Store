@@ -1,0 +1,13 @@
+# pack-refs with: peeled fully-peeled sorted 
+a93f3dfe9ead42af301c8be44a8b8b9fc38ec0df refs/heads/ChuyenPhan
+d06159e6154eebe9ef9b8a844325a7bf31158e3e refs/heads/ChuyenPhanNEw
+75e42d9e5050c18cd48a8703cf1b036d8706709d refs/heads/NgocHien
+ae84623a042632b3445d81f73d340b454065cd4f refs/heads/NguyenHaunew
+3afa9b9b7130fa77ad0c2c548a91f73e8b454d42 refs/heads/Nguyen_hau
+3bd6893c4f7c62ae5efe5eb367a0f6986cd2e8c3 refs/heads/TienDung
+d06159e6154eebe9ef9b8a844325a7bf31158e3e refs/heads/master
+e2a90e4e40096659196c03edb695784ad5060ad9 refs/heads/ngochien_fe
+3b10a8f15a94fa4b558f6daedff945b7bc08bb7f refs/heads/security
+b49b6b4478f8ae913fe1126481c254862f12936d refs/heads/tunght
+8f64a2a2a0c0fd88428a0ec6aefce7ac7b32efc5 refs/heads/tunght_sec
+544db0f5e96754c781da733981b3f878f0e82533 refs/pull/1/head
