@@ -5,7 +5,7 @@
     <div class="col-md-12">
       <form [formGroup]="searchForm" class="search-form mb-4">
         <div class="border rounded p-4 mb-4">
-          <h4 class="mb-3">Lọc Khuyến mãi</h4>
+          <h4 class="mb-3">Lọc Voucher</h4>
           <div class="row d-flex align-items-center flex-wrap">
   
             <!-- Search Input -->
@@ -44,8 +44,16 @@
     </div>
   </div>
 
-  <!-- Form thêm/sửa voucher -->
-<div class="border rounded p-4 mb-4" *ngIf="isFormVisible">
+  <div class="modal fade" id="sanPhamModal" tabindex="-1" role="dialog" aria-labelledby="sanPhamModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">  
+          <div class="modal-header">
+            
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>         
+            <div class="modal-body">
   <h4 class="mb-3">Thêm/Sửa Voucher</h4>
   <form [formGroup]="voucherForm" (ngSubmit)="createOrUpdateVoucher()">
     <div class="row">
@@ -53,22 +61,24 @@
         <div class="form-group">
           <label for="ma">Mã Voucher</label>
           <input type="text" id="ma" class="form-control" required formControlName="ma" 
-          [ngClass]="{'error-message': voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)}">
+          [ngClass]="{'error-message': voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)}"
+          pattern="^[A-Za-z0-9]+$" />
         </div>
         <div *ngIf="voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)">
-          <span class="error-message">Mã không hợp lệ</span>
+          <span class="error-message">Mã voucher không hợp lệ</span>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="ten">Tên Voucher</label>
           <input type="text" id="ten" class="form-control" required formControlName="ten" 
-          [ngClass]="{'error-message': voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)}">
+          [ngClass]="{'error-message': voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)}"
+          pattern="^[A-Za-z0-9àáảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựđĐ%. ]+$" />
         </div>
         <div *ngIf="voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)">
-          <span class="error-message">Tên không hợp lệ</span>
+          <span class="error-message">Tên voucher không hợp lệ</span>
         </div>
-      </div>
+      </div> 
       <div class="col-md-4">
         <div class="form-group">
           <label for="kieuGiamGia">Kiểu Giảm Giá</label>
@@ -77,15 +87,19 @@
             <option value="%">%</option>
           </select>
         </div>
+        <div *ngIf="voucherForm.get('kieuGiamGia').invalid && (voucherForm.get('kieuGiamGia').touched || voucherForm.get('kieuGiamGia').dirty)">
+          <span class="error-message">Bạn phải chọn một kiểu giảm giá</span>
+        </div>
       </div>
     </div>
-
+  
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
           <label for="soLuong">Số Lượng</label>
           <input type="number" id="soLuong" class="form-control" required formControlName="soLuong" 
-          [ngClass]="{'error-message': voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)}" />
+          [ngClass]="{'error-message': voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)}"
+          min="0" max="9999999" />
         </div>
         <div *ngIf="voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)">
           <span class="error-message">Số lượng không hợp lệ</span>
@@ -95,32 +109,33 @@
         <div class="form-group">
           <label for="giaTriVoucher">Giá Trị Voucher</label>
           <input type="number" id="giaTriVoucher" class="form-control" required formControlName="giaTriVoucher" 
-          [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}" />
+          [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}"
+          min="0" max="99999999" />
         </div>
         <div *ngIf="voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)">
-          <span class="error-message">Giá trị không hợp lệ</span>
+          <span class="error-message">Giá trị voucher không hợp lệ</span>
         </div>
       </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="giaTriGiamToiDa">Giá Trị Giảm Tối Đa</label>
           <input type="number" id="giaTriGiamToiDa" class="form-control" required formControlName="giaTriGiamToiDa" 
-          [ngClass]="{'error-message': voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)}" />
+          [ngClass]="{'error-message': voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)}"
+          min="0" max="99999999" />
         </div>
         <div *ngIf="voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)">
           <span class="error-message">Giá trị giảm tối đa không hợp lệ</span>
         </div>
       </div>
     </div>
-
-   
-
+    
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
           <label for="giaTriHoaDonToiThieu">Giá Trị Hóa Đơn Tối Thiểu</label>
           <input type="number" id="giaTriHoaDonToiThieu" class="form-control" required formControlName="giaTriHoaDonToiThieu" 
-          [ngClass]="{'error-message': voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)}" />
+          [ngClass]="{'error-message': voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)}"
+          min="0" max="99999999" />
         </div>
         <div *ngIf="voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)">
           <span class="error-message">Giá trị hóa đơn tối thiểu không hợp lệ</span>
@@ -129,17 +144,8 @@
       <div class="col-md-4">
         <div class="form-group">
           <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
-          <!-- Nếu trạng thái là "Đang diễn ra", hiển thị giá trị và không cho phép sửa -->
-          <div *ngIf="voucherForm.get('trangThai').value === 'Đang diễn ra'">
-            <input type="datetime-local" id="thoiGianBatDau" class="form-control" required
-              [value]="voucherForm.get('thoiGianBatDau').value"
-              readonly />
-          </div>
-          <!-- Nếu trạng thái không phải là "Đang diễn ra", hiển thị ô nhập liệu -->
-          <div *ngIf="voucherForm.get('trangThai').value !== 'Đang diễn ra'">
-            <input type="datetime-local" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau"
-              [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" />
-          </div>
+          <input type="datetime-local" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau"
+          [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" />
         </div>
         <div *ngIf="voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)">
           <span class="error-message">Thời gian bắt đầu không hợp lệ</span>
@@ -149,44 +155,44 @@
         <div class="form-group">
           <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
           <input type="datetime-local" id="thoiGianKetThuc" class="form-control" required formControlName="thoiGianKetThuc" 
-            [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
+          [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
         </div>
         <div *ngIf="voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)">
           <span class="error-message">Thời gian kết thúc không hợp lệ</span>
         </div>
       </div>
     </div>
-
+    
+  
     <div class="row">
-    <div class="col-md-12">
-      <div class="form-group">
-        <label for="moTa">Mô Tả</label>
-        <input type="text" id="moTa" class="form-control" formControlName="moTa" />
+      <div class="col-md-12">
+        <div class="form-group">
+          <label for="moTa">Mô Tả</label>
+          <input type="text" id="moTa" class="form-control" formControlName="moTa" />
+        </div>
       </div>
     </div>
-  </div>
-
+  
     <button type="submit" class="btn btn-primary w-100" [disabled]="voucherForm.invalid">
       <i class="material-icons" style="vertical-align: middle;">add</i>
       {{ currentVoucher ? 'Cập nhật' : 'Thêm' }}
     </button>
     <button type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
-      <i class="material-icons" style="vertical-align: middle;">cancel</i>
-      Hủy
+      <i class="material-icons" style="vertical-align: middle;">undo</i>
+     Reset
     </button>
   </form>
+  
+</div>
+</div>
+</div>
 </div>
 
 
-<div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem;">
-  <div>
-    <button *ngIf="!isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" [disabled]="role!=='admin'">
-      <i class="material-icons">visibility</i>
-    </button>
-    <button *ngIf="isFormVisible" class="btn btn-primary" (click)="toggleFormVisibility()" >
-      <i class="material-icons">visibility_off</i>
-    </button>
-  </div>
+<div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem; text-align: right;">
+    <button [disabled]="role!=='admin'" type="button" click="resetForm()" class="btn" data-toggle="modal" data-target="#sanPhamModal">
+      Thêm Voucher
+   </button>
 </div>
 
   <hr />
@@ -222,7 +228,7 @@
         <td>{{ voucher.moTa }}</td>
         <td>{{ voucher.trangThai }}</td>
         <td>
-          <button class="btn btn-edit" (click)="editVoucher(voucher)" [disabled]="role!=='admin'">
+          <button class="btn btn-edit" (click)="editVoucher(voucher)" [disabled]="role!=='admin'" data-toggle="modal" data-target="#sanPhamModal">
             <i class="material-icons">edit</i>
           </button>
           <button class="btn btn-update" (click)="capNhap(voucher.id)"

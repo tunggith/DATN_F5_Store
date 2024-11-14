@@ -713,3 +713,95 @@ button:hover {
   transform: scale(1.5);      /* Phóng to khi hover */
   
 }
+
+/* Đảm bảo modal được căn giữa màn hình */
+.modal-dialog {
+  max-width: 800px;
+  margin: 1.75rem auto;
+}
+
+/* Nền modal */
+.modal-content {
+  background-color: #fff; /* Màu nền trắng */
+  border-radius: 8px; /* Bo tròn các góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
+  padding: 20px;
+}
+
+/* Tiêu đề modal */
+.modal-header h4 {
+  font-weight: bold;
+  color: #333; /* Màu tiêu đề */
+}
+
+/* Nhấn mạnh các nhãn */
+.modal-content label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Cải thiện các input fields */
+.modal-content input,
+.modal-content select {
+  border: 1px solid #ddd; /* Đường viền nhẹ */
+  padding: 8px;
+  border-radius: 4px; /* Bo tròn các góc của input */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hiệu ứng khi có lỗi trong input */
+.modal-content .error-message {
+  color: red;
+ 
+ 
+}
+
+/* Cải thiện nút submit */
+.modal-content button[type="submit"] {
+  background-color: #007bff; /* Màu xanh cho nút submit */
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #0056b3; /* Màu khi hover */
+}
+
+/* Cải thiện nút hủy */
+.modal-content button[type="button"] {
+  background-color: #6c757d; /* Màu xám cho nút hủy */
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #5a6268; /* Màu khi hover */
+}
+
+/* Chỉnh sửa giao diện form khi có lỗi */
+.error-message {
+ 
+  color: red;
+ 
+}
+
+.modal-body {
+  padding: 20px 0;
+}
+
+/* Thêm padding cho các form-group */
+.form-group {
+  margin-bottom: 20px;
+}

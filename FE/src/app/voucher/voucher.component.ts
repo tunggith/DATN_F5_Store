@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VoucherService } from './voucher.service';
 import { debounceTime } from 'rxjs/operators';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import * as moment from 'moment-timezone';
@@ -47,19 +47,16 @@ export class VoucherComponent implements OnInit {
 
     // Khởi tạo form thêm/sửa
     this.voucherForm = this.fb.group({
-      ma: [''],
-      ten: [''],
-      giaTriVoucher: [''],
-      kieuGiamGia: ['$'], // Giá trị mặc định
-      giaTriGiamToiDa: [''],
-      giaTriHoaDonToiThieu: [''],
-      thoiGianBatDau: new Date,
-      thoiGianKetThuc: new Date,
-      moTa: [''],
-      soLuong: [''],
-      nguoiTao: [''],
-      nguoiSua: [''],
-      trangThai: ['']
+      ma: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9]+$')]],
+      ten: ['', Validators.required],
+      kieuGiamGia: ['VND', Validators.required],
+      soLuong: [0, [Validators.required, Validators.min(0)]],
+      giaTriVoucher: [0, [Validators.required, Validators.min(0)]],
+      giaTriGiamToiDa: [0, [Validators.required, Validators.min(0)]],
+      giaTriHoaDonToiThieu: [0, [Validators.required, Validators.min(0)]],
+      thoiGianBatDau: ['', Validators.required],
+      thoiGianKetThuc: ['', Validators.required],
+      moTa: ['']
     });
     // Lắng nghe sự thay đổi của tất cả các trường trong form tìm kiếm
     this.searchForm.valueChanges
