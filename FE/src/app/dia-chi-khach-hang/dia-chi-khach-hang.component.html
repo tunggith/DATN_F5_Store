@@ -6,66 +6,108 @@
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số nhà</label>
-                        <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha"
-                            [(ngModel)]="diaChiMoi.soNha" required>
+                        <input type="number" class="form-control" placeholder="Nhập số nhà" name="soNha"
+                            [(ngModel)]="diaChiMoi.soNha" required #soNha="ngModel">
+                        <span class="text-danger" *ngIf="soNha.touched && diaChiMoi.soNha?.trim() === ''">
+                            Số nhà không được để trống
+                        </span>
+                        <span class="text-danger" *ngIf="soNha.touched && hasWhitespace(diaChiMoi.soNha)">
+                            Số nhà không được chứa khoảng trắng
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Đường</label>
                         <input type="text" class="form-control" placeholder="Nhập đường" name="duong"
-                            [(ngModel)]="diaChiMoi.duong" required>
+                            [(ngModel)]="diaChiMoi.duong" required #duong="ngModel">
+                        <span class="text-danger" *ngIf="duong.touched && diaChiMoi.duong?.trim() === ''">
+                            Đường không được để trống
+                        </span>
+                        <span class="text-danger" *ngIf="duong.touched && hasNumbers(diaChiMoi.duong)">
+                            Đường không được chứa số
+                        </span>
+                        <span class="text-danger" *ngIf="duong.touched && hasSpecialCharacters(diaChiMoi.duong)">
+                            Đường không được chứa ký tự đặc biệt
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
-                            [(ngModel)]="diaChiMoi.sdt" required>
+                        <input type="number" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
+                            [(ngModel)]="diaChiMoi.sdt" required #sdt="ngModel">
+                        <span class="text-danger" *ngIf="sdt.touched && diaChiMoi.sdt?.trim() === ''">
+                            Số điện thoại không được để trống
+                        </span>
+                        <span class="text-danger" *ngIf="sdt.touched && !diaChiMoi.sdt?.startsWith('0')">
+                            Số điện thoại phải bắt đầu bằng số 0
+                        </span>
+                        <span class="text-danger" *ngIf="sdt.touched && validatePhoneLength(diaChiMoi.sdt)">
+                            Số điện thoại phải từ 10-11 số
+                        </span>
+                        <span class="text-danger" *ngIf="sdt.touched && hasWhitespace(diaChiMoi.sdt)">
+                            Số điện thoại không được chứa khoảng trắng
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
-                      <div>
-                        <label for="" class="form-label">Tỉnh thành</label>
-                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="tinhThanh" [(ngModel)]="selectedTinhThanh" (change)="onTinhThanhChange($event)">
-                          <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }}</option>
-                        </select>
-                      </div>
+                        <div>
+                            <label for="" class="form-label">Tỉnh thành</label>
+                            <select class="form-select" aria-label="Default select example"
+                                style="height: 40px;font-size: 15px;" name="tinhThanh" [(ngModel)]="selectedTinhThanh"
+                                (change)="onTinhThanhChange($event)">
+                                <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{
+                                    province.ProvinceName }}</option>
+                            </select>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4">
                     <div class="mb-3">
-                      <div>
-                        <label for="" class="form-label">Quận huyện</label>
-                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="quanHuyen" [(ngModel)]="selectedQuanHuyen" (change)="onQuanHuyenChange($event)">
-                          <option *ngFor="let district of districts" [value]="district.DistrictID">{{ district.DistrictName }}</option>
-                        </select>
-                      </div>
+                        <div>
+                            <label for="" class="form-label">Quận huyện</label>
+                            <select class="form-select" aria-label="Default select example"
+                                style="height: 40px;font-size: 15px;" name="quanHuyen" [(ngModel)]="selectedQuanHuyen"
+                                (change)="onQuanHuyenChange($event)">
+                                <option *ngFor="let district of districts" [value]="district.DistrictID">{{
+                                    district.DistrictName }}</option>
+                            </select>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-sm-4">
+                </div>
+                <div class="col-sm-4">
                     <div class="mb-3">
-                      <div>
-                        <label for="" class="form-label">Phường xã</label>
-                        <select class="form-select" aria-label="Default select example" style="height: 40px;font-size: 15px;"
-                          name="phuongXa" [(ngModel)]="selectedPhuongXa" (change)="onPhuongXaChange($event)">
-                          <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
-                        </select>
-                      </div>
+                        <div>
+                            <label for="" class="form-label">Phường xã</label>
+                            <select class="form-select" aria-label="Default select example"
+                                style="height: 40px;font-size: 15px;" name="phuongXa" [(ngModel)]="selectedPhuongXa"
+                                (change)="onPhuongXaChange($event)">
+                                <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
+                            </select>
+                        </div>
                     </div>
-                  </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Quốc gia</label>
                         <input type="text" class="form-control" placeholder="Nhập quốc gia" name="quocGia"
-                            [(ngModel)]="diaChiMoi.quocGia" required>
+                            [(ngModel)]="diaChiMoi.quocGia" required #quocGia="ngModel"
+                            [ngModel]="diaChiMoi.quocGia?.trim()">
+                        <span class="text-danger" *ngIf="quocGia.touched && hasNumbers(diaChiMoi.quocGia)">
+                            Quốc gia không được chứa số
+                        </span>
+                        <span class="text-danger" *ngIf="quocGia.touched && hasSpecialCharacters(diaChiMoi.quocGia)">
+                            Quốc gia không được chứa ký tự đặc biệt
+                        </span>
+                        <span class="text-danger" *ngIf="quocGia.touched && !diaChiMoi.quocGia?.trim()">
+                            Quốc gia không được để trống
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -125,7 +167,7 @@
                         <th>Số nhà</th>
                         <th>Đường</th>
                         <th>Số điện thoại</th>
-                        <th>Tỉnh thành </th> 
+                        <th>Tỉnh thành </th>
                         <th>Quận huyện</th>
                         <th>Phường xã</th>
                         <th>Quốc gia</th>
@@ -140,7 +182,7 @@
                         <td>{{ customerAddress.soNha }}</td>
                         <td>{{ customerAddress.duong }}</td>
                         <td>{{ customerAddress.sdt }}</td>
-                        <td>{{ customerAddress.tinhThanh }}</td> 
+                        <td>{{ customerAddress.tinhThanh }}</td>
                         <td>{{ customerAddress.quanHuyen }}</td>
                         <td>{{ customerAddress.phuongXa }}</td>
                         <td>{{ customerAddress.quocGia }}</td>

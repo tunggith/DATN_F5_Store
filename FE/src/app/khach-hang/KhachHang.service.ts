@@ -30,6 +30,9 @@ export class CustomerService {
   updateTrangThai(id:number):Observable<any>{
     return this.http.put(`${this.baseUrl}/update-trang-thai/${id}`,{});
   }
+  checkEmailExists(email: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.baseUrl}/check-email/${email}`);
+  }
   
   
 

@@ -34,6 +34,7 @@ export class KhachHangComponent implements OnInit {
   };
   isUpdating: boolean = false; // Biến để xác định hành động
   isAdding: boolean = true; // Biến để xác định hành động thêm
+  emailExists: boolean = false;
 
 
   // Phân trang
@@ -41,6 +42,9 @@ export class KhachHangComponent implements OnInit {
   size: number = 10; // Cấu hình số lượng nhân viên mỗi trang
   currentPage: number = 0; // Trang hiện tại
   totalPages: number = 0; // Tổng số trang
+
+  // Thêm thuộc tính currentDate
+  currentDate: Date = new Date();
 
   constructor(private customerService: CustomerService, private datePipe: DatePipe) { }
   ngOnInit() {
@@ -83,9 +87,12 @@ export class KhachHangComponent implements OnInit {
     )
   }
   // Phương thức để định dạng ngày sinh
-  formatDate(dateString: string): string {
-    const date = new Date(dateString); // Chuyển đổi chuỗi ngày thành đối tượng Date
-    return this.datePipe.transform(date, 'yyyy-MM-dd') || ''; // Định dạng lại ngày
+  formatDate(date: Date | string): string {
+    if (date instanceof Date) {
+      return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
+    }
+    const parsedDate = new Date(date);
+    return this.datePipe.transform(parsedDate, 'yyyy-MM-dd') || '';
   }
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
@@ -105,6 +112,23 @@ export class KhachHangComponent implements OnInit {
       this.loadKhachHang(this.currentPage); // Tải lại danh sách khách hàng
       this.searchKhachHang();
     }
+  }
+  // Thêm phương thức checkExistingEmail
+  checkExistingEmail(email: string) {
+    if (!email) {
+      this.emailExists = false;
+      return;
+    }
+    
+    this.customerService.checkEmailExists(email).subscribe(
+      (exists: boolean) => {
+        this.emailExists = exists;
+      },
+      (error) => {
+        console.error('Lỗi kiểm tra email:', error);
+        this.emailExists = false;
+      }
+    );
   }
   createKhachHang(): void {
     if (!this.validateKhachHang(this.newKhachHang)) {
@@ -263,5 +287,72 @@ export class KhachHangComponent implements OnInit {
   }
 
   protected readonly document = document;
+
+  hasSpecialCharacters(value: string): boolean {
+    const regex = /[^a-zA-ZÀ-ỹ\s]/;
+    return regex.test(value);
+  }
+
+  hasRepeatingDigits(value: string): boolean {
+    const regex = /(.)\1{5,}/;
+    return regex.test(value);
+  }
+
+  containsOnlyNumbers(value: string): boolean {
+    const regex = /[^0-9]/;
+    return regex.test(value);
+  }
+
+  // Thêm các phương thức kiểm tra ngày tháng
+  isUnder3YearsOld(birthDate: string): boolean {
+    const birth = new Date(birthDate);
+    const today = new Date();
+    const age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      return age <= 3;
+    }
+    return age < 3;
+  }
+
+  isFutureDate(date: string): boolean {
+    const inputDate = new Date(date);
+    const today = new Date();
+    return inputDate > today;
+  }
+
+  isBeforeYear1900(date: string): boolean {
+    const inputDate = new Date(date);
+    return inputDate.getFullYear() < 1900;
+  }
+
+  isValidDate(dateString: string): boolean {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date.getTime());
+  }
+
+  // Thêm phương thức xử lý tìm kiếm
+  handleSearch(event: any) {
+    this.searchKeyword = this.searchKeyword.replace(/\s+/g, ' ').trim();
+    this.searchKhachHang();
+  }
+
+  // Thêm các phương thức validation
+  validatePhoneNumber(value: string): boolean {
+    return /^[0-9]{10,11}$/.test(value);
+  }
+
+  hasNumbers(value: string): boolean {
+    return /\d/.test(value);
+  }
+
+  hasWhitespace(value: string): boolean {
+    return value && value.includes(' ');
+  }
+
+  validatePhoneLength(value: string): boolean {
+    return value && (value.length < 10 || value.length > 11);
+  }
 }
 

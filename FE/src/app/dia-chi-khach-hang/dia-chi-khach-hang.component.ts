@@ -277,4 +277,22 @@ export class DiaChiKhachHangComponent implements OnInit {
     }
   }
 
+  // Thêm các phương thức validation
+  hasWhitespace(value: string): boolean {
+    return value && value.includes(' ');
+  }
+
+  hasNumbers(value: string): boolean {
+    return /\d/.test(value);
+  }
+
+  hasSpecialCharacters(value: string): boolean {
+    const specialChars = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
+    return specialChars.test(value);
+  }
+
+  validatePhoneLength(value: string): boolean {
+    return value && (value.length < 10 || value.length > 11);
+  }
+
 }
