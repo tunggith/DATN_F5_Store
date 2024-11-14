@@ -27,6 +27,7 @@ public class NhanVienDto {
     private String sdt;
     private String diaChi;
     private String anh;
+    private String roles;
     private String username;
     private String password;
     private String nguoiTao;
