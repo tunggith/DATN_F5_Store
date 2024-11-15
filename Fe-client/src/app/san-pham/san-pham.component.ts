@@ -20,11 +20,11 @@ export class SanPhamComponent implements OnInit {
   size: number = 10;
 
   // khai báo biến chọn màu
-  selectedColors: string[] = [];
-  selectedSizes: string[] = [];
-  selectedGioiTinhs: string[] = [];
-  selectedXuatXu: string[] = [];
-  selectThuongHieu: string[] = [];
+  selectedColors: string = "";
+  selectedSizes: string = "";
+  selectedGioiTinhs: string = "";
+  selectedXuatXu: string = "";
+  selectThuongHieu: string = "";
 // Biến để kiểm soát trạng thái mở rộng/thu lại
   isOpen: boolean = false;
   isSizeOpen: boolean = false;
@@ -50,7 +50,7 @@ export class SanPhamComponent implements OnInit {
         this.loadGioiTinh();
         this.loadSanPhamPhanTrang();
         this.loadThuongHieu();
-
+        this.loadSanPham2()
       }
   // ============= hàm loadata end===============
 
@@ -137,21 +137,57 @@ export class SanPhamComponent implements OnInit {
   }
 
   changePage(page: number, event: MouseEvent) {
-    event.preventDefault();  // Ngừng hành động mặc định của thẻ <a>
-    // Xử lý logic phân trang tại đây
-    console.log('Chuyển trang:', page);
-    this.page = page;
-    this.loadSanPhamPhanTrang(); // Gọi lại hàm phân trang
+    event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+  
+    // Kiểm tra xem trang có hợp lệ không
+    if (page >= 0 && page < this.totalPages.length) {
+      console.log('Chuyển trang:', page);
+      this.page = page;
+      this.loadSanPham2(); // Gọi lại hàm loadSanPham2 để cập nhật sản phẩm theo trang
+    }
   }
-
+  
   calculateTotalPages(): void {
+    // Tính tổng số trang dựa trên tổng số sản phẩm và kích thước trang
     const totalPages = Math.ceil(this.totalElements / this.size);
-    this.totalPages = Array.from({ length: totalPages }, (_, i) => i); // Tạo mảng số trang
+    this.totalPages = Array.from({ length: totalPages }, (_, i) => i); // Tạo mảng số trang [0, 1, 2, ...]
   }
+  
 
-
-
-
+  sanPhamList: any[] =[]
+  giaMin: number = 0;
+  giaMax: number = 9999999;
+  loadSanPham2(): void {
+    // Chuyển các giá trị về kiểu string, nếu không có giá trị thì trả về chuỗi rỗng
+    const gioiTinh = this.selectedGioiTinhs || '';
+    const thuongHieu = this.selectThuongHieu || '';
+    const xuatXu = this.selectedXuatXu || '';
+    const mauSac = this.selectedColors || '';
+    const kichThuoc = this.selectedSizes || '';
+  
+    // Gọi API với các tham số đã chuyển đổi thành string
+    this.sanPhamService.getSanPhamloc(
+      gioiTinh,
+      thuongHieu,
+      xuatXu,
+      this.giaMin,
+      this.giaMax,
+      mauSac,
+      kichThuoc,
+      this.page,
+      this.size
+    ).subscribe(response => {
+      console.log("Sản phẩm lọc: ", response);
+      this.sanPhamList = response.content;  // Chỉ gán `content` vào `sanPhamList`
+      this.totalElements = response.totalElements;  // Cập nhật tổng số sản phẩm
+      this.calculateTotalPages();  // Cập nhật số trang nếu cần
+      console.log("Sản phẩm lọc đã cập nhật: ", this.sanPhamList);
+    });
+  }
+  
+  
+  
+  
 
 // ==============================================================================================================
 //                                     XỬ LÝ MỞ RỘNG/THU GỌN VÀ CHỌN THUỘC TÍNH
@@ -190,72 +226,169 @@ export class SanPhamComponent implements OnInit {
     this.isthuongHieuOpen = !this.isthuongHieuOpen; // Đổi trạng thái mở rộng/thu lại
   }
 
-//  sử lý khi chọn  thuộc tính
   onColorChange(color: any): void {
-    if (this.selectedColors.includes(color.ten)) {
-      // Nếu màu sắc đã có trong danh sách thì bỏ chọn
-      this.selectedColors = this.selectedColors.filter(c => c !== color.ten);
+    if (this.selectedColors === color.id) {
+      this.selectedColors = "";  // Bỏ chọn nếu đã chọn lại
     } else {
-      // Nếu chưa có thì thêm vào danh sách đã chọn
-      this.selectedColors.push(color.ten);
+      this.selectedColors = color.id;  // Chọn mới
     }
+
     console.log('Màu sắc đã chọn:', this.selectedColors);
+    this.loadSanPham2();
   }
-
-
-
+  
   onthuongHieuChage(ThuongHieu: any): void {
-    if (this.selectThuongHieu.includes(ThuongHieu.ten)) {
-      // Nếu thương hiệu đã có trong danh sách thì bỏ chọn
-      this.selectThuongHieu = this.selectThuongHieu.filter(c => c !== ThuongHieu.ten);
+    if (this.selectThuongHieu === ThuongHieu.id) {
+      this.selectThuongHieu = "";  // Bỏ chọn nếu đã chọn lại
     } else {
-      // Nếu chưa có thì thêm vào danh sách đã chọn
-      this.selectThuongHieu.push(ThuongHieu.ten);
+      this.selectThuongHieu = ThuongHieu.id;  // Chọn mới
+       
     }
-    console.log('thương hiệu đã chọn:', this.selectThuongHieu);
+    console.log('Thương hiệu đã chọn:', this.selectThuongHieu);
+    this.loadSanPham2();
   }
-
-
-  // Hàm xử lý khi người dùng chọn hoặc bỏ chọn kích thước
+  
   onSizeChange(size: any): void {
-    if (this.selectedSizes.includes(size.ten)) {
-      // Nếu kích thước đã có trong danh sách thì bỏ chọn
-      this.selectedSizes = this.selectedSizes.filter(s => s !== size.ten);
+    if (this.selectedSizes === size.id) {
+      this.selectedSizes = "";  // Bỏ chọn nếu đã chọn lại
     } else {
-      // Nếu chưa có thì thêm vào danh sách đã chọn
-      this.selectedSizes.push(size.ten);
+      this.selectedSizes = size.id;  // Chọn mới
+     
     }
     console.log('Kích thước đã chọn:', this.selectedSizes);
+    this.loadSanPham2();
   }
-
-
-
-
-  // Hàm xử lý khi người dùng chọn hoặc bỏ chọn kích thước
+  
   onGioiTinhChange(GioiTinh: any): void {
-    if (this.selectedSizes.includes(GioiTinh.ten)) {
-      // Nếu kích thước đã có trong danh sách thì bỏ chọn
-      this.selectedSizes = this.selectedSizes.filter(s => s !== GioiTinh.ten);
+    if (this.selectedGioiTinhs === GioiTinh.id) {
+      this.selectedGioiTinhs = "";  // Bỏ chọn nếu đã chọn lại
     } else {
-      // Nếu chưa có thì thêm vào danh sách đã chọn
-      this.selectedSizes.push(GioiTinh.ten);
+      this.selectedGioiTinhs = GioiTinh.id;  // Chọn mới
+   
     }
-    console.log('Kích thước đã chọn:', this.selectedSizes);
+    console.log('Giới tính đã chọn:', this.selectedGioiTinhs);
+    this.loadSanPham2();
   }
-
-
-  // Hàm xử lý khi người dùng chọn hoặc bỏ chọn kích thước
+  
   onXuatXuChange(XuatXu: any): void {
-    if (this.selectedXuatXu.includes(XuatXu.ten)) {
-      // Nếu kích thước đã có trong danh sách thì bỏ chọn
-      this.selectedXuatXu = this.selectedXuatXu.filter(s => s !== XuatXu.ten);
+    if (this.selectedXuatXu === XuatXu.id) {
+      this.selectedXuatXu = "";  // Bỏ chọn nếu đã chọn lại
     } else {
-      // Nếu chưa có thì thêm vào danh sách đã chọn
-      this.selectedXuatXu.push(XuatXu.ten);
+      this.selectedXuatXu = XuatXu.id;  // Chọn mới
+      
     }
-    console.log('Kích thước đã chọn:', this.selectedXuatXu);
+    console.log('Xuất xứ đã chọn:', this.selectedXuatXu);
+    this.loadSanPham2();
   }
 
+
+  clearColor(): void {
+    this.selectedColors = "";  // Bỏ chọn màu sắc
+    console.log('Đã bỏ chọn màu sắc');
+  }
+  
+  clearThuongHieu(): void {
+    this.selectThuongHieu = "";  // Bỏ chọn thương hiệu
+    console.log('Đã bỏ chọn thương hiệu');
+     
+  }
+  
+  clearSize(): void {
+    this.selectedSizes = "";  // Bỏ chọn kích thước
+    console.log('Đã bỏ chọn kích thước');
+  }
+  
+  clearGioiTinh(): void {
+    this.selectedGioiTinhs = "";  // Bỏ chọn giới tính
+    console.log('Đã bỏ chọn giới tính');
+  }
+  
+  clearXuatXu(): void {
+    this.selectedXuatXu = "";  // Bỏ chọn xuất xứ
+    console.log('Đã bỏ chọn xuất xứ');
+  }
+
+
+
+formattedgiaMin: string = ''; // Giá trị hiển thị đã định dạng của giaMin
+formattedgiaMax: string = ''; // Giá trị hiển thị đã định dạng của giaMax
+
+errorMsg: string = ''; // Thông báo lỗi
+
+// Hàm xử lý khi người dùng nhập giá trị min
+// Hàm xử lý khi người dùng nhập giá trị min
+// Hàm xử lý khi người dùng nhập giá trị min
+onGiaMin(event: any): void {
+  const rawValue = event.target.value.replace(/\D/g, ''); // Loại bỏ tất cả ký tự không phải số
+  let inputValue = parseInt(rawValue, 10) || 0; // Chuyển đổi sang số nguyên
+
+  // Xử lý khi trường nhập bị xóa
+  if (event.target.value.trim() === '') {
+    this.giaMin = 0; // Gán giá trị mặc định
+    this.formattedgiaMin = ''; // Hiển thị trống
+    this.errorMsg = ''; // Không hiển thị lỗi
+    this.loadSanPham2(); // Cập nhật sản phẩm
+    return;
+  }
+
+  // Kiểm tra điều kiện
+  if (inputValue > this.giaMax) {
+    this.errorMsg = 'Giá trị tối thiểu không được lớn hơn giá trị tối đa.';
+    inputValue = this.giaMax; // Không cho phép min lớn hơn max
+  } else if (inputValue < 0) {
+    inputValue = 0; // Không cho phép số âm
+    this.errorMsg = 'Giá trị tối thiểu không được nhỏ hơn 0.';
+  } else if (inputValue > 999000000) {
+    inputValue = 999000000; // Giới hạn số lớn nhất là 999 triệu
+    this.errorMsg = 'Giá trị tối thiểu không được lớn hơn 999 triệu.';
+  } else {
+    this.errorMsg = ''; // Xóa thông báo lỗi nếu hợp lệ
+  }
+
+  this.giaMin = inputValue; // Gán giá trị hợp lệ
+  this.formattedgiaMin = this.formatNumber(this.giaMin); // Cập nhật hiển thị
+  event.target.value = this.formattedgiaMin; // Hiển thị giá trị đã định dạng trong input
+  this.loadSanPham2(); // Gọi API tự động tìm kiếm
+}
+
+// Hàm xử lý khi người dùng nhập giá trị max
+onGiaMax(event: any): void {
+  const rawValue = event.target.value.replace(/\D/g, ''); // Loại bỏ tất cả ký tự không phải số
+  let inputValue = parseInt(rawValue, 10) || 0; // Chuyển đổi sang số nguyên
+
+  // Xử lý khi trường nhập bị xóa
+  if (event.target.value.trim() === '') {
+    this.giaMax = 999000000; // Gán giá trị mặc định
+    this.formattedgiaMax = ''; // Hiển thị trống
+    this.errorMsg = ''; // Không hiển thị lỗi
+    this.loadSanPham2(); // Cập nhật sản phẩm
+    return;
+  }
+
+  // Kiểm tra điều kiện
+  if (inputValue < this.giaMin) {
+    this.errorMsg = 'Giá trị tối đa không được nhỏ hơn giá trị tối thiểu.';
+    inputValue = this.giaMin; // Không cho phép max nhỏ hơn min
+  } else if (inputValue < 0) {
+    inputValue = 0; // Không cho phép số âm
+    this.errorMsg = 'Giá trị tối đa không được nhỏ hơn 0.';
+  } else if (inputValue > 999000000) {
+    inputValue = 999000000; // Giới hạn số lớn nhất là 999 triệu
+    this.errorMsg = 'Giá trị tối đa không được lớn hơn 999 triệu.';
+  } else {
+    this.errorMsg = ''; // Xóa thông báo lỗi nếu hợp lệ
+  }
+
+  this.giaMax = inputValue; // Gán giá trị hợp lệ
+  this.formattedgiaMax = this.formatNumber(this.giaMax); // Cập nhật hiển thị
+  event.target.value = this.formattedgiaMax; // Hiển thị giá trị đã định dạng trong input
+  this.loadSanPham2(); // Gọi API tự động tìm kiếm
+}
+
+// Hàm định dạng số có dấu chấm
+formatNumber(value: number): string {
+  return value.toLocaleString('vi-VN'); // Định dạng số kiểu Việt Nam
+}
 // ==============================================================================================================
 //                                    KẾT THÚC XỬ LÝ MỞ RỘNG/THU GỌN VÀ CHỌN THUỘC TÍNH
 // ==============================================================================================================

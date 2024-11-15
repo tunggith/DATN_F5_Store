@@ -53,7 +53,7 @@ import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.compone
   ],
   declarations: [
     BanHangComponent,
-    SanphamComponent,  // Đổi UserProfileComponent thành SanphamComponent
+    SanphamComponent,  
     TableListComponent,
     ThongkeComponent,
     IconsComponent,
