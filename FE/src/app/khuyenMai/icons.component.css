@@ -202,13 +202,15 @@ select:focus {
 }
 
 
-.table-responsive {
+.table-responsive2 {
   overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
   -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
+  
+ 
 }
 
 .table-responsive2 {
@@ -263,7 +265,7 @@ table-striped tbody tr:nth-of-type(odd) {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1050;
   overflow: hidden;
 }
 
@@ -282,23 +284,15 @@ table-striped tbody tr:nth-of-type(odd) {
   align-items: center;
 }
 
-/* CSS cho nút */
-.khuyen-mai-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 0 5px; /* Khoảng cách giữa các nút */
-}
-
-.khuyen-mai-btn i {
-  font-size: 24px;
+.btn {
+  margin: 0 5px;                /* Thêm khoảng cách giữa các nút */
+  padding: 10px 15px;           /* Thêm khoảng cách bên trong cho nút */
+  border: none;                 /* Bỏ đường viền */
+  border-radius: 5px;          /* Bo góc cho nút */
+  background-color: #003366;   /* Màu nền của nút */
+  color: white;                 /* Màu chữ của nút */
+  cursor: pointer;              /* Thay đổi con trỏ khi di chuột vào nút */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi di chuột */
 }
 
 /* Nút "Thêm" - màu xanh lá */
@@ -321,10 +315,7 @@ table-striped tbody tr:nth-of-type(odd) {
 
 
 
-/* Điều chỉnh chiều rộng của các nút */
-.khuyen-mai-btn i {
-  font-size: 18px; /* Kích thước icon nhỏ hơn */
-}
+
 
 .page-item {
   margin: 0 5px;
@@ -387,7 +378,7 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 
 /* Căn chỉnh bảng và khoảng cách để phù hợp */
-.table-responsive {
+.table-responsive2 {
   margin-top: 1rem;
 }
 .table-title {
@@ -422,18 +413,133 @@ text-align: center;
 }
 
 
+/* Đảm bảo modal được căn giữa màn hình */
+.modal-dialog {
+  max-width: 800px;
+  margin: 1.75rem auto;
+}
+
+/* Nền modal */
+.modal-content {
+  background-color: #fff; /* Màu nền trắng */
+  border-radius: 8px; /* Bo tròn các góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
+  padding: 20px;
+}
+
+/* Tiêu đề modal */
+.modal-header h4 {
+  font-weight: bold;
+  color: #333; /* Màu tiêu đề */
+}
+
+/* Nhấn mạnh các nhãn */
+.modal-content label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+/* Cải thiện các input fields */
+.modal-content input,
+.modal-content select {
+  border: 1px solid #ddd; /* Đường viền nhẹ */
+  padding: 8px;
+  border-radius: 4px; /* Bo tròn các góc của input */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hiệu ứng khi có lỗi trong input */
+.modal-content .error-message {
+  color: red;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+ 
+}
+
+/* Cải thiện nút submit */
+.modal-content button[type="submit"] {
+  background-color: #003366; /* Màu xanh cho nút submit */
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color:  #004366; /* Màu khi hover */
+}
+
+/* Cải thiện nút hủy */
+.modal-content button[type="button"] {
+  background-color: #6c757d; /* Màu xám cho nút hủy */
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="button"]:hover {
+  background-color: #5a6268; /* Màu khi hover */
+}
+
+/* Chỉnh sửa giao diện form khi có lỗi */
 
 
+.modal-body {
+  padding: 20px 0;
+}
 
+/* Thêm padding cho các form-group */
+.form-group {
+  margin-bottom: 20px;
+}
 
+.hehe{
+  width: 400px;
+}
 
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 1200px;
+  width: 100%;
+}
 
-
-
-
-
-
-
-
-
-
+*[_ngcontent-epn-c58] {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@media (min-width: 576px) {
+  .modal-content {
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+  }
+}
+.modal-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #ffffff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
+  outline: 0;
+}
