@@ -6,8 +6,9 @@
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số nhà</label>
-                        <input type="number" class="form-control" placeholder="Nhập số nhà" name="soNha"
-                            [(ngModel)]="diaChiMoi.soNha" required #soNha="ngModel">
+                        <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha"
+                            [(ngModel)]="diaChiMoi.soNha" required #soNha="ngModel"
+                            (input)="onSoNhaInput($event)">
                         <span class="text-danger" *ngIf="soNha.touched && diaChiMoi.soNha?.trim() === ''">
                             Số nhà không được để trống
                         </span>
@@ -21,15 +22,16 @@
                         <label class="form-label">Đường</label>
                         <input type="text" class="form-control" placeholder="Nhập đường" name="duong"
                             [(ngModel)]="diaChiMoi.duong" required #duong="ngModel">
-                        <span class="text-danger" *ngIf="duong.touched && diaChiMoi.duong?.trim() === ''">
-                            Đường không được để trống
-                        </span>
-                        <span class="text-danger" *ngIf="duong.touched && hasNumbers(diaChiMoi.duong)">
-                            Đường không được chứa số
-                        </span>
-                        <span class="text-danger" *ngIf="duong.touched && hasSpecialCharacters(diaChiMoi.duong)">
-                            Đường không được chứa ký tự đặc biệt
-                        </span>
+                        <div>
+                            <span class="text-danger" *ngIf="duong.touched && diaChiMoi.duong?.trim() === ''">
+                                Đường không được để trống
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-danger" *ngIf="duong.touched && (hasNumbers(diaChiMoi.duong) || hasSpecialCharacters(diaChiMoi.duong) || diaChiMoi.duong?.length > 20 || startsWithSpace(diaChiMoi.duong) || hasMultipleSpaces(diaChiMoi.duong)) && diaChiMoi.duong?.trim() !== ''">
+                                Tên đường không hợp lệ
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -37,18 +39,16 @@
                         <label class="form-label">Số điện thoại</label>
                         <input type="number" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
                             [(ngModel)]="diaChiMoi.sdt" required #sdt="ngModel">
-                        <span class="text-danger" *ngIf="sdt.touched && diaChiMoi.sdt?.trim() === ''">
-                            Số điện thoại không được để trống
-                        </span>
-                        <span class="text-danger" *ngIf="sdt.touched && !diaChiMoi.sdt?.startsWith('0')">
-                            Số điện thoại phải bắt đầu bằng số 0
-                        </span>
-                        <span class="text-danger" *ngIf="sdt.touched && validatePhoneLength(diaChiMoi.sdt)">
-                            Số điện thoại phải từ 10-11 số
-                        </span>
-                        <span class="text-danger" *ngIf="sdt.touched && hasWhitespace(diaChiMoi.sdt)">
-                            Số điện thoại không được chứa khoảng trắng
-                        </span>
+                        <div>
+                            <span class="text-danger" *ngIf="sdt.touched && !diaChiMoi.sdt">
+                                Số điện thoại không được để trống
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-danger" *ngIf="sdt.touched && diaChiMoi.sdt && !validatePhoneNumber(diaChiMoi.sdt)">
+                                Số điện thoại không hợp lệ
+                                </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,15 +99,16 @@
                         <input type="text" class="form-control" placeholder="Nhập quốc gia" name="quocGia"
                             [(ngModel)]="diaChiMoi.quocGia" required #quocGia="ngModel"
                             [ngModel]="diaChiMoi.quocGia?.trim()">
-                        <span class="text-danger" *ngIf="quocGia.touched && hasNumbers(diaChiMoi.quocGia)">
-                            Quốc gia không được chứa số
-                        </span>
-                        <span class="text-danger" *ngIf="quocGia.touched && hasSpecialCharacters(diaChiMoi.quocGia)">
-                            Quốc gia không được chứa ký tự đặc biệt
-                        </span>
-                        <span class="text-danger" *ngIf="quocGia.touched && !diaChiMoi.quocGia?.trim()">
-                            Quốc gia không được để trống
-                        </span>
+                        <div>
+                            <span class="text-danger" *ngIf="quocGia.touched && !diaChiMoi.quocGia?.trim()">
+                                Quốc gia không được để trống
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-danger" *ngIf="quocGia.touched && (hasNumbers(diaChiMoi.quocGia?.trim()) || hasSpecialCharacters(diaChiMoi.quocGia?.trim()) || startsWithSpace(diaChiMoi.quocGia) || hasMultipleSpaces(diaChiMoi.quocGia))">
+                                Quốc gia không hợp lệ
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
@@ -145,14 +146,15 @@
                     </div>
                 </div>
                 <div class="button-action" style="text-align: center;">
-                    <div style="display: inline-block; margin-right: 10px;">
+                    <div style="display: inline-block;">
                         <button type="submit" class="btn-submit">
-                            <i class="material-icons">add_location_alt</i> Thêm địa chỉ
+                            <i class="material-icons">{{!idDiaChi ? 'add_location_alt' : 'update'}}</i> 
+                            {{!idDiaChi ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}}
                         </button>
                     </div>
-                    <div style="display: inline-block;">
-                        <button (click)="updateDiaChi()" class="btn-submit" type="submit" [disabled]="!idKhachHang">
-                            <i class="material-icons">update</i> Cập nhật địa chỉ
+                    <div style="display: inline-block; margin-left: 10px;">
+                        <button type="button" class="btn-submit" (click)="resetForm()">
+                            <i class="material-icons">refresh</i> Làm mới
                         </button>
                     </div>
                 </div>

@@ -354,5 +354,34 @@ export class KhachHangComponent implements OnInit {
   validatePhoneLength(value: string): boolean {
     return value && (value.length < 10 || value.length > 11);
   }
+
+  validateTen(value: string) {
+    // Loại bỏ khoảng trắng ở đầu và cuối
+    const trimmedValue = value?.trim();
+    if (trimmedValue) {
+        this.newKhachHang.ten = trimmedValue;
+    }
+  }
+  hasMultipleSpaces(value: string): boolean {
+    if (!value) return false;
+    return /\s{2,}/.test(value); // Kiểm tra nếu có từ 2 khoảng trắng liên tiếp trở lên
+}
+
+hasInvalidName(value: string): boolean {
+    if (!value) return false;
+    return (
+        this.hasNumbers(value) || 
+        this.hasSpecialCharacters(value) || 
+        this.hasMultipleSpaces(value) || 
+        this.startsWithSpace(value) || 
+        /\s{2,}/.test(value) ||
+        value.trim().length === 0
+    );
+}
+
+startsWithSpace(value: string): boolean {
+    return value.startsWith(' ');
+}
+
 }
 

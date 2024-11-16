@@ -295,4 +295,52 @@ export class DiaChiKhachHangComponent implements OnInit {
     return value && (value.length < 10 || value.length > 11);
   }
 
+  hasMultipleSpaces(str: string): boolean {
+    return /\s{2,}/.test(str);
+  }
+
+  startsWithSpace(str: string): boolean {
+    return /^\s/.test(str);
+  }
+
+
+  validatePhoneNumber(phone: string): boolean {
+    if (!phone) return false;
+    // Loại bỏ khoảng trắng và kiểm tra định dạng số điện thoại
+    const cleanPhone = phone.trim();
+    const phoneRegex = /^0\d{9}$/;
+    return phoneRegex.test(cleanPhone);
+  }
+
+  onSoNhaInput(event: any) {
+    const value = event.target.value;
+    this.diaChiMoi.soNha = value.replace(/[^0-9]/g, '');
+  }
+
+  resetForm() {
+    // Reset form về giá trị mặc định
+    this.diaChiMoi = {
+      soNha: '',
+      duong: '',
+      sdt: '',
+      tinhThanh: '',
+      quanHuyen: '',
+      phuongXa: '',
+      quocGia: 'Việt Nam', // Giá trị mặc định cho quốc gia
+      loaiDiaChi: 'Nhà riêng', // Giá trị mặc định cho loại địa chỉ
+      trangThai: 'Còn sử dụng' // Giá trị mặc định cho trạng thái
+    };
+
+    // Reset các select dropdown
+    this.selectedTinhThanh = '';
+    this.selectedQuanHuyen = '';
+    this.selectedPhuongXa = '';
+    
+    // Clear districts và wards khi reset form
+    this.districts = [];
+    this.wards = [];
+
+  
+  }
+
 }

@@ -31,17 +31,20 @@
                                     <label class="form-label">Tên khách hàng</label>
                                     <input type="text" class="form-control" placeholder="Nhập tên khách hàng" name="ten"
                                         required [(ngModel)]="newKhachHang.ten" #ten="ngModel" 
-                                        pattern="^[a-zA-ZÀ-ỹ\s]{3,50}$"
-                                        maxlength="50">
-                                    <span class="text-danger" *ngIf="ten.invalid && (ten.dirty || ten.touched)">
-                                        <span *ngIf="ten.errors?.['required']">Tên khách hàng không được để trống</span>
-                                        <span *ngIf="ten.errors?.['pattern']">
-                                            <span *ngIf="hasNumbers(ten.value)">Tên không được chứa số</span>
-                                            <span *ngIf="hasSpecialCharacters(ten.value)">Tên không được chứa ký tự đặc biệt</span>
-                                        </span>
-                                        <span *ngIf="ten.errors?.['maxlength']">Tên khách hàng không được vượt quá 50 ký tự</span>
-                                        <span *ngIf="ten.value && ten.value.trim().length === 0">Tên khách hàng không được chỉ chứa khoảng trắng</span>
-                                    </span>
+                                        pattern="^[a-zA-ZÀ-ỹ][a-zA-ZÀ-ỹ\s]{2,25}$"
+                                        maxlength="25"
+                                        (input)="validateTen(ten.value)">
+                                    
+                                    <div class="text-danger" *ngIf="ten.invalid && (ten.dirty || ten.touched)">
+                                        <div *ngIf="ten.errors?.['required']">Tên khách hàng không được để trống</div>
+                                        <div *ngIf="ten.errors?.['pattern']">Tên khách hàng phải từ 3-25 ký tự và chỉ chứa chữ cái</div>
+                                        <div *ngIf="ten.errors?.['maxlength']">Tên khách hàng không được vượt quá 25 ký tự</div>
+                                        <div *ngIf="ten.value && ten.value.trim().length === 0">Tên khách hàng không được chỉ chứa khoảng trắng</div>
+                                        <div *ngIf="hasNumbers(ten.value)">Tên khách hàng không được chứa số</div>
+                                        <div *ngIf="hasSpecialCharacters(ten.value)">Tên khách hàng không được chứa ký tự đặc biệt</div>
+                                        <div *ngIf="hasMultipleSpaces(ten.value)">Tên khách hàng không được chứa nhiều khoảng trắng liên tiếp</div>
+                                        <div *ngIf="startsWithSpace(ten.value)">Tên khách hàng không được bắt đầu bằng khoảng trắng</div>
+                                    </div>
                                 </div>
                                 <div class="mt-4">
                                     <label class="form-label" for="ngayThangNamSinh">Ngày sinh</label>
@@ -65,14 +68,15 @@
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" class="form-control" name="sdt"
                                             placeholder="Nhập số điện thoại" required [(ngModel)]="newKhachHang.sdt"
-                                            #sdt="ngModel" pattern="^[0-9]{10,11}$">
+                                            #sdt="ngModel" pattern="^(?!.*(.)\1{9,})[0-9]{10,11}$">
                                         <span class="text-danger" *ngIf="sdt.invalid && (sdt.dirty || sdt.touched)">
-                                            <span *ngIf="sdt.errors?.['required']">Số điện thoại không được để trống</span>
-                                            <span *ngIf="sdt.errors?.['pattern']">
-                                                <span *ngIf="!validatePhoneNumber(sdt.value)">Số điện thoại chỉ được chứa số</span>
-                                                <span *ngIf="validatePhoneLength(sdt.value)">Số điện thoại phải có từ 10-11 số</span>
-                                            </span>
-                                            <span *ngIf="hasWhitespace(sdt.value)">Số điện thoại không được chứa khoảng trắng</span>
+                                            <div *ngIf="sdt.errors?.['required']">Số điện thoại không được để trống</div>
+                                            <div *ngIf="sdt.value && (
+                                                !validatePhoneNumber(sdt.value) || 
+                                                validatePhoneLength(sdt.value) || 
+                                                hasRepeatingDigits(sdt.value) || 
+                                                hasWhitespace(sdt.value)
+                                            )">Số điện thoại không hợp lệ</div>
                                         </span>
                                     </div>
                                 </div>
@@ -95,20 +99,14 @@
                                     <label class="form-label">Email</label>
                                     <input type="email" class="form-control" name="email" placeholder="Nhập email"
                                         required [(ngModel)]="newKhachHang.email" #email="ngModel" 
-                                        pattern="^\s*[a-zA-Z]+[a-zA-Z0-9._-]*@(gmail\.com|yahoo\.com|outlook\.com|hotmail\.com)$"
+                                        pattern="^\s*[a-zA-Z]+[a-zA-Z0-9._-]*@(gmail\.com|fpt.edu\.vn)$"
                                         [email]="true" (ngModelChange)="checkExistingEmail($event)">
-                                    <span class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors?.['required']">
+                                    <div class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors?.['required']">
                                         Email không được để trống
-                                    </span>
-                                    <span class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors?.['pattern']">
-                                        Email không hợp lệ (phải có tên miền gmail.com/yahoo.com/outlook.com/hotmail.com, không chứa kí tự đặc biệt, không có dấu cách ở giữa)
-                                    </span>
-                                    <span class="text-danger" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors?.['email']">
-                                        Email không đúng định dạng
-                                    </span>
-                                    <span class="text-danger" *ngIf="emailExists">
-                                        Email này đã tồn tại
-                                    </span>
+                                    </div>
+                                    <div class="text-danger" *ngIf="(email.invalid && (email.dirty || email.touched) && (email.errors?.['pattern'] || email.errors?.['email'])) || emailExists">
+                                        Email không hợp lệ
+                                    </div>
                                 </div>
                                 <div class="mt-4">
                                     <label class="form-label">Trạng thái</label>
