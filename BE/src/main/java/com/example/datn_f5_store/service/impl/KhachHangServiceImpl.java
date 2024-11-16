@@ -153,7 +153,7 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHang.setEmail(request.getEmail());
         khachHang.setAnh(request.getAnh());
         khachHang.setSdt(request.getSdt());
-        khachHang.setRoles(request.getRoles());
+        khachHang.setRoles("CUSTOMER");
         khachHang.setUserName(username);
         khachHang.setPassword(password);
         khachHang.setTrangThai("Đang hoạt động");
