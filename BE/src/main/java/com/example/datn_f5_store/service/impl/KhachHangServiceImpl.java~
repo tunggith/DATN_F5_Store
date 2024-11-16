@@ -54,6 +54,8 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHangEntity.getEmail(),
                 khachHangEntity.getAnh(),
                 khachHangEntity.getSdt(),
+                khachHangEntity.getUserName(),
+                khachHangEntity.getPassword(),
                 khachHangEntity.getRoles(),
                 khachHangEntity.getTrangThai()
         ));
@@ -70,9 +72,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         }
         if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
             throw new BadRequestException("Email đã tồn tại, không thể thêm mới!");
-        }
-        if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-            throw new BadRequestException("Email phải có đuôi @gmail.com");
         }
 
         String username;
@@ -117,9 +116,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         // Validate dữ liệu
         if (request.getTen() == null || request.getTen().isEmpty()) {
             throw new BadRequestException("Tên khách hàng không được để trống");
-        }
-        if(request.getRoles() == null || request.getRoles().isEmpty()){
-            throw new BadRequestException("Vai trò không được để trống");
         }
         if (request.getNgayThangNamSinh() == null) {
             throw new BadRequestException("Ngày sinh không được để trống");
@@ -213,15 +209,8 @@ public class KhachHangServiceImpl implements KhachHangService {
         Optional<KhachHangEntity> kiemTraTonTaiKhachHang = khachHangRepository.findById(id);
         if (kiemTraTonTaiKhachHang.isPresent()) {
             KhachHangEntity khachHang = kiemTraTonTaiKhachHang.get();
-            if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-                throw new BadRequestException("Email phải có đuôi @gmail.com");
-            }
-
             if (khachHangRequest.getTen() == null || khachHangRequest.getTen().isEmpty()) {
                 throw new BadRequestException("Tên khách hàng không được để trống");
-            }
-            if (khachHangRequest.getRoles() == null || khachHangRequest.getRoles().isEmpty()) {
-                throw new BadRequestException("Vai trò khách hàng không được để trống");
             }
             if (khachHangRequest.getNgayThangNamSinh() == null) {
                 throw new BadRequestException("Ngày sinh không được để trống");
