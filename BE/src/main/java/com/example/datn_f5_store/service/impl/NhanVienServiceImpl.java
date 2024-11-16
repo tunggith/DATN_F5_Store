@@ -32,27 +32,7 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public Page<NhanVienDto> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<NhanVienEntity> nhanVienPage = nhanVienRepo.findAll(pageable);
-
-        //chuyen doi tu NhanVienEntity sang NhanVienDto su dung phuong thuc map cua page
-        return nhanVienPage.map(entity -> new NhanVienDto(
-                entity.getId(),
-                entity.getMa(),
-                entity.getTen(),
-                entity.getGioiTinh(),
-                entity.getNgayThangNamSinh(),
-                entity.getEmail(),
-                entity.getSdt(),
-                entity.getDiaChi(),
-                entity.getAnh(),
-                entity.getUsername(),
-                entity.getPassword(),
-                entity.getNguoiTao(),
-                entity.getThoiGianTao(),
-                entity.getNguoiSua(),
-                entity.getThoiGianSua(),
-                entity.getTrangThai()
-        ));
+        return nhanVienRepo.getAll(pageable);
     }
 
     //Tim san pham theo ten hoac ma voi phan trang
@@ -78,6 +58,7 @@ public class NhanVienServiceImpl implements NhanVienService {
                 entity.getSdt(),
                 entity.getDiaChi(),
                 entity.getAnh(),
+                entity.getRoles(),
                 entity.getUsername(),
                 entity.getPassword(),
                 entity.getNguoiTao(),
@@ -119,22 +100,35 @@ public class NhanVienServiceImpl implements NhanVienService {
     //Phuong thuc cap nhat nhan vien
     @Override
     public DataResponse update(NhanVienRequest nhanVienRequest, Integer id) {
-        //Kiem tra du lieu dau vao
+        // Kiểm tra dữ liệu đầu vào
         if (!this.checkNhanVien(nhanVienRequest)){
-            //Tim nhan vien theo id
+            // Tìm nhân viên theo ID
             NhanVienEntity nhanVien = nhanVienRepo.findById(id).orElse(null);
             if (nhanVien == null) {
                 return new DataResponse(false, new ResultModel<>(null, "Nhân viên không tồn tại"));
             }
 
-            nhanVienRequest.setNguoiSua("admin");
+            // Kiểm tra trùng lặp với các nhân viên khác (trừ nhân viên hiện tại)
+            List<NhanVienEntity> nhanVienList = nhanVienRepo.findAll();
+            for (NhanVienEntity e : nhanVienList) {
+                if (!e.getId().equals(id) &&
+                        (e.getMa().equals(nhanVienRequest.getMa()) ||
+                                e.getEmail().equals(nhanVienRequest.getEmail()) ||
+                                e.getSdt().equals(nhanVienRequest.getSdt()))) {
+                    return new DataResponse(false, new ResultModel<>(null, "Mã, email hoặc số điện thoại đã tồn tại!"));
+                }
+            }
+
+            nhanVienRequest.setNguoiSua("ADMIN");
             nhanVienRequest.setThoiGianSua(new Date());
-            //luu hoac cap nhat nhan vien
+
+            // Lưu hoặc cập nhật nhân viên
             return this.saveOfUpdate(nhanVien, nhanVienRequest);
         } else {
             return new DataResponse(false, new ResultModel<>(null, "Lỗi dữ liệu đầu vào"));
         }
     }
+
 
     @Override
     public DataResponse delete(Integer id) {
@@ -156,6 +150,7 @@ public class NhanVienServiceImpl implements NhanVienService {
         NhanVienEntity nhanVien = nhanVienRepo.findByUsername(username);
         return nhanVien;
     }
+
 
     //phuong thuc luu va update nhan vien
     private DataResponse saveOfUpdate(NhanVienEntity entity, NhanVienRequest request) {
@@ -180,18 +175,21 @@ public class NhanVienServiceImpl implements NhanVienService {
         return check;
     }
 
-    //check trung lap ma nhan vien
+    // Kiểm tra trùng lặp mã, email và số điện thoại
     private boolean checkDuplicate(NhanVienRequest request){
-        boolean check = false;
         List<NhanVienEntity> nhanVien = nhanVienRepo.findAll();
-        //kiem tra ma nhan vien co trung lap hay khong
+
+        // Kiểm tra mã, email và số điện thoại có trùng lặp hay không
         for (NhanVienEntity e : nhanVien) {
-            if (e.getMa().equals(request.getMa())){
+            if (e.getMa().equals(request.getMa()) ||
+                    e.getEmail().equals(request.getEmail()) ||
+                    e.getSdt().equals(request.getSdt())) {
                 return true;
             }
         }
-        return check;
+        return false;
     }
+
 
     private void convertNhanVien(NhanVienEntity entity, NhanVienRequest request) {
         // Chỉ set ID nếu entity mới được tạo (ID = null)
@@ -206,9 +204,10 @@ public class NhanVienServiceImpl implements NhanVienService {
         entity.setSdt(request.getSdt());
         entity.setDiaChi(request.getDiaChi());
         entity.setAnh(request.getAnh());
+        entity.setRoles("USER");
         entity.setUsername(request.getUsername());
         entity.setPassword(request.getPassword());
-        entity.setNguoiTao("admin");
+        entity.setNguoiTao("ADMIN");
         entity.setThoiGianTao(new Date());
         entity.setNguoiSua(request.getNguoiSua());
         entity.setThoiGianSua(request.getThoiGianSua());

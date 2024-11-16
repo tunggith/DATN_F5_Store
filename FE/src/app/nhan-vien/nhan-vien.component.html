@@ -63,7 +63,9 @@
                                    formControlName="ten" required>
                             <div *ngIf="nhanVienForm.get('ten').invalid && nhanVienForm.get('ten').touched">
                                 <small class="text-danger" *ngIf="nhanVienForm.get('ten').errors?.required">Tên nhân
-                                    viên là bắt buộc.</small>
+                                    viên không được để trống.</small>
+                                <small class="text-danger" *ngIf="nhanVienForm.get('ten').errors?.pattern">Tên chỉ được
+                                    chứa chữ cái và khoảng trắng.</small>
                                 <small class="text-danger"
                                        *ngIf="validationErrors?.ten">{{ validationErrors.ten }}</small>
                             </div>
@@ -76,9 +78,9 @@
                                    formControlName="sdt" required>
                             <div *ngIf="nhanVienForm.get('sdt').invalid && nhanVienForm.get('sdt').touched">
                                 <small class="text-danger" *ngIf="nhanVienForm.get('sdt').errors?.required">Số điện
-                                    thoại là bắt buộc.</small>
+                                    thoại không được để trống.</small>
                                 <small class="text-danger"
-                                       *ngIf="nhanVienForm.get('sdt')?.errors?.pattern">Số điện thoại phải là 10 ký
+                                       *ngIf="nhanVienForm.get('sdt')?.errors?.pattern">Số điện thoại phải là 10 hoặc 11 ký
                                     tự và phải là số.</small>
                                 <small class="text-danger"
                                        *ngIf="validationErrors?.sdt">{{ validationErrors.sdt }}</small>
@@ -95,11 +97,15 @@
                             <div *ngIf="nhanVienForm.get('ngayThangNamSinh').invalid && nhanVienForm.get('ngayThangNamSinh').touched">
                                 <small class="text-danger"
                                        *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.required">
-                                    Ngày sinh là bắt buộc.
+                                    Ngày sinh không được để trống.
                                 </small>
                                 <small class="text-danger"
                                        *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageInvalid">
-                                    Bạn phải lớn hơn hoặc bằng 18 tuổi.
+                                    Ngày sinh phải lớn hơn hoặc bằng 18 tuổi.
+                                </small>
+                                <small class="text-danger"
+                                       *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageTooHigh">
+                                    Ngày sinh phải nhỏ hơn 100 tuổi.
                                 </small>
                                 <small class="text-danger" *ngIf="validationErrors?.ngayThangNamSinh">
                                     {{ validationErrors.ngayThangNamSinh }}
@@ -113,8 +119,7 @@
                             <input type="email" class="form-control" id="email" placeholder="Nhập email"
                                    formControlName="email" required>
                             <div *ngIf="nhanVienForm.get('email').invalid && nhanVienForm.get('email').touched">
-                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.required">Email là
-                                    bắt buộc.</small>
+                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.required">Email không được để trống.</small>
                                 <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.email">Email không
                                     hợp lệ.</small>
                                 <small class="text-danger"
@@ -132,7 +137,10 @@
                                 <label for="gioiTinhNam" style="margin-right: 20px;">Nam</label>
 
                                 <input type="radio" id="gioiTinhNu" formControlName="gioiTinh" value="0">
-                                <label for="gioiTinhNu">Nữ</label>
+                                <label for="gioiTinhNu" style="margin-right: 20px;">Nữ</label>
+
+                                <input type="radio" id="gioiTinhKhac" formControlName="gioiTinh" value="2">
+                                <label for="gioiTinhKhac">Khác</label>
                             </div>
                         </div>
 
@@ -193,7 +201,7 @@
                     <thead>
                     <tr>
                         <th>STT</th>
-                        <th>ID</th>
+<!--                        <th>ID</th>-->
                         <th>Mã</th>
                         <th>Tên</th>
                         <th>Giới tính</th>
@@ -210,10 +218,15 @@
                     <tbody>
                     <tr *ngFor="let nhanVien of nhanViens; let i = index">
                         <th scope="row">{{ i + 1 }}</th>
-                        <td>{{ nhanVien.id }}</td>
+<!--                        <td>{{ nhanVien.id }}</td>-->
                         <td>{{ nhanVien.ma }}</td>
                         <td>{{ nhanVien.ten }}</td>
-                        <td>{{ nhanVien.gioiTinh === '1' ? 'Nam' : 'Nữ' }}</td>
+                        <td>
+                            {{
+                                nhanVien.gioiTinh === '1' ? 'Nam' :
+                                    (nhanVien.gioiTinh === '0' ? 'Nữ' : 'Khác')
+                            }}
+                        </td>
                         <td>{{ formatDate(nhanVien.ngayThangNamSinh) }}</td>
                         <td>{{ nhanVien.email }}</td>
                         <td>{{ nhanVien.sdt }}</td>

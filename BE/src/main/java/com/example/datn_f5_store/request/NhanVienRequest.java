@@ -55,4 +55,6 @@ public class NhanVienRequest {
     private Date thoiGianSua;
 
     private String trangThai;
+
+    private String roles;
 }
