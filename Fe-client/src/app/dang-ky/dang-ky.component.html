@@ -1,41 +1,100 @@
 <div class="popup">
     <div class="form-login">
-        <span class="close">×</span>
-        <div class="image-user">
-            <div class="logo-user">
-                <i class="fa fa-user"></i>
+        <span class="close" (click)="close()">×</span>
+        <div class="form-group upload-container">
+            <div class="image-upload-container" (click)="document.getElementById('anh')?.click()">
+                <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)" required>
+                <div class="image-preview" *ngIf="khachHangNew.anh">
+                    <img [src]="khachHangNew.anh" alt="Ảnh nhân viên" />
+                </div>
+                <label for="anh" class="upload-label" *ngIf="!khachHangNew.anh">
+                    <i class="material-icons">add_a_photo</i>
+                </label>
             </div>
-            <i class="material-icons">add_a_photo</i>
         </div>
-        <form>
+        <form [formGroup]="khachHangForm" (ngSubmit)="addKhachHang()">
             <div>
                 <div class="mb-3">
                     <label class="form-label">Họ và tên</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" formControlName="hoTen" (focus)="markAsTouched('hoTen')"
+                        (blur)="markAsTouched('hoTen')">
+                    <div *ngIf="khachHangForm.get('hoTen')?.invalid && khachHangForm.get('hoTen')?.touched">
+                        <small class="text-danger" *ngIf="khachHangForm.get('hoTen')?.errors?.['required']">
+                            Tên khách hàng không được để trống.
+                        </small>
+                        <small class="text-danger" *ngIf="khachHangForm.get('hoTen')?.errors?.['pattern']">
+                            Dữ liệu không hợp lệ.
+                        </small>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Giới tính</label>
-                    <input type="password" class="form-control">
+                    <div style="display: flex;">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" formControlName="gioiTinh" id="flexRadioDefault1"
+                                value="0">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Nam
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" formControlName="gioiTinh" id="flexRadioDefault2"
+                                value="1" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Nữ
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Ngày, tháng, năm sinh</label>
-                    <input type="text" class="form-control">
+                    <input type="date" class="form-control" formControlName="ngayThangNamSinh"
+                        (focus)="markAsTouched('ngayThangNamSinh')" (blur)="markAsTouched('ngayThangNamSinh')">
+                    <div
+                        *ngIf="khachHangForm.get('ngayThangNamSinh')?.invalid && khachHangForm.get('ngayThangNamSinh')?.touched">
+                        <small class="text-danger" *ngIf="khachHangForm.get('ngayThangNamSinh')?.errors?.['required']">
+                            Ngày sinh là bắt buộc.
+                        </small>
+                        <small class="text-danger"
+                            *ngIf="khachHangForm.get('ngayThangNamSinh')?.errors?.['ageTooYoung']">
+                            Tuổi không hợp lệ.
+                        </small>
+                        <small class="text-danger"
+                            *ngIf="khachHangForm.get('ngayThangNamSinh')?.errors?.['ageTooHigh']">
+                            Tuổi không hợp lệ.
+                        </small>
+                    </div>
                 </div>
             </div>
             <div style="margin-left: 10px;">
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="password" class="form-control">
+                    <input type="email" class="form-control" formControlName="email" (focus)="markAsTouched('email')"
+                        (blur)="markAsTouched('email')">
+                    <div *ngIf="khachHangForm.get('email')?.invalid && khachHangForm.get('email')?.touched">
+                        <small class="text-danger" *ngIf="khachHangForm.get('email')?.errors?.['required']">
+                            Email là bắt buộc.
+                        </small>
+                        <small class="text-danger" *ngIf="khachHangForm.get('email')?.errors?.['email']">
+                            Định dạng email không hợp lệ.
+                        </small>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Số điện thoại</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" formControlName="sdt" (focus)="markAsTouched('sdt')"
+                        (blur)="markAsTouched('sdt')">
+                    <div *ngIf="khachHangForm.get('sdt')?.invalid && khachHangForm.get('sdt')?.touched">
+                        <small class="text-danger" *ngIf="khachHangForm.get('sdt')?.errors?.['required']">
+                            Số điện thoại là bắt buộc.
+                        </small>
+                        <small class="text-danger" *ngIf="khachHangForm.get('sdt')?.errors?.['pattern']">
+                            Số điện thoại không hợp lệ.
+                        </small>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" disabled placeholder="--chọn địa chỉ">
-                </div>
-                <button type="submit" class="btn btn-primary">Đăng ký</button>
+                <button type="submit" style="margin-top: 30px; margin-left: 55%; background-color: #003366;color: #fff;">Đăng
+                    ký</button>
             </div>
         </form>
     </div>

@@ -8,7 +8,7 @@ import { VeChungToiComponent } from 'src/app/ve-chung-toi/ve-chung-toi.component
 import { LienHeComponent } from 'src/app/lien-he/lien-he.component';
 import { GioHangComponent } from 'src/app/gio-hang/gio-hang.component';
 import { TaiKhoanComponent } from 'src/app/tai-khoan/tai-khoan.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { TraCuuDonHangComponent } from 'src/app/tra-cuu-don-hang/tra-cuu-don-hang.component';
 
 
@@ -28,6 +28,7 @@ import { TraCuuDonHangComponent } from 'src/app/tra-cuu-don-hang/tra-cuu-don-han
     AdminLayoutRouting,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class AdminLayoutModule { }

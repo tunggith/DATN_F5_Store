@@ -23,6 +23,7 @@ export const ROUTES: RouteInfo[] = [
 })
 export class NavbarComponent implements OnInit {
   popupDangNhap: boolean = false;
+  popupDangKy: boolean = false;
   menuItems: any[] = [];
   hoTen:string='';
   constructor(private router:Router) { }
@@ -34,6 +35,7 @@ export class NavbarComponent implements OnInit {
     localStorage.clear();
     this.hoTen = '';
     this.showSuccessMessage('Đăng xuất thành công!');
+    this.router.navigate(['/trang-chu']);
   }
   openPopupDangNhap() {
     this.popupDangNhap = true;
@@ -41,6 +43,12 @@ export class NavbarComponent implements OnInit {
   closePopupDangNhap() {
     this.popupDangNhap = false;
     this.hoTen= localStorage.getItem('hoTen')||'';
+  }
+  openPopUpDangKy(){
+    this.popupDangKy = true;
+  }
+  closePopupDangKy(){
+    this.popupDangKy = false;
   }
   getRedirectTaiKhoan(){
     this.router.navigate(['/tai-khoan']);

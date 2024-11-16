@@ -16,12 +16,13 @@
                                     <li><a *ngIf="hoTen!=''">Xin chào, {{hoTen}}</a></li>
                                     <li><a (click)="getRedirectTaiKhoan()"title="Tài khoản" *ngIf="hoTen!=''">Tài khoản</a></li>
                                     <li><a (click)="openPopupDangNhap()" title="Đăng nhập" *ngIf="hoTen==''">Đăng nhập</a></li>
-                                    <li><a href="my-account.html" title="Đăng kí" *ngIf="hoTen==''">Đăng ký</a></li>
+                                    <li><a (click)="openPopUpDangKy()" title="Đăng kí" *ngIf="hoTen==''">Đăng ký</a></li>
                                     <li><a *ngIf="hoTen!=''" (click)="logout()" title="Đăng xuất">Đăng xuất</a></li>
                                 </ul>
                             </div>
                         </div>
                         <app-dang-nhap *ngIf="popupDangNhap" (closePopup)="closePopupDangNhap()"></app-dang-nhap>
+                        <app-dang-ky *ngIf="popupDangKy" (closePopup)="closePopupDangKy()"></app-dang-ky>
                     </div>
                 </div>
                 <div class="header_middel">
