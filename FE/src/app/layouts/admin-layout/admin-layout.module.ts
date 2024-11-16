@@ -31,6 +31,7 @@ import { NotificationsComponent } from 'app/notifications/notifications.componen
 import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
 import { HoaDonChoComponent } from 'app/hoa-don-cho/hoa-don-cho.component';
 import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
+import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-hang.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.compone
     LoiQuyenComponent,
     HoaDonChoComponent,
     PopupSanPhamComponent,
+    ThongTinDonHangComponent,
   ],
 })
 

@@ -130,20 +130,20 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse editTrangThaiHoaDon(Integer idCho,Integer idDang) {
-        HoaDonEntity hoaDonCho = hoaDonRepository.findById(idCho).orElseThrow(()->new NoSuchElementException("Hóa đơn chờ thanh toán không tồn tại"));
+    public DataResponse editTrangThaiHoaDon(Integer idCho, Integer idDang) {
+        HoaDonEntity hoaDonCho = hoaDonRepository.findById(idCho).orElseThrow(() -> new NoSuchElementException("Hóa đơn chờ thanh toán không tồn tại"));
         hoaDonCho.setTrangThai("Đang thanh toán");
         hoaDonRepository.save(hoaDonCho);
-        HoaDonEntity hoaDonDang = hoaDonRepository.findById(idDang).orElseThrow(()->new NoSuchElementException("Hóa đơn Đang thanh toán không tồn tại"));
+        HoaDonEntity hoaDonDang = hoaDonRepository.findById(idDang).orElseThrow(() -> new NoSuchElementException("Hóa đơn Đang thanh toán không tồn tại"));
         hoaDonDang.setTrangThai("Chờ thanh toán");
         hoaDonRepository.save(hoaDonDang);
-        return new DataResponse(true,new ResultModel<>(null,"Chọn hóa đơn thành công!"));
+        return new DataResponse(true, new ResultModel<>(null, "Chọn hóa đơn thành công!"));
     }
 
     @Override
     public List<HoaDonDto> getByTrangThaiCho() {
         List<HoaDonEntity> list = hoaDonRepository.findByTrangThai("Chờ thanh toán");
-        return list.stream().map(entity-> new HoaDonDto(
+        return list.stream().map(entity -> new HoaDonDto(
                 entity.getId(),
                 entity.getKhachHang(),
                 entity.getNhanVien(),
@@ -163,7 +163,67 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 entity.getGiaoHang(),
                 entity.getGhiChu(),
                 entity.getTrangThai()
-                )).collect(Collectors.toList());
+        )).collect(Collectors.toList());
+    }
+
+    @Override
+    public DataResponse updateHoaDon(Integer id, Double tongTienUpdate, Integer idNhanVien) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại!"));
+        hoaDon.setTongTienSauVoucher(tongTienUpdate);
+        hoaDonRepository.save(hoaDon);
+        LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
+        LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
+        lichSuHoaDon.setHoaDon(hoaDon);
+        NhanVienEntity nhanVien = nhanVienRepository.findById(idNhanVien).orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại!"));
+        lichSuHoaDon.setNhanVien(nhanVien);
+        lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
+        lichSuHoaDon.setTrangThaiMoi("Cập nhật sản phẩm");
+        lichSuHoaDon.setThoiGianThucHien(new Date());
+        lichSuHoaDon.setLoaiThayDoi("Cập nhật sản phầm");
+        lichSuHoaDonRepository.save(lichSuHoaDon);
+        this.huyUpdateHoaDon(id);
+        return new DataResponse(true, new ResultModel<>(null, "Cập nhật thành công!"));
+    }
+
+    @Override
+    public DataResponse huyUpdateHoaDon(Integer id) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại!"));
+        VoucherEntity voucher = voucherRepository.findById(hoaDon.getVoucher().getId()).orElseThrow(() -> new RuntimeException("Voucher không tồn tại!"));
+        if (voucher != null && hoaDon.getGiaoHang() == 0) {
+            double tongTienBanDau = tinhTongTienBanDau(hoaDon.getTongTienSauVoucher(), voucher);
+            hoaDon.setTongTienBanDau(tongTienBanDau);
+        } else if (voucher != null && hoaDon.getGiaoHang() == 1) {
+            double tongTienBanDau = tinhTongTienBanDau(hoaDon.getTongTienSauVoucher(), voucher);
+            hoaDon.setTongTienBanDau(tongTienBanDau + hoaDon.getPhiShip());
+        }
+        hoaDonRepository.save(hoaDon);
+        return new DataResponse(true, new ResultModel<>(null, hoaDon));
+    }
+
+    public double tinhTongTienBanDau(double tongTienSauVoucher, VoucherEntity voucher) {
+        double tongTienBanDau = 0.0;
+        double giaTriVoucher = voucher.getGiaTriVoucher();
+        double giaTriGiamToiDa = voucher.getGiaTriGiamToiDa();
+        double giaTriHoaDonToiThieu = voucher.getGiaTriHoaDonToiThieu();
+        String kieuGiamGia = voucher.getKieuGiamGia();
+
+        if (kieuGiamGia.equals("%")) {
+            // Giảm giá theo phần trăm
+            double discountRate = giaTriVoucher / 100.0;
+            double giaTriGiamToiDaApDung = giaTriGiamToiDa;
+            tongTienBanDau = (tongTienSauVoucher + giaTriGiamToiDaApDung) / (1 - discountRate);
+        } else {
+            // Giảm giá theo số tiền cố định
+            double giaTriGiam = Math.min(giaTriVoucher, giaTriGiamToiDa);
+            tongTienBanDau = tongTienSauVoucher + giaTriGiam;
+        }
+
+        // Kiểm tra điều kiện tổng tiền ban đầu >= giá trị hóa đơn tối thiểu
+        if (tongTienBanDau < giaTriHoaDonToiThieu) {
+            throw new RuntimeException("Tổng tiền ban đầu không hợp lệ!");
+        }
+
+        return tongTienBanDau;
     }
 
 
@@ -331,9 +391,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 throw new RuntimeException("Không thể thanh toán hóa đơn 0đ!");
             }
             // Cập nhật trạng thái của hóa đơn
-            if(request.getHinhThucThanhToan()==0){
+            if (request.getHinhThucThanhToan() == 0) {
                 request.setTrangThai("Đã xác nhận");
-            }else {
+            } else {
                 request.setTrangThai("Chờ xác nhận");
             }
             request.setMa(hoaDon.getMa());
@@ -348,12 +408,12 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 request.setPhiShip(0.0);
             }
             if (hoaDon != null) {
-                LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findByHoaDon(hoaDon);
+                LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
                 LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
                 lichSuHoaDon.setHoaDon(hoaDon);
                 lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
                 lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
-                lichSuHoaDon.setTrangThaiMoi("Chờ xác nhận");
+                lichSuHoaDon.setTrangThaiMoi(request.getTrangThai());
                 lichSuHoaDon.setThoiGianThucHien(new Date());
                 lichSuHoaDon.setLoaiThayDoi("Thanh toán");
                 lichSuHoaDonRepository.save(lichSuHoaDon);
@@ -508,7 +568,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         } else {
             throw new RuntimeException("số lượng đã hết");
         }
-        if(chiTietHoaDon.getSoLuong()==0){
+        if (chiTietHoaDon.getSoLuong() == 0) {
             chiTietHoaDonRepository.deleteById(idHdct);
         }
         chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + 1);

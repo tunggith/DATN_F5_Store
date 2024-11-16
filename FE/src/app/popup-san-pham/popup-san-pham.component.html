@@ -55,7 +55,7 @@
                         <td>{{ctsp.san_pham?.gioiTinh?.ten}}</td>
                         <td>{{ctsp.size?.ten}}</td>
                         <td>{{ctsp.soLuong}}</td>
-                        <td>{{ctsp.donGia | currency:'VND'}}</td>
+                        <td>{{ctsp.donGia | number:'1.0-0' }} VNĐ</td>
                         <td>{{ctsp.ten}}</td>
                         <td><button class="select-product" (click)="selectProduct(ctsp.id)">
                                 <i class="material-icons">add_shopping_cart</i></button></td>
