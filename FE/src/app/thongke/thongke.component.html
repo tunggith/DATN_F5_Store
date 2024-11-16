@@ -4,6 +4,46 @@
     <h2 style="font-weight: bold; font-size: 2rem; color: #0066cc;">Thống kê doanh thu</h2>
   </div>
 
+  
+    
+  <!-- Khối tổng doanh thu -->
+  <div class="row" style="margin-top: 30px; justify-content: center;">
+    <div class="col-md-8">
+      <div class="card" style="background-color: #f7f7f7; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
+        <div class="row">
+           <!-- Cột 1: Tổng doanh thu -->
+           <div class="col-md-4">
+            <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
+              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Doanh thu ngày hôm nay </h4>
+              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
+                {{ DoanhthuHienTai | number }} VNĐ
+              </p>
+            </div>
+          </div>
+
+          <!-- Cột 2: Tổng doanh thu -->
+          <div class="col-md-4">
+            <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
+              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Tổng doanh thu {{titler}} {{ viewType === 'day' ? 'ngày' : (viewType === 'month' ? 'tháng' : (viewType === 'quarter' ? 'quý' : 'Năm')) }}</h4>
+              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
+                {{ totalDoanhThu | number }} VNĐ
+              </p>
+            </div>
+          </div>
+
+          <!-- Cột 2: Mục có doanh thu cao nhất -->
+          <div class="col-md-4">
+            <div class="revenue-box" style="padding: 15px;">
+              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">{{ viewType === 'day' ? 'Ngày' : (viewType === 'month' ? 'Tháng' : (viewType === 'quarter' ? 'Quý' : 'Năm')) }} có doanh thu cao nhất</h4>
+              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
+                {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VNĐ
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Hàng chứa 2 khối chính -->
   <div class="row" style="margin-bottom: 30px;">
 
@@ -16,7 +56,7 @@
         <div style="margin-bottom: 15px;">
           <label for="viewType" style="font-size: 1rem; color: #555;">Chọn kiểu thống kê:</label>
           <select id="viewType" [(ngModel)]="viewType" class="form-control form-control-sm" style="margin-top: 8px; border-radius: 8px;">
-            <option value="month">Thống kê theo tháng</option>
+            <option value="month">Thống kê các tháng của năm </option>
             <option value="quarter">Thống kê theo quý</option>
             <option value="year">Thống kê theo năm</option>
             <option value="day">Thống kê theo ngày</option>
@@ -63,7 +103,7 @@
     <!-- Khối thứ hai - Top sản phẩm -->
     <div class="col-md-6">
       <div class="card" style="padding: 20px; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-        <h4 style="font-weight: bold; font-size: 1.4rem; color: #333;">Top sản phẩm</h4>
+        <h4 style="font-weight: bold; font-size: 1.4rem; color: #333;">Top 5 sản phẩm bán nhiều nhất</h4>
         
         <!-- Nếu có sản phẩm -->
         <div *ngIf="topSanPham.length > 0">
@@ -109,32 +149,5 @@
     </div>
   </div>
 
-  <!-- Khối tổng doanh thu -->
-  <div class="row" style="margin-top: 30px; justify-content: center;">
-    <div class="col-md-8">
-      <div class="card" style="background-color: #f7f7f7; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
-        <div class="row">
-          <!-- Cột 1: Tổng doanh thu -->
-          <div class="col-md-6">
-            <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
-              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Tổng doanh thu</h4>
-              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ totalDoanhThu | number }} VNĐ
-              </p>
-            </div>
-          </div>
 
-          <!-- Cột 2: Mục có doanh thu cao nhất -->
-          <div class="col-md-6">
-            <div class="revenue-box" style="padding: 15px;">
-              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">{{ viewType === 'day' ? 'Ngày' : (viewType === 'month' ? 'Tháng' : (viewType === 'quarter' ? 'Quý' : 'Năm')) }} có doanh thu cao nhất</h4>
-              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VNĐ
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>

@@ -713,95 +713,71 @@ button:hover {
   transform: scale(1.5);      /* Phóng to khi hover */
   
 }
-
-/* Đảm bảo modal được căn giữa màn hình */
-.modal-dialog {
-  max-width: 800px;
-  margin: 1.75rem auto;
+/* CSS chung cho các radio button */
+.form-check-input[type="radio"] {
+  appearance: none;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
-/* Nền modal */
-.modal-content {
-  background-color: #fff; /* Màu nền trắng */
-  border-radius: 8px; /* Bo tròn các góc */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
-  padding: 20px;
+/* Hiển thị dấu chấm khi được chọn */
+.form-check-input[type="radio"]:checked::before {
+  content: '';
+  display: block;
+  background-color: #007bff; /* Màu xanh đậm khi chọn */
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-/* Tiêu đề modal */
-.modal-header h4 {
-  font-weight: bold;
-  color: #333; /* Màu tiêu đề */
+/* Thay đổi màu viền khi được chọn */
+.form-check-input[type="radio"]:checked {
+  border-color: #007bff;
 }
 
-/* Nhấn mạnh các nhãn */
-.modal-content label {
-  font-weight: 600;
+/* Thêm màu nền nhạt khi hover hoặc focus */
+.form-check-input[type="radio"]:hover,
+.form-check-input[type="radio"]:focus {
+  background-color: #f0f8ff;
+  border-color: #007bff;
+}
+
+/* Tùy chỉnh label để dễ nhận biết khi radio được chọn */
+.form-check-label {
+  margin-left: 8px;
+  font-weight: normal;
   color: #333;
+}
+
+.form-check-input[type="radio"]:checked + .form-check-label {
+  font-weight: bold;
+  color: #007bff;
+}
+
+
+
+/* Nhãn cho Giới Tính và Trạng Thái */
+.form-group label {
+  display: block;
+  font-weight: bold;
+  color: #6c757d;
   margin-bottom: 8px;
 }
 
-/* Cải thiện các input fields */
-.modal-content input,
-.modal-content select {
-  border: 1px solid #ddd; /* Đường viền nhẹ */
-  padding: 8px;
-  border-radius: 4px; /* Bo tròn các góc của input */
-  width: 100%;
-  box-sizing: border-box;
+/* Radio buttons căn ngang hàng */
+.form-check {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
 }
 
-/* Hiệu ứng khi có lỗi trong input */
-.modal-content .error-message {
-  color: red;
- 
- 
-}
-
-/* Cải thiện nút submit */
-.modal-content button[type="submit"] {
-  background-color: #007bff; /* Màu xanh cho nút submit */
-  color: white;
-  border: none;
-  padding: 12px;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.modal-content button[type="submit"]:hover {
-  background-color: #0056b3; /* Màu khi hover */
-}
-
-/* Cải thiện nút hủy */
-.modal-content button[type="button"] {
-  background-color: #6c757d; /* Màu xám cho nút hủy */
-  color: white;
-  border: none;
-  padding: 12px;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.modal-content button[type="button"]:hover {
-  background-color: #5a6268; /* Màu khi hover */
-}
-
-/* Chỉnh sửa giao diện form khi có lỗi */
-.error-message {
- 
-  color: red;
- 
-}
-
-.modal-body {
-  padding: 20px 0;
-}
-
-/* Thêm padding cho các form-group */
-.form-group {
-  margin-bottom: 20px;
-}

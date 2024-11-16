@@ -54,7 +54,7 @@ import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-h
   ],
   declarations: [
     BanHangComponent,
-    SanphamComponent,  // Đổi UserProfileComponent thành SanphamComponent
+    SanphamComponent,  
     TableListComponent,
     ThongkeComponent,
     IconsComponent,
