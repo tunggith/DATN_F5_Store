@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface ThanhToanClientService {
     DataResponse ThanhToanGioHang(Integer idKhachHang, HoaDonRequest hoaDonRequest, List<GioHangRequest> gioHangRequestList);
-    DataResponse thanhToan(HoaDonRequest request);
+    DataResponse thanhToan(HoaDonRequest request,List<Integer> idChiTietGioHang);
 }

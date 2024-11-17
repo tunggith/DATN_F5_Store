@@ -8,7 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/customer")
@@ -17,7 +20,8 @@ public class ThanhToanClientController {
     private ThanhToanClientService thanhToanClientService;
 
     @PostMapping("/thanh-toan")
-    public ResponseEntity<Object> thanhToan(@RequestBody HoaDonRequest request) {
-        return new ResponseEntity<>(thanhToanClientService.thanhToan(request), HttpStatus.OK);
+    public ResponseEntity<Object> thanhToan(@RequestBody HoaDonRequest request,
+                                            @RequestParam List<Integer> idChiTietGioHang) {
+        return new ResponseEntity<>(thanhToanClientService.thanhToan(request,idChiTietGioHang), HttpStatus.OK);
     }
 }

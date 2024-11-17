@@ -67,7 +67,7 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
 
     @Override
     @Transactional
-    public DataResponse thanhToan(HoaDonRequest request) {
+    public DataResponse thanhToan(HoaDonRequest request,List<Integer> idChiTietGioHang) {
         // Lấy giỏ hàng của khách hàng
         GioHangEntity gioHang = gioHangRepository.findByKhachHang_Id(request.getIdKhachHang());
 
@@ -80,8 +80,6 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
         if (request.getIdVoucher() != null) {
             VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
             hoaDon.setVoucher(voucher);
-        } else {
-            hoaDon.setVoucher(null);
         }
         PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
         hoaDon.setThanhToan(thanhToan);
@@ -101,11 +99,11 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
         hoaDon.setGiaTriGiam(request.getGiaTriGiam());
         hoaDon = hoaDonRepository.save(hoaDon);
 
-        // Lấy danh sách chi tiết giỏ hàng
-        List<ChiTietGioHangEntity> chiTietGioHang = chiTietGioHangRepository.findByGioHang_Id(gioHang.getId());
+        // Lấy danh sách chi tiết giỏ hàng được chọn
+        List<ChiTietGioHangEntity> selectedChiTietGioHang = chiTietGioHangRepository.findByIdIn(idChiTietGioHang);
 
         // Chuyển chi tiết giỏ hàng sang hóa đơn chi tiết
-        for (ChiTietGioHangEntity chiTiet : chiTietGioHang) {
+        for (ChiTietGioHangEntity chiTiet : selectedChiTietGioHang) {
             ChiTietHoaDonEntity hoaDonChiTiet = new ChiTietHoaDonEntity();
             hoaDonChiTiet.setHoaDon(hoaDon);
             hoaDonChiTiet.setChiTietSanPham(chiTiet.getChiTietSanPham());
@@ -116,12 +114,12 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             chiTietHoaDonRepository.save(hoaDonChiTiet);
         }
 
-        // Xóa giỏ hàng và chi tiết giỏ hàng
-        chiTietGioHangRepository.deleteByGioHang_Id(gioHang.getId());
-        gioHangRepository.deleteById(gioHang.getId());
+        // Xóa các chi tiết giỏ hàng đã thanh toán
+        chiTietGioHangRepository.deleteAll(selectedChiTietGioHang);
 
-        return new DataResponse(true,new ResultModel<>(null,"Thanh toán thành công!"));
+        return new DataResponse(true, new ResultModel<>(null, "Thanh toán thành công!"));
     }
+
 
     public String generateMaHoaDon() {
         // Lấy thời gian hiện tại
