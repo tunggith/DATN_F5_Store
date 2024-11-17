@@ -75,7 +75,7 @@ public class ChiTietGioHangIplm {
     }
 
     public void deleteChiTietGioHang(Integer chiTietGioHangId) {
-        repohg.delete(repohgct.findById(chiTietGioHangId).get().getGioHang());
+        repohgct.deleteById(chiTietGioHangId);
     }
 
 

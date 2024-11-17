@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SanPhamService } from 'src/app/san-pham/san-pham-service.component';
+import { GioHangService } from 'src/app/gio-hang/gio-hang-service.component';
+import { CartItem } from 'src/app/san-pham/cart-item.model';
 
 @Component({
   selector: 'app-san-pham',
@@ -34,8 +36,13 @@ export class SanPhamComponent implements OnInit {
 
 
 
+  // gio hang
+  idgh: number = 0;
 
-  constructor(private sanPhamService: SanPhamService) { }
+
+  constructor(private sanPhamService: SanPhamService,
+    private GioHangService : GioHangService
+  ) { }
 //====================== hàm chạy ========================
   ngOnInit(): void {
     this.loadData();
@@ -392,4 +399,145 @@ formatNumber(value: number): string {
 // ==============================================================================================================
 //                                    KẾT THÚC XỬ LÝ MỞ RỘNG/THU GỌN VÀ CHỌN THUỘC TÍNH
 // ==============================================================================================================
+
+
+
+// add sản phẩm vào giỏ hàng 
+
+  // thêm sản phẩm vào giỏ hàng
+  addToCart(productId: number): void {
+    console.log('id sản phẩm được thêm', productId);
+    const soLuongMoi = 1;
+    const id = localStorage.getItem('id') || ''; // Lấy ID khách hàng từ localStorage
+  
+    if (id !== '') {
+      // Nếu có ID khách hàng
+      this.GioHangService.getHoaDonByKhachHang(id).subscribe({
+        next: (response) => {
+          if (response && response.status) {
+            const hoaDons = response.result.content.content; // Danh sách hóa đơn
+            if (hoaDons && hoaDons.length > 0) {
+              this.idgh = hoaDons[0].id; // Lấy ID hóa đơn đầu tiên
+              this.addToCartWithHoaDon(productId, this.idgh, soLuongMoi); // Thêm sản phẩm vào giỏ hàng
+            } else {
+              this.createHoaDon(productId, soLuongMoi);
+            }
+          } else {
+            alert('Không tìm thấy khách hàng');
+          }
+        },
+        error: (error) => console.error('Lỗi khi gọi API lấy hóa đơn:', error),
+      });
+    } else {
+      // Nếu không có ID khách hàng, lưu vào localStorage
+      this.addToLocalCart(productId, soLuongMoi);
+    }
+  }
+  
+
+
+// tạo mới hóa đơn
+createHoaDon(productId: number, soLuongMoi: number) {
+  const khachHangId = localStorage.getItem('id') || ''; // Lấy ID khách hàng từ localStorage
+  if (!khachHangId) {
+    console.error('Không tìm thấy ID khách hàng trong localStorage.');
+    alert('Bạn cần đăng nhập để thực hiện thao tác này.');
+    return;
+  }
+  const newGioHang = {
+    khachHang: { id: khachHangId }, // Định dạng dữ liệu phù hợp với BE
+    thoiGianTao: new Date(),
+  };
+  this.GioHangService.createGioHang(newGioHang).subscribe({
+    next: (response) => {
+      if (response && response.status) {
+        this.idgh = response.result.id; // Lấy ID giỏ hàng vừa tạo
+        console.log('Giỏ hàng mới được tạo:', this.idgh);
+        this.addToCartWithHoaDon(productId, this.idgh, soLuongMoi); // Thêm sản phẩm vào giỏ hàng
+      } else {
+        console.error('Không thể tạo giỏ hàng mới.');
+      }
+    },
+    error: (error) => {
+      console.error('Lỗi khi tạo giỏ hàng mới:', error);
+      alert('Không thể tạo giỏ hàng mới.');
+    },
+  });
+}
+
+
+addToCartWithHoaDon(productId: number, hoaDonId: number, soLuongMoi: number) {
+  this.GioHangService.getByGh(hoaDonId).subscribe({
+    next: (response) => {
+      if (response && response.status) {
+        const cart: CartItem[] = response.result.content.content;
+        const productInCart = cart.find((item: CartItem) => item.id === productId);
+        let soLuong = soLuongMoi;
+        if (productInCart) {
+          soLuong = productInCart.soLuong + soLuongMoi;
+        }
+        this.GioHangService.addToCart2(hoaDonId, productId, soLuong).subscribe({
+          next: (response) => {
+            alert('Sản phẩm đã được thêm vào giỏ hàng!');
+          },
+          error: (error) => {
+            alert('Số lượng sản phẩm trong giỏ hàng đã lớn hơn số lượng hiện tại sản phẩm đang có');
+          },
+        });
+      } 
+    },
+    error: (error) => {
+      alert('Giỏ hàng đã được tạo thành công !');
+    },
+  });
+}
+
+addToLocalCart(productId: number, soLuongMoi: number): void {
+  // Kiểm tra xem có idGiỏHàng trong localStorage chưa
+  let idGioHang = localStorage.getItem('idGioHang');
+  if (!idGioHang) {
+    // Nếu chưa có idGiỏHàng, tạo mới một số ngẫu nhiên từ 1 đến 9 và lưu vào localStorage
+    idGioHang = (Math.floor(Math.random() * 9) + 1).toString(); // Tạo ID giỏ hàng ngẫu nhiên từ 1 đến 9
+    localStorage.setItem('idGioHang', idGioHang);
+  }
+
+  // Lấy giỏ hàng hiện tại từ localStorage
+  const localCart = JSON.parse(localStorage.getItem('localCart') || '[]');
+
+  // Kiểm tra sản phẩm đã tồn tại trong giỏ chưa
+  const productIndex = localCart.findIndex((item: any) => item.productId === productId);
+  if (productIndex > -1) {
+    // Nếu đã tồn tại, tăng số lượng
+    localCart[productIndex].soLuong += soLuongMoi;
+  } else {
+    // Nếu chưa, thêm sản phẩm mới
+    localCart.push({ productId, soLuong: soLuongMoi });
+  }
+
+  // Lưu lại giỏ hàng vào localStorage
+  localStorage.setItem('localCart', JSON.stringify(localCart));
+
+  // Lưu thời gian hết hạn (sau 1 ngày)
+  const expiration = new Date();
+  expiration.setDate(expiration.getDate() + 1); // Thêm 1 ngày
+  localStorage.setItem('localCartExpiration', expiration.toISOString());
+
+  alert('Sản phẩm đã được thêm vào giỏ hàng tạm thời!');
+}
+
+
+checkAndClearExpiredLocalCart(): void {
+  const expiration = localStorage.getItem('localCartExpiration');
+  if (expiration) {
+    const now = new Date();
+    const expirationDate = new Date(expiration);
+
+    if (now > expirationDate) {
+      // Xóa giỏ hàng tạm thời nếu đã hết hạn
+      localStorage.removeItem('localCart');
+      localStorage.removeItem('localCartExpiration');
+      console.log('Dữ liệu giỏ hàng tạm thời đã được xóa vì hết hạn.');
+    }
+  }
+}
 }

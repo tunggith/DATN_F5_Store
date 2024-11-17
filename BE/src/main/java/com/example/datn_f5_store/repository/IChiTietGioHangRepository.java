@@ -47,6 +47,10 @@ select new com.example.datn_f5_store.response.ChiTietGioHangReponse(
 
     ChiTietGioHangEntity findByGioHangAndChiTietSanPham(GioHangEntity gioHang, ChiTietSanPhamEntity chiTietSanPham);
 
+    @Query("""
+select p  from ChiTietGioHangEntity  p where p.gioHang.id = ?1
+""")
+    Page<ChiTietGioHangEntity> findByIdGioHang(Pageable pageable,Integer idgh);
 
 
 }
