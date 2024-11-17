@@ -1,13 +1,19 @@
 package com.example.datn_f5_store.service.impl;
 
-import com.example.datn_f5_store.dto.KhuyenMaiDto;
+import com.example.datn_f5_store.dto.VoucherDto;
 import com.example.datn_f5_store.entity.AnhChiTietSanPham;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
+import com.example.datn_f5_store.entity.MauSacEntity;
+import com.example.datn_f5_store.entity.SanPhamEntity;
+import com.example.datn_f5_store.entity.SizeEntity;
+import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IKhuyenMaiRepository;
-import com.example.datn_f5_store.service.IHomeClient;
+import com.example.datn_f5_store.repository.ISanPhamRepository;
+import com.example.datn_f5_store.repository.IVoucherRepository;
+import com.example.datn_f5_store.service.IHomeClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +28,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class HomeClientIPLM implements IHomeClient {
+public class HomeClientIPLM implements IHomeClientService {
     @Autowired
     private IChiTietSanPhamRepository spctRepo;
+    @Autowired
+    private ISanPhamRepository spRepo;
+
     @Autowired
     private IAnhChiTietSanPhamRepository anhRepo;
     @Autowired
@@ -32,6 +41,8 @@ public class HomeClientIPLM implements IHomeClient {
 
     @Autowired
     private IKhuyenMaiRepository khuyenMaiRepository;
+    @Autowired
+    private IVoucherRepository iVoucherRepository;
     @Override
     public ResponseEntity<List<AnhChiTietSanPham>> getSanPhamnew() {
         String trangThai = "Đang hoạt động"; // Giá trị trạng thái cần kiểm tra
@@ -90,27 +101,99 @@ public class HomeClientIPLM implements IHomeClient {
     }
 
     @Override
-    public Page<KhuyenMaiDto> findByTrangThai() {
+    public Page<VoucherDto> findByTrangThai() {
         Pageable pageable = PageRequest.of(0, 5);
-        Page<KhuyenMaiEntity> khuyenMaiEntities;
-            khuyenMaiEntities = khuyenMaiRepository.findByTrangThai("Đang diễn ra", pageable);
-        return khuyenMaiEntities.map(entity -> new KhuyenMaiDto(
+        Page<VoucherEntity> voucherEntities = iVoucherRepository.findByTrangThai2("Đang diễn ra", pageable);
+
+        return voucherEntities.map(entity -> new VoucherDto(
                 entity.getId(),
                 entity.getMa(),
                 entity.getTen(),
-                entity.getKieuKhuyenMai(),
-                entity.getMoTa(),
-                entity.getSoLuong(),
-                entity.getGiaTriKhuyenMai(),
-                entity.getThoiGianBatDau(),
+                entity.getGiaTriVoucher(),
+                entity.getKieuGiamGia(),
+                entity.getGiaTriGiamToiDa(),
+                entity.getGiaTriHoaDonToiThieu(), // Fixed this argument
+                entity.getThoiGianBatDau(), // Fixed this argument
                 entity.getThoiGianKetThuc(),
+                entity.getMoTa(), // Fixed this argument
+                entity.getSoLuong(),
+                entity.getNguoiTao(), // Fixed this argument
                 entity.getThoiGianTao(),
-                entity.getThoiGianSua(),
                 entity.getNguoiSua(),
-                entity.getNguoiTao(),
+                entity.getThoiGianSua(),
                 entity.getTrangThai()
         ));
     }
 
 
+    @Override
+    public List<SanPhamEntity> findBySanPhamId(Integer id) {
+        return spRepo.finfbyidSP(id);
+    }
+
+@Override
+public String getKhoangGia(Integer idSanPham) {
+    // Truy vấn MIN và MAX giá
+    List<Map<String, Double>> result = spctRepo.findMinMaxGiaBySanPhamId(idSanPham);
+
+    // Kiểm tra kết quả rỗng
+    if (result.isEmpty()) {
+        return "Không tìm thấy sản phẩm.";
+    }
+
+    // Lấy giá trị MIN và MAX từ kết quả
+    Double minGia = result.get(0).get("minGia");
+    Double maxGia = result.get(0).get("maxGia");
+
+    // Kiểm tra nếu giá trị null
+    if (minGia == null || maxGia == null) {
+        return "Không tìm thấy sản phẩm.";
+    }
+
+    // Nếu minGia và maxGia bằng nhau, chỉ trả về giá trị maxGia
+    if (minGia.equals(maxGia)) {
+        return maxGia.intValue() + ""; // Trả về giá trị maxGia dưới dạng chuỗi
+    }
+
+    // Trả về chuỗi khoảng giá
+    return minGia.intValue() + " - " + maxGia.intValue();
 }
+
+
+
+    // Lấy danh sách ID_SIZE duy nhất
+    public List<SizeEntity> getDistinctSizes(Integer idSanPham) {
+        return spctRepo.findDistinctSizesBySanPhamId(idSanPham);
+    }
+
+    // Trả về danh sách đối tượng MauSacEntity
+    public List<MauSacEntity> getDistinctColors(Integer idSanPham) {
+        return spctRepo.findDistinctColorsBySanPhamId(idSanPham);
+    }
+
+
+    public List<AnhChiTietSanPham> getAnhChiTietByMauSacAndSizeAndSanPham(Integer idMauSac, Integer idSize, Integer idSanPham) {
+        return anhRepo.findAnhChiTietByMauSacAndSizeAndSanPham(idMauSac, idSize, idSanPham);
+    }
+
+    public List<ChiTietSanPhamEntity> getChiTietByMauSacAndSizeAndSanPham(Integer idMauSac, Integer idSize, Integer idSanPham) {
+        return spctRepo.findChiTietByMauSacAndSizeAndSanPham(idMauSac, idSize, idSanPham);
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

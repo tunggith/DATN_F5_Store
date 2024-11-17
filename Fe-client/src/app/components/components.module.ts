@@ -10,13 +10,14 @@ import { FormsModule } from '@angular/forms';
 
 
 
+
 @NgModule({
   declarations: [
     FooterComponent,
     NavbarComponent,
     SidebarComponent,
     DangNhapComponent,
-    DangKyComponent,
+    DangKyComponent
   ],
   imports: [
     CommonModule,

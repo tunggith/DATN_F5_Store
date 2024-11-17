@@ -14,7 +14,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/san-pham', title: 'Sản phẩm', icon: '', class: '' },
   { path: '/ve-chung-toi', title: 'Về chúng tôi', icon: '', class: '' },
   { path: '/lien-he', title: 'Liên hệ', icon: '', class: '' },
-  { path: '/tra-cuu-don-hang', title: 'Tra cứu đơn hàng', icon: '', class: '' }
+  { path: '/tra-cuu-don-hang', title: 'Tra cứu đơn hàng', icon: '', class: '' },
+  
 ];
 @Component({
   selector: 'app-navbar',

@@ -104,4 +104,16 @@ public interface IAnhChiTietSanPhamRepository extends JpaRepository<AnhChiTietSa
     );
 
 
+    @Query("SELECT a FROM AnhChiTietSanPham a " +
+            "WHERE a.chiTietSanPham.id IN (" +
+            "    SELECT c.id FROM ChiTietSanPhamEntity c " +
+            "    WHERE c.mauSac.id = :idMauSac AND c.size.id = :idSize AND c.sanPham.id = :idSanPham" +
+            ")")
+    List<AnhChiTietSanPham> findAnhChiTietByMauSacAndSizeAndSanPham(
+            @Param("idMauSac") Integer idMauSac,
+            @Param("idSize") Integer idSize,
+            @Param("idSanPham") Integer idSanPham
+    );
+
+
 }
