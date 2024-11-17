@@ -5,7 +5,6 @@ import { AuthService } from 'app/auth.service';
 import { BanHangService } from 'app/ban-hang.service';
 import { DiaChiKhachHangService } from 'app/dia-chi-khach-hang/dia-chi-khach-hang.service';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
-import * as e from 'express';
 import { map, Observable, startWith } from 'rxjs';
 import Swal from 'sweetalert2';
 
@@ -37,7 +36,7 @@ export class BanHangComponent implements OnInit {
   icon: string = 'toggle_on';
   checkHoaDon: boolean = false;
   selectedVoucherId: number | null = null;
-  idThanhToan: number = 0;
+  idThanhToan: number = 1;
   idGiaoHang: number = 0;
   popup: boolean = false;
   popupHs: boolean = false;
@@ -96,6 +95,7 @@ export class BanHangComponent implements OnInit {
   trangThaiCho: any[] = [];
   editGioHang: boolean = false;
   editDiaChi: boolean = false;
+  vnpTransactionStatus: string | null = null;
   constructor(
     private banHangService: BanHangService,
     private giaoHangNhanhService: GiaoHangNhanhService,
@@ -122,6 +122,9 @@ export class BanHangComponent implements OnInit {
       if (activeTab) {
         this.activeTab = activeTab;
       }
+    });
+    this.route.queryParams.subscribe(params => {
+      this.vnpTransactionStatus = params['vnp_TransactionStatus'];
     });
   }
   //chuyển tab
@@ -174,6 +177,11 @@ export class BanHangComponent implements OnInit {
           this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
           this.tenKhachHang = hoaDonData.khachHang.ten;
           this.hasError = false;  // Có sản phẩm, không có lỗi
+          if (this.vnpTransactionStatus === '00') {
+            this.thanhtoanHoaDonSauCk(id);
+          }else{
+            this.router.navigate(['/ban-hang']);
+          }
         } else {
           this.resetHoaDonData();
           this.hasError = true;  // Không có sản phẩm, báo lỗi
@@ -395,8 +403,57 @@ export class BanHangComponent implements OnInit {
       giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
       diaChiNhanHang: this.diaChiNhanHang
     };
-
-    // Gọi service để thanh toán hóa đơn
+    if (this.idThanhToan == 2) {
+      this.banHangService.vnPay(this.tongTienSauVoucher+this.giaTriGiam+this.phiVanChuyen).subscribe(
+        (response: any) => {
+          const paymentUrl = response.paymentUrl;
+          if (paymentUrl) {
+            window.location.href = paymentUrl;
+          }
+        },
+        (error) => {
+          this.handleError(error); // Xử lý lỗi nếu có
+          this.showErrorMessage('Gọi API thanh toán VNPay thất bại! Vui lòng thử lại.');
+        }
+      );
+    } else {
+      // Gọi service để thanh toán hóa đơn
+      this.banHangService.thanhToanHoaDOn(idHoaDon, hoaDonData).subscribe(
+        response => {
+          this.showSuccessMessage('Thanh toán hóa đơn thành công!');
+          this.getHoaDon();
+          this.getByTrangThai();
+          this.icon = 'toggle_off';
+          // Hiển thị hộp thoại xác nhận in hóa đơn
+          const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
+          if (printConfirm) {
+            this.downloadPdf(idHoaDon);
+          }
+        },
+        error => {
+          this.handleError(error); // Xử lý lỗi nếu có
+          this.showErrorMessage('Thanh toán thất bại! Vui lòng thử lại.');
+        }
+      );
+    }
+  }
+  thanhtoanHoaDonSauCk(idHoaDon: number): void {
+    const hoaDonData = {
+      idKhachHang: this.idKhachHang || 1,
+      idNhanVien: this.idNhanVien,
+      idVoucher: this.selectedVoucherId || null,
+      idThanhToan: this.idThanhToan || 1,
+      ma: this.hoaDonChiTietMoi.hoaDon.ma,
+      tongTienBanDau: this.tongTienBanDau,
+      phiShip: this.phiVanChuyen,
+      hinhThucThanhToan: 0,
+      tongTienSauVoucher: 0,
+      tenNguoiNhan: this.hoTenNguoiNhan,
+      sdtNguoiNhan: this.soDienThoai,
+      emailNguoiNhan: this.email,
+      giaoHang: this.idGiaoHang || 0, // Trạng thái giao hàng
+      diaChiNhanHang: this.diaChiNhanHang
+    };
     this.banHangService.thanhToanHoaDOn(idHoaDon, hoaDonData).subscribe(
       response => {
         this.showSuccessMessage('Thanh toán hóa đơn thành công!');
@@ -407,6 +464,7 @@ export class BanHangComponent implements OnInit {
         const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
         if (printConfirm) {
           this.downloadPdf(idHoaDon);
+          this.router.navigate(['/ban-hang']);
         }
       },
       error => {

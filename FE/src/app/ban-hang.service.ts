@@ -17,6 +17,7 @@ export class BanHangService {
   private lichSuHoaDonUrl = 'http://localhost:8080/api/v1/lich-su-hoa-don';
   private thuocTinhUrl = 'http://localhost:8080/api/v1';
   public nhanVienUrl = 'http://localhost:8080/api/nhan-vien/find-by-username';
+  public vnPayUrl = 'http://localhost:8080/vnpay';
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -136,5 +137,8 @@ export class BanHangService {
   }
   huyUpdateHoaDon(id:number):Observable<any>{
     return this.http.get(`${this.hoaDonUrl}/huy-cap-nhat/${id}`);
+  }
+  vnPay(amount:number):Observable<any>{
+    return this.http.get(`${this.vnPayUrl}/createPay?amount=${amount}`);
   }
 }

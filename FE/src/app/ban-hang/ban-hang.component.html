@@ -163,13 +163,6 @@
                         <div>
                             <span>Tổng tiền tạm tính: {{tongTienBanDau | number:'1.0-0' }} VNĐ</span>
                         </div>
-                        <div>
-                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
-                                    style="text-align: center;">
-                                    {{phuongThuc.tenPhuongThuc}}</option>
-                            </select>
-                        </div>
                         <div class="giao-hang">
                             <span>Giao hàng: <i class="material-icons toggle-icon"
                                     [ngStyle]="{ color: icon === 'toggle_off' ? 'gray' : 'green' }"
@@ -190,6 +183,13 @@
                             </form>
                         </div>
                         <div>
+                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
+                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
+                                    style="text-align: center;">
+                                    {{phuongThuc.tenPhuongThuc}}</option>
+                            </select>
+                        </div> 
+                        <div>
                             <div>
                                 <span>Tiền khách đưa: </span>
                                 <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
@@ -207,10 +207,12 @@
                             <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
                         </div>
                         <div>
-                            <span>Số tiền được giảm: {{ (tongTienBanDau-tongTienSauVoucher||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Số tiền được giảm: {{ (tongTienBanDau-tongTienSauVoucher||0) | number:'1.0-0' }}
+                                VNĐ</span>
                         </div>
                         <div>
-                            <span>Tổng tiền phải thanh toán: {{(tongTienSauVoucher+phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Tổng tiền phải thanh toán: {{(tongTienSauVoucher+phiVanChuyen||0) | number:'1.0-0' }}
+                                VNĐ</span>
                         </div>
                         <div>
                             <span>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VNĐ</span>
@@ -255,7 +257,8 @@
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
-                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VNĐ</td>
+                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VNĐ
+                            </td>
                             <td class="button-select">
                                 <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"
                                     (click)="getIdThongTinDonHang(hoaDon.id)">Chờ xác nhận</div>

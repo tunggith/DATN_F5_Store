@@ -57,7 +57,7 @@ public class SecurityConfig{
                 .authorizeHttpRequests(auth -> {
                     // Các endpoint chung không cần quyền cụ thể
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
-                    auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/api/v1/customer/**").permitAll(); // Cho phép truy cập Swagger
+                    auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/api/v1/customer/**","/vnpay/**").permitAll(); // Cho phép truy cập Swagger
                     auth.anyRequest().authenticated(); // Các endpoint còn lại yêu cầu xác thực
                 });
 
