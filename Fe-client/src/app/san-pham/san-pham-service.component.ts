@@ -56,4 +56,15 @@ export class SanPhamService {
     return this.http.get(`${this.apiUrl}/filter`, { params });
   }
 
+
+  getAnhByIdCtsp(idMauSac: number, idSize: number, idSanPham: number): Observable<any[]> {
+    const params = new HttpParams()
+      .set('idMauSac', idMauSac.toString())
+      .set('idSize', idSize.toString())
+      .set('idSanPham', idSanPham.toString());
+
+    return this.http.get<any[]>(`${this.apiUrl}/get-anh-by-id-ctsp`, { params });
+  }
+  
 }
+

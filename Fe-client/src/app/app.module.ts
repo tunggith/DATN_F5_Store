@@ -6,11 +6,15 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { TraCuuDonHangComponent } from './tra-cuu-don-hang/tra-cuu-don-hang.component';
+import { ChiTietSanPhamComponent } from './chi-tiet-san-pham/chi-tiet-san-pham.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    ChiTietSanPhamComponent,
+
   ],
   imports: [
     BrowserModule,

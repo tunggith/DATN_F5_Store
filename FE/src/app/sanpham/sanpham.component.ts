@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SevricesanphamService } from './sevricesanpham.service'; // Import service
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { response } from 'express';
 import { forkJoin } from 'rxjs';
@@ -659,8 +659,8 @@ resetForm() {
               idMauSac: mauSacId,
               idSize: sizeId,
               ma: ma,
-              donGia:['', [Validators.required, Validators.min(0)]],
-            soLuong: ['', [Validators.required, Validators.min(0)]],
+              donGia: parseFloat(this.chiTietSanPhamForm.value.donGia) || 0, // Chuyển sang số, giá trị mặc định là 0
+              soLuong: parseInt(this.chiTietSanPhamForm.value.soLuong, 10) || 0, // Chuyển sang số nguyên, giá trị mặc định là 0
               moTa: this.chiTietSanPhamForm.value.moTa,
               trangThai: this.chiTietSanPhamForm.value.trangThai
             };
@@ -1516,6 +1516,18 @@ resetChiTietSanPhamForm() {
   this.chiTietSanPhamForm.updateValueAndValidity(); // Cập nhật lại trạng thái hợp lệ của form
 
   console.log("Đã reset chi tiết sản phẩm form");
+
+  this.loaddata();
+
+  // Nếu sử dụng FormArray cho checkbox, hãy clear giá trị của nó
+  (this.chiTietSanPhamForm.get('mauSacs') as FormArray).clear();
+  (this.chiTietSanPhamForm.get('sizes') as FormArray).clear();
+
+  // Hoặc nếu không dùng FormArray, bạn có thể set lại giá trị rỗng
+  this.chiTietSanPhamForm.patchValue({
+    mauSacs: [],
+    sizes: []
+  });
 }
 
 

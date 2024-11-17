@@ -27,4 +27,11 @@ public interface ISanPhamRepository extends JpaRepository<SanPhamEntity,Integer>
     List<SanPhamEntity> findProductsByStatus();
 
 
+
+
+
+    @Query("SELECT sp FROM SanPhamEntity sp WHERE sp.id = :id")
+    List<SanPhamEntity> finfbyidSP(@Param("id") Integer id);
+
+
 }
