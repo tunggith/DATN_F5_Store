@@ -57,7 +57,7 @@
                     <!--  rải voucher  -->
                     <div class="featured_product mb-4">
                         <div class="block_title text-center">
-                            <h3 class="blinking-text">khuyến mại </h3>
+                            <h3 class="blinking-text">  voucher </h3>
                         </div>
                     <div class="voucher-container">
                         <div *ngFor="let voucherItem of voucher" class="voucher-card">
@@ -89,8 +89,11 @@
                       <a href="single-product.html">
                         <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="{{ product.chiTietSanPham.ten || 'Product' }}">
                       </a>
+                      <!-- Nút mở popup -->
                       <div class="product_action">
-                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                        <button class="add_to_cart" (click)="openPopup(product.chiTietSanPham.sanPham.id)">
+                          <i class="fa fa-shopping-cart"></i> Add to cart
+                        </button>
                       </div>
                     </div>
                     <div class="product_content">
@@ -127,7 +130,9 @@
                         <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="{{ product.chiTietSanPham.ten || 'Product' }}">
                       </a>
                       <div class="product_action">
-                        <a href="#" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                        <button class="add_to_cart" (click)="openPopup(product.chiTietSanPham.sanPham.id)">
+                          <i class="fa fa-shopping-cart"></i> Add to cart
+                        </button>
                       </div>
                     </div>
                     <div class="product_content">
@@ -184,3 +189,107 @@
       </div>
     </div>
   </div>
+
+  <!--  modal -->
+
+
+<!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+  <div class="popup-content">
+    <!-- Nút đóng -->
+    <span class="close" (click)="closePopup()">&times;</span>
+
+    <div class="popup-body">
+      <!-- Phần bên trái: Hình ảnh -->
+      <div class="popup-left">
+        <!-- Ảnh chính -->
+        <img [src]="currentImage" alt="Product Image" class="popup-image" />
+
+        <!-- Danh sách ảnh thu nhỏ -->
+        <div class="image-list">
+          <img
+            *ngFor="let anh of anhChiTietSanPham"
+            [src]="anh.urlAnh"
+            class="thumbnail"
+            [class.selected]="currentImage === anh.urlAnh"
+            (click)="changeImage(anh.urlAnh)"
+          />
+        </div>
+      </div>
+
+      <!-- Phần bên phải: Nội dung sản phẩm -->
+      <div class="popup-right">
+        <p>Mã sản phẩm: <strong>{{ maSanPham }}</strong></p>
+        <h2>Sản Phẩm: <strong>{{ tenSanPham }}</strong></h2>
+
+        <p><strong>Thương hiệu:</strong> {{ ThuongHieu }}</p>
+        <p><strong>Xuất xứ:</strong> {{ XuatXu }}</p>
+        <p><strong>Giới tính:</strong> {{ gioiTinh }}</p>
+
+        <p>
+          <strong>Giá:</strong>
+          <span class="price">{{ formatTien(donGia) }} VNĐ</span>
+        </p>
+
+        <div class="options">
+          <div class="colors">
+            <strong>Màu sắc:</strong>
+            <div class="option-buttons">
+              <ng-container *ngFor="let color of mauSacList">
+                <button
+                  [class.selected]="color === selectedColor"
+                  (click)="selectColor(color)"
+                >
+                  {{ color.ten }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="sizes">
+            <strong>Kích thước:</strong>
+            <div class="option-buttons">
+              <ng-container *ngFor="let kichthuoc of sizeList">
+                <button
+                  [class.selected]="kichthuoc === selectedSize"
+                  (click)="selectSize(kichthuoc)"
+                >
+                  {{ kichthuoc.ten }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="stock-status">
+          <strong>Trạng thái hàng:</strong>
+          <span *ngIf="soLuongCTSP === 0" style="color: red;">Hết hàng</span>
+          <span *ngIf="soLuongCTSP > 0" style="color: brown;">
+            Còn {{ soLuongCTSP }}
+          </span>
+        </div>
+
+        <div class="quantity-container">
+          <strong>Số lượng:</strong>
+          <div class="quantity">
+            <button (click)="decreaseQuantity()">-</button>
+            <input
+              type="text"
+              [(ngModel)]="quantity"
+              min="1"
+              [max]="soLuongCTSP"
+              (input)="onQuantityChange($event)"
+            />
+            <button (click)="increaseQuantity()">+</button>
+          </div>
+          <p class="error-message" *ngIf="err2">{{ err2 }}</p>
+        </div>
+
+        <button class="add-to-cart">Thêm vào giỏ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  

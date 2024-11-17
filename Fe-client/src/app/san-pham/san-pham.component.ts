@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SanPhamService } from 'src/app/san-pham/san-pham-service.component';
+import { TrangChuServiceComponent } from 'src/app/trang-chu/trang-chu.service.component';
 import { GioHangService } from 'src/app/gio-hang/gio-hang-service.component';
 import { CartItem } from 'src/app/san-pham/cart-item.model';
 
@@ -20,6 +21,7 @@ export class SanPhamComponent implements OnInit {
   // Khai báo page và size trước
   page: number = 0;
   size: number = 10;
+  idCTSP: number = 0;
 
   // khai báo biến chọn màu
   selectedColors: string = "";
@@ -34,15 +36,14 @@ export class SanPhamComponent implements OnInit {
   isXuatXuOpen: boolean = false;
   isthuongHieuOpen: boolean = false;
 
+    // gio hang
+    idgh: number = 0;
 
 
-  // gio hang
-  idgh: number = 0;
 
 
-  constructor(private sanPhamService: SanPhamService,
-    private GioHangService : GioHangService
-  ) { }
+
+  constructor(private sanPhamService: SanPhamService, private trangChuService: TrangChuServiceComponent, private GioHangService: GioHangService) { }
 //====================== hàm chạy ========================
   ngOnInit(): void {
     this.loadData();
@@ -145,7 +146,7 @@ export class SanPhamComponent implements OnInit {
 
   changePage(page: number, event: MouseEvent) {
     event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
-  
+
     // Kiểm tra xem trang có hợp lệ không
     if (page >= 0 && page < this.totalPages.length) {
       console.log('Chuyển trang:', page);
@@ -153,13 +154,13 @@ export class SanPhamComponent implements OnInit {
       this.loadSanPham2(); // Gọi lại hàm loadSanPham2 để cập nhật sản phẩm theo trang
     }
   }
-  
+
   calculateTotalPages(): void {
     // Tính tổng số trang dựa trên tổng số sản phẩm và kích thước trang
     const totalPages = Math.ceil(this.totalElements / this.size);
     this.totalPages = Array.from({ length: totalPages }, (_, i) => i); // Tạo mảng số trang [0, 1, 2, ...]
   }
-  
+
 
   sanPhamList: any[] =[]
   giaMin: number = 0;
@@ -171,7 +172,7 @@ export class SanPhamComponent implements OnInit {
     const xuatXu = this.selectedXuatXu || '';
     const mauSac = this.selectedColors || '';
     const kichThuoc = this.selectedSizes || '';
-  
+
     // Gọi API với các tham số đã chuyển đổi thành string
     this.sanPhamService.getSanPhamloc(
       gioiTinh,
@@ -191,10 +192,10 @@ export class SanPhamComponent implements OnInit {
       console.log("Sản phẩm lọc đã cập nhật: ", this.sanPhamList);
     });
   }
-  
-  
-  
-  
+
+
+
+
 
 // ==============================================================================================================
 //                                     XỬ LÝ MỞ RỘNG/THU GỌN VÀ CHỌN THUỘC TÍNH
@@ -243,46 +244,46 @@ export class SanPhamComponent implements OnInit {
     console.log('Màu sắc đã chọn:', this.selectedColors);
     this.loadSanPham2();
   }
-  
+
   onthuongHieuChage(ThuongHieu: any): void {
     if (this.selectThuongHieu === ThuongHieu.id) {
       this.selectThuongHieu = "";  // Bỏ chọn nếu đã chọn lại
     } else {
       this.selectThuongHieu = ThuongHieu.id;  // Chọn mới
-       
+
     }
     console.log('Thương hiệu đã chọn:', this.selectThuongHieu);
     this.loadSanPham2();
   }
-  
+
   onSizeChange(size: any): void {
     if (this.selectedSizes === size.id) {
       this.selectedSizes = "";  // Bỏ chọn nếu đã chọn lại
     } else {
       this.selectedSizes = size.id;  // Chọn mới
-     
+
     }
     console.log('Kích thước đã chọn:', this.selectedSizes);
     this.loadSanPham2();
   }
-  
+
   onGioiTinhChange(GioiTinh: any): void {
     if (this.selectedGioiTinhs === GioiTinh.id) {
       this.selectedGioiTinhs = "";  // Bỏ chọn nếu đã chọn lại
     } else {
       this.selectedGioiTinhs = GioiTinh.id;  // Chọn mới
-   
+
     }
     console.log('Giới tính đã chọn:', this.selectedGioiTinhs);
     this.loadSanPham2();
   }
-  
+
   onXuatXuChange(XuatXu: any): void {
     if (this.selectedXuatXu === XuatXu.id) {
       this.selectedXuatXu = "";  // Bỏ chọn nếu đã chọn lại
     } else {
       this.selectedXuatXu = XuatXu.id;  // Chọn mới
-      
+
     }
     console.log('Xuất xứ đã chọn:', this.selectedXuatXu);
     this.loadSanPham2();
@@ -293,23 +294,23 @@ export class SanPhamComponent implements OnInit {
     this.selectedColors = "";  // Bỏ chọn màu sắc
     console.log('Đã bỏ chọn màu sắc');
   }
-  
+
   clearThuongHieu(): void {
     this.selectThuongHieu = "";  // Bỏ chọn thương hiệu
     console.log('Đã bỏ chọn thương hiệu');
-     
+
   }
-  
+
   clearSize(): void {
     this.selectedSizes = "";  // Bỏ chọn kích thước
     console.log('Đã bỏ chọn kích thước');
   }
-  
+
   clearGioiTinh(): void {
     this.selectedGioiTinhs = "";  // Bỏ chọn giới tính
     console.log('Đã bỏ chọn giới tính');
   }
-  
+
   clearXuatXu(): void {
     this.selectedXuatXu = "";  // Bỏ chọn xuất xứ
     console.log('Đã bỏ chọn xuất xứ');
@@ -401,14 +402,348 @@ formatNumber(value: number): string {
 // ==============================================================================================================
 
 
+// /===================================================modal=======================================================================
+// ===============================================================================================================================
+  // sử lý modal
+  isPopupVisible: boolean = false; // Trạng thái hiển thị popup
+  quantity: number = 0; // Số lượng sản phẩm
+  // thuộc tính sản phẩm click
+   sanPhamClick: any[] = [];
+    idSsanPham: string = '';
+    tenSanPham: string = '';
+    maSanPham: string = ''
+    ThuongHieu: string = ''
+    XuatXu: string = ''
+    gioiTinh: string = ''
+    selectedColor: any = null; // Lưu màu sắc được chọn
+    selectedSize: any = null; // Lưu kích thước được chọ
+    anhChiTietSanPham: any[] = []; // Lưu danh sách ảnh chi tiết sản phẩm
+    chitietSanPham: any[] = [];
+    currentImage: string = ''; // Ảnh chính mặc định
+    soLuongCTSP: number = 0 ;
+    donGiaDau: number = 0;
+    donGia : Number = 0;
+    selectedProductId: number = 0;
+ // ======================== //
 
-// add sản phẩm vào giỏ hàng 
 
+
+
+
+// hàm kiểm tra và sử lý  chọn màu với size
+
+ checkSelection(): void {
+  //  nếu chọn 2
+  if (this.selectedColor !== null && this.selectedSize !== null) {
+    console.log('Đã được chọn:');
+    console.log("id sản phẩm là ",this.idSsanPham)
+    console.log('Màu sắc:', this.selectedColor);
+    console.log('Kích thước:', this.selectedSize);
+    this.loadAnhChiTietSanPham(this.selectedColor.id,this.selectedSize.id,this.idSsanPham)
+
+
+  }
+  //  nếu chọn 1
+  if(this.selectedColor !== null ||  this.selectedSize !== null) {
+    if(this.selectedColor !== null ){
+      console.log('Đã 1 được chọn:');
+      console.log("id sản phẩm là ",this.idSsanPham)
+      console.log('Màu sắc:', this.selectedColor);
+    }else{
+      console.log("id sản phẩm là ",this.idSsanPham)
+      console.log('Đã 1 được chọn:');
+      console.log('Kích thước:', this.selectedSize);
+    }
+
+
+  }
+}
+
+
+
+
+// load ảnh khi chọn size và màu
+loadAnhChiTietSanPham(selectedColor: any, selectedSize: any, idSanPham: string): void {
+  const idSanPhamNumber = Number(idSanPham); // Chuyển đổi idSanPham từ string sang number
+
+  if (isNaN(idSanPhamNumber)) {
+    console.error('ID sản phẩm không hợp lệ:', idSanPham);
+    return;
+  }
+
+  this.trangChuService.getAnhByIdCtsp(selectedColor, selectedSize, idSanPhamNumber).subscribe(
+    (response) => {
+      if (response && response.length > 0) {
+        this.anhChiTietSanPham = response;
+        const chiTiet = response[0]?.chiTietSanPham;
+        if (chiTiet) {
+          this.soLuongCTSP = chiTiet.soLuong || 0;
+          this.donGiaDau = chiTiet.donGia || 0;
+          this.donGia = this.donGiaDau;
+          this.currentImage = response[0]?.urlAnh || '';
+          this.idCTSP = response[0]?.chiTietSanPham.id;
+          console.log('id laf ',this.idCTSP)
+          this.quantity = 0
+        } else {
+          console.warn('Không tìm thấy chi tiết sản phẩm trong phần tử đầu tiên của danh sách ảnh.');
+        }
+      } else {
+        console.warn('API trả về danh sách ảnh rỗng.');
+        this.anhChiTietSanPham = [];
+  
+        this.getctsp(this.selectedColor.id,this.selectedSize.id,this.idSsanPham);
+
+        this.currentImage = '';
+      }
+    },
+    (error) => {
+      console.error('Lỗi khi tải danh sách ảnh:', error);
+      this.anhChiTietSanPham = [];
+      this.soLuongCTSP = 0;
+
+      this.currentImage = '';
+    }
+  );
+  
+}
+getctsp(selectedColor: any, selectedSize: any, idSanPham: string) : void{
+  const idSanPhamNumber = Number(idSanPham); // Chuyển đổi idSanPham từ string sang number
+
+  if (isNaN(idSanPhamNumber)) {
+    console.error('ID sản phẩm không hợp lệ:', idSanPham);
+    return;
+  }
+
+  this.trangChuService.getCtsp(selectedColor, selectedSize, idSanPhamNumber).subscribe(
+    (response) => {
+      if (response && response.length > 0) {
+        this.chitietSanPham = response;
+        console.log("chi tiết sản phẩm lấy đc là :",this.chitietSanPham)
+        const chiTietsp = response[0];
+        console.log("chiTietsp sản phẩm lấy đc là :",chiTietsp)
+        this.soLuongCTSP = chiTietsp.soLuong || 0;
+        this.donGiaDau = chiTietsp.donGia || 0;
+        this.donGia = this.donGiaDau;
+        this.idCTSP = chiTietsp.id;
+        console.log('id la ctsp ',this.idCTSP)
+        this.quantity = 0
+    }
+    
+    });
+   
+}
+
+
+
+
+// đổi ảnh
+changeImage(url: string): void {
+  this.currentImage = url;
+  console.log('Ảnh hiện tại:', this.currentImage);
+}
+
+// chọn size
+ selectColor(color: any): void {
+  this.selectedColor = color;
+  console.log('Selected Color:', this.selectedColor);
+  this.checkSelection();
+}
+
+// chọn kích thước
+selectSize(size: any): void {
+  this.selectedSize = size;
+  console.log('Selected Size:', this.selectedSize);
+  this.checkSelection();
+}
+
+// chọn sản phẩm
+  getSanPham(id: number) {
+    this.trangChuService.findBySanPhamId(id)
+      .subscribe(
+        (response: any) => {
+          console.log('Phản hồi API sản phẩm click:', response);
+
+          // Giả sử dữ liệu sản phẩm có cấu trúc như trong phản hồi bạn gửi
+          const product = response[0]; // Nếu phản hồi là một mảng, chọn phần tử đầu tiên
+
+          // Lấy id và tên sản phẩm
+          this.idSsanPham = product.id;
+          this.tenSanPham = product.ten;
+          this.maSanPham = product.ma;
+          this.ThuongHieu = product.thuongHieu.ten;
+          this.XuatXu = product.xuatXu.ten;
+          this.gioiTinh = product.gioiTinh.ten;
+
+          console.log('ID sản phẩm:', this.idSsanPham);
+          console.log('Tên sản phẩm:', this.tenSanPham);
+          console.log('thuonghieu sản phẩm:', this.ThuongHieu);
+          console.log('XuatXu sản phẩm:', this.XuatXu);
+          console.log('gioiTinh sản phẩm:', this.gioiTinh);
+
+
+          // Lưu thông tin sản phẩm vào biến để sử dụng sau này
+          this.sanPhamClick = product;
+        },
+        (error) => {
+          console.error('Lỗi khi tải sản phẩm:', error);
+        }
+      );
+  }
+
+
+  loadSizes(id: number): void {
+    this.trangChuService.getSizes(id).subscribe(
+      (response: any[]) => {
+        console.log("size theo id sp",response)
+        this.sizeList = response;
+        console.log('sizeList:', this.sizeList);
+      },
+      (error) => {
+        console.error('Error loading sizes:', error);
+      }
+    );
+  }
+
+
+  loadColors(id: number): void {
+    this.trangChuService.getMau(id).subscribe(
+      (response: any[]) => {
+        console.log("màu theo id sp",response)
+        this.mauSacList = response;
+        console.log('mauSacList:', this.mauSacList);
+      },
+      (error) => {
+        console.error('Error loading mauSacList:', error);
+      }
+    );
+  }
+
+
+  openPopup(productId: number) {
+    // gọi hàm thực thi
+    this.loadSizes(productId)
+    this.loadColors(productId)
+    this.getSanPham(productId)
+    this.quantity = 0
+    this.isPopupVisible = true;
+    this.selectedProductId = productId; // Gán id sản phẩm được chọn
+    console.log('ID sản phẩm:', productId); // Hiển thị id sản phẩm trên console (kiểm tra)
+    // Thực hiện logic khác tại đây nếu cần
+
+  setTimeout(() => {
+    if (this.mauSacList.length >= 0) {
+      this.selectedColor = this.mauSacList[0]; // Chọn màu đầu tiên
+      console.log('Màu sắc mặc định:', this.selectedColor);
+    }
+    if (this.sizeList.length >= 0) {
+      this.selectedSize = this.sizeList[0]; // Chọn kích thước đầu tiên
+      console.log('Kích thước mặc định:', this.selectedSize);
+    }
+
+    // Kiểm tra và tải hình ảnh theo lựa chọn mặc định
+    if (this.selectedColor && this.selectedSize) {
+      this.checkSelection(); // Gọi lại kiểm tra lựa chọn
+    }
+  }, 100);
+  }
+  closePopup() {
+    this.soLuongCTSP = 0;
+    this.isPopupVisible = false; // Đóng popup
+  }
+
+
+
+
+
+
+
+  // sử lý số lượng ===========================
+
+
+
+  err2: string = ''; // Biến để hiển thị thông báo lỗi
+
+  // Xử lý khi người dùng thay đổi số lượng
+  onQuantityChange(event: any): void {
+    // Lấy giá trị từ input và loại bỏ khoảng trắng
+    let value = event.target?.value?.toString().trim();
+
+    // Loại bỏ tất cả các ký tự không phải là số
+    value = value.replace(/[^0-9]/g, '');
+
+    // Nếu giá trị sau khi làm sạch là rỗng, đặt về 0
+    if (!value) {
+      this.quantity = 0;
+      event.target.value = ''; // Cập nhật giá trị input thành rỗng
+      return;
+    }
+
+    // Chuyển đổi giá trị sang số nguyên
+    const numericValue = parseInt(value, 10);
+
+    // Kiểm tra số lượng nhỏ hơn 1
+    if (numericValue < 0) {
+      this.quantity = 0;
+      event.target.value = '0'; // Cập nhật lại input
+      return;
+    }
+
+    // Kiểm tra số lượng vượt quá giới hạn trong kho
+    if (numericValue > this.soLuongCTSP) {
+      this.quantity = this.soLuongCTSP;
+      event.target.value = this.soLuongCTSP.toString(); // Cập nhật lại input
+      return;
+    }
+
+    // Giá trị hợp lệ
+    this.err2 = ''; // Xóa lỗi
+    this.quantity = numericValue; // Gán số lượng hợp lệ
+    event.target.value = numericValue.toString(); // Đảm bảo input chỉ chứa số hợp lệ
+  }
+
+
+
+// Xử lý khi người dùng giảm số lượng
+decreaseQuantity(): void {
+  if (this.quantity > 0) {
+    this.quantity--;
+    this.err2 = ''; // Xóa lỗi nếu giá trị hợp lệ
+  }
+}
+
+// Xử lý khi người dùng tăng số lượng
+increaseQuantity(): void {
+  if (this.quantity < this.soLuongCTSP) {
+    this.quantity++;
+    this.err2 = ''; // Xóa lỗi nếu giá trị hợp lệ
+  }
+}
+
+// Xử lý khi người dùng dán dữ liệu (ngăn dán dữ liệu không hợp lệ)
+onPaste(event: ClipboardEvent): void {
+  const clipboardData = event.clipboardData?.getData('text') || '';
+  if (!/^\d+$/.test(clipboardData.trim())) {
+    event.preventDefault(); // Ngăn không cho dán giá trị không hợp lệ
+    this.err2 = 'Dữ liệu dán không hợp lệ. Vui lòng chỉ nhập số nguyên dương.';
+  }
+}
+
+formatTien(value: any): string {
+  const numValue = Number(value); // Chuyển đổi giá trị sang kiểu `number`
+  if (isNaN(numValue)) return '0'; // Xử lý trường hợp không phải số
+  return numValue.toLocaleString('de-DE'); // Định dạng dấu chấm làm phân cách hàng nghìn
+}
+
+  // ===================================================modal=======================================================================
+// ===============================================================================================================================
+
+
+// thêm sản phẩm vào giỏ hàng
   // thêm sản phẩm vào giỏ hàng
   addToCart(productId: number): void {
-    console.log('id sản phẩm được thêm', productId);
+    console.log('ID sản phẩm được thêm:', productId);
     const soLuongMoi = 1;
-    const id = localStorage.getItem('id') || ''; // Lấy ID khách hàng từ localStorage
+    let id = localStorage.getItem('id') || ''; // Lấy ID khách hàng từ localStorage
   
     if (id !== '') {
       // Nếu có ID khách hàng
@@ -429,10 +764,33 @@ formatNumber(value: number): string {
         error: (error) => console.error('Lỗi khi gọi API lấy hóa đơn:', error),
       });
     } else {
-      // Nếu không có ID khách hàng, lưu vào localStorage
-      this.addToLocalCart(productId, soLuongMoi);
+      // Nếu không có ID khách hàng, tự động tạo tài khoản và giỏ hàng
+      this.createAccountAndCart(productId, soLuongMoi);
     }
   }
+  
+  createAccountAndCart(productId: number, soLuongMoi: number): void {
+    this.GioHangService.createKhachhang().subscribe({
+      next: (response) => {
+        if (response && response.id) { // Kiểm tra nếu có trường `id` trong JSON
+          const newCustomerId = response.id; // ID khách hàng được tạo
+  
+          // Lưu thông tin khách hàng và trạng thái vào localStorage
+          localStorage.setItem('id', newCustomerId.toString()); // Lưu ID dưới dạng chuỗi
+          localStorage.setItem('store', 'true');
+  
+          console.log('Khách hàng mới đã được tạo:', newCustomerId);
+  
+          // Tiếp tục thêm sản phẩm vào giỏ hàng
+          this.createHoaDon(productId, soLuongMoi); // Tạo hóa đơn hoặc giỏ hàng
+        } else {
+          console.error('Không thể tạo tài khoản: Thiếu ID trong dữ liệu trả về');
+        }
+      },
+      error: (error) => console.error('Lỗi khi gọi API tạo khách hàng:', error),
+    });
+  }
+  
   
 
 
@@ -492,52 +850,8 @@ addToCartWithHoaDon(productId: number, hoaDonId: number, soLuongMoi: number) {
   });
 }
 
-addToLocalCart(productId: number, soLuongMoi: number): void {
-  // Kiểm tra xem có idGiỏHàng trong localStorage chưa
-  let idGioHang = localStorage.getItem('idGioHang');
-  if (!idGioHang) {
-    // Nếu chưa có idGiỏHàng, tạo mới một số ngẫu nhiên từ 1 đến 9 và lưu vào localStorage
-    idGioHang = (Math.floor(Math.random() * 9) + 1).toString(); // Tạo ID giỏ hàng ngẫu nhiên từ 1 đến 9
-    localStorage.setItem('idGioHang', idGioHang);
-  }
-
-  // Lấy giỏ hàng hiện tại từ localStorage
-  const localCart = JSON.parse(localStorage.getItem('localCart') || '[]');
-
-  // Kiểm tra sản phẩm đã tồn tại trong giỏ chưa
-  const productIndex = localCart.findIndex((item: any) => item.productId === productId);
-  if (productIndex > -1) {
-    // Nếu đã tồn tại, tăng số lượng
-    localCart[productIndex].soLuong += soLuongMoi;
-  } else {
-    // Nếu chưa, thêm sản phẩm mới
-    localCart.push({ productId, soLuong: soLuongMoi });
-  }
-
-  // Lưu lại giỏ hàng vào localStorage
-  localStorage.setItem('localCart', JSON.stringify(localCart));
-
-  // Lưu thời gian hết hạn (sau 1 ngày)
-  const expiration = new Date();
-  expiration.setDate(expiration.getDate() + 1); // Thêm 1 ngày
-  localStorage.setItem('localCartExpiration', expiration.toISOString());
-
-  alert('Sản phẩm đã được thêm vào giỏ hàng tạm thời!');
-}
 
 
-checkAndClearExpiredLocalCart(): void {
-  const expiration = localStorage.getItem('localCartExpiration');
-  if (expiration) {
-    const now = new Date();
-    const expirationDate = new Date(expiration);
 
-    if (now > expirationDate) {
-      // Xóa giỏ hàng tạm thời nếu đã hết hạn
-      localStorage.removeItem('localCart');
-      localStorage.removeItem('localCartExpiration');
-      console.log('Dữ liệu giỏ hàng tạm thời đã được xóa vì hết hạn.');
-    }
-  }
-}
+
 }

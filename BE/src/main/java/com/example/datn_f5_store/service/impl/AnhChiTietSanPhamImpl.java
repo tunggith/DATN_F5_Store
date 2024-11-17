@@ -1,10 +1,8 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.AnhChiTietSanPhamDto;
-import com.example.datn_f5_store.dto.DiaChiKhachHangDto;
 import com.example.datn_f5_store.entity.AnhChiTietSanPham;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
-import com.example.datn_f5_store.entity.DiaChiKhachHangEntity;
 import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.request.AnhChiTietSanPhamRequest;
@@ -90,4 +88,7 @@ public class AnhChiTietSanPhamImpl implements IAnhChiTietSanPhamService {
             return new DataResponse(false,new ResultModel<>(null,"create of update exception"));
         }
     }
+
+
+
 }

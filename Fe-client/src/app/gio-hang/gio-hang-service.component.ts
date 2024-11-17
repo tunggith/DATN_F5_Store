@@ -34,6 +34,12 @@ export class GioHangService {
     return this.http.post<any>(url, newGioHang);
   }
 
+  createKhachhang(): Observable<any> {
+    const url = 'http://localhost:8080/api/v1/customer/TaoKhachHangVanglai';
+    return this.http.post<any>(url,'');
+  }
+
+
   addToCart(idGioHang: number, idChiTietSanPham: number, soLuong: number): Observable<any> {
     const requestBody = {
       idGioHang: idGioHang,

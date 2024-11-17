@@ -6,17 +6,23 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
 import { TraCuuDonHangComponent } from './tra-cuu-don-hang/tra-cuu-don-hang.component';
+import { RouterModule } from '@angular/router';
+
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ComponentsModule,
     HttpClientModule,
+    RouterModule
 ],
   providers: [],
   bootstrap: [AppComponent]

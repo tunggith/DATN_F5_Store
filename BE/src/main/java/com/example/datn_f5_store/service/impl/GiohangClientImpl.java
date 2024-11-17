@@ -5,12 +5,19 @@ import com.example.datn_f5_store.dto.GioHangDto;
 import com.example.datn_f5_store.entity.ChiTietGioHangEntity;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.GioHangEntity;
+import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IChiTietGioHangRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
+import com.example.datn_f5_store.repository.IDiaChiKhachHangRepository;
 import com.example.datn_f5_store.repository.IGioHangRepository;
+import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.example.datn_f5_store.request.ChiTietGioHangRequest;
+import com.example.datn_f5_store.request.KhachHangRequest;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IGioHangClientService;
+import com.example.datn_f5_store.service.sendEmail.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +41,17 @@ public class GiohangClientImpl implements IGioHangClientService {
 
     @Autowired
     private IChiTietSanPhamRepository repoCTSP;
+
+    @Autowired
+    private IKhachHangRepository khachHangRepository;
+    @Autowired
+    private IDiaChiKhachHangRepository diaChiKhachHangRepository;
+    @Autowired
+    private SendEmailService sendEmailService;
+    @Autowired
+    private IGioHangRepository gioHangRepository;
+
+
 
     @Override
     public ChiTietGioHangEntity addOrUpdateChiTietGioHang(ChiTietGioHangRequest chiTietGioHangRequest) {
@@ -132,9 +151,7 @@ public class GiohangClientImpl implements IGioHangClientService {
     public Page<GioHangDto> findByKhachHang(int page, int size, Integer idkh) {
         Pageable pageable = PageRequest.of(page, size);
 
-
         Page<GioHangEntity> gioHangEntities = repohg.findByIdKhachHang(pageable,idkh);
-
 
         List<GioHangDto> dtoList = gioHangEntities.getContent().stream()
                 .map(ChiTietGioHang -> new GioHangDto(
@@ -144,8 +161,24 @@ public class GiohangClientImpl implements IGioHangClientService {
 
                 ))
                 .collect(Collectors.toList());
-
-
         return new PageImpl<>(dtoList, pageable, gioHangEntities.getTotalElements());
     }
+
+    @Override
+    public KhachHangEntity registerClientGh() {
+
+        KhachHangEntity entity = new KhachHangEntity();
+        entity.setMa("KHVL");
+        entity.setTen("Khách vãng lai");
+        entity.setRoles("CUSTOMER");
+        entity.setTrangThai("Đang hoạt động");
+        KhachHangEntity savedEntity = khachHangRepository.save(entity);
+        GioHangEntity gioHangEntity = new GioHangEntity();
+        gioHangEntity.setKhachHang(savedEntity);
+        gioHangEntity.setThoiGianTao(new Date());
+        gioHangRepository.save(gioHangEntity);
+
+        return savedEntity;
+    }
+
 }

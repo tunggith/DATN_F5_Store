@@ -1,7 +1,9 @@
 package com.example.datn_f5_store.repository;
 
-import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
+import com.example.datn_f5_store.entity.MauSacEntity;
+import com.example.datn_f5_store.entity.SizeEntity;
+import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamEntity, Integer> {
@@ -209,6 +212,31 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
     """)
     List<ChiTietSanPhamEntity> findTop5ActiveProducts(@Param("trangThai") String trangThai, Pageable pageable);
 
+
+
+
+    @Query("SELECT new map(MIN(c.donGia) as minGia, MAX(c.donGia) as maxGia) " +
+            "FROM ChiTietSanPhamEntity c " +
+            "WHERE c.sanPham.id = :idSanPham")
+    List<Map<String, Double>> findMinMaxGiaBySanPhamId(@Param("idSanPham") Integer idSanPham);
+
+
+
+    @Query("SELECT DISTINCT c.size FROM ChiTietSanPhamEntity c WHERE c.sanPham.id = :idSanPham")
+    List<SizeEntity> findDistinctSizesBySanPhamId(@Param("idSanPham") Integer idSanPham);
+
+
+    @Query("SELECT DISTINCT c.mauSac FROM ChiTietSanPhamEntity c WHERE c.sanPham.id = :idSanPham")
+    List<MauSacEntity> findDistinctColorsBySanPhamId(@Param("idSanPham") Integer idSanPham);
+
+    @Query("SELECT c FROM ChiTietSanPhamEntity c WHERE c.mauSac.id = :idMauSac AND c.size.id = :idSize AND c.sanPham.id = :idSanPham")
+    List<ChiTietSanPhamEntity> findChiTietByMauSacAndSizeAndSanPham(
+            @Param("idMauSac") Integer idMauSac,
+            @Param("idSize") Integer idSize,
+            @Param("idSanPham") Integer idSanPham
+    );
+
 }
+
 
 
