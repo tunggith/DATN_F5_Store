@@ -371,3 +371,230 @@ css tiền
 .product_price span {
   color: #333;                /* Màu chữ chính */
 }
+
+
+
+
+/* and css modal  */
+/* Popup tổng thể */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 800px; /* Tăng chiều rộng */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  overflow: hidden;
+}
+
+/* Nút đóng */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #555;
+}
+
+.close:hover {
+  color: red;
+}
+
+/* Phần nội dung chính */
+.popup-body {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+/* Phần bên trái: Hình ảnh */
+.popup-left {
+  flex: 1; /* Chiếm 50% chiều rộng */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.popup-image {
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Danh sách ảnh thu nhỏ */
+.image-list {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+  border-color: #007bff;
+}
+
+.thumbnail.selected {
+  border-color: #007bff;
+  border-width: 2px;
+}
+
+/* Phần bên phải: Nội dung sản phẩm */
+.popup-right {
+  flex: 1; /* Chiếm 50% chiều rộng */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  font-size: 14px;
+  text-align: left;
+}
+
+.popup-right h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.popup-right p {
+  margin: 5px 0;
+}
+
+.popup-right .price {
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Màu sắc và kích thước */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.colors,
+.sizes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.option-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Các nút trong option-buttons (mặc định) */
+.option-buttons button {
+  position: relative; /* Để sử dụng pseudo-element */
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background: #040000;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover hiệu ứng */
+.option-buttons button:hover {
+  background-color: #f6f6f7;
+  color: black;
+}
+
+/* Khi nút được chọn */
+.option-buttons button.selected {
+  background-color: transparent; /* Nền trong suốt */
+  border: 2px solid #514a07d6; /* Viền đổi màu */
+  color: inherit; /* Giữ nguyên màu chữ */
+  transition: border-color 0.3s ease;
+}
+
+/* Thêm dấu tick khi được chọn */
+.option-buttons button.selected::after {
+  content: "✓"; /* Biểu tượng dấu tick */
+  position: absolute;
+  bottom: -5px; /* Căn dưới */
+  right: -1px; /* Căn phải */
+  font-size: 16px; /* Kích thước dấu tick */
+  color: #514a07d6; /* Màu sắc dấu tick (giống màu viền) */
+  font-weight: bold;
+}
+
+
+/* Bộ chọn số lượng */
+.quantity-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity input {
+  width: 50px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.quantity button {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background: #dfdcdc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.quantity button:hover {
+  background: #000810;
+  color: white;
+}
+
+/* Nút thêm vào giỏ */
+.add-to-cart {
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-to-cart:hover {
+  background: #218838;
+}
+

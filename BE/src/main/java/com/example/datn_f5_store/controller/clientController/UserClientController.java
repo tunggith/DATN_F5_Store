@@ -63,4 +63,5 @@ public class UserClientController {
     private ResponseEntity<Object> getAll(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(userClientService.getDiaChiByKhachHang(id),HttpStatus.OK);
     }
+
 }

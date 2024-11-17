@@ -3,6 +3,7 @@ package com.example.datn_f5_store.controller.clientController;
 import com.example.datn_f5_store.entity.ChiTietGioHangEntity;
 import com.example.datn_f5_store.request.ChiTietGioHangRequest;
 import com.example.datn_f5_store.request.GioHangRequest;
+import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IGioHangClientService;
@@ -140,6 +141,11 @@ public class GioHangClientController {
             dataResponse.setStatus(false);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(dataResponse);
         }
+    }
+
+    @PostMapping("/TaoKhachHangVanglai")
+    private ResponseEntity<Object> register(){
+        return new ResponseEntity<>(iGioHangClientService.registerClientGh(),HttpStatus.CREATED);
     }
 
 

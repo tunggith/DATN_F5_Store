@@ -16,19 +16,19 @@
                                 <div class="layere_categorie" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
                                     <ul>
                                         <li *ngFor="let size of sizeList">
-                                          <input 
-                                            type="radio" 
-                                            id="{{ size.id }}" 
-                                            name="size" 
-                                            [value]="size.id" 
-                                            [(ngModel)]="selectedSizes" 
-                                            (click)="onSizeChange(size)" 
-                                            [checked]="selectedSizes == size.id" 
+                                          <input
+                                            type="radio"
+                                            id="{{ size.id }}"
+                                            name="size"
+                                            [value]="size.id"
+                                            [(ngModel)]="selectedSizes"
+                                            (click)="onSizeChange(size)"
+                                            [checked]="selectedSizes == size.id"
                                           />
                                           <label for="{{ size.id }}">{{ size.ten }}</label>
                                         </li>
                                       </ul>
-                                      
+
                                 </div>
                             </div>
                         </div>
@@ -44,19 +44,19 @@
                             <div class="layere_categorie" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
                                 <ul>
                                     <li *ngFor="let thuonghieu of ThuongHieuList">
-                                      <input 
-                                        type="radio" 
-                                        id="{{ thuonghieu.id }}" 
-                                        name="thuonghieu" 
-                                        [value]="thuonghieu.id" 
-                                        [(ngModel)]="selectThuongHieu" 
-                                        (click)="onthuongHieuChage(thuonghieu)" 
-                                        [checked]="selectThuongHieu == thuonghieu.id" 
+                                      <input
+                                        type="radio"
+                                        id="{{ thuonghieu.id }}"
+                                        name="thuonghieu"
+                                        [value]="thuonghieu.id"
+                                        [(ngModel)]="selectThuongHieu"
+                                        (click)="onthuongHieuChage(thuonghieu)"
+                                        [checked]="selectThuongHieu == thuonghieu.id"
                                       />
                                       <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
                                     </li>
                                   </ul>
-                                  
+
                             </div>
                         </div>
 
@@ -73,19 +73,19 @@
                                             <div class="layere_categorie" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
                                                 <ul>
                                                     <li *ngFor="let color of mauSacList">
-                                                      <input 
-                                                        type="radio" 
-                                                        id="{{ color.id }}" 
-                                                        name="color" 
-                                                        [value]="color.id" 
-                                                        [(ngModel)]="selectedColors" 
-                                                        (click)="onColorChange(color)" 
-                                                        [checked]="selectedColors === color.id" 
+                                                      <input
+                                                        type="radio"
+                                                        id="{{ color.id }}"
+                                                        name="color"
+                                                        [value]="color.id"
+                                                        [(ngModel)]="selectedColors"
+                                                        (click)="onColorChange(color)"
+                                                        [checked]="selectedColors === color.id"
                                                       />
                                                       <label for="{{ color.id }}">{{ color.ten }}</label>
                                                     </li>
                                                   </ul>
-                                                  
+
                                             </div>
                                         </div>
 
@@ -106,18 +106,18 @@
                                         <div class="layere_categorie" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
                                             <ul>
                                                 <li *ngFor="let xuatXu of xuatXuList">
-                                                  <input 
-                                                    type="radio" 
-                                                    id="{{ xuatXu.id }}" 
-                                                    name="xuatXu" 
-                                                    [value]="xuatXu.id" 
-                                                    [(ngModel)]="selectedXuatXu" 
-                                                    (click)="onXuatXuChange(xuatXu)" 
-                                                    [checked]="selectedXuatXu === xuatXu.id" 
+                                                  <input
+                                                    type="radio"
+                                                    id="{{ xuatXu.id }}"
+                                                    name="xuatXu"
+                                                    [value]="xuatXu.id"
+                                                    [(ngModel)]="selectedXuatXu"
+                                                    (click)="onXuatXuChange(xuatXu)"
+                                                    [checked]="selectedXuatXu === xuatXu.id"
                                                   />
                                                   <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
                                                 </li>
-                                              </ul>                                              
+                                              </ul>
                                         </div>
                                     </div>
 
@@ -138,19 +138,19 @@
                                         <div class="layere_categorie" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
                                             <ul>
                                                 <li *ngFor="let gioiTinh of gioiTinhList">
-                                                  <input 
-                                                    type="radio" 
-                                                    id="{{ gioiTinh.id }}" 
-                                                    name="gioiTinh" 
-                                                    [value]="gioiTinh.id" 
-                                                    [(ngModel)]="selectedGioiTinhs" 
-                                                    (click)="onGioiTinhChange(gioiTinh)" 
-                                                    [checked]="selectedGioiTinhs === gioiTinh.id" 
+                                                  <input
+                                                    type="radio"
+                                                    id="{{ gioiTinh.id }}"
+                                                    name="gioiTinh"
+                                                    [value]="gioiTinh.id"
+                                                    [(ngModel)]="selectedGioiTinhs"
+                                                    (click)="onGioiTinhChange(gioiTinh)"
+                                                    [checked]="selectedGioiTinhs === gioiTinh.id"
                                                   />
                                                   <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
                                                 </li>
                                               </ul>
-                                              
+
                                         </div>
                                     </div>
 
@@ -170,57 +170,40 @@
                               <!-- Thông báo lỗi -->
                               <!-- Ô nhập giá trị min -->
                               <label for="min-price">Từ:</label>
-                              <input 
-                                type="text" 
-                                id="min-price" 
-                                [value]="formattedgiaMin" 
-                                (input)="onGiaMin($event)" 
+                              <input
+                                type="text"
+                                id="min-price"
+                                [value]="formattedgiaMin"
+                                (input)="onGiaMin($event)"
                                 placeholder="Giá thấp nhất"
                               />
-                          
+
                               <!-- Ô nhập giá trị max -->
                               <label for="max-price">Đến:</label>
-                              <input 
-                                type="text" 
-                                id="max-price" 
-                                [value]="formattedgiaMax" 
-                                (input)="onGiaMax($event)" 
+                              <input
+                                type="text"
+                                id="max-price"
+                                [value]="formattedgiaMax"
+                                (input)="onGiaMax($event)"
                                 placeholder="Giá cao nhất"
                               />
-                             
+
                             </div>
                           </div>
-                          
-                          
-                          
-                          
+
+
+
+
                         <!--price slider end-->
 
                         <!--wishlist block start-->
                         <div class="sidebar_widget wishlist mb-30">
-                          
-                            
+
+
                         </div>
                         <!--wishlist block end-->
 
-                        <!--popular tags area-->
-                        <div class="sidebar_widget tags  mb-30">
-                            <div class="block_title">
-                                <h3>popular tags</h3>
-                            </div>
-                            <div class="block_tags">
-                                <a href="#">ipod</a>
-                                <a href="#">sam sung</a>
-                                <a href="#">apple</a>
-                                <a href="#">iphone 5s</a>
-                                <a href="#">superdrive</a>
-                                <a href="#">shuffle</a>
-                                <a href="#">nano</a>
-                                <a href="#">iphone 4s</a>
-                                <a href="#">canon</a>
-                            </div>
-                        </div>
-                        <!--popular tags end-->
+
 
                         <!--newsletter block start-->
                         <div class="sidebar_widget newsletter mb-30">
@@ -235,54 +218,6 @@
                         </div>
                         <!--newsletter block end-->
 
-                        <!--special product start-->
-                        <div class="sidebar_widget special">
-                            <div class="block_title">
-                                <h3>Special Products</h3>
-                            </div>
-                            <div class="special_product_inner mb-20">
-                                <div class="special_p_thumb">
-                                    <a href="single-product.html"><img src="assets\img\cart\cart3.jpg" alt=""></a>
-                                </div>
-                                <div class="small_p_desc">
-                                    <div class="product_ratting">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h3><a href="single-product.html">Lorem ipsum dolor</a></h3>
-                                    <div class="special_product_proce">
-                                        <span class="old_price">$124.58</span>
-                                        <span class="new_price">$118.35</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="special_product_inner">
-                                <div class="special_p_thumb">
-                                    <a href="single-product.html"><img src="assets\img\cart\cart18.jpg" alt=""></a>
-                                </div>
-                                <div class="small_p_desc">
-                                    <div class="product_ratting">
-                                        <ul>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-star"></i></a></li>
-                                        </ul>
-                                    </div>
-                                    <h3><a href="single-product.html">Printed Summer</a></h3>
-                                    <div class="special_product_proce">
-                                        <span class="old_price">$124.58</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--special product end-->
 
 
                     </div>
@@ -297,7 +232,7 @@
                         <div class="search_box">
                            <!-- tìm kiếm -->
                         </div>
-                        
+
                         <!--shop toolbar end-->
 
                         <!--shop tab sản phẩm-->
@@ -316,9 +251,13 @@
                                                     <div class="img_icone" *ngIf="product.mauSac">
                                                         <img src="assets/img/cart/span-new.png" alt="Màu sắc">
                                                     </div>
+
                                                     <div class="product_action">
-                                                        <a (click)="addToCart(product.id)" class="add_to_cart"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                                        <button class="add_to_cart" (click)="openPopup(product.chiTietSanPham.sanPham.id)">
+                                                            <i class="fa fa-shopping-cart"></i> Add to cart
+                                                          </button>
                                                     </div>
+
                                                 </div>
                                                 <div class="product_content">
                                                     <!-- Hiển thị tên và giá sản phẩm -->
@@ -336,7 +275,7 @@
                                             </div>
                                         </div>
                                     </div>
-                        
+
                                     <!-- Phần phân trang -->
                                     <div class="pagination">
                                         <ul class="pagination-list">
@@ -357,7 +296,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
 
                         <!--shop tab product end-->
@@ -370,3 +309,105 @@
         </div>
     </div>
 </div>
+
+
+  <!-- Popup  -->
+  <!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+    <div class="popup-content">
+      <!-- Nút đóng -->
+      <span class="close" (click)="closePopup()">&times;</span>
+
+      <div class="popup-body">
+        <!-- Phần bên trái: Hình ảnh -->
+        <div class="popup-left">
+          <!-- Ảnh chính -->
+          <img [src]="currentImage" alt="Product Image" class="popup-image" />
+
+          <!-- Danh sách ảnh thu nhỏ -->
+          <div class="image-list">
+            <img
+              *ngFor="let anh of anhChiTietSanPham"
+              [src]="anh.urlAnh"
+              class="thumbnail"
+              [class.selected]="currentImage === anh.urlAnh"
+              (click)="changeImage(anh.urlAnh)"
+            />
+          </div>
+        </div>
+
+        <!-- Phần bên phải: Nội dung sản phẩm -->
+        <div class="popup-right">
+          <p>Mã sản phẩm: <strong>{{ maSanPham }}</strong></p>
+          <h2>Sản Phẩm: <strong>{{ tenSanPham }}</strong></h2>
+
+          <p><strong>Thương hiệu:</strong> {{ ThuongHieu }}</p>
+          <p><strong>Xuất xứ:</strong> {{ XuatXu }}</p>
+          <p><strong>Giới tính:</strong> {{ gioiTinh }}</p>
+
+          <p>
+            <strong>Giá:</strong>
+            <span class="price">{{ formatTien(donGia) }} VNĐ</span>
+          </p>
+
+          <div class="options">
+            <div class="colors">
+              <strong>Màu sắc:</strong>
+              <div class="option-buttons">
+                <ng-container *ngFor="let color of mauSacList">
+                  <button
+                    [class.selected]="color === selectedColor"
+                    (click)="selectColor(color)"
+                  >
+                    {{ color.ten }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="sizes">
+              <strong>Kích thước:</strong>
+              <div class="option-buttons">
+                <ng-container *ngFor="let kichthuoc of sizeList">
+                  <button
+                    [class.selected]="kichthuoc === selectedSize"
+                    (click)="selectSize(kichthuoc)"
+                  >
+                    {{ kichthuoc.ten }}
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+          <div class="stock-status">
+            <strong>Trạng thái hàng:</strong>
+            <span *ngIf="soLuongCTSP === 0" style="color: red;">Hết hàng</span>
+            <span *ngIf="soLuongCTSP > 0" style="color: brown;">
+              Còn {{ soLuongCTSP }}
+            </span>
+          </div>
+
+          <div class="quantity-container">
+            <strong>Số lượng:</strong>
+            <div class="quantity">
+              <button (click)="decreaseQuantity()">-</button>
+              <input
+                type="text"
+                [(ngModel)]="quantity"
+                min="1"
+                [max]="soLuongCTSP"
+                (input)="onQuantityChange($event)"
+              />
+              <button (click)="increaseQuantity()">+</button>
+            </div>
+            <p class="error-message" *ngIf="err2">{{ err2 }}</p>
+          </div>
+
+          <button (click)="addToCart(idCTSP)"  class="add-to-cart">Thêm vào giỏ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- popupend  -->
