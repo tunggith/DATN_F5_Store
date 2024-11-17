@@ -23,4 +23,7 @@ export class DangNhapService {
   dangKy(KhachHang:any):Observable<any>{
     return this.http.post(`${this.baseUrl}/register`,KhachHang);
   }
+  updateKhachHang(id: string, KhachHang: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update/${id}`, KhachHang);
+  }
 }

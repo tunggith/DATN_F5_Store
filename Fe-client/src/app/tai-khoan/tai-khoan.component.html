@@ -1,69 +1,78 @@
 <div class="pos_page">
-    <div class="container">
-        <div class="pos_page_inner">
-            <div class="content-top">
-                <div class="left">
-                    <label for="fileInput">
-                        <div class="image">
-                            <ng-container *ngIf="khachHang.anh; else defaultIcon">
-                                <img [src]="khachHang.anh" alt="Ảnh">
-                            </ng-container>
-                            <ng-template #defaultIcon>
-                                <i class="material-icons">person</i>
-                            </ng-template>
-                        </div>
-                        <div class="icon">
-                            <i class="material-icons">add_a_photo</i>
-                            <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;"
-                                id="fileInput">
-                        </div>
-                    </label>
-                </div>
-                <div class="right">
-                    <h2>Thông tin tài khoản</h2>
-                    <div class="mb-3">
-                        <label class="form-label">Mã:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.ma" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Họ tên:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.ten">
-                    </div>
-                </div>
+  <div class="container">
+    <div class="pos_page_inner">
+      <div class="content-top">
+        <div class="left">
+          <label for="fileInput">
+            <div class="image">
+              <ng-container *ngIf="khachHang.anh; else defaultIcon">
+                <img [src]="khachHang.anh" alt="Ảnh">
+              </ng-container>
+              <ng-template #defaultIcon>
+                <i class="material-icons">person</i>
+              </ng-template>
             </div>
-            <div class="content-bottom">
-                <div class="left">
-                    <div class="gioi-tinh mb-3">
-                        <label class="form-label">Giới tính:</label>
-                        <input type="radio" id="gioi-tinh-nam" name="gioi-tinh" checked>
-                        <label for="gioi-tinh-nam">Nam</label>
-                        <input type="radio" id="gioi-tinh-nu" name="gioi-tinh">
-                        <label for="gioi-tinh-nu">Nữ</label>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ngày, tháng, năm sinh:</label>
-                        <input type="date" class="form-control" [(ngModel)]="khachHang.ngayThangNamSinh">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.email">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Số điện thoại:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
-                    </div>
-                    <button type="button" class="btn btn-outline-primary">Cập nhật</button>
-                </div>
-                <div class="right">
-                    <div class="mb-3">
-                        <label for="basic-url" class="form-label">Địa chỉ khách hàng: <i class="material-icons">add</i></label>
-                        <div class="input-group mb-3" *ngFor="let diaChi of diaChi">
-                            <input type="text" class="form-control" [value]="diaChi" disabled>
-                            <span class="input-group-text" id="basic-addon2"><i class="material-icons">edit</i></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="icon">
+              <i class="material-icons">add_a_photo</i>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;"
+                     id="fileInput">
             </div>
+          </label>
         </div>
+        <div class="right">
+          <h2>Thông tin tài khoản</h2>
+          <div class="mb-3">
+            <label class="form-label">Mã:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.ma" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Họ tên:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.ten">
+            <small *ngIf="errors.ten" class="text-danger">{{ errors.ten }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="content-bottom">
+        <div class="left">
+          <div class="gioi-tinh mb-3">
+            <label class="form-label">Giới tính:</label>
+            <input type="radio" id="gioi-tinh-nam" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="1">
+            <label for="gioi-tinh-nam">Nam</label>
+
+            <input type="radio" id="gioi-tinh-nu" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="0">
+            <label for="gioi-tinh-nu">Nữ</label>
+
+            <input type="radio" id="gioi-tinh-khac" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="2">
+            <label for="gioi-tinh-khac">Khác</label>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Ngày, tháng, năm sinh:</label>
+            <input type="date" class="form-control" [(ngModel)]="khachHang.ngayThangNamSinh">
+            <small *ngIf="errors.ngayThangNamSinh" class="text-danger">{{ errors.ngayThangNamSinh }}</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.email">
+            <small *ngIf="errors.email" class="text-danger">{{ errors.email }}</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Số điện thoại:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
+            <small *ngIf="errors.sdt" class="text-danger">{{ errors.sdt }}</small>
+          </div>
+          <button type="button" class="btn btn-outline-primary" (click)="updateKhachHang()">Cập nhật</button>
+        </div>
+        <div class="right">
+          <div class="mb-3">
+            <label for="basic-url" class="form-label">Địa chỉ khách hàng: <i class="material-icons">add</i></label>
+            <div class="input-group mb-3" *ngFor="let diaChi of diaChi">
+              <input type="text" class="form-control" [value]="diaChi" disabled>
+              <span class="input-group-text" id="basic-addon2"><i class="material-icons">edit</i></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

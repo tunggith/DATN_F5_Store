@@ -1,5 +1,6 @@
 package com.example.datn_f5_store.controller.clientController;
 
+import com.example.datn_f5_store.entity.KhachHangEntity;
 import com.example.datn_f5_store.request.DiaChiKhachHangResquest;
 import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.service.client.UserClientService;
@@ -63,4 +64,5 @@ public class UserClientController {
     private ResponseEntity<Object> getAll(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(userClientService.getDiaChiByKhachHang(id),HttpStatus.OK);
     }
+
 }

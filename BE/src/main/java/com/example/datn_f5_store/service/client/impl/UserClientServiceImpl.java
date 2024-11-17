@@ -157,22 +157,29 @@ public class UserClientServiceImpl implements UserClientService {
 
 
     @Override
-    public DataResponse updateAnh(Integer id,KhachHangRequest request) {
-        KhachHangEntity khachHang = khachHangRepository.findById(id).orElseThrow(()->new RuntimeException("khách hàng không tồn tại"));
+    public DataResponse updateAnh(Integer id, KhachHangRequest request) {
+        // Tìm kiếm khách hàng theo ID
+        KhachHangEntity khachHang = khachHangRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
+
+        // Thực hiện kiểm tra hợp lệ (validation)
         validateKhachHangRequest(request);
 
-        // Tạo đối tượng khách hàng nếu validation thành công
-        KhachHangEntity entity = new KhachHangEntity();
+        // Cập nhật thông tin cho đối tượng khách hàng đã tìm thấy
         khachHang.setAnh(request.getAnh());
-        entity.setTen(request.getTen());
-        entity.setGioiTinh(request.getGioiTinh());
-        entity.setNgayThangNamSinh(request.getNgayThangNamSinh());
-        entity.setEmail(request.getEmail());
-        entity.setSdt(request.getSdt());
-        entity.setTrangThai(request.getTrangThai());
-        khachHangRepository.save(entity);
-        return new DataResponse(true,new ResultModel<>(null,"update thành công"));
+        khachHang.setTen(request.getTen());
+        khachHang.setGioiTinh(request.getGioiTinh());
+        khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
+        khachHang.setEmail(request.getEmail());
+        khachHang.setSdt(request.getSdt());
+        khachHang.setTrangThai(request.getTrangThai());
+
+        // Lưu lại đối tượng đã được cập nhật
+        khachHangRepository.save(khachHang);
+
+        return new DataResponse(true, new ResultModel<>(null, "Update thành công"));
     }
+
 
     @Override
     public DataResponse changePassword(String username, String passwordOld, String passwordNew) {
@@ -198,6 +205,35 @@ public class UserClientServiceImpl implements UserClientService {
     public DataResponse getDiaChiByKhachHang(Integer id) {
         List<DiaChiKhachHangEntity> listDiaChi = diaChiKhachHangRepository.findByKhackHang_Id(id);
         return new DataResponse(true,new ResultModel<>(null,listDiaChi));
+    }
+
+    // Phương thức cập nhật thông tin khách hàng
+    @Override
+    public KhachHangEntity updateKhachHang(Integer id, KhachHangEntity khachHang) {
+        // Kiểm tra xem khách hàng có tồn tại trong cơ sở dữ liệu không
+        if (khachHangRepository.existsById(id)) {
+            // Lấy thông tin khách hàng từ cơ sở dữ liệu
+            KhachHangEntity existingKhachHang = khachHangRepository.findById(id).orElse(null);
+
+            // Nếu khách hàng tồn tại, tiến hành cập nhật các trường thông tin
+            if (existingKhachHang != null) {
+                existingKhachHang.setMa(khachHang.getMa());
+                existingKhachHang.setTen(khachHang.getTen());
+                existingKhachHang.setGioiTinh(khachHang.getGioiTinh());
+                existingKhachHang.setNgayThangNamSinh(khachHang.getNgayThangNamSinh());
+                existingKhachHang.setEmail(khachHang.getEmail());
+                existingKhachHang.setAnh(khachHang.getAnh());
+                existingKhachHang.setSdt(khachHang.getSdt());
+                existingKhachHang.setRoles(khachHang.getRoles());
+                existingKhachHang.setUserName(khachHang.getUserName());
+                existingKhachHang.setPassword(khachHang.getPassword());
+                existingKhachHang.setTrangThai(khachHang.getTrangThai());
+
+                // Lưu khách hàng đã được cập nhật
+                return khachHangRepository.save(existingKhachHang);
+            }
+        }
+        return null; // Nếu không tìm thấy khách hàng, trả về null
     }
 
     private void validateKhachHangRequest(KhachHangRequest request) {
