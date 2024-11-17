@@ -31,4 +31,5 @@ public interface IHoaDonService {
     List<HoaDonDto> getByTrangThaiCho();
     DataResponse updateHoaDon(Integer id,Double tongTienUpdate,Integer idNhanVien);
     DataResponse huyUpdateHoaDon(Integer id);
+    HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request);
 }
