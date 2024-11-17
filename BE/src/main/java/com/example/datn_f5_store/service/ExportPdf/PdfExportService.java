@@ -20,6 +20,7 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,12 +43,13 @@ public class PdfExportService {
     IChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
     IDiaChiKhachHangRepository diaChiRepository;
+
     public ByteArrayInputStream exportPdf(Integer id) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         try {
             HoaDonEntity hoaDon = hoaDonRepository.findById(id)
-                    .orElseThrow(()->new EntityNotFoundException("Hóa đơn không tồn tại"));
+                    .orElseThrow(() -> new EntityNotFoundException("Hóa đơn không tồn tại"));
             List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
             // Khởi tạo PDF Writer
             PdfWriter writer = new PdfWriter(out);
@@ -97,13 +100,23 @@ public class PdfExportService {
             int thang = calendar.get(Calendar.MONTH) + 1;
             int nam = calendar.get(Calendar.YEAR);
             String maHoaDon = hoaDon.getMa();
-            double tongTien = hoaDon.getTongTienSauVoucher();
+            double tongTien = 0;
+            if(hoaDon.getGiaoHang()==0&&hoaDon.getVoucher()==null){
+                tongTien  = hoaDon.getTongTienSauVoucher();
+            }else if(hoaDon.getGiaoHang()!=0&&hoaDon.getVoucher()==null){
+                tongTien  = hoaDon.getTongTienSauVoucher()+ hoaDon.getPhiShip();
+            }else if(hoaDon.getGiaoHang()==0&&hoaDon.getVoucher()!=null){
+                tongTien  = hoaDon.getTongTienSauVoucher()- hoaDon.getGiaTriGiam();
+            }else{
+                tongTien  = hoaDon.getTongTienSauVoucher()+hoaDon.getPhiShip()- hoaDon.getGiaTriGiam();
+            }
             String email = "";
             String sdt = "";
             String diaChi = "";
+            DecimalFormat df = new DecimalFormat("#,###");
             List<DiaChiKhachHangEntity> diaChiKhachHang = diaChiRepository.findByKhackHang_Id(hoaDon.getKhachHang().getId());
-            if(hoaDon.getGiaoHang()==0){
-                if(diaChiKhachHang.size()>0) {
+            if (hoaDon.getGiaoHang() == 0) {
+                if (diaChiKhachHang.size() > 0) {
                     DiaChiKhachHangEntity diaChiActive = diaChiKhachHang.get(0);
                     email = hoaDon.getKhachHang().getEmail();
                     sdt = hoaDon.getKhachHang().getSdt();
@@ -112,44 +125,35 @@ public class PdfExportService {
                             + diaChiActive.getQuanHuyen() + ","
                             + diaChiActive.getPhuongXa() + ","
                             + diaChiActive.getTinhThanh();
-                }else {
+                } else {
                     diaChi = "";
                 }
-            }else {
+            } else {
                 email = hoaDon.getEmailNguoiNhan();
                 sdt = hoaDon.getSdtNguoiNhan();
                 diaChi = hoaDon.getDiaChiNhanHang();
             }
-            document.add(new Paragraph("Ngày "+ngay+",tháng "+thang+",năm "+nam)
+            document.add(new Paragraph("Ngày " + ngay + ",tháng " + thang + ",năm " + nam)
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Khách hàng:"+khachHang)
+            document.add(new Paragraph("Khách hàng:" + khachHang)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Nhân viên thanh toán:"+hoaDon.getNhanVien().getTen())
+            document.add(new Paragraph("Nhân viên thanh toán:" + hoaDon.getNhanVien().getTen())
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Mã hóa đơn:"+maHoaDon)
+            document.add(new Paragraph("Mã hóa đơn:" + maHoaDon)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Số điện thoại:"+sdt)
+            document.add(new Paragraph("Số điện thoại:" + sdt)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Email:"+email)
+            document.add(new Paragraph("Email:" + email)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Địa chỉ:"+diaChi)
+            document.add(new Paragraph("Địa chỉ:" + diaChi)
                     .setTextAlignment(TextAlignment.LEFT));
             // Tạo bảng với 3 cột
-            Table table = new Table(10);
+            Table table = new Table(5);
+            table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             // Thêm tiêu đề cho các cột
             table.addCell(new Cell().add(new Paragraph("Stt")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
             table.addCell(new Cell().add(new Paragraph("Tên sản phẩm")).setTextAlignment(TextAlignment.CENTER)
-                    .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            table.addCell(new Cell().add(new Paragraph("Thương hiệu")).setTextAlignment(TextAlignment.CENTER)
-                    .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            table.addCell(new Cell().add(new Paragraph("Xuất xứ")).setTextAlignment(TextAlignment.CENTER)
-                    .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            table.addCell(new Cell().add(new Paragraph("Size")).setTextAlignment(TextAlignment.CENTER)
-                    .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            table.addCell(new Cell().add(new Paragraph("Màu sắc")).setTextAlignment(TextAlignment.CENTER)
-                    .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            table.addCell(new Cell().add(new Paragraph("Thể loại")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
             table.addCell(new Cell().add(new Paragraph("Số lượng")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
@@ -157,27 +161,21 @@ public class PdfExportService {
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
             table.addCell(new Cell().add(new Paragraph("Thành tiền")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
-            int stt= 1;
-            for(ChiTietHoaDonEntity x:chiTietHoaDon){
+            int stt = 1;
+            for (ChiTietHoaDonEntity x : chiTietHoaDon) {
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(stt++)))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getThuongHieu().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getXuatXu().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSize().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getMauSac().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getSanPham().getGioiTinh().getTen())))
-                        .setTextAlignment(TextAlignment.CENTER));
+                table.addCell(new Cell().add(new Paragraph(
+                        String.valueOf(x.getChiTietSanPham().getSanPham().getTen()) + " - " +
+                                String.valueOf(x.getChiTietSanPham().getSize().getTen()) + " - " +
+                                String.valueOf(x.getChiTietSanPham().getMauSac().getTen()) + " - " +
+                                String.valueOf(x.getChiTietSanPham().getSanPham().getGioiTinh().getTen())
+                ).setTextAlignment(TextAlignment.CENTER)));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getSoLuong())))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getChiTietSanPham().getDonGia())))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getChiTietSanPham().getDonGia()) + " VNĐ")))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getGiaSpctHienTai())))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getGiaSpctHienTai()) + " VNĐ")))
                         .setTextAlignment(TextAlignment.CENTER));
             }
             // Thêm bảng vào document
@@ -190,14 +188,17 @@ public class PdfExportService {
             Cell cell = new Cell();
             cell.setBorder(Border.NO_BORDER);
             cell.setTextAlignment(TextAlignment.CENTER);
-            cell.add(new Paragraph("Tổng tiền: " + hoaDon.getTongTienBanDau()));
-
+            cell.add(new Paragraph("Tổng tiền: " + df.format(hoaDon.getTongTienBanDau()) + "VNĐ"));
             if (hoaDon.getVoucher() != null) {
                 cell.add(new Paragraph("Giảm giá: " + hoaDon.getVoucher().getGiaTriVoucher() + " " + hoaDon.getVoucher().getKieuGiamGia()));
-                cell.add(new Paragraph("Đã giảm: "+(hoaDon.getTongTienBanDau()-hoaDon.getTongTienSauVoucher())+"đ"));
+                if (hoaDon.getGiaoHang() == 0) {
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VNĐ"));
+                } else {
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VNĐ"));
+                }
             }
-
-            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + tongTien));
+            cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + "VNĐ"));
+            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + "VNĐ"));
             cell.add(new Paragraph("Nhân viên thanh toán").setFont(boldFont));
             cell.add(new Paragraph(hoaDon.getNhanVien().getTen()));
 

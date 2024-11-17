@@ -30,6 +30,7 @@ public class HoaDonRequest {
 
     private Double tongTienBanDau; // Tổng tiền ban đầu trước khi áp dụng voucher
     private Double phiShip;
+    private Double giaTriGiam;
 
     private Double tongTienSauVoucher; // Tổng tiền sau khi áp dụng voucher
 
