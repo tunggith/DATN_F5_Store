@@ -7,7 +7,7 @@
 }
 
 button {
-  background-color: rgb(94, 94, 208);
+  background-color: #003366;
 }
 
 a {
@@ -15,7 +15,7 @@ a {
 }
 
 button:hover {
-  background-color: rgb(105, 105, 213);
+  background-color: #186793;
 }
 
 .image_login {
@@ -27,4 +27,14 @@ button:hover {
 }
 span :hover{
   cursor: pointer;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+}
+
+input::placeholder {
+  font-size: 11px; /* Thay đổi kích thước chữ */
+  color: #999; /* Màu sắc của placeholder, có thể thay đổi */
 }

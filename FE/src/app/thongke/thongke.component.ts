@@ -10,6 +10,9 @@ import { ThongkeService } from './thongke.sevice';
 })
 export class ThongkeComponent implements OnInit {
 
+
+   titler : String ='các'
+
   public lineChartData: any[] = [
     { data: [], label: 'Dữ liệu' }
   ];
@@ -37,7 +40,7 @@ export class ThongkeComponent implements OnInit {
 
   // Biến để lưu tổng doanh thu
   public totalDoanhThu: number = 0;
-
+  public DoanhthuHienTai: number = 0;
   // Biến để lưu mục có doanh thu cao nhất và doanh thu của mục đó
   public highestRevenueLabel: string = '';  // Tên (ngày/tháng/năm/quý) có doanh thu cao nhất
   public highestRevenueAmount: number = 0;  // Doanh thu cao nhất
@@ -50,6 +53,10 @@ export class ThongkeComponent implements OnInit {
   ngOnInit(): void {
     // Khởi tạo biểu đồ mặc định theo tháng
     this.loadDoanhThu();
+    this.loadDoanhThuTheoNgayHienTai();
+    this.loadTopSanPhamTheoThang();
+    this.loadDoanhThu();
+  
   }
 
   // Hàm tính tổng doanh thu từ một mảng doanh thu
@@ -407,6 +414,54 @@ if (endDate < startDate) {
       );
   }
   
+
+
+  loadDoanhThuTheoNgayHienTai(): void {
+    // Gọi API để lấy thời gian hiện tại tại Việt Nam
+    fetch('https://timeapi.io/api/Time/current/zone?timeZone=Asia/Ho_Chi_Minh')
+      .then(response => response.json())
+      .then(data => {
+        const currentDate = new Date(data.dateTime); // Chuyển chuỗi ngày giờ thành đối tượng Date
+
+        // Chuyển đổi định dạng ngày thành dd/MM/yyyy
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const year = currentDate.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+
+        // Hiển thị ngày lấy được ra console
+        console.log("Ngày hiện tại tại Việt Nam:", formattedDate);
+
+        // Sử dụng ngày hiện tại cho cả ngày bắt đầu và ngày kết thúc
+        this.thongkeService.getDoanhThuTheoNgay(formattedDate, formattedDate)
+          .subscribe(
+            data => {
+              const labels = data.map(item => item.ngay);
+              const doanhThu = data.map(item => item.doanhThu);
+
+              this.lineChartLabels = labels;
+              this.lineChartData = [
+                { data: doanhThu, label: `Doanh thu ngày ${formattedDate}` }
+              ];
+
+              // Tính tổng doanh thu
+              this.DoanhthuHienTai = this.calculateTotal(doanhThu);
+              console.log("Doanh thu hôm nay là:", this.DoanhthuHienTai);
+            },
+            error => {
+              console.error('Lỗi khi lấy dữ liệu doanh thu theo ngày:', error);
+            }
+          );
+      })
+      .catch(error => console.error('Lỗi khi lấy ngày giờ từ API:', error));
+}
+
+
+
+
+
+
+
   // Hàm định dạng ngày từ yyyy-MM-dd sang dd/MM/yyyy
   formatDate(dateString: string): string {
     const date = new Date(dateString);

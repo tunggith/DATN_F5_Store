@@ -141,4 +141,16 @@ public class HoaDonController {
     ){
       return new ResponseEntity<>(hoaDonService.editTrangThaiHoaDon(idCho,idDang),HttpStatus.OK);
     }
+    @PutMapping("/cap-nhat-san-pham")
+    private ResponseEntity<Object> capNhatSanPham(
+            @Parameter(name = "id")@RequestParam Integer id,
+            @Parameter(name = "tongTien")@RequestParam Double tongTien,
+            @Parameter(name = "idNhanVien")@RequestParam Integer idNhanVien
+    ){
+        return new ResponseEntity<>(hoaDonService.updateHoaDon(id,tongTien,idNhanVien),HttpStatus.OK);
+    }
+    @GetMapping("/huy-cap-nhat/{id}")
+    private ResponseEntity<Object> huyCapNhat(@Parameter(name = "id")@PathVariable Integer id){
+        return new ResponseEntity<>(hoaDonService.huyUpdateHoaDon(id),HttpStatus.OK);
+    }
 }

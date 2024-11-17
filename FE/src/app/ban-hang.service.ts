@@ -131,4 +131,10 @@ export class BanHangService {
   setTrangThai(idCho:number,idDang:number):Observable<any>{
     return this.http.put(`${this.hoaDonUrl}/set-trang-thai?idCho=${idCho}&idDang=${idDang}`,{});
   }
+  updateHoaDon(id:number,tongTien:number,idNhanVien):Observable<any>{
+    return this.http.put(`${this.hoaDonUrl}/cap-nhat-san-pham?id=${id}&tongTien=${tongTien}&idNhanVien=${idNhanVien}`,{});
+  }
+  huyUpdateHoaDon(id:number):Observable<any>{
+    return this.http.get(`${this.hoaDonUrl}/huy-cap-nhat/${id}`);
+  }
 }

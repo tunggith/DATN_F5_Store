@@ -8,19 +8,27 @@
                         <div class="sidebar_widget shop_c">
                             <div class="sidebar_widget color">
                                 <h2 (click)="toggleSizeList()">
-                                    <span class="icon" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
+                                    <span  class="icon" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
                                         <i class="fa" [ngClass]="{'fa-chevron-down': !isSizeOpen, 'fa-chevron-up': isSizeOpen}"></i>
                                       </span>
 
-                                    Kích thước</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                                       Kích thước</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
                                 <div class="layere_categorie" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
                                     <ul>
-                                        <!-- Dùng *ngFor để lặp qua danh sách kích thước -->
                                         <li *ngFor="let size of sizeList">
-                                            <input type="checkbox" id="{{ size.id }}" name="size" [value]="size.ten" (change)="onSizeChange(size)" />
-                                            <label for="{{ size.id }}">{{ size.ten }}</label>
+                                          <input 
+                                            type="radio" 
+                                            id="{{ size.id }}" 
+                                            name="size" 
+                                            [value]="size.id" 
+                                            [(ngModel)]="selectedSizes" 
+                                            (click)="onSizeChange(size)" 
+                                            [checked]="selectedSizes == size.id" 
+                                          />
+                                          <label for="{{ size.id }}">{{ size.ten }}</label>
                                         </li>
-                                    </ul>
+                                      </ul>
+                                      
                                 </div>
                             </div>
                         </div>
@@ -35,12 +43,20 @@
                                 Thương hiệu </h2>
                             <div class="layere_categorie" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
                                 <ul>
-
                                     <li *ngFor="let thuonghieu of ThuongHieuList">
-                                        <input type="checkbox" id="{{ thuonghieu.id }}" name="thuonghieu" [value]="thuonghieu.ten" (change)="onthuongHieuChage(thuonghieu)" />
-                                        <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
+                                      <input 
+                                        type="radio" 
+                                        id="{{ thuonghieu.id }}" 
+                                        name="thuonghieu" 
+                                        [value]="thuonghieu.id" 
+                                        [(ngModel)]="selectThuongHieu" 
+                                        (click)="onthuongHieuChage(thuonghieu)" 
+                                        [checked]="selectThuongHieu == thuonghieu.id" 
+                                      />
+                                      <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
                                     </li>
-                                </ul>
+                                  </ul>
+                                  
                             </div>
                         </div>
 
@@ -56,12 +72,20 @@
                                                 Màu sắc</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
                                             <div class="layere_categorie" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
                                                 <ul>
-                                                    <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
                                                     <li *ngFor="let color of mauSacList">
-                                                        <input type="checkbox" id="{{ color.id }}" name="color" [value]="color.ten" (change)="onColorChange(color)" />
-                                                        <label for="{{ color.id }}">{{ color.ten }}</label>
+                                                      <input 
+                                                        type="radio" 
+                                                        id="{{ color.id }}" 
+                                                        name="color" 
+                                                        [value]="color.id" 
+                                                        [(ngModel)]="selectedColors" 
+                                                        (click)="onColorChange(color)" 
+                                                        [checked]="selectedColors === color.id" 
+                                                      />
+                                                      <label for="{{ color.id }}">{{ color.ten }}</label>
                                                     </li>
-                                                </ul>
+                                                  </ul>
+                                                  
                                             </div>
                                         </div>
 
@@ -81,12 +105,19 @@
                                             Xuất Xứ</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
                                         <div class="layere_categorie" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
                                             <ul>
-                                                <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
                                                 <li *ngFor="let xuatXu of xuatXuList">
-                                                    <input type="checkbox" id="{{ xuatXu.id }}" name="xuatXu" [value]="xuatXu.ten" (change)="onXuatXuChange(xuatXu)" />
-                                                    <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
+                                                  <input 
+                                                    type="radio" 
+                                                    id="{{ xuatXu.id }}" 
+                                                    name="xuatXu" 
+                                                    [value]="xuatXu.id" 
+                                                    [(ngModel)]="selectedXuatXu" 
+                                                    (click)="onXuatXuChange(xuatXu)" 
+                                                    [checked]="selectedXuatXu === xuatXu.id" 
+                                                  />
+                                                  <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
                                                 </li>
-                                            </ul>
+                                              </ul>                                              
                                         </div>
                                     </div>
 
@@ -106,12 +137,20 @@
                                             giới tính </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
                                         <div class="layere_categorie" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
                                             <ul>
-                                                <!-- Dùng *ngFor để lặp qua danh sách màu sắc -->
                                                 <li *ngFor="let gioiTinh of gioiTinhList">
-                                                    <input type="checkbox" id="{{ gioiTinh.id }}" name="gioiTinh" [value]="gioiTinh.ten" (change)="onGioiTinhChange(gioiTinh)" />
-                                                    <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
+                                                  <input 
+                                                    type="radio" 
+                                                    id="{{ gioiTinh.id }}" 
+                                                    name="gioiTinh" 
+                                                    [value]="gioiTinh.id" 
+                                                    [(ngModel)]="selectedGioiTinhs" 
+                                                    (click)="onGioiTinhChange(gioiTinh)" 
+                                                    [checked]="selectedGioiTinhs === gioiTinh.id" 
+                                                  />
+                                                  <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
                                                 </li>
-                                            </ul>
+                                              </ul>
+                                              
                                         </div>
                                     </div>
 
@@ -123,50 +162,44 @@
 
                         <!--price slider start-->
                         <div class="sidebar_widget price">
-                            <h2>Price</h2>
-                            <div class="ca_search_filters">
-
-                                <input type="text" name="text" id="amount">
-                                <div id="slider-range"></div>
+                            <h2>Khoảng giá</h2>
+                             <div *ngIf="errorMsg" class="error-message">
+                                {{ errorMsg }}
+                              </div>
+                            <div class="price-range">
+                              <!-- Thông báo lỗi -->
+                              <!-- Ô nhập giá trị min -->
+                              <label for="min-price">Từ:</label>
+                              <input 
+                                type="text" 
+                                id="min-price" 
+                                [value]="formattedgiaMin" 
+                                (input)="onGiaMin($event)" 
+                                placeholder="Giá thấp nhất"
+                              />
+                          
+                              <!-- Ô nhập giá trị max -->
+                              <label for="max-price">Đến:</label>
+                              <input 
+                                type="text" 
+                                id="max-price" 
+                                [value]="formattedgiaMax" 
+                                (input)="onGiaMax($event)" 
+                                placeholder="Giá cao nhất"
+                              />
+                             
                             </div>
-                        </div>
+                          </div>
+                          
+                          
+                          
+                          
                         <!--price slider end-->
 
                         <!--wishlist block start-->
                         <div class="sidebar_widget wishlist mb-30">
-                            <div class="block_title">
-                                <h3><a href="#">Wishlist</a></h3>
-                            </div>
-                            <div class="cart_item">
-                                <div class="cart_img">
-                                    <a href="#"><img src="assets\img\cart\cart.jpg" alt=""></a>
-                                </div>
-                                <div class="cart_info">
-                                    <a href="#">lorem ipsum dolor</a>
-                                    <span class="cart_price">$115.00</span>
-                                    <span class="quantity">Qty: 1</span>
-                                </div>
-                                <div class="cart_remove">
-                                    <a title="Remove this item" href="#"><i class="fa fa-times-circle"></i></a>
-                                </div>
-                            </div>
-                            <div class="cart_item">
-                                <div class="cart_img">
-                                    <a href="#"><img src="assets\img\cart\cart2.jpg" alt=""></a>
-                                </div>
-                                <div class="cart_info">
-                                    <a href="#">Quisque ornare dui</a>
-                                    <span class="cart_price">$105.00</span>
-                                    <span class="quantity">Qty: 1</span>
-                                </div>
-                                <div class="cart_remove">
-                                    <a title="Remove this item" href="#"><i class="fa fa-times-circle"></i></a>
-                                </div>
-                            </div>
-                            <div class="block_content">
-                                <p>2 products</p>
-                                <a href="#">» My wishlists</a>
-                            </div>
+                          
+                            
                         </div>
                         <!--wishlist block end-->
 
@@ -261,42 +294,10 @@
                         <!--banner slider start-->
 
                         <!--shop toolbar start-->
-                        <div class="shop_toolbar mb-35">
-
-                            <div class="list_button">
-                                <ul class="nav" role="tablist">
-                                    <li>
-                                        <a class="active" data-toggle="tab" href="#large" role="tab"
-                                            aria-controls="large" aria-selected="true"><i
-                                                class="fa fa-th-large"></i></a>
-                                    </li>
-                                    <li>
-                                        <a data-toggle="tab" href="#list" role="tab" aria-controls="list"
-                                            aria-selected="false"><i class="fa fa-th-list"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="page_amount">
-                                <p>Showing 1–9 of 21 results</p>
-                            </div>
-
-                            <div class="select_option">
-                                <form action="#">
-                                    <label>Sort By</label>
-                                    <select name="orderby" id="short">
-                                        <option selected="" value="1">Position</option>
-                                        <option value="1">Price: Lowest</option>
-                                        <option value="1">Price: Highest</option>
-                                        <option value="1">Product Name:Z</option>
-                                        <option value="1">Sort by price:low</option>
-                                        <option value="1">Product Name: Z</option>
-                                        <option value="1">In stock</option>
-                                        <option value="1">Product Name: A</option>
-                                        <option value="1">In stock</option>
-                                    </select>
-                                </form>
-                            </div>
+                        <div class="search_box">
+                           <!-- tìm kiếm -->
                         </div>
+                        
                         <!--shop toolbar end-->
 
                         <!--shop tab sản phẩm-->
@@ -304,12 +305,14 @@
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade show active" id="large" role="tabpanel">
                                     <div class="row">
-                                        <!-- Lặp qua danh sách sanPhamPage để hiển thị từng sản phẩm -->
-                                        <div class="col-lg-4 col-md-6" *ngFor="let product of sanPhamPage">
+                                        <!-- Lặp qua danh sách sanPhamList để hiển thị từng sản phẩm -->
+                                        <div class="col-lg-4 col-md-6" *ngFor="let product of sanPhamList">
                                             <div class="single_product">
                                                 <div class="product_thumb">
                                                     <!-- Hiển thị ảnh sản phẩm -->
-                                                    <a href="single-product.html"><img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm"></a>
+                                                    <a href="single-product.html">
+                                                        <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm">
+                                                    </a>
                                                     <div class="img_icone" *ngIf="product.mauSac">
                                                         <img src="assets/img/cart/span-new.png" alt="Màu sắc">
                                                     </div>
@@ -320,7 +323,9 @@
                                                 <div class="product_content">
                                                     <!-- Hiển thị tên và giá sản phẩm -->
                                                     <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
-                                                    <h3 class="product_title"><a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a></h3>
+                                                    <h3 class="product_title">
+                                                        <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a>
+                                                    </h3>
                                                 </div>
                                                 <div class="product_info">
                                                     <ul>
@@ -331,25 +336,28 @@
                                             </div>
                                         </div>
                                     </div>
-
+                        
                                     <!-- Phần phân trang -->
                                     <div class="pagination">
                                         <ul class="pagination-list">
+                                            <!-- Prev button, disabled if page is 0 -->
                                             <li [ngClass]="{ 'disabled': page === 0 }">
                                                 <a href="#" (click)="changePage(page - 1, $event)">Prev</a>
                                             </li>
+                                            <!-- Tạo các trang, đánh dấu trang hiện tại -->
                                             <li *ngFor="let p of totalPages" [ngClass]="{ 'active': p === page }">
                                                 <a href="#" (click)="changePage(p, $event)">{{ p + 1 }}</a>
                                             </li>
+                                            <!-- Next button, disabled if current page is the last page -->
                                             <li [ngClass]="{ 'disabled': page === totalPages.length - 1 }">
                                                 <a href="#" (click)="changePage(page + 1, $event)">Next</a>
                                             </li>
-                                         </ul>
-
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
 
 
                         <!--shop tab product end-->

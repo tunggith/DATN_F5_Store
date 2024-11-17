@@ -41,4 +41,19 @@ export class SanPhamService {
   }
  
   
+  getSanPhamloc(gioiTinh: string, thuongHieu: string, xuatXu: string, giaMin: number, giaMax: number, mauSac: string, kichThuoc: string, page: number = 0, size: number = 10): Observable<any> {
+    const params = new HttpParams()
+      .set('gioiTinh', gioiTinh)
+      .set('thuongHieu', thuongHieu)
+      .set('xuatXu', xuatXu)
+      .set('giaMin', giaMin.toString())
+      .set('giaMax', giaMax.toString())
+      .set('mauSac', mauSac)
+      .set('kichThuoc', kichThuoc)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get(`${this.apiUrl}/filter`, { params });
+  }
+
 }

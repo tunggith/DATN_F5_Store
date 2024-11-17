@@ -22,6 +22,6 @@ public interface IGioHangRepository extends JpaRepository<GioHangEntity,Integer>
 """
     )
     Page<GioHangResponse> getallPhanTrang(Pageable pageable);
-
+    GioHangEntity findByKhachHang_Id(Integer id);
 
 }

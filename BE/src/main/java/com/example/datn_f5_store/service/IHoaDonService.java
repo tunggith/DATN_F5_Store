@@ -29,4 +29,6 @@ public interface IHoaDonService {
     DataResponse updateDiaChiNhanHang(Integer id,HoaDonRequest request);
     DataResponse editTrangThaiHoaDon(Integer idCho,Integer idDang);
     List<HoaDonDto> getByTrangThaiCho();
+    DataResponse updateHoaDon(Integer id,Double tongTienUpdate,Integer idNhanVien);
+    DataResponse huyUpdateHoaDon(Integer id);
 }

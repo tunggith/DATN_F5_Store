@@ -621,8 +621,10 @@ private showSwalSuccess(message: string) {
     icon: 'success',
     confirmButtonText: 'OK',
     customClass: {
-      confirmButton: 'custom-confirm-button'
+      confirmButton: 'custom-confirm-button',
+      popup: 'custom-swal-popup'
     }
+    
   });
 }
 
@@ -633,7 +635,8 @@ private showSwalError(message: string) {
     icon: 'error',
     confirmButtonText: 'OK',
     customClass: {
-      confirmButton: 'custom-confirm-button'
+      confirmButton: 'custom-confirm-button',
+      popup: 'custom-swal-popup'
     }
   });
 }

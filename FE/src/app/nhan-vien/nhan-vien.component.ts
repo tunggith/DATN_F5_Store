@@ -50,9 +50,9 @@ export class NhanVienComponent implements OnInit {
     constructor(private mapsService: MapsService, private giaoHangNhanhService: GiaoHangNhanhService, private datePipe: DatePipe, private fb: FormBuilder) {
         this.nhanVienForm = this.fb.group({
             ma: [''],
-            ten: ['', Validators.required],
+            ten: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹà-ỹ\\s]+$')]],
             ngayThangNamSinh: ['', [Validators.required, this.validateAge]],
-            sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+            sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
             diaChi: [{ value: '', disabled: true }],
             username: [''],
             password: [''],
@@ -222,7 +222,7 @@ export class NhanVienComponent implements OnInit {
     // Thêm nhân viên
     createNhanVien() {
         if (this.nhanVienForm.valid) {
-            this.newNhanVien = {...this.nhanVienForm.getRawValue()}; // Lưu dữ liệu vào newNhanVien
+            this.newNhanVien = { ...this.nhanVienForm.getRawValue() }; // Lưu dữ liệu vào newNhanVien
             this.mapsService.createNhanVien(this.newNhanVien).subscribe({
                 next: (response) => {
                     if (response && response.status && response.result) {
@@ -239,10 +239,15 @@ export class NhanVienComponent implements OnInit {
                         // Đặt lại các trường trạng thái, giới tính
                         this.onReset();
                     } else {
-                        // Nếu không có phản hồi thành công, hiển thị thông báo lỗi
+                        // Nếu phản hồi không thành công, hiển thị thông báo lỗi từ backend
+                        let errorMessage = 'Số điện thoại hoặc email đã tồn tại. Vui lòng nhập lại thông tin!';
+                        if (response.result && response.result.message) {
+                            errorMessage = response.result.message; // lấy thông báo lỗi từ backend
+                        }
+
                         Swal.fire({
                             title: 'Lỗi!',
-                            text: 'Mã nhân viên đã tồn tại. Vui lòng kiểm tra lại.',
+                            text: errorMessage,
                             icon: 'warning',
                             confirmButtonText: 'OK'
                         });
@@ -254,7 +259,7 @@ export class NhanVienComponent implements OnInit {
 
                         Swal.fire({
                             title: 'Lỗi!',
-                            text: 'Vui lòng kiểm tra lại thông tin bạn đã nhập.',
+                            text: errors.error.message || 'Vui lòng kiểm tra lại thông tin bạn đã nhập.',
                             icon: 'warning',
                             confirmButtonText: 'OK'
                         });
@@ -278,33 +283,53 @@ export class NhanVienComponent implements OnInit {
         }
     }
 
+
     // Cập nhật nhân viên
     updateNhanVien(id: number): void {
         if (this.nhanVienForm.valid) {
-            this.updateNhanVienData = {...this.nhanVienForm.getRawValue()}; // Lấy tất cả dữ liệu từ form, kể cả các trường bị disabled
-            // delete this.updateNhanVienData.ma; // Bỏ qua trường mã vì nó không được chỉnh sửa
+            this.updateNhanVienData = { ...this.nhanVienForm.getRawValue() }; // Lấy tất cả dữ liệu từ form
 
             this.mapsService.updateNhanVien(id, this.updateNhanVienData).subscribe({
-                next: () => {
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Nhân viên đã được cập nhật thành công.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                    this.loadNhanVien(this.currentPage);
-                    this.nhanVienForm.reset();
+                next: (response) => {
+                    if (response && response.status) {
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Nhân viên đã được cập nhật thành công.',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                        this.loadNhanVien(this.currentPage);
+                        this.nhanVienForm.reset();
 
-                    // Đặt lại các trường trạng thái, giới tính
-                    this.onReset();
+                        // Đặt lại các trường trạng thái, giới tính
+                        this.onReset();
+                    } else {
+                        let errorMessage = 'Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.';
+                        if (response.result && response.result.message) {
+                            errorMessage = response.result.message; // lấy thông báo lỗi từ backend
+                        }
+
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: errorMessage,
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
+                    }
                 },
                 error: (errors) => {
                     if (errors.status === 400 && errors.error) {
                         this.validationErrors = errors.error;
 
+                        // Kiểm tra nếu backend trả về thông báo lỗi chi tiết
+                        let errorText = 'Vui lòng kiểm tra lại thông tin bạn đã nhập.';
+                        if (errors.error.message) {
+                            errorText = errors.error.message;
+                        }
+
                         Swal.fire({
                             title: 'Lỗi!',
-                            text: 'Vui lòng kiểm tra lại thông tin bạn đã nhập.',
+                            text: errorText,
                             icon: 'warning',
                             confirmButtonText: 'OK'
                         });
@@ -329,6 +354,7 @@ export class NhanVienComponent implements OnInit {
         // Kích hoạt lại trường mã để có thể nhập liệu khi thêm mới
         this.nhanVienForm.get('ma')?.enable(); // Bật lại trường mã
     }
+
 
     // Xóa nhân viên
     deleteNhanVien(id: number) {
@@ -424,18 +450,31 @@ export class NhanVienComponent implements OnInit {
         const dateOfBirth = new Date(control.value);
         const today = new Date();
 
-        // Nếu ngày sinh không hợp lệ
+        // Kiểm tra nếu ngày sinh không hợp lệ
         if (!dateOfBirth.getTime()) {
             return null;
         }
 
         // Tính tuổi
-        const age = today.getFullYear() - dateOfBirth.getFullYear();
-        const isAdult = age > 18 ||
-            (age === 18 && (today.getMonth() > dateOfBirth.getMonth() ||
-                (today.getMonth() === dateOfBirth.getMonth() && today.getDate() >= dateOfBirth.getDate())));
+        let age = today.getFullYear() - dateOfBirth.getFullYear();
 
-        return isAdult ? null : { 'ageInvalid': true };
+        // Điều chỉnh tuổi nếu ngày sinh chưa đến trong năm nay
+        const birthMonth = dateOfBirth.getMonth();
+        const birthDay = dateOfBirth.getDate();
+        if (today.getMonth() < birthMonth ||
+            (today.getMonth() === birthMonth && today.getDate() < birthDay)) {
+            age--;
+        }
+
+        // Kiểm tra các điều kiện tuổi
+        if (age < 18) {
+            return { 'ageInvalid': true }; // Tuổi dưới 18
+        }
+        if (age >= 100) {
+            return { 'ageTooHigh': true }; // Tuổi trên hoặc bằng 100
+        }
+
+        return null; // Tuổi hợp lệ
     }
 
     protected readonly document = document;

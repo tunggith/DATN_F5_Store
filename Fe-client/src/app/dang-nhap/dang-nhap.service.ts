@@ -20,4 +20,7 @@ export class DangNhapService {
   detailDiaChi(id:string):Observable<any>{
     return this.http.get(`${this.baseUrl}/detail-dia-chi/${id}`);
   }
+  dangKy(KhachHang:any):Observable<any>{
+    return this.http.post(`${this.baseUrl}/register`,KhachHang);
+  }
 }

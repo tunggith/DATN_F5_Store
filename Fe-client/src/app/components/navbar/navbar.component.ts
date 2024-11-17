@@ -13,7 +13,8 @@ export const ROUTES: RouteInfo[] = [
   { path: '/trang-chu', title: 'Trang chủ', icon: '', class: '' },
   { path: '/san-pham', title: 'Sản phẩm', icon: '', class: '' },
   { path: '/ve-chung-toi', title: 'Về chúng tôi', icon: '', class: '' },
-  { path: '/lien-he', title: 'Liên hệ', icon: '', class: '' }
+  { path: '/lien-he', title: 'Liên hệ', icon: '', class: '' },
+  { path: '/tra-cuu-don-hang', title: 'Tra cứu đơn hàng', icon: '', class: '' }
 ];
 @Component({
   selector: 'app-navbar',
@@ -22,6 +23,7 @@ export const ROUTES: RouteInfo[] = [
 })
 export class NavbarComponent implements OnInit {
   popupDangNhap: boolean = false;
+  popupDangKy: boolean = false;
   menuItems: any[] = [];
   hoTen:string='';
   constructor(private router:Router) { }
@@ -33,6 +35,7 @@ export class NavbarComponent implements OnInit {
     localStorage.clear();
     this.hoTen = '';
     this.showSuccessMessage('Đăng xuất thành công!');
+    this.router.navigate(['/trang-chu']);
   }
   openPopupDangNhap() {
     this.popupDangNhap = true;
@@ -40,6 +43,12 @@ export class NavbarComponent implements OnInit {
   closePopupDangNhap() {
     this.popupDangNhap = false;
     this.hoTen= localStorage.getItem('hoTen')||'';
+  }
+  openPopUpDangKy(){
+    this.popupDangKy = true;
+  }
+  closePopupDangKy(){
+    this.popupDangKy = false;
   }
   getRedirectTaiKhoan(){
     this.router.navigate(['/tai-khoan']);

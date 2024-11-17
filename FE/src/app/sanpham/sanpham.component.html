@@ -59,26 +59,29 @@
       <div class="modal-content">
           <div class="modal-header">
               <h5 class="modal-title" id="createDetailModalLabel">Tạo Chi Tiết Sản Phẩm</h5>
-              <button type="button" (click)="resetChiTietSanPhamForm()" class="close" data-dismiss="modal" aria-label="Close">
+              <button type="button" (click)="resetChiTietSanPhamForm()"  class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
               </button>
           </div>
           <div class="modal-body">
               <form [formGroup]="chiTietSanPhamForm">
-                  <div class="form-group">
-                      <label for="donGia">Đơn giá</label>
-                      <input type="number" id="donGia" class="form-control" formControlName="donGia" placeholder="Nhập đơn giá" required>
-                      <div *ngIf="chiTietSanPhamForm.get('donGia')?.invalid && (chiTietSanPhamForm.get('donGia')?.dirty || chiTietSanPhamForm.get('donGia')?.touched)" class="text-danger">
-                          Đơn giá phải là số không âm.
-                      </div>
+                <div class="form-group">
+                  <label for="donGia">Đơn giá</label>
+                  <input type="number" id="donGia" class="form-control" formControlName="donGia" placeholder="Nhập đơn giá" min="0" required>
+                  <div *ngIf="chiTietSanPhamForm.get('donGia')?.invalid && (chiTietSanPhamForm.get('donGia')?.dirty || chiTietSanPhamForm.get('donGia')?.touched)" class="text-danger">
+                    <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.required">Đơn giá là bắt buộc.</small>
+                    <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.min">Đơn giá phải là số không âm.</small>
                   </div>
-                  <div class="form-group">
-                      <label for="soLuong">Số lượng</label>
-                      <input type="number" id="soLuong" class="form-control" formControlName="soLuong" placeholder="Nhập số lượng" required>
-                      <div *ngIf="chiTietSanPhamForm.get('soLuong')?.invalid && (chiTietSanPhamForm.get('soLuong')?.dirty || chiTietSanPhamForm.get('soLuong')?.touched)" class="text-danger">
-                          Số lượng phải là số không âm.
-                      </div>
-                  </div>
+                </div>
+                
+                  <div class="mb-3">
+                    <label for="soLuong" class="form-label">Số lượng</label>
+                    <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
+                    <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
+                      <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
+                      <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+                    </div>
+                  </div>                                  
                   <div class="form-group">
                     <label for="moTa">mô tả </label> 
                     <textarea id="moTa" class="form-control" formControlName="moTa" placeholder="Nhập ghi chú (không bắt buộc)"></textarea>
@@ -126,7 +129,7 @@
               </div>
           </div>
           <div class="modal-footer">
-              <button type="button"  data-dismiss="modal">Đóng</button>
+              <button type="button"  (click)="resetChiTietSanPhamForm()" data-dismiss="modal">Đóng</button>
               <button [disabled]="!isValidSelection" 
               (click)="renderChiTietSanPham()" 
               class="btn ">Lưu Chi Tiết Sản Phẩm</button>
@@ -149,87 +152,113 @@
               </button>
           </div>
           <div class="modal-body">
-              <form [formGroup]="sanPhamForm" (ngSubmit)="onSubmit()">
-                    <div class="form-row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="maSanPham">Mã sản phẩm</label>
-                            <input type="text" id="maSanPham" class="form-control" formControlName="maSanPham" placeholder="Mã sản phẩm" required readonly>
-                            <div *ngIf="sanPhamForm.get('maSanPham').invalid && (sanPhamForm.get('maSanPham').dirty || sanPhamForm.get('maSanPham').touched)" class="text-danger">
-                                <small *ngIf="sanPhamForm.get('maSanPham').errors?.required">Mã sản phẩm là bắt buộc.</small>
-                            </div>
-                        </div>
+            <form [formGroup]="sanPhamForm" (ngSubmit)="onSubmit()">
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="maSanPham">Mã sản phẩm</label>
+                    <input type="text" id="maSanPham" class="form-control" formControlName="maSanPham" placeholder="Mã sản phẩm" required readonly>
+                  </div>
+                </div>
+            
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="tenSanPham">Tên sản phẩm</label>
+                    <input type="text" id="tenSanPham" class="form-control" formControlName="tenSanPham" placeholder="Tên sản phẩm" required>
+                    <div *ngIf="sanPhamForm.get('tenSanPham').invalid && (sanPhamForm.get('tenSanPham').dirty || sanPhamForm.get('tenSanPham').touched)" class="text-danger">
+                      <small *ngIf="sanPhamForm.get('tenSanPham').errors?.required">Tên sản phẩm là bắt buộc.</small>
+                      <small *ngIf="sanPhamForm.get('tenSanPham').errors?.pattern">Tên sản phẩm không được chứa ký tự đặc biệt.</small>
                     </div>
-                    
-                      <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="tenSanPham">Tên sản phẩm</label>
-                              <input type="text" id="tenSanPham" class="form-control" formControlName="tenSanPham" placeholder="Tên sản phẩm" required>
-                              <div *ngIf="sanPhamForm.get('tenSanPham').invalid && (sanPhamForm.get('tenSanPham').dirty || sanPhamForm.get('tenSanPham').touched)" class="text-danger">
-                                  <small *ngIf="sanPhamForm.get('tenSanPham').errors?.required">Tên sản phẩm là bắt buộc.</small>
-                              </div>
-                          </div>
-                      </div>
                   </div>
-
-                  <div class="form-row">
-                      <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="xuatXu">Xuất xứ</label>
-                              <select id="xuatXu" class="form-control" formControlName="xuatXu" required>
-                                  <option value="">Chọn xuất xứ</option>
-                                  <option *ngFor="let xuatXu of xuatXuList" [value]="xuatXu.id">{{ xuatXu.ten }}</option>
-                              </select>
-                              <div *ngIf="sanPhamForm.get('xuatXu').invalid && (sanPhamForm.get('xuatXu').dirty || sanPhamForm.get('xuatXu').touched)" class="text-danger">
-                                  <small *ngIf="sanPhamForm.get('xuatXu').errors?.required">Xuất xứ là bắt buộc.</small>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="thuongHieu">Thương Hiệu</label>
-                              <select id="thuongHieu" class="form-control" formControlName="thuongHieu" required>
-                                  <option value="">Chọn thương hiệu</option>
-                                  <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
-                              </select>
-                              <div *ngIf="sanPhamForm.get('thuongHieu').invalid && (sanPhamForm.get('thuongHieu').dirty || sanPhamForm.get('thuongHieu').touched)" class="text-danger">
-                                  <small *ngIf="sanPhamForm.get('thuongHieu').errors?.required">Thương hiệu là bắt buộc.</small>
-                              </div>
-                          </div>
-                      </div>
+                </div>
+              </div>
+            
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="xuatXu">Xuất xứ</label>
+                    <select id="xuatXu" class="form-control" formControlName="xuatXu" required>
+                      <option value="">Chọn xuất xứ</option>
+                      <option *ngFor="let xuatXu of xuatXuList" [value]="xuatXu.id">{{ xuatXu.ten }}</option>
+                    </select>
+                    <div *ngIf="sanPhamForm.get('xuatXu').invalid && (sanPhamForm.get('xuatXu').dirty || sanPhamForm.get('xuatXu').touched)" class="text-danger">
+                      <small *ngIf="sanPhamForm.get('xuatXu').errors?.required">Xuất xứ là bắt buộc.</small>
+                    </div>
                   </div>
-
-                  <div class="form-row">
-                      <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="gioiTinh">Giới Tính</label>
-                              <select id="gioiTinh" class="form-control" formControlName="gioiTinh" required>
-                                  <option value="">Chọn giới tính</option>
-                                  <option *ngFor="let gioiTinh of gioiTinhList" [value]="gioiTinh.id">{{ gioiTinh.ten }}</option>
-                              </select>
-                              <div *ngIf="sanPhamForm.get('gioiTinh').invalid && (sanPhamForm.get('gioiTinh').dirty || sanPhamForm.get('gioiTinh').touched)" class="text-danger">
-                                  <small *ngIf="sanPhamForm.get('gioiTinh').errors?.required">Giới tính là bắt buộc.</small>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-6">
-                          <div class="form-group">
-                              <label for="trangThai" class="form-label">Trạng thái</label>
-                              <select id="trangThai" class="form-control" formControlName="trangThai" required>
-                                  <option value="Đang hoạt động">Đang hoạt động</option>
-                                  <option value="Dừng hoạt động">Dừng hoạt động</option>
-                              </select>
-                          </div>
-                      </div>
+                </div>
+            
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="thuongHieu">Thương Hiệu</label>
+                    <select id="thuongHieu" class="form-control" formControlName="thuongHieu" required>
+                      <option value="">Chọn thương hiệu</option>
+                      <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
+                    </select>
+                    <div *ngIf="sanPhamForm.get('thuongHieu').invalid && (sanPhamForm.get('thuongHieu').dirty || sanPhamForm.get('thuongHieu').touched)" class="text-danger">
+                      <small *ngIf="sanPhamForm.get('thuongHieu').errors?.required">Thương hiệu là bắt buộc.</small>
+                    </div>
                   </div>
-
-                  <div class="form-group text-right">
-                      <button type="submit" class="btn ">
-                          {{ selectedSanPhamId ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm' }}
-                      </button>
-                      <button type="button" class="btn btn-danger" (click)="resetForm()">Xóa form</button>
+                </div>
+              </div>
+            
+              <div class="form-row">
+                <div class="col-md-6">
+                  <div class="form-group gioi-tinh">
+                    <label>Giới Tính</label>
+                    <nav *ngFor="let gioiTinh of gioiTinhList" class="form-check">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        [value]="gioiTinh.id"
+                        formControlName="gioiTinh"
+                        [id]="'gioiTinh' + gioiTinh.id"
+                        required
+                      />
+                      <label class="form-check-label" [for]="'gioiTinh' + gioiTinh.id">{{ gioiTinh.ten }}</label>
+                    </nav>
+                    <div *ngIf="sanPhamForm.get('gioiTinh')?.invalid && (sanPhamForm.get('gioiTinh')?.dirty || sanPhamForm.get('gioiTinh')?.touched)" class="text-danger">
+                      <small *ngIf="sanPhamForm.get('gioiTinh')?.errors?.required">Giới tính là bắt buộc.</small>
+                    </div>
                   </div>
-              </form>
+                </div>
+              
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Trạng Thái</label>
+                    <div class="form-check form-check-inline">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        value="Đang hoạt động"
+                        formControlName="trangThai"
+                        id="trangThaiHoatDong"
+                        required
+                      />
+                      <label class="form-check-label" for="trangThaiHoatDong">Đang hoạt động</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        value="Dừng hoạt động"
+                        formControlName="trangThai"
+                        id="trangThaiDungHoatDong"
+                        required
+                      />
+                      <label class="form-check-label" for="trangThaiDungHoatDong">Dừng hoạt động</label>
+                    </div>
+                    <div *ngIf="sanPhamForm.get('trangThai')?.invalid && (sanPhamForm.get('trangThai')?.dirty || sanPhamForm.get('trangThai')?.touched)" class="text-danger">
+                      <small *ngIf="sanPhamForm.get('trangThai')?.errors?.required">Trạng thái là bắt buộc.</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group text-right">
+                <button type="submit" class="btn">{{ selectedSanPhamId ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm' }}</button>
+                <button type="button" class="btn btn-danger" (click)="resetForm()">Xóa form</button>
+              </div>
+            </form>
+            
           </div>
       </div>
   </div>
@@ -250,28 +279,48 @@
       </div>
       <div class="modal-body">
         <form [formGroup]="attributeForm" (ngSubmit)="onSubmitAttribute()">
+          <!-- Loại thuộc tính -->
           <div class="mb-3">
             <label for="attributeType" class="form-label">Loại thuộc tính</label>
-            <select id="attributeType" class="form-control" formControlName="type" required>
+            <select id="attributeType" class="form-control" formControlName="type">
+              <option value="">Chọn loại thuộc tính</option>
               <option value="mau-sac">Màu sắc</option>
               <option value="size">Kích thước</option>
               <option value="xuat-xu">Xuất xứ</option>
               <option value="thuong-hieu">Thương hiệu</option>
             </select>
+            <div *ngIf="attributeForm.get('type')?.invalid && (attributeForm.get('type')?.dirty || attributeForm.get('type')?.touched)" class="text-danger">
+              <small *ngIf="attributeForm.get('type')?.errors?.required">Loại thuộc tính là bắt buộc.</small>
+            </div>
           </div>
+      
+          <!-- Mã thuộc tính -->
           <div class="mb-3">
-            <label for="attributeCode" class="form-label">Mã thuộc tính</label>
-            <input type="text" id="attributeMa" class="form-control" formControlName="ma" required>
+            <label for="attributeMa" class="form-label">Mã thuộc tính</label>
+            <input type="text" id="attributeMa" class="form-control" formControlName="ma">
+            <div *ngIf="attributeForm.get('ma')?.invalid && (attributeForm.get('ma')?.dirty || attributeForm.get('ma')?.touched)" class="text-danger">
+              <small *ngIf="attributeForm.get('ma')?.errors?.required">Mã thuộc tính là bắt buộc.</small>
+              <small *ngIf="attributeForm.get('ma')?.errors?.minlength">Mã thuộc tính phải có ít nhất 2 ký tự.</small>
+              <small *ngIf="attributeForm.get('ma')?.errors?.maxlength">Mã thuộc tính không được vượt quá 20 ký tự.</small>
+            </div>
           </div>
+      
+          <!-- Tên thuộc tính -->
           <div class="mb-3">
-            <label for="attributeName" class="form-label">Tên thuộc tính</label>
-
-            <input type="text" id="attributeTen" class="form-control" formControlName="ten" required>
-
+            <label for="attributeTen" class="form-label">Tên thuộc tính</label>
+            <input type="text" id="attributeTen" class="form-control" formControlName="ten">
+            <div *ngIf="attributeForm.get('ten')?.invalid && (attributeForm.get('ten')?.dirty || attributeForm.get('ten')?.touched)" class="text-danger">
+              <small *ngIf="attributeForm.get('ten')?.errors?.required">Tên thuộc tính là bắt buộc.</small>
+              <small *ngIf="attributeForm.get('ten')?.errors?.minlength">Tên thuộc tính phải có ít nhất 2 ký tự.</small>
+              <small *ngIf="attributeForm.get('ten')?.errors?.maxlength">Tên thuộc tính không được vượt quá 50 ký tự.</small>
+            </div>
           </div>
-          <button type="submit" class="btn " (click)="logButtonClick()">Thêm</button>
+      
+          <!-- Nút submit -->
+          <button type="submit" class="btn btn-primary" [disabled]="attributeForm.invalid">Thêm</button>
         </form>
       </div>
+      
     </div>
   </div>
 </div>
@@ -281,11 +330,11 @@
   <div class="col-12">
     <!-- Nút mở modal -->
     <div class="d-flex justify-content-end mb-3">
-      <button [disabled]="role!=='admin'" type="button" click="resetForm()" class="btn " data-toggle="modal" data-target="#sanPhamModal">
-          QUẢN LÝ SẢN PHẨM
+      <button [disabled]="role!=='admin'" type="button" (click)="resetForm()" class="btn " data-toggle="modal" data-target="#sanPhamModal">
+         tHÊM SẢN PHẨM 
       </button>
       <!-- Nút mở modal -->
-      <button [disabled]="role!=='admin'" type="button" click="resetForm()" class="btn " data-toggle="modal" data-target="#modalThuocTinh">
+      <button [disabled]="role!=='admin'" type="button" (click)="resetForm()" class="btn " data-toggle="modal" data-target="#modalThuocTinh">
         thêm thuộc tính 
     </button>
   </div>
@@ -391,6 +440,7 @@
       <div class="col-md-4">
         <label for="idMauSac" class="form-label">Màu sắc</label>
         <select id="idMauSac" class="form-control" [(ngModel)]="selectedColor" (change)="selectColor($event.target.value)">
+          <option disabled></option>
           <option *ngFor="let mau of mauSacList" [value]="mau.id">{{ mau.ten }}</option>
         </select>
       </div>
@@ -398,7 +448,7 @@
       <div class="col-md-4">
         <label for="idSize" class="form-label">Kích thước</label>
         <select id="idSize" class="form-control" [(ngModel)]="selectedSize" (change)="selectSize($event.target.value)">
-
+          <option disabled></option>
           <option *ngFor="let size of sizes" [value]="size.id">{{ size.ten }}</option>
         </select>
       </div>
@@ -407,6 +457,8 @@
         <label for="donGia" class="form-label">Đơn giá</label>
         <input type="number" id="donGia" [(ngModel)]="selectedPrice" (input)="updatePrice($event.target.value)" placeholder="Nhập giá" class="form-control" />
       </div>
+    
+      
     </div>
 
     <!-- Nội dung chi tiết sản phẩm -->
@@ -502,22 +554,23 @@
           </div>
         </div>
 
-        <div class="mb-3">
-          <label for="donGia" class="form-label">Đơn giá</label>
-          <input type="number" id="donGia" class="form-control" formControlName="donGia" required>
-          <div *ngIf="chiTietSanPhamForm.get('donGia').invalid && (chiTietSanPhamForm.get('donGia').dirty || chiTietSanPhamForm.get('donGia').touched)" class="text-danger">
-            <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.required">Đơn giá là bắt buộc.</small>
+        <div class="form-group">
+          <label for="donGia">Đơn giá</label>
+          <input type="number" id="donGia" class="form-control" formControlName="donGia" placeholder="Nhập đơn giá" min="0" required>
+          <div *ngIf="chiTietSanPhamForm.get('donGia')?.invalid && (chiTietSanPhamForm.get('donGia')?.dirty || chiTietSanPhamForm.get('donGia')?.touched)" class="text-danger">
+            <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.required">Đơn giá là bắt buộc.</small>
+            <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.min">Đơn giá phải là số không âm.</small>
           </div>
         </div>
-
+        
         <div class="mb-3">
           <label for="soLuong" class="form-label">Số lượng</label>
-          <input type="number" id="soLuong" class="form-control" formControlName="soLuong" required>
+          <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
           <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
             <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
+            <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
           </div>
-        </div>
-
+        </div>        
         <button type="submit" class="btn ">Thêm Chi Tiết</button>
       </form>
     </div>
@@ -565,8 +618,13 @@
 
         <div class="mb-3">
           <label for="soLuong" class="form-label">Số lượng</label>
-          <input type="number" id="soLuong" class="form-control" formControlName="soLuong" required>
+          <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
+          <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
+            <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
+            <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+          </div>
         </div>
+        
 
         <button type="submit" class="btn btn-primary">Cập nhật Chi Tiết</button>
       </form>

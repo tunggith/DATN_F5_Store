@@ -1,6 +1,7 @@
 import { response } from 'express';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CustomerService } from './KhachHang.service';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { GiaoHangNhanhService } from 'app/giao-hang-nhanh.service';
 
@@ -15,6 +16,9 @@ import Swal from 'sweetalert2';
 
 })
 export class KhachHangComponent implements OnInit {
+  
+  khachHangForm: FormGroup;
+  validationErrors: any = {};  // Lưu lỗi từ backend
   //Khách hàng
   customers: any[] = [];
   addresses = [];
@@ -34,7 +38,6 @@ export class KhachHangComponent implements OnInit {
   };
   isUpdating: boolean = false; // Biến để xác định hành động
   isAdding: boolean = true; // Biến để xác định hành động thêm
-  emailExists: boolean = false;
 
 
   // Phân trang
@@ -43,10 +46,20 @@ export class KhachHangComponent implements OnInit {
   currentPage: number = 0; // Trang hiện tại
   totalPages: number = 0; // Tổng số trang
 
-  // Thêm thuộc tính currentDate
-  currentDate: Date = new Date();
-
-  constructor(private customerService: CustomerService, private datePipe: DatePipe) { }
+  constructor(private customerService: CustomerService, private datePipe: DatePipe, private fb: FormBuilder) { 
+    this.khachHangForm = this.fb.group({
+      ma:[''],
+      ten: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹà-ỹ\\s]+$')]],
+      ngayThangNamSinh: ['', [Validators.required, this.validateAge]],
+      sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
+      username: [''],
+      password: [''],
+      email: ['', [Validators.required, Validators.email]],
+      anh: [''],
+      gioiTinh: ['1'],
+      trangThai: ['Đang hoạt động'],
+    });
+  }
   ngOnInit() {
     this.loadKhachHang(this.currentPage);
   }
@@ -87,12 +100,9 @@ export class KhachHangComponent implements OnInit {
     )
   }
   // Phương thức để định dạng ngày sinh
-  formatDate(date: Date | string): string {
-    if (date instanceof Date) {
-      return this.datePipe.transform(date, 'yyyy-MM-dd') || '';
-    }
-    const parsedDate = new Date(date);
-    return this.datePipe.transform(parsedDate, 'yyyy-MM-dd') || '';
+  formatDate(dateString: string): string {
+    const date = new Date(dateString); // Chuyển đổi chuỗi ngày thành đối tượng Date
+    return this.datePipe.transform(date, 'yyyy-MM-dd') || ''; // Định dạng lại ngày
   }
   onFileSelected(event: Event): void {
     const fileInput = event.target as HTMLInputElement;
@@ -113,105 +123,225 @@ export class KhachHangComponent implements OnInit {
       this.searchKhachHang();
     }
   }
-  // Thêm phương thức checkExistingEmail
-  checkExistingEmail(email: string) {
-    if (!email) {
-      this.emailExists = false;
-      return;
-    }
-    
-    this.customerService.checkEmailExists(email).subscribe(
-      (exists: boolean) => {
-        this.emailExists = exists;
-      },
-      (error) => {
-        console.error('Lỗi kiểm tra email:', error);
-        this.emailExists = false;
-      }
-    );
-  }
-  createKhachHang(): void {
-    if (!this.validateKhachHang(this.newKhachHang)) {
-      return; // Ngừng lại nếu dữ liệu không hợp lệ
-    }
+// createKhachHang(): void {
+//     if (!this.validateKhachHang(this.newKhachHang)) {
+//       return; // Ngừng lại nếu dữ liệu không hợp lệ
+//     }
 
-    this.customerService.addKhachHang(this.newKhachHang).subscribe(
-      (response) => {
-        this.newKhachHang = {};
-        Swal.fire({
-          title: 'Thành công!',
-          text: ' Khách hàng đã được thêm thành công.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
-        this.loadKhachHang(this.currentPage);
-      },
-      (error) => {
-        Swal.fire({
+//     this.customerService.addKhachHang(this.newKhachHang).subscribe(
+//       (response) => {
+//         this.newKhachHang = {};
+//         Swal.fire({
+//           title: 'Thành công!',
+//           text: ' Khách hàng đã được thêm thành công.',
+//           icon: 'success',
+//           confirmButtonText: 'OK'
+//         });
+//         this.loadKhachHang(this.currentPage);
+//       },
+//       (error) => {
+//         Swal.fire({
+//           title: 'Lỗi!',
+//           text: 'Có lỗi xảy ra trong quá trình thêm mới khách hàng.',
+//           icon: 'error',
+//           confirmButtonText: 'OK'
+//         });
+//       }
+//     );
+//   }
+createKhachHang() {
+  if (this.khachHangForm.valid) {
+      this.newKhachHang = { ...this.khachHangForm.getRawValue() }; // Lưu dữ liệu vào newNhanVien
+      this.customerService.addKhachHang(this.newKhachHang).subscribe({
+          next: (response) => {
+              if (response && response.status && response.result) {
+                  console.log('Khách hàng đã được thêm thành công', response);
+                  this.loadKhachHang(this.currentPage);
+
+                  Swal.fire({
+                      title: 'Thành công!',
+                      text: 'Khách hàng đã được thêm thành công.',
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                  });
+
+                  // Đặt lại các trường trạng thái, giới tính
+                  this.resetForm();
+              } else {
+                  // Nếu phản hồi không thành công, hiển thị thông báo lỗi từ backend
+                  let errorMessage = 'Số điện thoại hoặc email đã tồn tại. Vui lòng nhập lại thông tin!';
+                  if (response.result && response.result.message) {
+                      errorMessage = response.result.message; // lấy thông báo lỗi từ backend
+                  }
+
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: errorMessage,
+                      icon: 'warning',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          },
+          error: (errors) => {
+              if (errors.status === 400 && errors.error) {
+                  this.validationErrors = errors.error;
+
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: errors.error.message || 'Vui lòng kiểm tra lại thông tin bạn đã nhập.',
+                      icon: 'warning',
+                      confirmButtonText: 'OK'
+                  });
+              } else {
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: 'Có lỗi xảy ra trong quá trình thêm khách hàng.',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          }
+      });
+  } else {
+      Swal.fire({
           title: 'Lỗi!',
-          text: 'Có lỗi xảy ra trong quá trình thêm mới khách hàng.',
-          icon: 'error',
+          text: 'Vui lòng điền đầy đủ các trường bắt buộc.',
+          icon: 'warning',
           confirmButtonText: 'OK'
-        });
-      }
-    );
+      });
   }
+}
 
   updateKhachHang(id: number): void {
-    if (!this.validateKhachHang(this.newKhachHang)) {
-      return; // Ngừng lại nếu dữ liệu không hợp lệ
-    }
+    if (this.khachHangForm.valid) {
+      this.updateKhachHang = { ...this.khachHangForm.getRawValue() }; // Lấy tất cả dữ liệu từ form
 
-    this.customerService.updateKhachHang(id, this.newKhachHang).subscribe((response) => {
-      Swal.fire({
-        title: 'Thành công!',
-        text: 'Khách hàng đã được cập nhật thành công.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      });
-      this.loadKhachHang(this.currentPage);
-      this.updateKhachHangData = {};
-      // this.isUpdating = false; // Đặt lại trạng thái sau khi cập nhật
+      this.customerService.updateKhachHang(id, this.updateKhachHang).subscribe({
+          next: (response) => {
+              if (response && response.status) {
+                  Swal.fire({
+                      title: 'Thành công!',
+                      text: 'Khách hàng đã được cập nhật thành công.',
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                  });
+                  this.loadKhachHang(this.currentPage);
+                  this.khachHangForm.reset();
 
-    }, error => {
-      Swal.fire({
-        title: 'Lỗi!',
-        text: 'Có lỗi xảy ra trong quá trình cập nhật khách hàng.',
-        icon: 'error',
-        confirmButtonText: 'OK'
+                  // Đặt lại các trường trạng thái, giới tính
+                  this.resetForm();
+              } else {
+                  let errorMessage = 'Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.';
+                  if (response.result && response.result.message) {
+                      errorMessage = response.result.message; // lấy thông báo lỗi từ backend
+                  }
+
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: errorMessage,
+                      icon: 'warning',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          },
+          error: (errors) => {
+              if (errors.status === 400 && errors.error) {
+                  this.validationErrors = errors.error;
+
+                  // Kiểm tra nếu backend trả về thông báo lỗi chi tiết
+                  let errorText = 'Vui lòng kiểm tra lại thông tin bạn đã nhập.';
+                  if (errors.error.message) {
+                      errorText = errors.error.message;
+                  }
+
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: errorText,
+                      icon: 'warning',
+                      confirmButtonText: 'OK'
+                  });
+              } else {
+                  Swal.fire({
+                      title: 'Lỗi!',
+                      text: 'Có lỗi xảy ra trong quá trình cập nhật khách hàng.',
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          }
       });
-      console.log('Có lỗi trong quá trình cập nhật', error);
-    });
+  } else {
+      Swal.fire({
+          title: 'Lỗi!',
+          text: 'Vui lòng điền đầy đủ các trường bắt buộc.',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+      });
+  }
+  // Kích hoạt lại trường mã để có thể nhập liệu khi thêm mới
+  this.khachHangForm.get('ma')?.enable(); // Bật lại trường mã
   }
 
   // Hàm kiểm tra hợp lệ
-  validateKhachHang(khachHang: any): boolean {
-    // Kiểm tra trống
-    if (!khachHang.ten || khachHang.ten.length < 3) {
-      Swal.fire('Lỗi!', 'Tên khách hàng phải ít nhất 3 ký tự.', 'error');
-      return false;
-    }
-    if (!khachHang.ngayThangNamSinh) {
-      Swal.fire('Lỗi!', 'Ngày sinh không được để trống.', 'error');
-      return false;
-    }
-    const ngaySinh = new Date(khachHang.ngayThangNamSinh);
-    const ngayHienTai = new Date(); // Lấy ngày hiện tại
-    if (ngaySinh > ngayHienTai) {
-      Swal.fire('Lỗi!', 'Ngày sinh không được vượt quá ngày hiện tại.', 'error');
-      return false;
-    }
-    if (!khachHang.email || !this.validateEmail(khachHang.email)) {
-      Swal.fire('Lỗi!', 'Email không hợp lệ.', 'error');
-      return false;
-    }
-    if (!khachHang.sdt || khachHang.sdt.length < 10 || khachHang.sdt.length > 11) {
-      Swal.fire('Lỗi!', 'Số điện thoại phải từ 10 đến 11 ký tự.', 'error');
-      return false;
+  // validateKhachHang(khachHang: any): boolean {
+  //   // Kiểm tra trống
+  //   if (!khachHang.ten || khachHang.ten.length < 3) {
+  //     Swal.fire('Lỗi!', 'Tên khách hàng phải ít nhất 3 ký tự.', 'error');
+  //     return false;
+  //   }
+  //   if (!khachHang.ngayThangNamSinh) {
+  //     Swal.fire('Lỗi!', 'Ngày sinh không được để trống.', 'error');
+  //     return false;
+  //   }
+  //   const ngaySinh = new Date(khachHang.ngayThangNamSinh);
+  //   const ngayHienTai = new Date(); // Lấy ngày hiện tại
+  //   if (ngaySinh > ngayHienTai) {
+  //     Swal.fire('Lỗi!', 'Ngày sinh không được vượt quá ngày hiện tại.', 'error');
+  //     return false;
+  //   }
+  //   if (!khachHang.email || !this.validateEmail(khachHang.email)) {
+  //     Swal.fire('Lỗi!', 'Email không hợp lệ.', 'error');
+  //     return false;
+  //   }
+  //   if (!khachHang.sdt || khachHang.sdt.length < 10 || khachHang.sdt.length > 11) {
+  //     Swal.fire('Lỗi!', 'Số điện thoại phải từ 10 đến 11 ký tự.', 'error');
+  //     return false;
+  //   }
+
+  //   return true; // Tất cả các kiểm tra đều hợp lệ
+  // }
+   // Kiểm tra ngày sinh >= 18 tuổi
+  validateAge(control: AbstractControl): { [key: string]: any } | null {
+    const dateOfBirth = new Date(control.value);
+    const today = new Date();
+
+    // Kiểm tra nếu ngày sinh không hợp lệ
+    if (!dateOfBirth.getTime()) {
+        return null;
     }
 
-    return true; // Tất cả các kiểm tra đều hợp lệ
-  }
+    // Tính tuổi
+    let age = today.getFullYear() - dateOfBirth.getFullYear();
+
+    // Điều chỉnh tuổi nếu ngày sinh chưa đến trong năm nay
+    const birthMonth = dateOfBirth.getMonth();
+    const birthDay = dateOfBirth.getDate();
+    if (today.getMonth() < birthMonth ||
+        (today.getMonth() === birthMonth && today.getDate() < birthDay)) {
+        age--;
+    }
+
+    // Kiểm tra các điều kiện tuổi
+    if (age < 18) {
+        return { 'ageInvalid': true }; // Tuổi dưới 18
+    }
+    if (age >= 100) {
+        return { 'ageTooHigh': true }; // Tuổi trên hoặc bằng 100
+    }
+
+    return null; // Tuổi hợp lệ
+}
+
 
   // Hàm kiểm tra định dạng email
   validateEmail(email: string): boolean {
@@ -225,7 +355,10 @@ export class KhachHangComponent implements OnInit {
     this.updateKhachHangData.id = khachHang.id; // Lưu ID của nhân viên cần cập nhật
     this.isUpdating = true; // Đặt biến là true khi đang cập nhật
     this.isAdding = false; // Đặt lại trạng thái về thêm
+    this.khachHangForm.patchValue(this.newKhachHang);
 
+        // Vô hiệu hóa trường mã khi cập nhật
+        this.khachHangForm.get('ma')?.disable();
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
@@ -235,7 +368,7 @@ export class KhachHangComponent implements OnInit {
       ma: '',
       ten: '',
       gioiTinh: '0',
-      namSinh: '',
+      ngayThangNamSinh: '',
       email: '',
       sdt: '',
       roles :'',
@@ -287,101 +420,4 @@ export class KhachHangComponent implements OnInit {
   }
 
   protected readonly document = document;
-
-  hasSpecialCharacters(value: string): boolean {
-    const regex = /[^a-zA-ZÀ-ỹ\s]/;
-    return regex.test(value);
-  }
-
-  hasRepeatingDigits(value: string): boolean {
-    const regex = /(.)\1{5,}/;
-    return regex.test(value);
-  }
-
-  containsOnlyNumbers(value: string): boolean {
-    const regex = /[^0-9]/;
-    return regex.test(value);
-  }
-
-  // Thêm các phương thức kiểm tra ngày tháng
-  isUnder3YearsOld(birthDate: string): boolean {
-    const birth = new Date(birthDate);
-    const today = new Date();
-    const age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      return age <= 3;
-    }
-    return age < 3;
-  }
-
-  isFutureDate(date: string): boolean {
-    const inputDate = new Date(date);
-    const today = new Date();
-    return inputDate > today;
-  }
-
-  isBeforeYear1900(date: string): boolean {
-    const inputDate = new Date(date);
-    return inputDate.getFullYear() < 1900;
-  }
-
-  isValidDate(dateString: string): boolean {
-    const date = new Date(dateString);
-    return date instanceof Date && !isNaN(date.getTime());
-  }
-
-  // Thêm phương thức xử lý tìm kiếm
-  handleSearch(event: any) {
-    this.searchKeyword = this.searchKeyword.replace(/\s+/g, ' ').trim();
-    this.searchKhachHang();
-  }
-
-  // Thêm các phương thức validation
-  validatePhoneNumber(value: string): boolean {
-    return /^[0-9]{10,11}$/.test(value);
-  }
-
-  hasNumbers(value: string): boolean {
-    return /\d/.test(value);
-  }
-
-  hasWhitespace(value: string): boolean {
-    return value && value.includes(' ');
-  }
-
-  validatePhoneLength(value: string): boolean {
-    return value && (value.length < 10 || value.length > 11);
-  }
-
-  validateTen(value: string) {
-    // Loại bỏ khoảng trắng ở đầu và cuối
-    const trimmedValue = value?.trim();
-    if (trimmedValue) {
-        this.newKhachHang.ten = trimmedValue;
-    }
-  }
-  hasMultipleSpaces(value: string): boolean {
-    if (!value) return false;
-    return /\s{2,}/.test(value); // Kiểm tra nếu có từ 2 khoảng trắng liên tiếp trở lên
 }
-
-hasInvalidName(value: string): boolean {
-    if (!value) return false;
-    return (
-        this.hasNumbers(value) || 
-        this.hasSpecialCharacters(value) || 
-        this.hasMultipleSpaces(value) || 
-        this.startsWithSpace(value) || 
-        /\s{2,}/.test(value) ||
-        value.trim().length === 0
-    );
-}
-
-startsWithSpace(value: string): boolean {
-    return value.startsWith(' ');
-}
-
-}
-

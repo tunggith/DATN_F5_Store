@@ -14,4 +14,5 @@ public interface NhanVienService {
     DataResponse delete(Integer id); // Thêm phương thức xóa
     NhanVienEntity detail(Integer id);
     NhanVienEntity findByUserName(String username);
+
 }

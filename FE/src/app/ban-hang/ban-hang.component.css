@@ -7,6 +7,18 @@
     /* overflow: hidden; */
 }
 
+.cart .select-invoice {
+    border: none;
+    background-color: #ffff;
+    cursor: pointer;
+    width: 10px;
+    height: 10px;
+}
+
+.cart .select-invoice i {
+    font-size: 20px;
+}
+
 .tab {
     display: flex;
     gap: 20px;
@@ -21,14 +33,20 @@
     transition: 0.3s;
 }
 
+.tab a:hover {
+    cursor: pointer;
+}
+
 .tab a.active {
     color: #3498db;
     border-bottom: 3px solid #3498db;
 }
+
 .craete-invoice {
     display: flex;
 }
-.hoa-don-cho{
+
+.hoa-don-cho {
     display: flex;
     justify-content: space-between;
     border: none;
@@ -36,15 +54,16 @@
     font-size: 15px;
     cursor: pointer;
 }
-.hoa-don-cho span{
+
+.hoa-don-cho span {
     width: 10px;
     height: 10px;
     border-radius: 50%;
 }
+
 .order-list {
     display: flex;
     gap: 15px;
-    margin: 20px 0;
 }
 
 .order-list i {
@@ -53,16 +72,20 @@
     margin-left: 45%;
     color: grey;
 }
-.order-list .create-order i{
+
+.order-list .create-order i {
     font-size: 35px;
     margin-left: 0px;
 }
-.create-order{
+
+.create-order {
     display: flex;
 }
-.create-order .hoa-don-cho{
+
+.create-order .hoa-don-cho {
     margin-left: 645%;
 }
+
 .order-item {
     position: relative;
     display: inline-block;
@@ -147,11 +170,26 @@
 .cart p {
     color: #7f8c8d;
 }
-.san-pham-popup{
-    font-size: 35px;
+
+.san-pham-popup {
+    font-size: 20px;
     text-align: right;
     padding: 10px;
 }
+
+.san-pham-popup span {
+    padding: 5px;
+    width: 150px;
+    background-color: rgb(243, 69, 69);
+    color: #fff;
+    height: 30px;
+    border-radius: 5%;
+}
+
+.san-pham-popup span:hover {
+    cursor: pointer;
+}
+
 .payment button:hover {
     background-color: rgb(243, 69, 69);
 }
@@ -161,15 +199,6 @@
     height: 150px;
 }
 
-.voucher {
-    background-color: #fff;
-    width: 25%;
-    text-align: left;
-    padding: 10px;
-    margin-left: 10px;
-    border-radius: 10px;
-}
-
 .card-header .form-select {
     width: 120px;
     margin-left: 10px;
@@ -177,7 +206,16 @@
     border-radius: 10px;
 }
 
+.voucher {
+    width: 30%;
+    text-align: left;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
 .voucher input {
+    width: 100%;
     margin-left: 10px;
     border: none;
     border-bottom: 0.5px solid gray;
@@ -185,21 +223,18 @@
 }
 
 .voucher button {
+    width: 100%;
     color: #ffff;
     height: 30px;
     border: none;
     background-color: rgb(244, 25, 25);
-    border-radius: 10%;
+    border-radius: 5%;
     margin-left: 10px;
 }
 
-.voucher button i {
-    justify-content: center;
-    color: #fff;
-}
-
 .voucher select {
-    width: 250px;
+    width: 100%;
+    /* Make the select element take up full width */
     height: 30px;
     border: 0.5px solid gray;
     border-radius: 10px;
@@ -207,11 +242,12 @@
 
 .voucher div {
     margin-top: 10px;
+    width: 100%;
+    /* Ensure div elements take up full width */
 }
 
 .address {
-    width: 70%;
-    background-color: #ffff;
+    width: 65%;
 }
 
 .cash-client {
@@ -222,9 +258,11 @@
     display: flex;
     background-color: #003366;
 }
-.card-title{
+
+.card-title {
     color: #fff;
 }
+
 .card-header input {
     border-radius: 10px;
     border: 0.5px solid gainsboro;
@@ -245,22 +283,6 @@
 
 .select-product i:hover {
     font-size: 30px;
-}
-
-.select-invoice {
-    border: none;
-    background-color: #ffff;
-    cursor: pointer;
-    width: 10px;
-    height: 10px;
-}
-
-.select-invoice i {
-    font-size: 20px;
-}
-
-.select-invoice i:hover {
-    font-size: 25px;
 }
 
 .error-border {
@@ -363,264 +385,6 @@ datalist {
     font-size: 20px;
 }
 
-/* time line */
-.main-timeline10:after,
-.main-timeline10:before {
-    content: "";
-    display: block;
-    width: 100%;
-    clear: both
-}
-
-.main-timeline10 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-}
-
-.main-timeline10 .col-md-3 {
-    -ms-flex: 0 0 25%;
-    flex: 0 0 25%;
-    max-width: 24%
-}
-
-.main-timeline10 .timeline {
-    flex: 1;
-    margin: 0 10px;
-    position: relative;
-}
-
-.main-timeline10 .timeline-inner {
-    text-align: center;
-    margin: 20px 10px;
-    position: relative;
-    padding-bottom: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.main-timeline10 .timeline-inner:after {
-    content: "";
-    width: 300px;
-    /* Đặt độ dài cố định cho thanh dưới */
-    height: 3px;
-    background: #030303;
-    position: absolute;
-    bottom: 95px;
-    /* Đặt thanh dưới icon */
-    left: 110%;
-    transform: translateX(-50%);
-    /* Căn giữa thanh nối */
-}
-
-.main-timeline10 .timeline:last-child .timeline-inner:after {
-    width: 0;
-}
-
-.main-timeline10 .year {
-    background: #58b25e;
-    padding: 5px 0;
-    border-radius: 30px 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: #fff;
-    z-index: 1;
-    position: relative
-}
-
-.main-timeline10 .year:after,
-.main-timeline10 .year:before {
-    position: absolute;
-    top: -19px;
-    content: ""
-}
-
-.main-timeline10 .year:before {
-    right: 0;
-    border: 10px solid transparent;
-    border-bottom: 10px solid #58b25e;
-    border-right: 10px solid #58b25e
-}
-
-.main-timeline10 .year:after {
-    width: 25px;
-    height: 19px;
-    border-radius: 0 0 20px;
-    background: #fff;
-    right: 1px
-}
-
-.main-timeline10 .timeline-content {
-    padding: 10px 10px 30px;
-    border-left: 3px solid #58b25e;
-    position: relative
-}
-
-.main-timeline10 .timeline-content:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -1px;
-    border: 10px solid transparent;
-    border-top: 10px solid #58b25e;
-    border-left: 10px solid #58b25e
-}
-
-.main-timeline10 .timeline-content:after {
-    content: "";
-    width: 25px;
-    height: 19px;
-    border-radius: 20px 0 0;
-    background: #fff;
-    position: absolute;
-    top: 0;
-    left: 0
-}
-
-.main-timeline10 .post {
-    font-size: 20px;
-    color: #333
-}
-
-.main-timeline10 .description {
-    font-size: 14px;
-    color: #333;
-    margin-left: 30px;
-}
-
-.main-timeline10 .timeline-icon {
-    width: 70px;
-    height: 70px;
-    line-height: 65px;
-    border-radius: 50%;
-    border: 5px solid #58b25e;
-    background: #fff;
-    font-size: 30px;
-    color: #555;
-    z-index: 1;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.main-timeline10 .timeline:nth-child(2n) .year {
-    background: #9f84c4
-}
-
-.main-timeline10 .timeline:nth-child(2n) .year:before {
-    border-bottom-color: #9f84c4;
-    border-right-color: #9f84c4
-}
-
-.main-timeline10 .timeline:nth-child(2n) .timeline-content {
-    border-left-color: #9f84c4
-}
-
-.main-timeline10 .timeline:nth-child(2n) .timeline-content:before {
-    border-top-color: #9f84c4;
-    border-left-color: #9f84c4
-}
-
-.main-timeline10 .timeline:nth-child(2n) .timeline-icon {
-    border-color: #9f84c4
-}
-
-.main-timeline10 .timeline:nth-child(3n) .year {
-    background: #f35958
-}
-
-.main-timeline10 .timeline:nth-child(3n) .year:before {
-    border-bottom-color: #f35958;
-    border-right-color: #f35958
-}
-
-.main-timeline10 .timeline:nth-child(3n) .timeline-content {
-    border-left-color: #f35958
-}
-
-.main-timeline10 .timeline:nth-child(3n) .timeline-content:before {
-    border-top-color: #f35958;
-    border-left-color: #f35958
-}
-
-.main-timeline10 .timeline:nth-child(3n) .timeline-icon {
-    border-color: #f35958
-}
-
-.main-timeline10 .timeline:nth-child(4n) .year {
-    background: #e67e49
-}
-
-.main-timeline10 .timeline:nth-child(4n) .year:before {
-    border-bottom-color: #e67e49;
-    border-right-color: #e67e49
-}
-
-.main-timeline10 .timeline:nth-child(4n) .timeline-content {
-    border-left-color: #e67e49
-}
-
-.main-timeline10 .timeline:nth-child(4n) .timeline-content:before {
-    border-top-color: #e67e49;
-    border-left-color: #e67e49
-}
-
-.main-timeline10 .timeline:nth-child(4n) .timeline-icon {
-    border-color: #e67e49
-}
-
-@media only screen and (min-width: 1200px) {
-    .main-timeline10 .timeline {
-        flex: 1 1 18%;
-        /* Khi màn hình lớn hơn 1200px, chia mỗi phần tử chiếm 18% chiều rộng */
-    }
-}
-
-@media only screen and (max-width: 990px) {
-    .main-timeline10 .timeline {
-        flex: 1 1 48%;
-        /* Màn hình trung bình (dưới 990px), chia mỗi phần tử chiếm 48% chiều rộng */
-    }
-}
-
-@media only screen and (max-width: 767px) {
-    .main-timeline10 .timeline {
-        flex: 1 1 100%;
-        /* Màn hình nhỏ hơn 767px, mỗi phần tử chiếm toàn bộ chiều rộng */
-    }
-}
-
-.timeline .timeline-inner {
-    opacity: 0;
-    /* Tạo hiệu ứng mờ cho các trạng thái chưa hoàn thành */
-}
-
-.timeline.active .timeline-inner {
-    opacity: 1;
-    /* Làm sáng các trạng thái đã hoàn thành hoặc trạng thái hiện tại */
-}
-
-.timeline-inner h4 {
-    margin: 0;
-    /* Loại bỏ margin để không làm thay đổi độ dài thanh */
-    font-size: 18px;
-    /* Điều chỉnh kích thước chữ nếu cần */
-    white-space: nowrap;
-    /* Giữ cho thẻ h4 không bị xuống dòng */
-}
-
-.page-header button {
-    border: 0;
-    background-color: rgb(244, 25, 25);
-    border-radius: 45%;
-}
-
-.page-header button i {
-    font-size: 20px;
-    color: #ffff;
-    text-align: center;
-}
-
 .chiTietHoaDon,
 .lichSuHoaDon {
     font-size: 15px;
@@ -635,10 +399,6 @@ datalist {
 .lichSuHoaDon i:hover {
     cursor: pointer;
     font-size: 30px;
-}
-
-.page-header button i:hover {
-    font-size: 27px;
 }
 
 .form_address {
@@ -658,56 +418,11 @@ datalist {
 }
 
 .example-form {
-    min-width: 100px;
-    max-width: 200px;
     width: 100%;
 }
 
 .example-full-width {
     width: 100%;
-}
-
-.combox .example-form {
-    min-width: 150px;
-    max-width: 500px;
-    width: 100%;
-}
-
-.combox .example-full-width {
-    width: 100%;
-}
-.action-buttons {
-    display: none; /* Mặc định ẩn */
-    position: absolute;
-    top: 65%; /* Hiển thị các nút bên dưới thẻ .timeline-inner */
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
-.action-buttons button {
-    display: block;
-    margin: 5px 0;
-    padding: 5px 5px;
-    background-color: #fff;
-    color: gray;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    width: 100%;
-}
-
-.action-buttons button:hover {
-    cursor: pointer;
-}
-
-/* Hiển thị các nút khi hover vào .timeline */
-.timeline:hover .action-buttons {
-    display: flex;
 }
 
 /* Media Queries cho màn hình điện thoại */

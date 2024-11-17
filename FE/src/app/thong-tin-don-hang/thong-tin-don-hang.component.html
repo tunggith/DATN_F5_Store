@@ -1,0 +1,216 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h1>Thông tin đơn hàng</h1>
+                        <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
+                        <div>
+                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                        </div>
+                        <div>
+                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                        </div>
+                        <div style="display: flex;">
+                            <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden"
+                                (click)="downloadPdf(hoaDonChoId)">
+                                <i class="material-icons" title="In hóa đơn">print</i>
+                            </button>
+                            <button
+                                *ngIf="trangThaiHoaDon==='Đã xác nhận'||trangThaiHoaDon==='Chờ xác nhận' &&!isHidden"
+                                (click)="removeHoaDon(hoaDonChoId)" style="margin-left: 10px;">
+                                <i class="material-icons" title="Hủy hóa đơn">remove_shopping_cart</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div style="justify-content: center; text-align: center;" *ngIf="isHidden">
+                        <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
+                        <h3>Hóa đơn đã được hủy</h3>
+                    </div>
+                    <button style="background-color: rgb(244, 25, 25);"
+                        *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
+                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
+                    <button style="background-color: rgb(244, 25, 25);"
+                        *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
+                        (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
+                    <button style="background-color: rgb(244, 25, 25);"
+                        *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
+                        class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
+                    <div class="rollback"><span (click)="rollback()">Quay lại</span></div>
+                    <div style="display:inline-block;width:100%;overflow-x:hidden;" *ngIf="!isHidden">
+                        <div class="row main-timeline10">
+                            <!-- Trạng thái Chờ xác nhận -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'Chờ xác nhận' || trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng'||trangThaiHoaDon === 'Hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Chờ xác nhận</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-exclamation"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Trạng thái Đã xác nhận -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng'||trangThaiHoaDon === 'Hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Đã xác nhận</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-check"></i>
+                                    </div>
+                                    <!-- Nút thao tác, mặc định ẩn -->
+                                    <div class="action-buttons" *ngIf="trangThaiHoaDon === 'Đã xác nhận'">
+                                        <button (click)="openEditGioHang()" title="Thêm sản phẩm">
+                                            <div class="material-icons">add_shopping_cart</div>
+                                        </button>
+                                        <button (click)="openEditDiaChi()" title="Sửa địa chỉ">
+                                            <div class="material-icons">edit_location_alt</div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Trạng thái Đang giao hàng -->
+                            <div *ngIf="idGiaoHang=== 1" class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Đang giao hàng</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-solid fa-truck"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Trạng thái Hoàn thành -->
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+                                [ngClass]="{'active': trangThaiHoaDon === 'Hoàn thành'}">
+                                <div class="timeline-inner">
+                                    <h4>Hoàn thành</h4>
+                                    <div class="timeline-icon">
+                                        <i class="fa fa-regular fa-credit-card"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <app-popup-san-pham *ngIf="popupSanPham" [activeInvoiceID]="hoaDonChoId"
+                (closePopup)="closePopupSanPham()"></app-popup-san-pham>
+            <div *ngIf="editGioHang">
+                <div style="display: flex;">
+                    <div class="action material-icons" (click)="closeEditGioHang()"  title="Đóng">close</div>
+                    <div class="action material-icons" (click)="updateHoaDon()" style="margin-left: 5px;" title="Cập nhật">check</div>
+                </div>
+                <table class="table table-hover">
+                    <thead class="text-dark">
+                        <th>Stt</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Xuất xứ</th>
+                        <th>Thương hiệu</th>
+                        <th>Màu sắc</th>
+                        <th>Giới Tính</th>
+                        <th>Size</th>
+                        <th>Số lượng</th>
+                        <th>Tổng tiền</th>
+                        <th>Hành động</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cthd of detailHoaDon, let i = index">
+                            <td>{{i+1}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.xuatXu?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.thuongHieu?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.mauSac?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.sanPham?.gioiTinh?.ten}}</td>
+                            <td>{{cthd.chiTietSanPham?.size?.ten}}</td>
+                            <td>
+                                <div class="input-group mb-3">
+                                    <button class="input-group-text"
+                                        [disabled]="cthd.soLuong === 1 && detailHoaDon.length === 1"
+                                        (click)="decreaseQuantityhd(cthd.id)">
+                                        <i class="material-icons">remove</i></button>
+                                    <input type="text" class="form-control" [value]="cthd.soLuong" disabled>
+                                    <button class="input-group-text"><i class="material-icons"
+                                            (click)="increaseQuantityhd(cthd.chiTietSanPham?.id)">add</i></button>
+                                </div>
+                            </td>
+                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
+                            <td><button [disabled]="detailHoaDon.length === 1" (click)="removeHoaDonChiTiet(cthd.id)"
+                                    class="select-invoice"><i class="material-icons">delete_forever</i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="san-pham-popup" *ngIf="editGioHang">
+                <i class="material-icons" title="Sản phẩm" (click)="openPopupSanPham()">menu</i>
+            </div>
+            <div class="address" *ngIf="editDiaChi">
+                <form class="form_address" (ngSubmit)="submitAddress()">
+                    <div style="display: flex;">
+                        <div class="action material-icons" (click)="closeEditDiaChi()" title="Hủy">close</div>
+                        <button style="background-color: #fff; height: 20px; border: none;" type="submit"
+                            class="material-icons" title="Thay đổi địa chỉ">check</button>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="hoTen" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="hoTen" [(ngModel)]="hoTenNguoiNhan" name="hoTen"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="soDienThoai" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="soDienThoai" [(ngModel)]="soDienThoai"
+                                name="soDienThoai" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" [(ngModel)]="email" name="email"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="soNha" class="form-label">Số nhà</label>
+                            <input type="text" class="form-control" id="soNha" [(ngModel)]="soNha" name="soNha"
+                                required>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="duong" class="form-label">Đường</label>
+                            <input type="text" class="form-control" id="duong" [(ngModel)]="duong" name="duong"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
+                            <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh" name="tinhThanh"
+                                (change)="onTinhThanhChange($event)" required>
+                                <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{
+                                    tinh.ProvinceName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="quanHuyen" class="form-label">Quận/ huyện</label>
+                            <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen" name="quanHuyen"
+                                (change)="onQuanHuyenChange($event)" required>
+                                <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
+                                    quan.DistrictName }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phuongXa" class="form-label">Phường/ xã</label>
+                            <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa" name="phuongXa"
+                                (change)="onPhuongXaChange($event)" required>
+                                <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
