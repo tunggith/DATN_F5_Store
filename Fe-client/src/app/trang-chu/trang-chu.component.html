@@ -190,104 +190,103 @@
     </div>
   </div>
 
-  <!--  modal -->
+  <!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+  <div class="popup-content">
+    <!-- Nút đóng -->
+    <span class="close" (click)="closePopup()">&times;</span>
 
-
-  <!-- Popup  -->
-  <div class="popup" *ngIf="isPopupVisible">
-    <div class="popup-content">
-      <!-- Nút X (đóng popup) -->
-      <span class="close" (click)="closePopup()">&times;</span>
+    <div class="popup-body">
+      <!-- Phần bên trái: Hình ảnh -->
       <div class="popup-left">
-        <div class="popup-right">
-          <p>Mã sản phẩm: <strong> {{maSanPham}}</strong></p>
-          <h2>Sản Phẩm : <strong>{{tenSanPham}}</strong></h2>
-          
-        </div>
-        <!-- Ảnh chính được hiển thị -->
+        <!-- Ảnh chính -->
         <img [src]="currentImage" alt="Product Image" class="popup-image" />
-        
-        <!-- Danh sách ảnh -->
+
+        <!-- Danh sách ảnh thu nhỏ -->
         <div class="image-list">
           <img
             *ngFor="let anh of anhChiTietSanPham"
-            [src]="anh.urlAnh" 
+            [src]="anh.urlAnh"
             class="thumbnail"
-            (click)="changeImage(anh.urlAnh)" 
+            [class.selected]="currentImage === anh.urlAnh"
+            (click)="changeImage(anh.urlAnh)"
           />
         </div>
+      </div>
 
-
-          <!-- Ảnh chính được hiển thị -->
- 
-      
+      <!-- Phần bên phải: Nội dung sản phẩm -->
       <div class="popup-right">
-        <p> Thương hiệu:
-         <strong>{{ThuongHieu}}</strong>
-         xuất xứ:   <strong>{{XuatXu}}</strong>
-         giới tính: <strong>{{gioiTinh}}</strong> 
-       </p>
-       
+        <p>Mã sản phẩm: <strong>{{ maSanPham }}</strong></p>
+        <h2>Sản Phẩm: <strong>{{ tenSanPham }}</strong></h2>
+
+        <p><strong>Thương hiệu:</strong> {{ ThuongHieu }}</p>
+        <p><strong>Xuất xứ:</strong> {{ XuatXu }}</p>
+        <p><strong>Giới tính:</strong> {{ gioiTinh }}</p>
+
         <p>
           <strong>Giá:</strong>
           <span class="price">{{ formatTien(donGia) }} VNĐ</span>
-
-
-          
         </p>
+
         <div class="options">
           <div class="colors">
             <strong>Màu sắc:</strong>
             <div class="option-buttons">
               <ng-container *ngFor="let color of mauSacList">
-                <button 
-                  [class.selected]="color === selectedColor" 
-                  (click)="selectColor(color)">
+                <button
+                  [class.selected]="color === selectedColor"
+                  (click)="selectColor(color)"
+                >
                   {{ color.ten }}
                 </button>
               </ng-container>
             </div>
           </div>
+
           <div class="sizes">
             <strong>Kích thước:</strong>
             <div class="option-buttons">
               <ng-container *ngFor="let kichthuoc of sizeList">
-                <button 
-                  [class.selected]="kichthuoc === selectedSize" 
-                  (click)="selectSize(kichthuoc)">
+                <button
+                  [class.selected]="kichthuoc === selectedSize"
+                  (click)="selectSize(kichthuoc)"
+                >
                   {{ kichthuoc.ten }}
                 </button>
               </ng-container>
             </div>
           </div>
         </div>
-        <div>
-          <div>
-             <b>Trạng thái hàng </b>
-            <b *ngIf="soLuongCTSP === 0" style="color: red;">hết hàng</b>
-            <b *ngIf="soLuongCTSP > 0" style="color: brown;"> còn {{ soLuongCTSP }} </b>
-          </div>          
+
+        <div class="stock-status">
+          <strong>Trạng thái hàng:</strong>
+          <span *ngIf="soLuongCTSP === 0" style="color: red;">Hết hàng</span>
+          <span *ngIf="soLuongCTSP > 0" style="color: brown;">
+            Còn {{ soLuongCTSP }}
+          </span>
         </div>
-        <strong>Số lượng:</strong>
-        <div class="quantity">      
-          <button (click)="decreaseQuantity()">-</button>
-          <input
-            type="text"
-            [(ngModel)]="quantity"
-            min="1"
-            [max]="soLuongCTSP"
-            (input)="onQuantityChange($event)"
-          />
-          <button (click)="increaseQuantity()">+</button>
-          <!-- Thông báo lỗi -->
+
+        <div class="quantity-container">
+          <strong>Số lượng:</strong>
+          <div class="quantity">
+            <button (click)="decreaseQuantity()">-</button>
+            <input
+              type="text"
+              [(ngModel)]="quantity"
+              min="1"
+              [max]="soLuongCTSP"
+              (input)="onQuantityChange($event)"
+            />
+            <button (click)="increaseQuantity()">+</button>
+          </div>
           <p class="error-message" *ngIf="err2">{{ err2 }}</p>
         </div>
-        
+
         <button class="add-to-cart">Thêm vào giỏ</button>
       </div>
     </div>
   </div>
-  
-  <!-- popupend  -->
+</div>
 
+<!-- popupend  -->
   

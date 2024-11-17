@@ -189,6 +189,8 @@ export class TrangChuComponent implements OnInit {
     currentImage: string = ''; // Ảnh chính mặc định
     soLuongCTSP: number = 0 ;
     donGiaDau: number = 0;
+    idCTSP: number = 0;
+
  // ======================== //
 
 
@@ -243,6 +245,8 @@ getctsp(selectedColor: any, selectedSize: any, idSanPham: string) : void{
         this.soLuongCTSP = chiTietsp.soLuong || 0;
         this.donGiaDau = chiTietsp.donGia || 0;
         this.donGia = this.donGiaDau;
+        this.idCTSP = chiTietsp.id;
+        console.log('id la ctsp ',this.idCTSP)
         this.quantity = 0
     }
     
@@ -270,6 +274,8 @@ loadAnhChiTietSanPham(selectedColor: any, selectedSize: any, idSanPham: string):
           this.donGiaDau = chiTiet.donGia || 0;
           this.donGia = this.donGiaDau;
           this.currentImage = response[0]?.urlAnh || '';
+          this.idCTSP = response[0]?.chiTietSanPham.id;
+          console.log('id laf ',this.idCTSP)
           this.quantity = 0
         } else {
           console.warn('Không tìm thấy chi tiết sản phẩm trong phần tử đầu tiên của danh sách ảnh.');

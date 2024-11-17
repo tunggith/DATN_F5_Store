@@ -190,8 +190,6 @@
 
 
 
-
-/* and css modal  */
 /* Popup tổng thể */
 .popup {
   position: fixed;
@@ -200,23 +198,23 @@
   transform: translate(-50%, -50%);
   z-index: 1000;
   width: 90%;
-  max-width: 800px; /* Tăng chiều rộng */
+  max-width: 700px; /* Giảm chiều rộng */
   background: white;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  padding: 20px;
+  padding: 15px; /* Giảm padding */
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px; /* Giảm khoảng cách */
   overflow: hidden;
 }
 
 /* Nút đóng */
 .close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 18px;
+  top: 8px; /* Căn trên sát hơn */
+  right: 12px; /* Căn phải sát hơn */
+  font-size: 16px; /* Giảm kích thước chữ */
   cursor: pointer;
   color: #555;
 }
@@ -228,7 +226,7 @@
 /* Phần nội dung chính */
 .popup-body {
   display: flex;
-  gap: 20px;
+  gap: 15px; /* Giảm khoảng cách giữa các phần */
   justify-content: space-between;
 }
 
@@ -238,28 +236,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Giảm khoảng cách giữa các thành phần */
 }
 
 .popup-image {
   width: 100%;
-  max-width: 300px;
-  height: 300px;
+  max-width: 250px; /* Giảm chiều rộng */
+  height: 250px; /* Giảm chiều cao */
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid #ddd;
 }
 
 /* Danh sách ảnh thu nhỏ */
 .image-list {
   display: flex;
-  gap: 10px;
+  gap: 8px; /* Giảm khoảng cách */
   justify-content: center;
 }
 
 .thumbnail {
-  width: 50px;
-  height: 50px;
+  width: 45px; /* Giảm kích thước */
+  height: 45px;
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -282,23 +280,23 @@
   flex: 1; /* Chiếm 50% chiều rộng */
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  font-size: 14px;
+  gap: 12px; /* Giảm khoảng cách */
+  font-size: 13px; /* Giảm kích thước chữ */
   text-align: left;
 }
 
 .popup-right h2 {
-  font-size: 18px;
+  font-size: 16px; /* Giảm kích thước tiêu đề */
   font-weight: bold;
 }
 
 .popup-right p {
-  margin: 5px 0;
+  margin: 4px 0; /* Giảm khoảng cách */
 }
 
 .popup-right .price {
   color: red;
-  font-size: 16px;
+  font-size: 14px; /* Giảm kích thước giá */
   font-weight: bold;
 }
 
@@ -306,26 +304,26 @@
 .options {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px; /* Giảm khoảng cách */
 }
 
 .colors,
 .sizes {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .option-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px; /* Giảm khoảng cách */
 }
 
 /* Các nút trong option-buttons (mặc định) */
 .option-buttons button {
-  position: relative; /* Để sử dụng pseudo-element */
-  padding: 6px 12px;
+  position: relative;
+  padding: 5px 10px; /* Giảm padding */
   font-size: 12px;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -343,49 +341,48 @@
 
 /* Khi nút được chọn */
 .option-buttons button.selected {
-  background-color: transparent; /* Nền trong suốt */
-  border: 2px solid #514a07d6; /* Viền đổi màu */
-  color: inherit; /* Giữ nguyên màu chữ */
+  background-color: transparent;
+  border: 2px solid #514a07d6;
+  color: inherit;
   transition: border-color 0.3s ease;
 }
 
 /* Thêm dấu tick khi được chọn */
 .option-buttons button.selected::after {
-  content: "✓"; /* Biểu tượng dấu tick */
+  content: "✓";
   position: absolute;
-  bottom: -5px; /* Căn dưới */
-  right: -1px; /* Căn phải */
-  font-size: 16px; /* Kích thước dấu tick */
-  color: #514a07d6; /* Màu sắc dấu tick (giống màu viền) */
+  bottom: -5px;
+  right: -1px;
+  font-size: 14px; /* Giảm kích thước tick */
+  color: #514a07d6;
   font-weight: bold;
 }
-
 
 /* Bộ chọn số lượng */
 .quantity-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px; /* Giảm khoảng cách */
 }
 
 .quantity {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Giảm khoảng cách */
 }
 
 .quantity input {
-  width: 50px;
+  width: 45px; /* Giảm chiều rộng */
   text-align: center;
-  font-size: 14px;
+  font-size: 13px; /* Giảm kích thước chữ */
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 5px;
+  padding: 4px; /* Giảm padding */
 }
 
 .quantity button {
-  padding: 5px 10px;
-  font-size: 14px;
+  padding: 4px 8px; /* Giảm padding */
+  font-size: 13px; /* Giảm kích thước chữ */
   border: 1px solid #ddd;
   background: #dfdcdc;
   border-radius: 4px;
@@ -399,9 +396,9 @@
 
 /* Nút thêm vào giỏ */
 .add-to-cart {
-  margin-top: 10px;
-  padding: 10px 15px;
-  font-size: 16px;
+  margin-top: 8px;
+  padding: 8px 12px; /* Giảm padding */
+  font-size: 14px; /* Giảm kích thước chữ */
   font-weight: bold;
   background: #28a745;
   color: white;
