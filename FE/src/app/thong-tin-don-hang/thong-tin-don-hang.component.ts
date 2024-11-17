@@ -42,6 +42,7 @@ export class ThongTinDonHangComponent implements OnInit {
   phuongXa: string = '';
   quanHuyen: string = '';
   tinhThanh: string = '';
+  giaTriGiam:number=0;
   constructor(
     private banHangService: BanHangService,
     private authServie: AuthService,
@@ -109,6 +110,7 @@ export class ThongTinDonHangComponent implements OnInit {
         this.hoTenNguoiNhan = data.result.content.tenNguoiNhan;
         this.email = data.result.content.emailNguoiNhan;
         this.soDienThoai = data.result.content.sdtNguoiNhan;
+        this.giaTriGiam = data.result.content.giaTriGiam;
         this.detailChiTietHoaDon(id);
       }
     )

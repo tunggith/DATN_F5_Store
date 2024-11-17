@@ -24,6 +24,7 @@ export class BanHangComponent implements OnInit {
   hasError: boolean = false;
   activeInvoidID: number | null = null;
   tongTienBanDau: number = 0;
+  giaTriGiam: number = 0;
   tongTienSauVoucher: number = 0;
   tenKhachHang: string = '';
   tienKhachDua: number = 0;
@@ -168,8 +169,9 @@ export class BanHangComponent implements OnInit {
         if (this.chitietHoaDon.length > 0) {
           const hoaDonData = data.result.content[0].hoaDon;
           this.tongTienBanDau = hoaDonData.tongTienBanDau;
+          this.giaTriGiam = hoaDonData.giaTriGiam;
           this.tongTienSauVoucher = hoaDonData.tongTienBanDau;
-          this.tienKhachDua = this.tongTienSauVoucher+this.phiVanChuyen;
+          this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
           this.tenKhachHang = hoaDonData.khachHang.ten;
           this.hasError = false;  // Có sản phẩm, không có lỗi
         } else {
@@ -404,7 +406,7 @@ export class BanHangComponent implements OnInit {
         // Hiển thị hộp thoại xác nhận in hóa đơn
         const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
         if (printConfirm) {
-          this.downloadPdf(this.activeInvoidID);
+          this.downloadPdf(idHoaDon);
         }
       },
       error => {
@@ -541,7 +543,7 @@ export class BanHangComponent implements OnInit {
       // Tạo link để tải xuống
       const a = document.createElement('a');
       a.href = url;
-      a.download = `hoa_don_${this.hoaDonChoId}.pdf`; // Tên tệp bạn muốn
+      a.download = `hoa_don_${id}.pdf`; // Tên tệp bạn muốn
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -636,7 +638,7 @@ export class BanHangComponent implements OnInit {
       response => {
         // Xử lý phí vận chuyển ở đây
         this.phiVanChuyen = response.data.total;
-        this.tienKhachDua = this.tienKhachDua+this.phiVanChuyen;
+        this.tienKhachDua = this.tienKhachDua + this.phiVanChuyen;
       },
       error => {
         console.error('Lỗi khi lấy phí vận chuyển:', error);
@@ -763,6 +765,7 @@ export class BanHangComponent implements OnInit {
         this.selectedVoucherId = selectedVoucher.id;
         // Tính tổng tiền sau khi áp dụng voucher
         this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
+        this.tienKhachDua = this.tongTienBanDau - finalDiscount;
       } else {
         // Nếu không đạt điều kiện, tổng tiền không thay đổi
         this.tongTienSauVoucher = this.tongTienBanDau;

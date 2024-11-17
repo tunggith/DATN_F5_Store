@@ -192,7 +192,7 @@
                         <div>
                             <div>
                                 <span>Tiền khách đưa: </span>
-                                <input type="text" class="cash-client" [(ngModel)]="onOptionSelectedonOptionSelected"
+                                <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
                                     (input)="getTienTraLai(tienKhachDua)"
                                     [ngClass]="{'error-border': tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
                             </div>
@@ -255,7 +255,7 @@
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
-                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip| number:'1.0-0' }} VNĐ</td>
+                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VNĐ</td>
                             <td class="button-select">
                                 <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"
                                     (click)="getIdThongTinDonHang(hoaDon.id)">Chờ xác nhận</div>
