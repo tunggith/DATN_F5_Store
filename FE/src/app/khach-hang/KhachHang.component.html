@@ -5,7 +5,7 @@
                 <h3 class="card-title" style="color: #ffffff;"><i class="material-icons">group_add</i> Quản lý khách
                     hàng</h3>
             </div>
-            <form [formGroup]="khachHangForm" (ngSubmit)="createKhachHang()" #customerForm="ngForm">
+            <form style="width: 1100px; margin: 0 auto;" [formGroup]="khachHangForm" (ngSubmit)="createKhachHang()" #customerForm="ngForm">
                 <div class="row">
                     <div class="card "
                         style="padding: 20px; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
@@ -13,8 +13,7 @@
                             <div class="col-sm-4">
                                 <div class="form-row" style="display: flex; justify-content: center;">
                                     <div class="form-group upload-container">
-                                        <div class="image-upload-container"
-                                            (click)="document.getElementById('anh').click()">
+                                        <div class="image-upload-container">
                                             <input type="file" class="form-control" id="anh" name="anh"
                                                 (change)="onFileSelected($event)" required>
                                             <div class="image-preview" *ngIf="newKhachHang.anh">
@@ -32,15 +31,22 @@
                                     <input type="text" class="form-control" id="tenKhachHang"
                                         placeholder="Nhập tên khách hàng" formControlName="ten" required>
                                     <div *ngIf="khachHangForm.get('ten').invalid && khachHangForm.get('ten').touched">
-                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.required">Tên
-                                            khách hàng không được để trống.</small>
-                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.pattern">Tên
-                                            chỉ được
-                                            chứa chữ cái và khoảng trắng.</small>
-                                        <small class="text-danger" *ngIf="validationErrors?.ten">{{ validationErrors.ten
-                                            }}</small>
+                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.required">
+                                            Vui lòng nhập tên khách hàng
+                                        </small>
+                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.pattern">
+                                            Tên chỉ được chứa chữ cái, khoảng trắng và dấu
+                                        </small>
+                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.minlength">
+                                            Tên phải có ít nhất 3 ký tự
+                                        </small>
+                                        <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.maxlength">
+                                            Tên không được vượt quá 25 ký tự
+                                        </small>
+                                        <small class="text-danger" *ngIf="validationErrors?.ten">
+                                            {{ validationErrors.ten }}
+                                        </small>
                                     </div>
-
                                 </div>
                                 <div class="mt-4">
                                     <label class="form-label" for="ngayThangNamSinh">Ngày sinh</label>
@@ -65,8 +71,7 @@
                                         </small>
                                     </div>
                                 </div>
-                                <div class="mt-2">
-                                    <div class="">
+                                <div class="mt-4">
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" class="form-control" id="sdt"
                                             placeholder="Nhập số điện thoại" formControlName="sdt" required>
@@ -80,29 +85,30 @@
                                             <small class="text-danger" *ngIf="validationErrors?.sdt">{{
                                                 validationErrors.sdt }}</small>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <div>
                                     <label class="form-label">Giới tính</label>
-                                    <div style="margin-left: 8px;">
-                                        <input style="margin-right: 12px;" type="radio" id="gioiTinhNam"
-                                            formControlName="gioiTinh" name="gioiTinh" value="0" required>
-                                        <label for="gioiTinhNam" style="margin-right: 20px;">Nam</label>
-                                    </div>
-                                    <div style="margin-left: 8px;">
-                                        <input style="margin-right: 12px;" type="radio" id="gioiTinhNu"
-                                            formControlName="gioiTinh" name="gioiTinh" value="1">
-                                        <label for="gioiTinhNu">Nữ</label>
-                                    </div>
-                                    <div style="margin-left: 8px;">
-                                        <input style="margin-right: 12px;" type="radio" id="gioiTinhKhac"
-                                            formControlName="gioiTinh" value="2">
-                                        <label for="gioiTinhKhac">Khác</label>
+                                    <div style="display: flex; align-items: center;margin-top: 5px;">
+                                        <div style="margin-right: 20px; white-space: nowrap;">
+                                            <input style="margin-right: 8px;" type="radio" id="gioiTinhNam"
+                                                formControlName="gioiTinh" name="gioiTinh" value="0" required>
+                                            <label for="gioiTinhNam">Nam</label>
+                                        </div>
+                                        <div style="margin-right: 20px; white-space: nowrap;">
+                                            <input style="margin-right: 8px;" type="radio" id="gioiTinhNu"
+                                                formControlName="gioiTinh" name="gioiTinh" value="1">
+                                            <label for="gioiTinhNu">Nữ</label>
+                                        </div>
+                                        <div style="white-space: nowrap;">
+                                            <input style="margin-right: 8px;" type="radio" id="gioiTinhKhac"
+                                                formControlName="gioiTinh" value="2">
+                                            <label for="gioiTinhKhac">Khác</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="mt-4" style="margin-top: 12px;">
                                     <label class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" placeholder="Nhập email"
                                         formControlName="email" required>

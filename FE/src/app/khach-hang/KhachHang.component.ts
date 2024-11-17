@@ -49,7 +49,8 @@ export class KhachHangComponent implements OnInit {
   constructor(private customerService: CustomerService, private datePipe: DatePipe, private fb: FormBuilder) { 
     this.khachHangForm = this.fb.group({
       ma:[''],
-      ten: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹà-ỹ\\s]+$')]],
+      ten: ['', [Validators.required,  Validators.minLength(3),
+        Validators.maxLength(25), Validators.pattern('^[a-zA-ZÀ-ỹà-ỹ\\s]+$')]],
       ngayThangNamSinh: ['', [Validators.required, this.validateAge]],
       sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
       username: [''],
@@ -109,11 +110,16 @@ export class KhachHangComponent implements OnInit {
     if (fileInput.files && fileInput.files.length > 0) {
       const file = fileInput.files[0];
       const reader = new FileReader();
-
+  
       reader.onload = (e: any) => {
-        this.newKhachHang.anh = e.target.result; // Lưu URL ảnh vào đối tượng nhân viên
+        // Cập nhật giá trị ảnh vào form
+        this.khachHangForm.patchValue({
+          anh: e.target.result
+        });
+        // Đồng thời cập nhật vào newKhachHang
+        this.newKhachHang.anh = e.target.result;
       };
-      reader.readAsDataURL(file); // Đọc file và tạo URL
+      reader.readAsDataURL(file);
     }
   }
   changePage(page: number): void {
@@ -123,32 +129,7 @@ export class KhachHangComponent implements OnInit {
       this.searchKhachHang();
     }
   }
-// createKhachHang(): void {
-//     if (!this.validateKhachHang(this.newKhachHang)) {
-//       return; // Ngừng lại nếu dữ liệu không hợp lệ
-//     }
 
-//     this.customerService.addKhachHang(this.newKhachHang).subscribe(
-//       (response) => {
-//         this.newKhachHang = {};
-//         Swal.fire({
-//           title: 'Thành công!',
-//           text: ' Khách hàng đã được thêm thành công.',
-//           icon: 'success',
-//           confirmButtonText: 'OK'
-//         });
-//         this.loadKhachHang(this.currentPage);
-//       },
-//       (error) => {
-//         Swal.fire({
-//           title: 'Lỗi!',
-//           text: 'Có lỗi xảy ra trong quá trình thêm mới khách hàng.',
-//           icon: 'error',
-//           confirmButtonText: 'OK'
-//         });
-//       }
-//     );
-//   }
 createKhachHang() {
   if (this.khachHangForm.valid) {
       this.newKhachHang = { ...this.khachHangForm.getRawValue() }; // Lưu dữ liệu vào newNhanVien
@@ -282,34 +263,6 @@ createKhachHang() {
   this.khachHangForm.get('ma')?.enable(); // Bật lại trường mã
   }
 
-  // Hàm kiểm tra hợp lệ
-  // validateKhachHang(khachHang: any): boolean {
-  //   // Kiểm tra trống
-  //   if (!khachHang.ten || khachHang.ten.length < 3) {
-  //     Swal.fire('Lỗi!', 'Tên khách hàng phải ít nhất 3 ký tự.', 'error');
-  //     return false;
-  //   }
-  //   if (!khachHang.ngayThangNamSinh) {
-  //     Swal.fire('Lỗi!', 'Ngày sinh không được để trống.', 'error');
-  //     return false;
-  //   }
-  //   const ngaySinh = new Date(khachHang.ngayThangNamSinh);
-  //   const ngayHienTai = new Date(); // Lấy ngày hiện tại
-  //   if (ngaySinh > ngayHienTai) {
-  //     Swal.fire('Lỗi!', 'Ngày sinh không được vượt quá ngày hiện tại.', 'error');
-  //     return false;
-  //   }
-  //   if (!khachHang.email || !this.validateEmail(khachHang.email)) {
-  //     Swal.fire('Lỗi!', 'Email không hợp lệ.', 'error');
-  //     return false;
-  //   }
-  //   if (!khachHang.sdt || khachHang.sdt.length < 10 || khachHang.sdt.length > 11) {
-  //     Swal.fire('Lỗi!', 'Số điện thoại phải từ 10 đến 11 ký tự.', 'error');
-  //     return false;
-  //   }
-
-  //   return true; // Tất cả các kiểm tra đều hợp lệ
-  // }
    // Kiểm tra ngày sinh >= 18 tuổi
   validateAge(control: AbstractControl): { [key: string]: any } | null {
     const dateOfBirth = new Date(control.value);
@@ -341,6 +294,7 @@ createKhachHang() {
 
     return null; // Tuổi hợp lệ
 }
+
 
 
   // Hàm kiểm tra định dạng email

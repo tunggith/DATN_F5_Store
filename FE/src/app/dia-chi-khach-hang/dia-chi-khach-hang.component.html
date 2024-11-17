@@ -1,53 +1,45 @@
 <div class="popup">
     <div class="content">
-        <span class="close" (click)="close()" style="color: rgb(25, 0, 255);">X</span>
-        <form id="customerForm" (ngSubmit)="createDiaChi()" #customerForm="ngForm">
+        <button class="close" (click)="close()"
+            style="background: none; border: none; font-size: 24px; position: absolute; right: 10px; top: 5px; cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
+            <i class="material-icons" style="color: #ffffff; transition: all 0.2s;">close</i>
+        </button>
+
+        <form [formGroup]="diaChiForm" (ngSubmit)="createDiaChi()">
             <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số nhà</label>
-                        <input type="text" class="form-control" placeholder="Nhập số nhà" name="soNha"
-                            [(ngModel)]="diaChiMoi.soNha" required #soNha="ngModel"
-                            (input)="onSoNhaInput($event)">
-                        <span class="text-danger" *ngIf="soNha.touched && diaChiMoi.soNha?.trim() === ''">
-                            Số nhà không được để trống
-                        </span>
-                        <span class="text-danger" *ngIf="soNha.touched && hasWhitespace(diaChiMoi.soNha)">
-                            Số nhà không được chứa khoảng trắng
-                        </span>
+                        <input type="text" class="form-control" placeholder="Nhập số nhà" formControlName="soNha">
+                        <div *ngIf="diaChiForm.get('soNha').invalid && diaChiForm.get('soNha').touched">
+                            <small class="text-danger" *ngIf="diaChiForm.get('soNha').errors?.required">
+                                Vui lòng nhập số nhà
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Đường</label>
-                        <input type="text" class="form-control" placeholder="Nhập đường" name="duong"
-                            [(ngModel)]="diaChiMoi.duong" required #duong="ngModel">
-                        <div>
-                            <span class="text-danger" *ngIf="duong.touched && diaChiMoi.duong?.trim() === ''">
-                                Đường không được để trống
-                            </span>
-                        </div>
-                        <div>
-                            <span class="text-danger" *ngIf="duong.touched && (hasNumbers(diaChiMoi.duong) || hasSpecialCharacters(diaChiMoi.duong) || diaChiMoi.duong?.length > 20 || startsWithSpace(diaChiMoi.duong) || hasMultipleSpaces(diaChiMoi.duong)) && diaChiMoi.duong?.trim() !== ''">
-                                Tên đường không hợp lệ
-                            </span>
+                        <input type="text" class="form-control" placeholder="Nhập đường" formControlName="duong">
+                        <div *ngIf="diaChiForm.get('duong').invalid && diaChiForm.get('duong').touched">
+                            <small class="text-danger" *ngIf="diaChiForm.get('duong').errors?.required">
+                                Vui lòng nhập tên đường
+                            </small>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="number" class="form-control" placeholder="Nhập số điện thoại" name="sdt"
-                            [(ngModel)]="diaChiMoi.sdt" required #sdt="ngModel">
-                        <div>
-                            <span class="text-danger" *ngIf="sdt.touched && !diaChiMoi.sdt">
-                                Số điện thoại không được để trống
-                            </span>
-                        </div>
-                        <div>
-                            <span class="text-danger" *ngIf="sdt.touched && diaChiMoi.sdt && !validatePhoneNumber(diaChiMoi.sdt)">
-                                Số điện thoại không hợp lệ
-                                </span>
+                        <input type="text" class="form-control" placeholder="Nhập số điện thoại" formControlName="sdt">
+                        <div *ngIf="diaChiForm.get('sdt').invalid && diaChiForm.get('sdt').touched">
+                            <small class="text-danger" *ngIf="diaChiForm.get('sdt').errors?.required">
+                                Vui lòng nhập số điện thoại
+                            </small>
+                            <small class="text-danger" *ngIf="diaChiForm.get('sdt').errors?.pattern">
+                                Số điện thoại phải có 10-11 số
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -58,11 +50,18 @@
                         <div>
                             <label for="" class="form-label">Tỉnh thành</label>
                             <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="tinhThanh" [(ngModel)]="selectedTinhThanh"
+                                style="height: 40px;font-size: 15px;" formControlName="tinhThanh"
                                 (change)="onTinhThanhChange($event)">
-                                <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{
-                                    province.ProvinceName }}</option>
+                                <option value="">Chọn tỉnh thành</option>
+                                <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+                                    {{ province.ProvinceName }}
+                                </option>
                             </select>
+                            <div *ngIf="diaChiForm.get('tinhThanh').invalid && diaChiForm.get('tinhThanh').touched">
+                                <small class="text-danger" *ngIf="diaChiForm.get('tinhThanh').errors?.required">
+                                    Vui lòng chọn tỉnh thành
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,11 +70,18 @@
                         <div>
                             <label for="" class="form-label">Quận huyện</label>
                             <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="quanHuyen" [(ngModel)]="selectedQuanHuyen"
-                                (change)="onQuanHuyenChange($event)">
-                                <option *ngFor="let district of districts" [value]="district.DistrictID">{{
-                                    district.DistrictName }}</option>
+                                style="height: 40px;font-size: 15px;" formControlName="quanHuyen"
+                                (change)="onQuanHuyenChange($event)" [disabled]="!diaChiForm.get('tinhThanh').value">
+                                <option value="">Chọn quận huyện</option>
+                                <option *ngFor="let district of districts" [value]="district.DistrictID">
+                                    {{ district.DistrictName }}
+                                </option>
                             </select>
+                            <div *ngIf="diaChiForm.get('quanHuyen').invalid && diaChiForm.get('quanHuyen').touched">
+                                <small class="text-danger" *ngIf="diaChiForm.get('quanHuyen').errors?.required">
+                                    Vui lòng chọn quận huyện
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,10 +90,18 @@
                         <div>
                             <label for="" class="form-label">Phường xã</label>
                             <select class="form-select" aria-label="Default select example"
-                                style="height: 40px;font-size: 15px;" name="phuongXa" [(ngModel)]="selectedPhuongXa"
-                                (change)="onPhuongXaChange($event)">
-                                <option *ngFor="let ward of wards" [value]="ward.WardCode">{{ ward.WardName }}</option>
+                                style="height: 40px;font-size: 15px;" formControlName="phuongXa"
+                                (change)="onPhuongXaChange($event)" [disabled]="!diaChiForm.get('quanHuyen').value">
+                                <option value="">Chọn phường xã</option>
+                                <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                                    {{ ward.WardName }}
+                                </option>
                             </select>
+                            <div *ngIf="diaChiForm.get('phuongXa').invalid && diaChiForm.get('phuongXa').touched">
+                                <small class="text-danger" *ngIf="diaChiForm.get('phuongXa').errors?.required">
+                                    Vui lòng chọn phường xã
+                                </small>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -96,18 +110,11 @@
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Quốc gia</label>
-                        <input type="text" class="form-control" placeholder="Nhập quốc gia" name="quocGia"
-                            [(ngModel)]="diaChiMoi.quocGia" required #quocGia="ngModel"
-                            [ngModel]="diaChiMoi.quocGia?.trim()">
-                        <div>
-                            <span class="text-danger" *ngIf="quocGia.touched && !diaChiMoi.quocGia?.trim()">
-                                Quốc gia không được để trống
-                            </span>
-                        </div>
-                        <div>
-                            <span class="text-danger" *ngIf="quocGia.touched && (hasNumbers(diaChiMoi.quocGia?.trim()) || hasSpecialCharacters(diaChiMoi.quocGia?.trim()) || startsWithSpace(diaChiMoi.quocGia) || hasMultipleSpaces(diaChiMoi.quocGia))">
-                                Quốc gia không hợp lệ
-                            </span>
+                        <input type="text" class="form-control" placeholder="Nhập quốc gia" formControlName="quocGia">
+                        <div *ngIf="diaChiForm.get('quocGia').invalid && diaChiForm.get('quocGia').touched">
+                            <small class="text-danger" *ngIf="diaChiForm.get('quocGia').errors?.required">
+                                Vui lòng nhập quốc gia
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -116,13 +123,13 @@
                         <label class="form-label">Loại địa chỉ</label>
                         <div class="form-check">
                             <input class="form-check-radio" type="radio" id="loaiDiaChiNhaRieng" style="width: 20px;"
-                                [(ngModel)]="diaChiMoi.loaiDiaChi" name="loaiDiaChi" value="Nhà riêng" required checked>
+                                formControlName="loaiDiaChi" value="Nhà riêng" checked>
                             <label class="form-check-label" for="loaiDiaChiNhaRieng" style="margin-right: 20px;">Nhà
                                 riêng</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-radio" type="radio" name="loaiDiaChi" id="loaiDiaChiCongTy"
-                                [(ngModel)]="diaChiMoi.loaiDiaChi" value="Công ty" required>
+                            <input class="form-check-radio" type="radio" id="loaiDiaChiCongTy"
+                                formControlName="loaiDiaChi" value="Công ty">
                             <label class="form-check-label" for="loaiDiaChiCongTy" style="margin-right: 20px;">Công
                                 ty</label>
                         </div>
@@ -132,34 +139,45 @@
                     <div class="mb-3">
                         <label class="form-label">Trạng thái</label>
                         <div class="form-check">
-                            <input class="form-check-radio" type="radio" name="trangThai" value="Còn sử dụng"
-                                id="editConSuDung" [(ngModel)]="diaChiMoi.trangThai" checked>
+                            <input class="form-check-radio" type="radio" value="Còn sử dụng" id="editConSuDung"
+                                formControlName="trangThai" checked>
                             <label class="form-check-label" for="editConSuDung">Còn sử
                                 dụng</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-radio" type="radio" name="trangThai" value="Ngừng sử dụng"
-                                id="editKhongConSuDung" [(ngModel)]="diaChiMoi.trangThai">
+                            <input class="form-check-radio" type="radio" value="Ngừng sử dụng" id="editKhongConSuDung"
+                                formControlName="trangThai">
                             <label class="form-check-label" for="editKhongConSuDung">Ngừng
                                 sử dụng</label>
                         </div>
                     </div>
                 </div>
-                <div class="button-action" style="text-align: center;">
-                    <div style="display: inline-block;">
-                        <button type="submit" class="btn-submit">
-                            <i class="material-icons">{{!idDiaChi ? 'add_location_alt' : 'update'}}</i> 
-                            {{!idDiaChi ? 'Thêm địa chỉ' : 'Cập nhật địa chỉ'}}
+            </div>
+            <div class="row">
+                <div class="col-sm-6" style="text-align: end;">
+                    <div class="button-action" >
+                        <button type="submit" class="btn-submit" *ngIf="!idDiaChi" style="text-align: center;">
+                            <i class="material-icons">add_location_alt</i>Thêm địa chỉ
+                        </button>
+                    </div>  
+                    <div class="button-action" >
+                        <button type="button" class="btn-submit" *ngIf="idDiaChi" 
+                            (click)="updateDiaChi(); idDiaChi = null" style="text-align: center;">
+                            <i class="material-icons">update</i>Cập nhật địa chỉ
                         </button>
                     </div>
-                    <div style="display: inline-block; margin-left: 10px;">
-                        <button type="button" class="btn-submit" (click)="resetForm()">
-                            <i class="material-icons">refresh</i> Làm mới
+                </div>
+                <div class="col-sm-6">
+                    <div class="button-action" >
+                        <button type="button" class="btn-submit" (click)="resetForm(); idDiaChi = null"
+                            style="text-align: center;">
+                            <i class="material-icons">note</i>Làm mới
                         </button>
                     </div>
                 </div>
             </div>
         </form>
+
         <!-- Table hiển thị dữ liệu khách hàng -->
         <div class="table-responsive">
             <table class="table table-hover">
@@ -192,7 +210,7 @@
                         <td>{{ customerAddress.trangThai }}</td>
                         <td>
                             <button (click)="diaChiDetail(customerAddress.id)" class="btn dark-blue">
-                                <i class="material-icons">visibility</i>
+                                <i class="material-icons">edit</i>
                             </button>
                         </td>
                     </tr>
