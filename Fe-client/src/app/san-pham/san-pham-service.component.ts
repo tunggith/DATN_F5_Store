@@ -56,4 +56,8 @@ export class SanPhamService {
     return this.http.get(`${this.apiUrl}/filter`, { params });
   }
 
+  getSanPhamById(id: number): Observable<any> {
+    return this.http.delete<any>(`http://localhost:8080/api/v1/customer/GetSanPhamById/${id}`); 
+  }
+
 }
