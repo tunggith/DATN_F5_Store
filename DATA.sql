@@ -61,7 +61,7 @@ VALUES
 
 
 
-INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_GIOI_TINH, MA, TEN, TRANG_THAI) VALUES
+INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_GIOI_TINH, MA, MO_TA, TRANG_THAI) VALUES
 (1, 1, 1, 'SP001', N'Áo thun Nike', N'Đang hoạt động'),
 (2, 2, 1, 'SP002', N'Quần short Adidas', N'Đang hoạt động'),
 (3, 3, 1, 'SP003', N'Áo khoác Puma', N'Đang hoạt động'),
@@ -75,7 +75,7 @@ INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_GIOI_TINH, MA, TEN, TRANG_T
 select*from SAN_PHAM
 
 
-INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, TEN, DON_GIA, SO_LUONG, TRANG_THAI) VALUES
+INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, MO_TA, DON_GIA, SO_LUONG, TRANG_THAI) VALUES
 (1, 1, 1, 'CTSP001', N'Áo thun Nike - Đỏ - XS', 200000, 100, N'Còn hàng'),
 (2, 2, 2, 'CTSP002', N'Quần short Adidas - Xanh - S', 300000, 50, N'Còn hàng'),
 (3, 3, 3, 'CTSP003', N'Áo khoác Puma - Xanh lá - M', 500000, 30, N'Hết hàng'),

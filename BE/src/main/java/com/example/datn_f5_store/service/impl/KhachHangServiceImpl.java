@@ -73,9 +73,6 @@ public class KhachHangServiceImpl implements KhachHangService {
         if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
             throw new BadRequestException("Email đã tồn tại, không thể thêm mới!");
         }
-        if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-            throw new BadRequestException("Email phải có đuôi @gmail.com");
-        }
 
         String username;
         String password;
@@ -115,32 +112,15 @@ public class KhachHangServiceImpl implements KhachHangService {
 
 
     @Override
-    public DataResponse create(KhachHangRequest request) throws BadRequestException {
-        // Validate dữ liệu
-        if (request.getTen() == null || request.getTen().isEmpty()) {
-            throw new BadRequestException("Tên khách hàng không được để trống");
+    public DataResponse create(KhachHangRequest request) throws BadRequestException{
+        // Kiểm tra sự tồn tại của email
+        if (khachHangRepository.existsByEmail(request.getEmail())) {
+            throw new BadRequestException("Email đã tồn tại");
         }
-        if(request.getRoles() == null || request.getRoles().isEmpty()){
-            throw new BadRequestException("Vai trò không được để trống");
+        // Kiểm tra sự tồn tại của số điện thoại
+        if (khachHangRepository.existsBySdt(request.getSdt())) {
+            throw new BadRequestException("Số điện thoại đã tồn tại");
         }
-        if (request.getNgayThangNamSinh() == null) {
-            throw new BadRequestException("Ngày sinh không được để trống");
-        }
-        // Kiểm tra tuổi
-        Date birthDate = request.getNgayThangNamSinh();
-        int age = hamTinhTuoi(birthDate);
-        if (age < 2 ) {
-            throw new BadRequestException("Tuổi phải lớn hơn 2");
-        }
-        validateNgaySinh(request.getNgayThangNamSinh());
-        if (request.getEmail() == null || !request.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-            throw new BadRequestException("Email không hợp lệ");
-        }
-        if (request.getSdt() == null || !request.getSdt().matches("^\\d{10}$")) {
-            throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
-        }
-
-
         String username = request.getEmail();
         String password = this.generatePassword();
         // Tạo mã khách hàng
@@ -187,10 +167,10 @@ public class KhachHangServiceImpl implements KhachHangService {
         // Nguyễn Ngọc Hiển
         return age;
     }
-    private void validateNgaySinh(Date ngaySinh) throws BadRequestException {
+    private void validateNgaySinh(Date ngaySinh) {
         Date ngayHienTai = new Date(); // Dùng để lấy ngày hiện tại
         if (ngaySinh.after(ngayHienTai)) {
-            throw new BadRequestException("Ngày sinh phải là ngày hiện tại");
+            throw new RuntimeException("Ngày sinh phải là ngày hiện tại");
         }
     }
 
@@ -215,32 +195,16 @@ public class KhachHangServiceImpl implements KhachHangService {
         Optional<KhachHangEntity> kiemTraTonTaiKhachHang = khachHangRepository.findById(id);
         if (kiemTraTonTaiKhachHang.isPresent()) {
             KhachHangEntity khachHang = kiemTraTonTaiKhachHang.get();
-            if (!khachHangRequest.getEmail().endsWith("@gmail.com")) {
-                throw new BadRequestException("Email phải có đuôi @gmail.com");
-            }
+//
+//            if (khachHangRepository.existsByEmail(khachHangRequest.getEmail())) {
+//                throw new BadRequestException("Email đã tồn tại");
+//            }
+//            // Kiểm tra sự tồn tại của số điện thoại
+//            if (khachHangRepository.existsBySdt(khachHangRequest.getSdt())) {
+//                throw new BadRequestException("Số điện thoại đã tồn tại");
+//            }
 
-            if (khachHangRequest.getTen() == null || khachHangRequest.getTen().isEmpty()) {
-                throw new BadRequestException("Tên khách hàng không được để trống");
-            }
-            if (khachHangRequest.getRoles() == null || khachHangRequest.getRoles().isEmpty()) {
-                throw new BadRequestException("Vai trò khách hàng không được để trống");
-            }
-            if (khachHangRequest.getNgayThangNamSinh() == null) {
-                throw new BadRequestException("Ngày sinh không được để trống");
-            }
-            // Kiểm tra tuổi
-            Date birthDate = khachHangRequest.getNgayThangNamSinh();
-            int age = hamTinhTuoi(birthDate);
-            if (age < 2 ) {
-                throw new BadRequestException("Tuổi phải lớn hơn 2");
-            }
-            validateNgaySinh(khachHangRequest.getNgayThangNamSinh());
-            if (khachHangRequest.getEmail() == null || !khachHangRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-                throw new BadRequestException("Email không hợp lệ");
-            }
-            if (khachHangRequest.getSdt() == null || !khachHangRequest.getSdt().matches("^\\d{10}$")) {
-                throw new BadRequestException("Số điện thoại không hợp lệ, phải có 10 chữ số");
-            }
+            // Cập nhật thông tin khách hàng mà không làm các kiểm tra khác
             try {
                 khachHang.setMa(khachHangRequest.getMa());
                 khachHang.setTen(khachHangRequest.getTen());
@@ -255,15 +219,17 @@ public class KhachHangServiceImpl implements KhachHangService {
                 khachHang.setTrangThai(khachHangRequest.getTrangThai());
 
                 khachHangRepository.save(khachHang);
-                return new DataResponse(true,new ResultModel<>(null,"Update succesfully"));
+                return new DataResponse(true, new ResultModel<>(null, "Cập nhật khách hàng thành công"));
             } catch (Exception e) {
                 e.printStackTrace();
-                return new DataResponse(false,new ResultModel<>(null,"Update exception"));
+                return new DataResponse(false, new ResultModel<>(null, "Cập nhật khách hàng thất bại"));
             }
         } else {
             throw new BadRequestException("Khách hàng không tồn tại");
         }
     }
+
+
 
     @Override
     public List<KhachHangEntity> searchKhachHang(String name, String email, String sdt) {
