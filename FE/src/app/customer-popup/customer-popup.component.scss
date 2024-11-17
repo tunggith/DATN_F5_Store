@@ -34,68 +34,133 @@
   border-radius: 8px;
   background-color: #f9f9f9;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
 
-.add-customer div {
-  margin-bottom: 15px;
-}
+  .row {
+    margin-bottom: 24px;
+    
+    .col-sm-12 {
+      label {
+        display: block;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
 
-.add-customer label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
+      input[type="text"],
+      input[type="email"],
+      input[type="date"] {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background-color: #f8f9fa;
 
-.add-customer input[type="text"],
-.add-customer input[type="date"],
-.add-customer input[type="email"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+        &:focus {
+          border-color: #4a90e2;
+          box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+          outline: none;
+          background-color: white;
+        }
 
-.popup-content .form-select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+        &::placeholder {
+          color: #adb5bd;
+        }
+      }
+    }
+  }
 
-.add-customer input[type="radio"] {
-  margin-left: 15px;
-}
+  .check-input {
+    .col-sm-12 {
+      div {
+        display: flex;
+        gap: 24px;
+        margin-top: 8px;
+      }
 
-.check-input {
-  margin-bottom: 15px;
-}
+      .input-radio {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
 
-.input-radio {
-  display: inline-block;
-  margin-right: 15px;
-}
+        input[type="radio"] {
+          appearance: none;
+          -webkit-appearance: none;
+          width: 20px;
+          height: 20px;
+          border: 2px solid #e9ecef;
+          border-radius: 50%;
+          margin-right: 8px;
+          position: relative;
+          cursor: pointer;
 
-.input-radio input {
-  margin-right: 5px;
+          &:checked {
+            border-color: #4a90e2;
+            
+            &:after {
+              content: '';
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+              width: 10px;
+              height: 10px;
+              background-color: #4a90e2;
+              border-radius: 50%;
+            }
+          }
+        }
+
+        label {
+          margin-bottom: 0;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  input[type="date"] {
+    position: relative;
+    
+    &::-webkit-calendar-picker-indicator {
+      background: transparent;
+      bottom: 0;
+      color: transparent;
+      cursor: pointer;
+      height: auto;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: auto;
+    }
+  }
 }
 
 .btn-primary {
   width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+  padding: 12px;
+  background: linear-gradient(to right, #4a90e2, #357abd);
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
 
-.btn-primary:hover {
-  background-color: #0056b3;
-}
 .example-form {
   min-width: 150px;
   max-width: 500px;
