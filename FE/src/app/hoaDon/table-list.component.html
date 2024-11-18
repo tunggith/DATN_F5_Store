@@ -20,7 +20,7 @@
                 <tbody>
                     <tr *ngFor="let chiTiet of hoaDonChiTiet; let j = index">
                         <td>{{ chiTiet.hoaDon.ma }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.ten }}</td>
+                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
                         <td>{{ chiTiet.chiTietSanPham.sanPham.xuatXu.ten }}</td>
                         <td>{{ chiTiet.chiTietSanPham.sanPham.thuongHieu.ten }}</td>
                         <td>{{ chiTiet.chiTietSanPham.sanPham.gioiTinh.ten }}</td>
