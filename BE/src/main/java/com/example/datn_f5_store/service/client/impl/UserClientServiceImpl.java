@@ -116,7 +116,6 @@ public class UserClientServiceImpl implements UserClientService {
         diaChi.setTinhThanh(request.getTinhThanh());
         diaChi.setQuocGia(request.getQuocGia());
         diaChi.setTrangThai("Còn sử dụng");
-
         diaChiKhachHangRepository.save(diaChi);
         return new DataResponse(true, new ResultModel<>(null, "Thêm địa chỉ thành công"));
     }
@@ -124,10 +123,6 @@ public class UserClientServiceImpl implements UserClientService {
     private void validateDiaChiKhachHangRequest(DiaChiKhachHangResquest request) {
         if (request.getIdKhachHang() == null) {
             throw new IllegalArgumentException("ID khách hàng không được để trống");
-        }
-
-        if (request.getSdt() == null || !request.getSdt().matches("^\\d{10,11}$")) {
-            throw new IllegalArgumentException("Số điện thoại không hợp lệ");
         }
 
         if (request.getSoNha() == null || request.getSoNha().isEmpty()) {
@@ -233,4 +228,38 @@ public class UserClientServiceImpl implements UserClientService {
         String uuidPart = UUID.randomUUID().toString().substring(0, 2);
         return "NV"+ uuidPart + timeFormat;
     }
+
+
+
+
+    @Override
+    public DataResponse updateDiaChiClient(DiaChiKhachHangResquest request) {
+        // Validate request
+        validateDiaChiKhachHangRequest(request);
+
+        // Tìm địa chỉ khách hàng theo ID
+        DiaChiKhachHangEntity diaChi = diaChiKhachHangRepository.findById(request.getId())
+                .orElseThrow(() -> new RuntimeException("Địa chỉ không tồn tại"));
+
+        // Tìm khách hàng theo ID từ request (nếu cần cập nhật khách hàng liên quan)
+        if (request.getIdKhachHang() != null) {
+            KhachHangEntity khachHang = khachHangRepository.findById(request.getIdKhachHang())
+                    .orElseThrow(() -> new RuntimeException("Khách hàng không tồn tại"));
+            diaChi.setKhackHang(khachHang);
+        }
+
+        // Cập nhật thông tin địa chỉ
+        if (request.getSoNha() != null) diaChi.setSoNha(request.getSoNha());
+        if (request.getDuong() != null) diaChi.setDuong(request.getDuong());
+        if (request.getPhuongXa() != null) diaChi.setPhuongXa(request.getPhuongXa());
+        if (request.getQuanHuyen() != null) diaChi.setQuanHuyen(request.getQuanHuyen());
+        if (request.getTinhThanh() != null) diaChi.setTinhThanh(request.getTinhThanh());
+        if (request.getQuocGia() != null) diaChi.setQuocGia(request.getQuocGia());
+        if (request.getTrangThai() != null) diaChi.setTrangThai(request.getTrangThai());
+
+        // Lưu thay đổi
+        diaChiKhachHangRepository.save(diaChi);
+        return new DataResponse(true, new ResultModel<>(null, "Cập nhật địa chỉ thành công"));
+    }
+
 }

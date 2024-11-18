@@ -1,69 +1,195 @@
 <div class="pos_page">
-    <div class="container">
-        <div class="pos_page_inner">
-            <div class="content-top">
-                <div class="left">
-                    <label for="fileInput">
-                        <div class="image">
-                            <ng-container *ngIf="khachHang.anh; else defaultIcon">
-                                <img [src]="khachHang.anh" alt="Ảnh">
-                            </ng-container>
-                            <ng-template #defaultIcon>
-                                <i class="material-icons">person</i>
-                            </ng-template>
-                        </div>
-                        <div class="icon">
-                            <i class="material-icons">add_a_photo</i>
-                            <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;"
-                                id="fileInput">
-                        </div>
-                    </label>
-                </div>
-                <div class="right">
-                    <h2>Thông tin tài khoản</h2>
-                    <div class="mb-3">
-                        <label class="form-label">Mã:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.ma" disabled>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Họ tên:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.ten">
-                    </div>
-                </div>
+  <div class="container">
+    <div class="pos_page_inner">
+      <div class="content-top">
+        <div class="left">
+          <label for="fileInput">
+            <div class="image">
+              <ng-container *ngIf="khachHang.anh; else defaultIcon">
+                <img [src]="khachHang.anh" alt="Ảnh">
+              </ng-container>
+              <ng-template #defaultIcon>
+                <i class="material-icons">person</i>
+              </ng-template>
             </div>
-            <div class="content-bottom">
-                <div class="left">
-                    <div class="gioi-tinh mb-3">
-                        <label class="form-label">Giới tính:</label>
-                        <input type="radio" id="gioi-tinh-nam" name="gioi-tinh" checked>
-                        <label for="gioi-tinh-nam">Nam</label>
-                        <input type="radio" id="gioi-tinh-nu" name="gioi-tinh">
-                        <label for="gioi-tinh-nu">Nữ</label>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Ngày, tháng, năm sinh:</label>
-                        <input type="date" class="form-control" [(ngModel)]="khachHang.ngayThangNamSinh">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Email:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.email">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Số điện thoại:</label>
-                        <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
-                    </div>
-                    <button type="button" class="btn btn-outline-primary">Cập nhật</button>
-                </div>
-                <div class="right">
-                    <div class="mb-3">
-                        <label for="basic-url" class="form-label">Địa chỉ khách hàng: <i class="material-icons">add</i></label>
-                        <div class="input-group mb-3" *ngFor="let diaChi of diaChi">
-                            <input type="text" class="form-control" [value]="diaChi" disabled>
-                            <span class="input-group-text" id="basic-addon2"><i class="material-icons">edit</i></span>
-                        </div>
-                    </div>
-                </div>
+            <div class="icon">
+              <i class="material-icons">add_a_photo</i>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*" style="display: none;"
+                id="fileInput">
             </div>
+          </label>
         </div>
+        <div class="right">
+          <h2>Thông tin tài khoản</h2>
+          <div class="mb-3">
+            <label class="form-label">Mã:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.ma" disabled>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Họ tên:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.ten">
+            <small *ngIf="errors.ten" class="text-danger">{{ errors.ten }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="content-bottom">
+        <div class="left">
+          <div class="gioi-tinh mb-3">
+            <label class="form-label">Giới tính:</label>
+            <input type="radio" id="gioi-tinh-nam" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="1">
+            <label for="gioi-tinh-nam">Nam</label>
+
+            <input type="radio" id="gioi-tinh-nu" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="0">
+            <label for="gioi-tinh-nu">Nữ</label>
+
+            <input type="radio" id="gioi-tinh-khac" name="gioi-tinh" [(ngModel)]="khachHang.gioiTinh" [value]="2">
+            <label for="gioi-tinh-khac">Khác</label>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Ngày, tháng, năm sinh:</label>
+            <input type="date" class="form-control" [(ngModel)]="khachHang.ngayThangNamSinh">
+            <small *ngIf="errors.ngayThangNamSinh" class="text-danger">{{ errors.ngayThangNamSinh }}</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.email">
+            <small *ngIf="errors.email" class="text-danger">{{ errors.email }}</small>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Số điện thoại:</label>
+            <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
+            <small *ngIf="errors.sdt" class="text-danger">{{ errors.sdt }}</small>
+          </div>
+          <button type="button" class="btn btn-outline-primary" (click)="updateKhachHang()">Cập nhật</button>
+        </div>
+        <div class="right">
+          <div class="mb-3">
+
+            <!-- Nút mở popup -->
+            <button (click)="openPopup()" class="btn  material-icons">+</button>
+            <div class="input-group mb-3" *ngFor="let diaChi of diaCHiData">
+              <!-- Kết hợp các trường để hiển thị -->
+              <input type="text" class="form-control" [value]="formatDiaChi(diaChi)" readonly>
+              <span class="input-group-text" (click)="openPopup(diaChi)" id="basic-addon2">
+                <i class="material-icons">edit</i>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+
+
+<!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+  <div class="popup-content">
+    <!-- Nút đóng popup -->
+    <button class="close" (click)="closePopup()">✖</button>
+
+    <!-- Form thêm địa chỉ -->
+    <form [formGroup]="diaChiForm" (ngSubmit)="submitDiaChi()">
+      <div class="row">
+        <!-- Số nhà -->
+        <div class="col-sm-4">
+          <label class="form-label">Số nhà</label>
+          <input type="text" class="form-control" placeholder="Nhập số nhà" formControlName="soNha">
+          <small class="text-danger" *ngIf="diaChiForm.get('soNha')?.invalid && diaChiForm.get('soNha')?.touched">
+            Vui lòng nhập số nhà.
+          </small>
+        </div>
+
+        <!-- Đường -->
+        <div class="col-sm-4">
+          <label class="form-label">Đường</label>
+          <input type="text" class="form-control" placeholder="Nhập đường" formControlName="duong">
+          <small class="text-danger" *ngIf="diaChiForm.get('duong')?.invalid && diaChiForm.get('duong')?.touched">
+            Vui lòng nhập tên đường.
+          </small>
+        </div>
+
+        <!-- Tỉnh thành -->
+        <div class="col-sm-4">
+          <label class="form-label">Tỉnh thành</label>
+          <select class="form-select" formControlName="tinhThanh" (change)="onTinhThanhChange($event)">
+            <option value="">Chọn tỉnh thành</option>
+            <option *ngFor="let province of ListTinhThanh" [value]="province.ProvinceID">
+              {{ province.ProvinceName }}
+            </option>
+          </select>
+
+          <small class="text-danger"
+            *ngIf="diaChiForm.get('tinhThanh')?.invalid && diaChiForm.get('tinhThanh')?.touched">
+            Vui lòng chọn tỉnh thành.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <!-- Quận huyện -->
+        <div class="col-sm-4">
+          <label class="form-label">Quận huyện</label>
+          <select class="form-select" formControlName="quanHuyen" [disabled]="!diaChiForm.get('tinhThanh')?.value"
+            (change)="onQuanHuyenChange($event)">
+            <option value="">Chọn quận huyện</option>
+            <option *ngFor="let district of districts" [value]="district.DistrictID">
+              {{ district.DistrictName }}
+            </option>
+          </select>
+          <small class="text-danger"
+            *ngIf="diaChiForm.get('quanHuyen')?.invalid && diaChiForm.get('quanHuyen')?.touched">
+            Vui lòng chọn quận huyện.
+          </small>
+        </div>
+
+        <!-- Phường xã -->
+        <div class="col-sm-4">
+          <label class="form-label">Phường xã</label>
+          <select class="form-select" formControlName="phuongXa" [disabled]="!diaChiForm.get('quanHuyen')?.value">
+            <option value="">Chọn phường xã</option>
+            <option *ngFor="let ward of wards" [value]="ward.WardCode">
+              {{ ward.WardName }}
+            </option>
+          </select>
+          <small class="text-danger" *ngIf="diaChiForm.get('phuongXa')?.invalid && diaChiForm.get('phuongXa')?.touched">
+            Vui lòng chọn phường xã.
+          </small>
+        </div>
+        <!-- Loại địa chỉ -->
+        <div class="col-sm-4">
+          <label class="form-label">Loại địa chỉ</label>
+          <select class="form-select" formControlName="loaiDiaChi">
+            <option value="">Chọn loại địa chỉ</option>
+            <option value="Nhà riêng">Nhà riêng</option>
+            <option value="Văn phòng">Văn phòng</option>
+          </select>
+          <small class="text-danger"
+            *ngIf="diaChiForm.get('loaiDiaChi')?.invalid && diaChiForm.get('loaiDiaChi')?.touched">
+            Vui lòng chọn loại địa chỉ.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+      </div>
+
+      <div class="row">
+        <!-- Nút Lưu -->
+        <div class="col-sm-6">
+          <button type="submit" class="btn btn-primary" [disabled]="diaChiForm.invalid">
+            {{ isEditing ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ' }}
+          </button>
+        </div>
+        <!-- Nút Hủy -->
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">Hủy</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>

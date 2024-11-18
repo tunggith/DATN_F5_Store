@@ -15,4 +15,5 @@ public interface UserClientService {
     DataResponse changePassword(String username,String passwordOld,String passwordNew);
     DataResponse detailDiaChi(Integer id);
     DataResponse getDiaChiByKhachHang(Integer id);
+    DataResponse updateDiaChiClient(DiaChiKhachHangResquest request);
 }
