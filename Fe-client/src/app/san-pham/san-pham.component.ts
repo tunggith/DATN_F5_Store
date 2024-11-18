@@ -14,7 +14,9 @@ export class SanPhamComponent implements OnInit {
   ThuongHieuList: any[] = [];
   xuatXuList: any[] = [];
   sizeList: any[] = [];
+  sizeListSp: any[] = [];
   mauSacList: any[] = [];
+  mauSacListsp: any[] = [];
   gioiTinhList: any[] = [];
   sanPhamPage: any[] = [];
   totalPages: number[] = []; // Mảng chứa các số trang
@@ -600,8 +602,8 @@ export class SanPhamComponent implements OnInit {
     this.trangChuService.getSizes(id).subscribe(
       (response: any[]) => {
         console.log("size theo id sp", response)
-        this.sizeList = response;
-        console.log('sizeList:', this.sizeList);
+        this.sizeListSp = response;
+        console.log('sizeList:', this.sizeListSp);
       },
       (error) => {
         console.error('Error loading sizes:', error);
@@ -614,8 +616,8 @@ export class SanPhamComponent implements OnInit {
     this.trangChuService.getMau(id).subscribe(
       (response: any[]) => {
         console.log("màu theo id sp", response)
-        this.mauSacList = response;
-        console.log('mauSacList:', this.mauSacList);
+        this.mauSacListsp = response;
+        console.log('mauSacList:', this.mauSacListsp);
       },
       (error) => {
         console.error('Error loading mauSacList:', error);
@@ -636,12 +638,12 @@ export class SanPhamComponent implements OnInit {
     // Thực hiện logic khác tại đây nếu cần
 
     setTimeout(() => {
-      if (this.mauSacList.length >= 0) {
-        this.selectedColor = this.mauSacList[0]; // Chọn màu đầu tiên
+      if (this.mauSacListsp.length >= 0) {
+        this.selectedColor = this.mauSacListsp[0]; // Chọn màu đầu tiên
         console.log('Màu sắc mặc định:', this.selectedColor);
       }
-      if (this.sizeList.length >= 0) {
-        this.selectedSize = this.sizeList[0]; // Chọn kích thước đầu tiên
+      if (this.sizeListSp.length >= 0) {
+        this.selectedSize = this.sizeListSp[0]; // Chọn kích thước đầu tiên
         console.log('Kích thước mặc định:', this.selectedSize);
       }
 

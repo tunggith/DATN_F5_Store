@@ -22,10 +22,15 @@ export class GioHangComponent implements OnInit {
   sdtNguoiNhan: string = '';
   emailNguoiNhan: string = '';
   diaChiNhanHang: string = '';
+  selectedVoucherId:string='';
   voucher: any[] = [];
   diaChis:any[] = [];
   selectedAddressId: number = 0;
-
+  selectedPhuongXaName:string='';
+  selectedQuanHuyenName:string='';
+  selectedTinhThanhName:string='';
+  idThanhToan:string|number = '';
+  soLuong:string='';
   // địa chỉ kh
     provinces: any[] = []; // Danh sách tỉnh/thành
   districts: any[] = []; // Danh sách quận/huyện
@@ -80,7 +85,7 @@ export class GioHangComponent implements OnInit {
         next: (response) => {
           this.chiTietGioHang = response.result.content.map((item: any) => ({
             ...item,
-            checked: false
+            checked: false,
           }));
         },
         error: (err) => {
@@ -183,20 +188,21 @@ export class GioHangComponent implements OnInit {
       this.showWarningMessage('Vui lòng kiểm tra lại giỏ hàng và thông tin thanh toán!');
     }
   }
-
+  
   tienHanhXuLy(): void {
+    this.diaChiNhanHang = this.soNha +','+this.duong+","+this.selectedPhuongXaName+","+this.selectedQuanHuyen+","+this.selectedTinhThanh;
     const gioHangRequests = this.idChiTietGioHang.map((id: number) => ({
       idChiTietSanPham: id,
       soLuong: this.getSoLuongById(id), // Hàm lấy số lượng sản phẩm
     }));
-
+    
     const thanhToanRequest = {
       hoaDonRequest: {
         id: 0,
         idKhachHang: this.idKhachHang || 1,
         idNhanVien: 0,
-        idVoucher: 0,
-        idThanhToan: 1,
+        idVoucher: this.selectedVoucherId,
+        idThanhToan: this.idThanhToan||1,
         hinhThucThanhToan: 1,
         tongTienBanDau: this.tongTien || 0,
         phiShip: this.phiShip || 0,
@@ -204,7 +210,7 @@ export class GioHangComponent implements OnInit {
         tongTienSauVoucher: this.tinhTongTienSauVoucher(),
         tenNguoiNhan: this.tenNguoiNhan || '',
         sdtNguoiNhan: this.sdtNguoiNhan || '',
-        emailNguoiNhan: this.emailNguoiNhan || 'hatung18102004@gmail.com',
+        emailNguoiNhan: this.emailNguoiNhan || '',
         diaChiNhanHang: this.diaChiNhanHang || '',
         ngayNhanDuKien: new Date().toISOString(),
         thoiGianTao: new Date().toISOString(),
@@ -239,7 +245,7 @@ export class GioHangComponent implements OnInit {
   getSoLuongById(id: number): number {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const item = cart.find((c: any) => c.idChiTietSanPham === id);
-    return item ? item.soLuong : 0;
+    return item ? item.soLuong : this.chiTietGioHang;
   }
 
   themSanPham(id: number): void {
@@ -448,7 +454,44 @@ export class GioHangComponent implements OnInit {
         }
       )
   }
+  onChangeVoucher(event: any) {
+    this.selectedVoucherId = event.target.value;
+    console.log(this.voucher);
+    
+    const selectedVoucher = this.voucher.find(voucher => voucher.id == Number(this.selectedVoucherId));
+    console.log(selectedVoucher);
+    
+    if (selectedVoucher) {
+      let discountValue: number;
 
+      // Kiểm tra kiểu giảm giá của voucher
+      if (selectedVoucher.kieuGiamGia === '%') {
+        // Nếu là phần trăm, tính giá trị giảm dựa trên phần trăm
+        discountValue = this.tongTien * (selectedVoucher.giaTriVoucher / 100);
+      } else {
+        // Nếu là giảm tiền trực tiếp, lấy giá trị của voucher
+        discountValue = selectedVoucher.giaTriVoucher;
+      }
+
+      // Đảm bảo giảm giá không vượt quá giá trị tối đa mà voucher cho phép
+      const finalDiscount = Math.min(discountValue, selectedVoucher.giaTriGiamToiDa);
+
+      // Kiểm tra điều kiện áp dụng voucher (nếu cần)
+      if (this.tongTien >= selectedVoucher.giaTriHoaDonToiThieu) {
+        this.selectedVoucherId = selectedVoucher.id;
+        // Tính tổng tiền sau khi áp dụng voucher
+        this.canThanhToan = this.tongTien - finalDiscount;
+        this.giaTriGiam = finalDiscount;
+      } else {
+        // Nếu không đạt điều kiện, tổng tiền không thay đổi
+        this.canThanhToan = this.tongTien;
+        this.showErrorMessage('Không thể áp dụng voucher này cho hóa đơn này!');
+      }
+    } else {
+      // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
+      this.canThanhToan = this.tongTien;
+    }
+  }
   loadDiaChi(): void {
 
     this.gioHangService.getdiaChi()
@@ -461,9 +504,10 @@ export class GioHangComponent implements OnInit {
       )
   }
 
-
-
-
+  onPaymentMethodChange(event: any): void {
+    this.idThanhToan = event.target.value; // Lấy giá trị của option được chọn
+    console.log('idThanhToan:', this.idThanhToan); // In ra để kiểm tra
+  }
   updateCanThanhToan(): void {
     this.canThanhToan = this.tongTien - this.giaTriGiam + this.phiVanChuyen;
   }
@@ -490,7 +534,14 @@ loadProvinces(): void {
 onTinhThanhChange(event: any): void {
   const provinceId = Number(event.target.value);
   this.selectedTinhThanh = provinceId;
-  console.log('Selected Tỉnh Thành:', this.selectedTinhThanh);  // Kiểm tra giá trị tỉnh thành đã chọn
+
+  // Lấy tên của tỉnh thành đã chọn từ danh sách tỉnh
+  const selectedProvince = this.provinces.find(province => province.ProvinceID === provinceId);
+  if (selectedProvince) {
+    this.selectedTinhThanhName = selectedProvince.ProvinceName;
+  }
+
+  console.log('Selected Tỉnh Thành:', this.selectedTinhThanhName);  // Kiểm tra tên tỉnh thành
 
   this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
     (data: any) => {
@@ -510,11 +561,19 @@ onTinhThanhChange(event: any): void {
   );
 }
 
+
 // Xử lý khi chọn quận/huyện
 onQuanHuyenChange(event: any): void {
   const districtId = Number(event.target.value);
   this.selectedQuanHuyen = districtId;
-  console.log('Selected Quận Huyện:', this.selectedQuanHuyen);  // Kiểm tra giá trị quận huyện đã chọn
+
+  // Lấy tên của quận huyện đã chọn từ danh sách quận
+  const selectedDistrict = this.districts.find(district => district.DistrictID === districtId);
+  if (selectedDistrict) {
+    this.selectedQuanHuyenName = selectedDistrict.DistrictName;
+  }
+
+  console.log('Selected Quận Huyện:', this.selectedQuanHuyenName);  // Kiểm tra tên quận huyện đã chọn
 
   this.giaoHangNhanhService.getWards(districtId).subscribe(
     (data: any) => {
@@ -532,12 +591,23 @@ onQuanHuyenChange(event: any): void {
   );
 }
 
+
 // Xử lý khi chọn phường/xã
 onPhuongXaChange(event: any): void {
-  this.selectedPhuongXa = event.target.value;
-  console.log('Selected Phường Xã:', this.selectedPhuongXa);  // Kiểm tra giá trị phường xã đã chọn
-  this.calculateShippingFee();
+  const wardCode = event.target.value;
+  this.selectedPhuongXa = wardCode;
+
+  // Lấy tên của phường xã đã chọn từ danh sách phường/xã
+  const selectedWard = this.wards.find(ward => ward.WardCode === wardCode);
+  if (selectedWard) {
+    this.selectedPhuongXaName = selectedWard.WardName;
+  }
+
+  console.log('Selected Phường Xã:', this.selectedPhuongXaName);  // Kiểm tra tên phường xã đã chọn
+
+  this.calculateShippingFee();  // Ví dụ tính phí vận chuyển
 }
+
 
 
 
