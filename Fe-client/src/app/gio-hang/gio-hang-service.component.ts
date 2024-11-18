@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class GioHangService {
   private API_URL = 'http://localhost:8080/api/v1/customer';
+  private api = "http://localhost:8080/api/v1/customer";
 
 
   constructor(private http: HttpClient) { }
@@ -34,4 +35,13 @@ export class GioHangService {
   remove(id:number):Observable<any>{
     return this.http.get(`${this.API_URL}/remove/${id}`);
   }
+
+  getvoucher(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.api}/find-voucher`);
+  }
+
+  getdiaChi(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.api}/getAllDiaChiKhachHang_PhanTrang_TimKiem`);
+  }
+
 }

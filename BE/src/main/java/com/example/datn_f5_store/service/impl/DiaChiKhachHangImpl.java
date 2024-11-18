@@ -47,10 +47,11 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 entity.getId(),
                 entity.getSoNha(),
                 entity.getDuong(),
+                entity.getSdt(),
                 entity.getPhuongXa(),
                 entity.getQuanHuyen(),
                 entity.getTinhThanh(),
-                entity.getSdt(),
+
                 entity.getQuocGia(),
                 entity.getLoaiDiaChi(),
                 entity.getTrangThai()

@@ -65,7 +65,7 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
 
     @Override
     public DataResponse luuGioHang(List<GioHangRequest> gioHangRequestList) {
-        gioHangRepository.saveAll(gioHangRequestList)
+
         return null;
     }
 
@@ -137,4 +137,6 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
         // Kết hợp chuỗi "HD" với UUID và chuỗi thời gian
         return "HD" + uuidPart + timeFormat;
     }
+
+
 }

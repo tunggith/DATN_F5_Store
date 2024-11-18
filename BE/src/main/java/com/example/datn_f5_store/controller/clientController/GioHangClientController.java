@@ -6,6 +6,7 @@ import com.example.datn_f5_store.request.GioHangRequest;
 import com.example.datn_f5_store.request.KhachHangRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
+import com.example.datn_f5_store.service.IDiaChiKhachHangService;
 import com.example.datn_f5_store.service.IGioHangClientService;
 import com.example.datn_f5_store.service.ISanPhamClientservice;
 import com.example.datn_f5_store.service.impl.ChiTietGioHangIplm;
@@ -36,6 +37,9 @@ import java.util.Map;
 public class GioHangClientController {
     @Autowired
     private IGioHangClientService gioHangClientService;
+    @Autowired
+    private IDiaChiKhachHangService diaChiKhachHangService;
+
     @GetMapping("/get-all/{id}")
     private ResponseEntity<Object> getAll(@Parameter(name = "id")@PathVariable Integer id){
         DataResponse dataResponse = new DataResponse();
@@ -59,4 +63,21 @@ public class GioHangClientController {
     private ResponseEntity<Object> remove(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(gioHangClientService.xoaChiTietGioHang(id),HttpStatus.OK);
     }
+
+
+    @GetMapping("/getAllDiaChiKhachHang_PhanTrang_TimKiem")
+    public ResponseEntity<Object> getAllDiaChiKhachHang(
+            @Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
+            @Parameter(name = "size") @RequestParam(defaultValue = "5") Integer size,
+            @Parameter(name = "searchTerm") @RequestParam(required = false) String searchTerm
+    ) {
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+
+        var responseList = diaChiKhachHangService.getAllDiaChiKhachHang(page, size, searchTerm);
+        dataResponse.setResult(new ResultModel<>(null, responseList));
+
+        return ResponseEntity.ok(dataResponse);
+    }
+
 }
