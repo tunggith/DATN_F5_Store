@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GioHangService } from 'src/app/gio-hang/gio-hang-service.component';
 import { SanPhamService } from 'src/app/san-pham/san-pham-service.component';
+import {GiaoHangNhanhService} from 'src/app/dia-chi/giao-hang-nhanh.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -21,14 +22,35 @@ export class GioHangComponent implements OnInit {
   sdtNguoiNhan: string = '';
   emailNguoiNhan: string = '';
   diaChiNhanHang: string = '';
+  voucher: any[] = [];
+  diaChis:any[] = [];
+  selectedAddressId: number = 0;
+
+  // địa chỉ kh
+    provinces: any[] = []; // Danh sách tỉnh/thành
+  districts: any[] = []; // Danh sách quận/huyện
+  wards: any[] = []; // Danh sách phường/xã
+  selectedTinhThanh: number=0; // ID tỉnh/thành đã chọn
+  selectedQuanHuyen: number=0; // ID quận/huyện đã chọn
+  selectedPhuongXa: number=0; // Mã phường/xã đã chọn
+  soNha: string = '';
+  duong: string = '';
+
 
   // Giả sử bạn sẽ lấy chi tiết giỏ hàng từ API và lưu lại vào đây
   idChiTietGioHang: number[] = [];
 
   constructor(private gioHangService: GioHangService,
-    private sanPhamService: SanPhamService) { }
+    private sanPhamService: SanPhamService,
+  private giaoHangNhanhService:GiaoHangNhanhService) { }
 
   ngOnInit(): void {
+
+    this.onAddressInput();
+    this.loadProvinces();
+   this.loadvoucher();
+   this.loadDiaChi();
+
     // Lấy idKhachHang từ localStorage khi component được khởi tạo
     this.idKhachHang = localStorage.getItem('id') || '';
 
@@ -412,4 +434,270 @@ export class GioHangComponent implements OnInit {
     }
     this.showErrorMessage(errorMessage);
   }
- }
+
+
+
+  loadvoucher(): void {
+
+    this.gioHangService.getvoucher()
+      .subscribe(
+        (Response: any) => {
+          //  console.log("phản hồi voucher từ api là",Response)
+          this.voucher = Response.result.content;
+          //  console.log("voucher: " ,this.voucher);
+        }
+      )
+  }
+
+  loadDiaChi(): void {
+
+    this.gioHangService.getdiaChi()
+      .subscribe(
+        (Response: any) => {
+          //  console.log("phản hồi voucher từ api là",Response)
+          this.diaChis = Response.result.content.content;
+          //  console.log("voucher: " ,this.voucher);
+        }
+      )
+  }
+
+
+
+
+  updateCanThanhToan(): void {
+    this.canThanhToan = this.tongTien - this.giaTriGiam + this.phiVanChuyen;
+  }
+
+
+
+ // Xử lý khi tải danh sách tỉnh/thành
+loadProvinces(): void {
+  this.giaoHangNhanhService.getProvinces().subscribe(
+    (data: any) => {  // Sử dụng any cho dữ liệu trả về
+      if (data && Array.isArray(data['data'])) {
+        this.provinces = data['data'];  // Gán danh sách tỉnh/thành
+      } else {
+        console.error('Dữ liệu tỉnh/thành không đúng định dạng', data);
+      }
+    },
+    error => {
+      console.error('Lỗi khi tải danh sách tỉnh/thành:', error);
+    }
+  );
+}
+
+// Xử lý khi chọn tỉnh/thành
+onTinhThanhChange(event: any): void {
+  const provinceId = Number(event.target.value);
+  this.selectedTinhThanh = provinceId;
+  console.log('Selected Tỉnh Thành:', this.selectedTinhThanh);  // Kiểm tra giá trị tỉnh thành đã chọn
+
+  this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
+    (data: any) => {
+      if (data && Array.isArray(data['data'])) {
+        this.districts = data['data'];
+        this.wards = [];
+        this.selectedQuanHuyen = 0;
+        this.selectedPhuongXa = 0;
+      } else {
+        console.error('Dữ liệu quận/huyện không đúng định dạng', data);
+        this.districts = [];
+      }
+    },
+    error => {
+      console.error('Lỗi khi tải danh sách quận/huyện:', error);
+    }
+  );
+}
+
+// Xử lý khi chọn quận/huyện
+onQuanHuyenChange(event: any): void {
+  const districtId = Number(event.target.value);
+  this.selectedQuanHuyen = districtId;
+  console.log('Selected Quận Huyện:', this.selectedQuanHuyen);  // Kiểm tra giá trị quận huyện đã chọn
+
+  this.giaoHangNhanhService.getWards(districtId).subscribe(
+    (data: any) => {
+      if (data && Array.isArray(data['data'])) {
+        this.wards = data['data'];
+        this.selectedPhuongXa = 0;
+      } else {
+        console.error('Dữ liệu phường/xã không đúng định dạng', data);
+        this.wards = [];
+      }
+    },
+    error => {
+      console.error('Lỗi khi tải danh sách phường/xã:', error);
+    }
+  );
+}
+
+// Xử lý khi chọn phường/xã
+onPhuongXaChange(event: any): void {
+  this.selectedPhuongXa = event.target.value;
+  console.log('Selected Phường Xã:', this.selectedPhuongXa);  // Kiểm tra giá trị phường xã đã chọn
+  this.calculateShippingFee();
+}
+
+
+
+// Tính phí vận chuyển
+calculateShippingFee(): void {
+  if (this.selectedTinhThanh && this.selectedQuanHuyen && this.selectedPhuongXa && this.soNha && this.duong) {
+    const shippingFeeData = {
+      from_province_id: 201,
+      from_district_id: 1482,
+      to_province_id: Number(this.selectedTinhThanh),
+      to_district_id: Number(this.selectedQuanHuyen),
+      to_ward_code: this.selectedPhuongXa,
+      weight: 800,
+      length: 50,
+      width: 30,
+      height: 15,
+      service_id: 53321,
+      insurance_value: null,
+      cod_failed_amount: null,
+      coupon: null
+    };
+    console.log('Shipping Fee Data:', shippingFeeData);  // Kiểm tra dữ liệu gửi đi
+
+    this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
+      response => {
+        console.log('Phản hồi API:', response);
+        this.phiVanChuyen = response.data?.total || 0;
+      },
+      error => {
+        console.error('Lỗi khi tính phí vận chuyển:', error);
+      }
+    );
+  }
+}
+
+
+
+// Xử lý khi nhập số nhà và đường
+onAddressInput(): void {
+  this.calculateShippingFee(); // Tính phí vận chuyển khi thay đổi địa chỉ
+}
+
+
+
+//
+onAddressChange(event: any): void {
+  const selectedAddressId = event.target.value;
+  console.log('Selected Address ID:', selectedAddressId);
+
+  const selectedAddress = this.diaChis.find(item => item.id === Number(selectedAddressId));
+  console.log('Selected Address:', selectedAddress);
+
+  if (selectedAddress) {
+    const provinceName = selectedAddress.tinhThanh;
+    console.log('Province Name:', provinceName); // Kiểm tra giá trị của provinceName
+    const districtName = selectedAddress.quanHuyen;
+    const wardName = selectedAddress.phuongXa;
+
+    console.log('District Name:', districtName);
+    console.log('Ward Name:', wardName);
+
+    const province = this.giaoHangNhanhService.getProvinceIdByName(provinceName);
+    province.subscribe(id => {
+      console.log('ID Tỉnh: ', id); // Kiểm tra giá trị id trả về
+      if (id) {
+        console.log('Tìm thấy tỉnh thành');
+      } else {
+        console.log('Không tìm thấy tỉnh thành');
+      }
+    });
+  }
+}
+
+
+calculateShippingFee2(provinceId: number, districtId: number, wardCode: string): void {
+  if (provinceId && districtId && wardCode) {
+    const shippingFeeData = {
+      from_province_id: 201,  // Ví dụ: ID của tỉnh gửi
+      from_district_id: 1482,  // Ví dụ: ID của quận gửi
+      to_province_id: provinceId,  // ID tỉnh chọn
+      to_district_id: districtId,  // ID quận chọn
+      to_ward_code: wardCode,  // Mã phường xã
+      weight: 800,
+      length: 50,
+      width: 30,
+      height: 15,
+      service_id: 53321,
+      insurance_value: null,
+      cod_failed_amount: null,
+      coupon: null
+    };
+
+    this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
+      response => {
+        this.phiVanChuyen = response.data?.total || 0;
+      },
+      error => {
+        console.error('Lỗi khi tính phí vận chuyển:', error);
+      }
+    );
+  }
+}
+
+// Hàm tra cứu ID tỉnh từ tên tỉnh
+getProvince(name: string): any {
+  console.log('Received Province name:', name);  // In giá trị name nhận vào
+
+  if (!name || typeof name !== 'string') {
+    console.log('Province name is invalid or not a string:', name);
+    return null; // Trả về null nếu không hợp lệ
+  }
+
+  const normalizedName = name.trim().toLowerCase();  // Gọi trim() sau khi kiểm tra
+  const province = this.provinces.find(p => p.name.trim().toLowerCase() === normalizedName);
+
+  if (!province) {
+    console.log('Không tìm thấy tỉnh thành với tên:', name);
+  }
+
+  return province;
+}
+
+// Hàm tra cứu ID quận từ tên quận
+getDistrict(province: any, districtName: string): any {
+  console.log('Received District name:', districtName);  // In giá trị districtName nhận vào
+
+  if (!districtName || typeof districtName !== 'string') {
+    console.log('District name is invalid or not a string:', districtName);
+    return null;
+  }
+
+  const district = province.districts.find((d: any) => d.name.trim().toLowerCase() === districtName.trim().toLowerCase());
+
+  if (!district) {
+    console.log('Không tìm thấy quận với tên:', districtName);
+  }
+
+  return district;
+}
+
+// Hàm tra cứu ID phường từ tên phường
+getWard(district: any, wardName: string): any {
+  console.log('Received Ward name:', wardName);  // In giá trị wardName nhận vào
+
+  if (!wardName || typeof wardName !== 'string') {
+    console.log('Ward name is invalid or not a string:', wardName);
+    return null;
+  }
+
+  const ward = district.wards.find((w: any) => w.name.trim().toLowerCase() === wardName.trim().toLowerCase());
+
+  if (!ward) {
+    console.log('Không tìm thấy phường với tên:', wardName);
+  }
+
+  return ward;
+}
+
+
+
+
+
+}

@@ -125,3 +125,49 @@ img {
         margin-bottom: 20px;
     }
 }
+
+.address-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .address-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .form-group input, .form-group select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .form-group input[type="email"], .form-group input[type="tel"] {
+    width: 100%;
+  }
+  
+  .form-group select {
+    width: 100%;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .address-row {
+      flex-direction: column;
+    }
+  }
+  

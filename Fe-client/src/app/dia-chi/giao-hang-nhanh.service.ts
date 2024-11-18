@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -51,4 +52,45 @@ export class GiaoHangNhanhService {
 
     return this.http.post(`${this.addressUrl}/master-data/ward`, body, { headers });
   }
+
+  // Hàm tìm ID tỉnh theo tên tỉnh
+  getProvinceIdByName(provinceName: string): Observable<number | null> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Token': this.token
+    });
+  
+    return this.http.get<any>(`${this.addressUrl}/master-data/province`, { headers })
+      .pipe(
+        map(response => {
+          console.log('API Response:', response);  // In ra toàn bộ response để kiểm tra
+  
+          // Kiểm tra nếu response và response.data tồn tại
+          if (response && response.data) {
+            console.log('All provinces:', response.data);  // In ra toàn bộ danh sách các tỉnh
+  
+            // Tìm kiếm trong danh sách các tỉnh
+            const province = response.data.find((p: any) => {
+              console.log('Comparing:', p, 'with', provinceName);  // In ra từng phần tử trong mảng data để kiểm tra
+              return p.province_name && p.province_name.toLowerCase() === provinceName.toLowerCase();
+            });
+  
+            if (province) {
+              console.log('Found Province:', province);  // In ra tỉnh nếu tìm thấy
+              return province.province_id;  // Trả về ID tỉnh
+            } else {
+              console.log('Không tìm thấy tỉnh thành');
+              return null;  // Trả về null nếu không tìm thấy tỉnh
+            }
+          } else {
+            console.error('No provinces data found in the response');
+            return null;  // Trả về null nếu không có data
+          }
+        })
+      );
+  }
+  
+  
+  
+  
 }
