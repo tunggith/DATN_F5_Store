@@ -15,7 +15,7 @@ public interface IAnhChiTietSanPhamRepository extends JpaRepository<AnhChiTietSa
     Page<AnhChiTietSanPham> findBySearch(@Param("search") String search, Pageable pageable);
     Boolean existsByUrlAnh(String urlAnh);// Kiểm tra trùng tên đường dẫn
     Page<AnhChiTietSanPham> findByChiTietSanPham_Id(Integer id,Pageable pageable);
-
+    List<AnhChiTietSanPham> getByChiTietSanPham_Id(Integer id);
 
     @Query("""
     SELECT anh 

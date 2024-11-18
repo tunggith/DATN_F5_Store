@@ -60,7 +60,7 @@ public interface IChiTietGioHangRepository extends JpaRepository<ChiTietGioHangE
     ChiTietHoaDonEntity deleteByGioHang_Id(Integer id);
 
     List<ChiTietGioHangEntity> findByIdIn(List<Integer> id);
-
+    void deleteAllByIdIn(List<Integer> ids);
 }
 
 

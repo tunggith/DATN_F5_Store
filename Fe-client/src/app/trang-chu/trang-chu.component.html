@@ -103,12 +103,12 @@
                         <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
                       </h3>
                     </div>
-                    <div class="product_info">
+                    <!-- <div class="product_info">
                       <ul>
                         <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
                       </ul>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <ng-template #noData>
@@ -142,12 +142,12 @@
                         <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
                       </h3>
                     </div>
-                    <div class="product_info">
+                    <!-- <div class="product_info">
                       <ul>
                         <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
                       </ul>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <ng-template #noData>
@@ -285,7 +285,7 @@
           <p class="error-message" *ngIf="err2">{{ err2 }}</p>
         </div>
 
-        <button class="add-to-cart">Thêm vào giỏ</button>
+        <button class="add-to-cart" (click)="themSanPham()" [disabled]="quantity == 0">Thêm vào giỏ</button>
       </div>
     </div>
   </div>

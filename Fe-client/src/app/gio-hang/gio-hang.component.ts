@@ -1,194 +1,325 @@
-
 import { Component, OnInit } from '@angular/core';
 import { GioHangService } from 'src/app/gio-hang/gio-hang-service.component';
 import { SanPhamService } from 'src/app/san-pham/san-pham-service.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-gio-hang',
   templateUrl: './gio-hang.component.html',
   styleUrls: ['./gio-hang.component.css']
 })
-export class GioHangComponent {
-  hoaDons: any[]= [];
-  idkh: number =0;
-  Ghcts: any[] = []; // Chứa dữ liệu sản phẩm trong giỏ hàng
-  totalPrice: number = 0; // Tổng cộng giá trị giỏ hàng
-  sanPhamPage: any[] = [];
-  totalPages: number[] = []; // Mảng chứa các số trang
-  totalElements: number = 0; // Tổng số sản phẩm
-  
-  page: number = 0;
-  size: number = 10;
+export class GioHangComponent implements OnInit {
+  chiTietGioHang: any[] = [];
+  idKhachHang: string = '';
+  urlAnh: string = '';
+  tongTien: number = 0;
+  giaTriGiam: number = 0;
+  phiVanChuyen: number = 0;
+  canThanhToan: number = 0;
+  phiShip: number = 0;
+  tenNguoiNhan: string = '';
+  sdtNguoiNhan: string = '';
+  emailNguoiNhan: string = '';
+  diaChiNhanHang: string = '';
 
+  // Giả sử bạn sẽ lấy chi tiết giỏ hàng từ API và lưu lại vào đây
+  idChiTietGioHang: number[] = [];
 
-  constructor(private GioHangService: GioHangService,
-    private sanPhamService: SanPhamService) {}
+  constructor(private gioHangService: GioHangService,
+    private sanPhamService: SanPhamService) { }
 
   ngOnInit(): void {
-    this.detailHoaDon(); 
-  }
+    // Lấy idKhachHang từ localStorage khi component được khởi tạo
+    this.idKhachHang = localStorage.getItem('id') || '';
 
-  // Hàm gọi API
-  LoadGioHang(id: number) {
-    this.GioHangService.getByGh(id).subscribe(
-      (response) => {
-        if (response && response.status) {
-          this.Ghcts = response.result.content.content;
-          console.log('gio hang',this.Ghcts);
-          this.calculateTotal();
-          this.loadSanPhamPhanTrang();
-        } else {
-          console.error('Không tìm thấy thông tin khuyến mãi chi tiết sản phẩm.');
-        }
-      },
-      (error) => console.error('Lỗi khi gọi API khuyến mãi chi tiết sản phẩm:', error)
-    );
-}
-
-// Hàm để lấy chi tiết hóa đơn của khách hàng
-detailHoaDon(): void {
-  const id = localStorage.getItem('id') || ''; // Lấy id khách hàng từ localStorage
-  
-  if (id !== '') {
-    // Người dùng đã đăng nhập -> Lấy giỏ hàng từ server
-    this.GioHangService.getHoaDonByKhachHang(id).subscribe(
-      (response) => {
-        if (response && response.status) {
-          const hoaDons = response.result.content.content;
-          if (hoaDons && hoaDons.length > 0) {
-            this.idkh = hoaDons[0].id;
-            this.LoadGioHang(this.idkh); // Lấy giỏ hàng từ server
-          } else {
-            console.error('Không có hóa đơn nào trong danh sách');
-          }
-        } else {
-          console.error('API trả về không hợp lệ');
-        }
-      },
-      (error) => console.error('Lỗi khi gọi API lấy hóa đơn:', error)
-    );
-  } else {
-    // Người dùng chưa đăng nhập -> Lấy giỏ hàng từ localStorage
-    console.warn('Chưa đăng nhập, lấy giỏ hàng tạm thời từ localStorage.');
-    this.LoadTemporaryCart();
-  }
-}
-
-LoadTemporaryCart(): void {
-  const tempCart = JSON.parse(localStorage.getItem('localCart') || '[]');
-  console.log('Dữ liệu local', tempCart);
-
-  if (tempCart.length > 0) {
-    this.Ghcts = []; // Khởi tạo lại danh sách giỏ hàng
-
-    const requests = tempCart.map((item: any) =>
-      this.sanPhamService.getSanPhamById(item.productId).toPromise().then((product) => ({
-        chiTietSanPham: {
-          sanPham: product,
-          donGia: product.donGia,
-          // Thêm các thông tin khác nếu cần
-        },
-        soLuong: item.soLuong,
-      }))
-    );
-    console.log('Requests:', requests);
-
-    Promise.all(requests).then((result) => {
-      this.Ghcts = result;
-      console.log('Giỏ hàng chi tiết', this.Ghcts);
-      this.calculateTotal(); // Cập nhật tổng tiền
-    }).catch((error) => {
-      console.error('Lỗi khi lấy chi tiết sản phẩm:', error);
-    });
-  } else {
-    console.warn('Giỏ hàng tạm thời trống.');
-  }
-}
-
-
-  // Hàm tính tổng giá trị giỏ hàng
-  calculateTotal(): void {
-    if (Array.isArray(this.Ghcts)) {
-      this.totalPrice = this.Ghcts.reduce(
-        (sum, item) => sum + (item.chiTietSanPham.donGia || 0) * (item.soLuong || 0),
-        0
-      );
+    // Kiểm tra nếu có idKhachHang, gọi API để lấy giỏ hàng
+    if (this.idKhachHang) {
+      this.getAllGioHang(); // Lấy giỏ hàng từ API
     } else {
-      this.totalPrice = 0; // Đặt tổng tiền là 0 nếu không có sản phẩm nào
+      this.getKhachHangLocal();
     }
-  }
- 
-  onQuantityChange(item: any): void {
-    // Đảm bảo số lượng tối thiểu là 1
-    if (item.soLuong < 1) {
-      item.soLuong = 1;
-    }
-  
-    // Gọi lại API addToCart để cập nhật
-    this.GioHangService.addToCart(item.gioHang.id, item.chiTietSanPham.id, item.soLuong).subscribe({
-      next: (response) => {
-        console.log('Số lượng sản phẩm đã được cập nhật:', response);
-        this.calculateTotal(); // Cập nhật lại tổng tiền sau khi thay đổi số lượng
-      },
-      error: (error) => {
-        alert('Số lượng trong giỏ hàng nhiều hơn số lượng sản phẩm đang có');
-        this.LoadGioHang(item.gioHang.id); // Tải lại giỏ hàng nếu có lỗi
-      }
-    });
-  }
-  
 
-  deleteGioHangCtItem(ghctId: any) {
-    if (!ghctId) {
-      console.error('ID giỏ hàng chi tiết không hợp lệ.');
-      alert('Không tìm thấy ID giỏ hàng chi tiết để xóa.');
-      return;
-    }
-  
-    // Hiển thị xác nhận trước khi xóa
-    const confirmDelete = confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?');
-    if (!confirmDelete) {
-      return;
-    }
-  
-    // Gọi hàm service để xóa
-    this.GioHangService.deleteGioHangCt(ghctId.id).subscribe({
-      next: (response) => {
-        console.log('Xóa thành công:', response);
-        alert('Sản phẩm đã được xóa khỏi giỏ hàng.');
-        this.detailHoaDon(); // Gọi lại hàm load giỏ hàng để cập nhật danh sách
-      },
-      error: (error) => {
-        console.error('Lỗi khi xóa giỏ hàng chi tiết:', error);
-        alert('Không thể xóa sản phẩm. Vui lòng thử lại sau.');
-      },
-    });
+    this.tinhTongTienSauVoucher(); // Tính tổng tiền sau khi áp dụng voucher
   }
-  
-  
-  
-  
-  loadSanPhamPhanTrang(): void {
-    this.sanPhamService.getSanPhamPhanTrang(this.page, this.size).subscribe(
-      (response: any) => {
-        console.log('Phản hồi API Sản Phẩm Phân Trang:', response);
-        if (response && response.content) {
-          this.sanPhamPage = response.content;
-         
-        } else {
-          console.log('Không có dữ liệu trong response.content');
+  getKhachHangLocal(): void {
+    // Nếu không có idKhachHang, lấy giỏ hàng từ localStorage
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    this.chiTietGioHang = cart.map((item: any) => ({
+      ...item,
+      checked: false
+    }));
+    console.log('Giỏ hàng từ localStorage:', this.chiTietGioHang);
+  }
+  // Lấy tất cả giỏ hàng từ dịch vụ (dành cho khách hàng có idKhachHang)
+  getAllGioHang(): void {
+    if (this.idKhachHang) {
+      this.gioHangService.getAllGioHang(this.idKhachHang).subscribe({
+        next: (response) => {
+          this.chiTietGioHang = response.result.content.map((item: any) => ({
+            ...item,
+            checked: false
+          }));
+        },
+        error: (err) => {
+          console.error('Lỗi khi lấy giỏ hàng:', err);
         }
-      },
-      (error) => {
-        console.error('Lỗi khi tải danh sách Sản Phẩm Phân Trang:', error);
+      });
+    }
+  }
+
+  onCheckboxChange(gioHang: any): void {
+    if (gioHang.checked) {
+      // Nếu checkbox được chọn, thêm ID và cộng tiền
+      this.idChiTietGioHang.push(gioHang.id);
+      this.tongTien += gioHang.chiTietSanPham.donGia * gioHang.soLuong;
+      this.canThanhToan = this.tongTien;
+    } else {
+      // Nếu bỏ chọn, xóa ID và trừ tiền
+      const index = this.idChiTietGioHang.indexOf(gioHang.id);
+      if (index > -1) {
+        this.idChiTietGioHang.splice(index, 1);
       }
-    );
+      this.tongTien -= gioHang.chiTietSanPham.donGia * gioHang.soLuong;
+    }
+  }
+  tinhTongTienSauVoucher(): number {
+    return this.tongTien - this.giaTriGiam + this.phiShip;
   }
 
-  getProductImage(productId: number): string {
-    const product = this.sanPhamPage.find(item => item.id === productId);
-    return product?.urlAnh || 'assets/img/product/default.jpg'; // Trả về ảnh nếu tìm thấy
-  }
-  
+  // Xử lý khi người dùng gửi đơn hàng (thanh toán)
+  onSubmit(): void {
+    // Kiểm tra nếu chi tiết giỏ hàng và idChiTietGioHang hợp lệ
+    if (this.idChiTietGioHang.length > 0) {
+      const request = {
+        hoaDonRequest: {
+          id: 0,
+          idKhachHang: this.idKhachHang || 0,
+          idNhanVien: 0,
+          idVoucher: 0,
+          idThanhToan: 0,
+          hinhThucThanhToan: 2,
+          ma: '',
+          tongTienBanDau: this.tongTien || 0,
+          phiShip: this.phiShip || 0,
+          giaTriGiam: this.giaTriGiam || 0,
+          tongTienSauVoucher: this.tinhTongTienSauVoucher(),
+          tenNguoiNhan: this.tenNguoiNhan || "string",
+          sdtNguoiNhan: this.sdtNguoiNhan || "string",
+          emailNguoiNhan: this.emailNguoiNhan || "string",
+          diaChiNhanHang: this.diaChiNhanHang || "string",
+          ngayNhanDuKien: new Date().toISOString(),
+          thoiGianTao: new Date().toISOString(),
+          giaoHang: 1,
+          ghiChu: '',
+          trangThai: ''
+        },
+        idChiTietGioHang: this.idChiTietGioHang || [0]
+      };
 
+      this.gioHangService.thanhToan(request).subscribe({
+        next: (response) => {
+          this.showSuccessMessage('Thanh toán thành công!');
+          this.getAllGioHang();
+        },
+        error: (err) => {
+          this.showErrorMessage('Thanh toán thất bại!');
+          console.error(err);
+        }
+      });
+    } else {
+      this.showWarningMessage('Vui lòng kiểm tra lại giỏ hàng và thông tin thanh toán!');
+    }
+  }
+  themSanPham(id: number): void {
+    const idKhString = localStorage.getItem('id'); // Lấy id dưới dạng chuỗi
+
+    if (!idKhString) {
+      // Nếu không có ID khách hàng, thao tác với giỏ hàng trong localStorage
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Giỏ hàng từ localStorage, nếu không có thì khởi tạo mảng rỗng
+
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+      const existingProductIndex = cart.findIndex((item: any) => item.idChiTietSanPham === id);
+
+      if (existingProductIndex !== -1) {
+        // Nếu sản phẩm đã có trong giỏ hàng, cộng dồn số lượng
+        cart[existingProductIndex].soLuong += 1; // Cộng thêm 1 số lượng sản phẩm
+      } else {
+        // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ
+        const newProduct = {
+          id: 0, // ID của sản phẩm có thể để là 0 hoặc lấy từ dữ liệu sản phẩm khác
+          idGioHang: 0, // ID giỏ hàng, có thể để mặc định là 0 hoặc lấy từ giỏ hàng
+          idChiTietSanPham: id,
+          soLuong: 1, // Số lượng ban đầu là 1
+          urlAnh: '' // Đường dẫn ảnh sản phẩm có thể để rỗng hoặc lấy từ dữ liệu
+        };
+        cart.push(newProduct);
+      }
+      // Lưu lại giỏ hàng vào localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      this.getKhachHangLocal();
+    } else {
+      // Nếu có ID khách hàng, gọi API để thêm sản phẩm vào giỏ hàng
+      const idKh = Number(idKhString);
+      if (isNaN(idKh)) {
+        console.error('ID khách hàng không hợp lệ!');
+        return;
+      }
+
+      const request = {
+        id: 0,
+        idGioHang: 0,
+        idChiTietSanPham: id,
+        soLuong: 1 // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
+      };
+
+      // Gọi API thêm sản phẩm vào giỏ hàng của khách hàng
+      this.gioHangService.themSanPham(idKh, request).subscribe(
+        response => {
+          this.getAllGioHang(); // Cập nhật giỏ hàng từ API nếu có
+        },
+        error => {
+          this.handleError(error);
+        }
+      );
+    }
+  }
+
+  xoaSanPham(id: number): void {
+    const idKhString = localStorage.getItem('id'); // Lấy id khách hàng từ localStorage
+
+    if (!idKhString) {
+      // Nếu không có ID khách hàng, thao tác với giỏ hàng trong localStorage
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Giỏ hàng từ localStorage, nếu không có thì khởi tạo mảng rỗng
+
+      // Tìm sản phẩm trong giỏ hàng
+      const productIndex = cart.findIndex((item: any) => item.idChiTietSanPham === id);
+
+      if (productIndex !== -1) {
+        // Nếu sản phẩm có trong giỏ hàng, giảm số lượng đi 1
+        if (cart[productIndex].soLuong > 1) {
+          cart[productIndex].soLuong -= 1; // Giảm số lượng đi 1
+        } else {
+          // Nếu số lượng còn lại là 1, xóa sản phẩm khỏi giỏ hàng
+          cart.splice(productIndex, 1);
+        }
+      }
+
+      // Lưu lại giỏ hàng đã cập nhật vào localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
+      this.getKhachHangLocal(); // Cập nhật lại giỏ hàng sau khi thay đổi
+    } else {
+      // Nếu có ID khách hàng, gọi API để xóa sản phẩm khỏi giỏ hàng
+      const idKh = Number(idKhString);
+      if (isNaN(idKh)) {
+        console.error('ID khách hàng không hợp lệ!');
+        return;
+      }
+
+      // Gọi API xóa sản phẩm khỏi giỏ hàng của khách hàng
+      this.gioHangService.xoaSanPham(id).subscribe(
+        response => {
+          this.getAllGioHang(); // Cập nhật giỏ hàng từ API nếu có
+        },
+        error => {
+          this.handleError(error); // Xử lý lỗi nếu có
+        }
+      );
+    }
+  }
+
+
+  remove(id: number): void {
+    // Hiển thị hộp thoại xác nhận trước khi xóa
+    const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');
+
+    // Nếu người dùng xác nhận (nhấn "OK"), tiếp tục thực hiện xóa
+    if (isConfirmed) {
+      const idKhString = localStorage.getItem('id'); // Lấy id khách hàng từ localStorage
+
+      if (!idKhString) {
+        // Nếu không có ID khách hàng, thao tác với giỏ hàng trong localStorage
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Giỏ hàng từ localStorage, nếu không có thì khởi tạo mảng rỗng
+
+        // Tìm và xóa sản phẩm khỏi giỏ hàng
+        cart = cart.filter((item: any) => item.idChiTietSanPham !== id);
+
+        // Lưu lại giỏ hàng đã cập nhật vào localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Hiển thị thông báo thành công
+        this.showSuccessMessage('Sản phẩm đã được xóa khỏi giỏ hàng!');
+        this.getKhachHangLocal();
+      } else {
+        // Nếu có ID khách hàng, gọi API để xóa sản phẩm khỏi giỏ hàng
+        const idKh = Number(idKhString);
+        if (isNaN(idKh)) {
+          console.error('ID khách hàng không hợp lệ!');
+          return;
+        }
+
+        // Gọi API xóa sản phẩm khỏi giỏ hàng của khách hàng
+        this.gioHangService.remove(id).subscribe(
+          response => {
+            this.getAllGioHang(); // Cập nhật giỏ hàng từ API nếu có
+          },
+          error => {
+            this.handleError(error); // Xử lý lỗi nếu có
+          }
+        );
+      }
+    }
+  }
+
+  // =================== Thông báo ===================
+
+  showSuccessMessage(message: string) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Thành công!',
+      text: message,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
+  }
+
+  showErrorMessage(message: string) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Thất bại!',
+      text: message,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
+  }
+
+  showWarningMessage(message: string) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Cảnh báo!',
+      text: message,
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500,
+      timerProgressBar: true,
+    });
+  }
+  // ================= Xử lý lỗi =================
+  private handleError(error: any): void {
+    let errorMessage = 'Có lỗi xảy ra';
+    if (error.error instanceof ErrorEvent) {
+      // Lỗi từ phía client
+      errorMessage = `Lỗi: ${error.error.message}`;
+    } else {
+      // Lỗi từ phía server
+      errorMessage = `${error.error}`;
+    }
+    this.showErrorMessage(errorMessage);
+  }
 }

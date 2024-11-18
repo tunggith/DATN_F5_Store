@@ -2,6 +2,7 @@ package com.example.datn_f5_store.service.client.impl;
 
 import com.example.datn_f5_store.entity.ChiTietGioHangEntity;
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.GioHangEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.entity.KhachHangEntity;
@@ -18,8 +19,10 @@ import com.example.datn_f5_store.repository.ILichSuHoaDonRepository;
 import com.example.datn_f5_store.repository.INhanVienRepository;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
+import com.example.datn_f5_store.request.ChiTietGioHangRequest;
 import com.example.datn_f5_store.request.GioHangRequest;
 import com.example.datn_f5_store.request.HoaDonRequest;
+import com.example.datn_f5_store.request.ThanhToanRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IHoaDonService;
@@ -33,6 +36,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ThanhToanClientServiceImpl implements ThanhToanClientService {
@@ -60,47 +64,45 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
     private IHoaDonService hoaDonService;
 
     @Override
-    public DataResponse ThanhToanGioHang(Integer idKhachHang, HoaDonRequest hoaDonRequest, List<GioHangRequest> gioHangRequestList) {
-        HoaDonEntity hoaDon = hoaDonService.saveOrUpdate(new HoaDonEntity(),hoaDonRequest);
+    public DataResponse luuGioHang(List<GioHangRequest> gioHangRequestList) {
+        gioHangRepository.saveAll(gioHangRequestList)
         return null;
     }
 
     @Override
     @Transactional
-    public DataResponse thanhToan(HoaDonRequest request,List<Integer> idChiTietGioHang) {
-        // Lấy giỏ hàng của khách hàng
-        GioHangEntity gioHang = gioHangRepository.findByKhachHang_Id(request.getIdKhachHang());
-
+    public DataResponse thanhToan(ThanhToanRequest request) {
         // Tạo hóa đơn
         HoaDonEntity hoaDon = new HoaDonEntity();
-        KhachHangEntity khachHang = khachHangRepository.findById(request.getIdKhachHang()).orElse(null);
+        KhachHangEntity khachHang = khachHangRepository.findById(request.getHoaDonRequest().getIdKhachHang()).orElse(null);
         hoaDon.setKhachHang(khachHang);
-        NhanVienEntity nhanVien = nhanVienRepository.findById(request.getIdNhanVien()).orElse(null);
+        NhanVienEntity nhanVien = nhanVienRepository.findById(request.getHoaDonRequest().getIdNhanVien()).orElse(null);
         hoaDon.setNhanVien(nhanVien);
-        if (request.getIdVoucher() != null) {
-            VoucherEntity voucher = voucherRepository.findById(request.getIdVoucher()).orElse(null);
+        if (request.getHoaDonRequest().getIdVoucher() != null) {
+            VoucherEntity voucher = voucherRepository.findById(request.getHoaDonRequest().getIdVoucher()).orElse(null);
             hoaDon.setVoucher(voucher);
         }
-        PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getIdThanhToan()).orElse(null);
+        PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(request.getHoaDonRequest().getIdThanhToan()).orElse(null);
+        hoaDon.setMa(this.generateMaHoaDon());
         hoaDon.setThanhToan(thanhToan);
-        hoaDon.setHinhThucThanhToan(request.getHinhThucThanhToan());
-        hoaDon.setTongTienBanDau(request.getTongTienBanDau());
-        hoaDon.setPhiShip(request.getPhiShip());
-        hoaDon.setTongTienSauVoucher(request.getTongTienSauVoucher());
-        hoaDon.setTenNguoiNhan(request.getTenNguoiNhan());
-        hoaDon.setSdtNguoiNhan(request.getSdtNguoiNhan());
-        hoaDon.setEmailNguoiNhan(request.getEmailNguoiNhan());
-        hoaDon.setDiaChiNhanHang(request.getDiaChiNhanHang());
-        hoaDon.setNgayNhanDuKien(request.getNgayNhanDuKien());
+        hoaDon.setHinhThucThanhToan(request.getHoaDonRequest().getHinhThucThanhToan());
+        hoaDon.setTongTienBanDau(request.getHoaDonRequest().getTongTienBanDau());
+        hoaDon.setPhiShip(request.getHoaDonRequest().getPhiShip());
+        hoaDon.setTongTienSauVoucher(request.getHoaDonRequest().getTongTienSauVoucher());
+        hoaDon.setTenNguoiNhan(request.getHoaDonRequest().getTenNguoiNhan());
+        hoaDon.setSdtNguoiNhan(request.getHoaDonRequest().getSdtNguoiNhan());
+        hoaDon.setEmailNguoiNhan(request.getHoaDonRequest().getEmailNguoiNhan());
+        hoaDon.setDiaChiNhanHang(request.getHoaDonRequest().getDiaChiNhanHang());
+        hoaDon.setNgayNhanDuKien(new Date());
         hoaDon.setThoiGianTao(new Date());
-        hoaDon.setGiaoHang(request.getGiaoHang());
-        hoaDon.setGhiChu(request.getGhiChu());
+        hoaDon.setGiaoHang(request.getHoaDonRequest().getGiaoHang());
+        hoaDon.setGhiChu(request.getHoaDonRequest().getGhiChu());
         hoaDon.setTrangThai("Chờ xác nhận");
-        hoaDon.setGiaTriGiam(request.getGiaTriGiam());
+        hoaDon.setGiaTriGiam(request.getHoaDonRequest().getGiaTriGiam());
         hoaDon = hoaDonRepository.save(hoaDon);
 
         // Lấy danh sách chi tiết giỏ hàng được chọn
-        List<ChiTietGioHangEntity> selectedChiTietGioHang = chiTietGioHangRepository.findByIdIn(idChiTietGioHang);
+        List<ChiTietGioHangEntity> selectedChiTietGioHang = chiTietGioHangRepository.findByIdIn(request.getIdChiTietGioHang());
 
         // Chuyển chi tiết giỏ hàng sang hóa đơn chi tiết
         for (ChiTietGioHangEntity chiTiet : selectedChiTietGioHang) {

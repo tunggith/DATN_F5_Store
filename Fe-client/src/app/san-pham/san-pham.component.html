@@ -1,413 +1,331 @@
 <div class="pos_page">
-    <div class="container">
-        <div class="pos_page_inner">
-            <div class=" pos_home_section">
-                <div class="row pos_home">
-                    <div class="col-lg-3 col-md-12">
-                        <!--layere categorie"-->
-                        <div class="sidebar_widget shop_c">
-                            <div class="sidebar_widget color">
-                                <h2 (click)="toggleSizeList()">
-                                    <span  class="icon" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
-                                        <i class="fa" [ngClass]="{'fa-chevron-down': !isSizeOpen, 'fa-chevron-up': isSizeOpen}"></i>
-                                      </span>
+  <div class="container">
+    <div class="pos_page_inner">
+      <div class=" pos_home_section">
+        <div class="row pos_home">
+          <div class="col-lg-3 col-md-12">
+            <!--layere categorie"-->
+            <div class="sidebar_widget shop_c">
+              <div class="sidebar_widget color">
+                <h2 (click)="toggleSizeList()">
+                  <span class="icon" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
+                    <i class="fa" [ngClass]="{'fa-chevron-down': !isSizeOpen, 'fa-chevron-up': isSizeOpen}"></i>
+                  </span>
 
-                                       Kích thước</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
-                                <div class="layere_categorie" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
-                                    <ul>
-                                        <li *ngFor="let size of sizeList">
-                                          <input
-                                            type="radio"
-                                            id="{{ size.id }}"
-                                            name="size"
-                                            [value]="size.id"
-                                            [(ngModel)]="selectedSizes"
-                                            (click)="onSizeChange(size)"
-                                            [checked]="selectedSizes == size.id"
-                                          />
-                                          <label for="{{ size.id }}">{{ size.ten }}</label>
-                                        </li>
-                                      </ul>
+                  Kích thước
+                </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+                <div class="layere_categorie" [ngClass]="{'open': isSizeOpen, 'closed': !isSizeOpen}">
+                  <ul>
+                    <li *ngFor="let size of sizeList">
+                      <input type="radio" id="{{ size.id }}" name="size" [value]="size.id" [(ngModel)]="selectedSizes"
+                        (click)="onSizeChange(size)" [checked]="selectedSizes == size.id" />
+                      <label for="{{ size.id }}">{{ size.ten }}</label>
+                    </li>
+                  </ul>
 
-                                </div>
-                            </div>
-                        </div>
-                        <!--layere categorie end-->
-                          <!-- thuonghieu area start -->
-                          <div class="sidebar_widget color">
-                            <h2 (click)="togglethuonghieuList()">
+                </div>
+              </div>
+            </div>
+            <!--layere categorie end-->
+            <!-- thuonghieu area start -->
+            <div class="sidebar_widget color">
+              <h2 (click)="togglethuonghieuList()">
 
-                                <span class="icon" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
-                                    <i class="fa" [ngClass]="{'fa-chevron-down': !isthuongHieuOpen, 'fa-chevron-up': isthuongHieuOpen}"></i>
-                                  </span>
-                                Thương hiệu </h2>
-                            <div class="layere_categorie" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
-                                <ul>
-                                    <li *ngFor="let thuonghieu of ThuongHieuList">
-                                      <input
-                                        type="radio"
-                                        id="{{ thuonghieu.id }}"
-                                        name="thuonghieu"
-                                        [value]="thuonghieu.id"
-                                        [(ngModel)]="selectThuongHieu"
-                                        (click)="onthuongHieuChage(thuonghieu)"
-                                        [checked]="selectThuongHieu == thuonghieu.id"
-                                      />
-                                      <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
-                                    </li>
-                                  </ul>
+                <span class="icon" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
+                  <i class="fa"
+                    [ngClass]="{'fa-chevron-down': !isthuongHieuOpen, 'fa-chevron-up': isthuongHieuOpen}"></i>
+                </span>
+                Thương hiệu
+              </h2>
+              <div class="layere_categorie" [ngClass]="{'open': isthuongHieuOpen, 'closed': !isthuongHieuOpen}">
+                <ul>
+                  <li *ngFor="let thuonghieu of ThuongHieuList">
+                    <input type="radio" id="{{ thuonghieu.id }}" name="thuonghieu" [value]="thuonghieu.id"
+                      [(ngModel)]="selectThuongHieu" (click)="onthuongHieuChage(thuonghieu)"
+                      [checked]="selectThuongHieu == thuonghieu.id" />
+                    <label for="{{ thuonghieu.id }}">{{ thuonghieu.ten }}</label>
+                  </li>
+                </ul>
 
-                            </div>
-                        </div>
+              </div>
+            </div>
 
 
-                      <!-- color area end -->
-                                         <!-- color area start -->
-                                         <div class="sidebar_widget color">
-                                            <h2 (click)="toggleColorList()">
+            <!-- color area end -->
+            <!-- color area start -->
+            <div class="sidebar_widget color">
+              <h2 (click)="toggleColorList()">
 
-                                                <span class="icon" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
-                                                    <i class="fa" [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}"></i>
-                                                  </span>
-                                                Màu sắc</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
-                                            <div class="layere_categorie" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
-                                                <ul>
-                                                    <li *ngFor="let color of mauSacList">
-                                                      <input
-                                                        type="radio"
-                                                        id="{{ color.id }}"
-                                                        name="color"
-                                                        [value]="color.id"
-                                                        [(ngModel)]="selectedColors"
-                                                        (click)="onColorChange(color)"
-                                                        [checked]="selectedColors === color.id"
-                                                      />
-                                                      <label for="{{ color.id }}">{{ color.ten }}</label>
-                                                    </li>
-                                                  </ul>
+                <span class="icon" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
+                  <i class="fa" [ngClass]="{'fa-chevron-down': !isOpen, 'fa-chevron-up': isOpen}"></i>
+                </span>
+                Màu sắc
+              </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+              <div class="layere_categorie" [ngClass]="{'open': isOpen, 'closed': !isOpen}">
+                <ul>
+                  <li *ngFor="let color of mauSacList">
+                    <input type="radio" id="{{ color.id }}" name="color" [value]="color.id" [(ngModel)]="selectedColors"
+                      (click)="onColorChange(color)" [checked]="selectedColors === color.id" />
+                    <label for="{{ color.id }}">{{ color.ten }}</label>
+                  </li>
+                </ul>
 
-                                            </div>
-                                        </div>
+              </div>
+            </div>
 
 
-                                      <!-- color area end -->
+            <!-- color area end -->
 
 
 
 
-                                    <!-- color area start -->
-                                    <div class="sidebar_widget color">
-                                        <h2 (click)="toggleXuatXuList()">
+            <!-- color area start -->
+            <div class="sidebar_widget color">
+              <h2 (click)="toggleXuatXuList()">
 
-                                            <span class="icon" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
-                                                <i class="fa" [ngClass]="{'fa-chevron-down': !isXuatXuOpen, 'fa-chevron-up': isXuatXuOpen}"></i>
-                                            </span>
-                                            Xuất Xứ</h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
-                                        <div class="layere_categorie" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
-                                            <ul>
-                                                <li *ngFor="let xuatXu of xuatXuList">
-                                                  <input
-                                                    type="radio"
-                                                    id="{{ xuatXu.id }}"
-                                                    name="xuatXu"
-                                                    [value]="xuatXu.id"
-                                                    [(ngModel)]="selectedXuatXu"
-                                                    (click)="onXuatXuChange(xuatXu)"
-                                                    [checked]="selectedXuatXu === xuatXu.id"
-                                                  />
-                                                  <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
-                                                </li>
-                                              </ul>
-                                        </div>
-                                    </div>
+                <span class="icon" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
+                  <i class="fa" [ngClass]="{'fa-chevron-down': !isXuatXuOpen, 'fa-chevron-up': isXuatXuOpen}"></i>
+                </span>
+                Xuất Xứ
+              </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+              <div class="layere_categorie" [ngClass]="{'open': isXuatXuOpen, 'closed': !isXuatXuOpen}">
+                <ul>
+                  <li *ngFor="let xuatXu of xuatXuList">
+                    <input type="radio" id="{{ xuatXu.id }}" name="xuatXu" [value]="xuatXu.id"
+                      [(ngModel)]="selectedXuatXu" (click)="onXuatXuChange(xuatXu)"
+                      [checked]="selectedXuatXu === xuatXu.id" />
+                    <label for="{{ xuatXu.id }}">{{ xuatXu.ten }}</label>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
 
-                                <!-- color area end -->
+            <!-- color area end -->
 
 
 
 
-                                    <!-- color area start -->
-                                    <div class="sidebar_widget color">
-                                        <h2 (click)="toggleGioiTinhList()">
+            <!-- color area start -->
+            <div class="sidebar_widget color">
+              <h2 (click)="toggleGioiTinhList()">
 
-                                            <span class="icon" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
-                                                <i class="fa" [ngClass]="{'fa-chevron-down': !isGioiTinhOpen, 'fa-chevron-up': isGioiTinhOpen}"></i>
-                                            </span>
-                                            giới tính </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
-                                        <div class="layere_categorie" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
-                                            <ul>
-                                                <li *ngFor="let gioiTinh of gioiTinhList">
-                                                  <input
-                                                    type="radio"
-                                                    id="{{ gioiTinh.id }}"
-                                                    name="gioiTinh"
-                                                    [value]="gioiTinh.id"
-                                                    [(ngModel)]="selectedGioiTinhs"
-                                                    (click)="onGioiTinhChange(gioiTinh)"
-                                                    [checked]="selectedGioiTinhs === gioiTinh.id"
-                                                  />
-                                                  <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
-                                                </li>
-                                              </ul>
+                <span class="icon" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
+                  <i class="fa" [ngClass]="{'fa-chevron-down': !isGioiTinhOpen, 'fa-chevron-up': isGioiTinhOpen}"></i>
+                </span>
+                giới tính
+              </h2> <!-- Nhấn vào tiêu đề để mở rộng/thu lại -->
+              <div class="layere_categorie" [ngClass]="{'open': isGioiTinhOpen, 'closed': !isGioiTinhOpen}">
+                <ul>
+                  <li *ngFor="let gioiTinh of gioiTinhList">
+                    <input type="radio" id="{{ gioiTinh.id }}" name="gioiTinh" [value]="gioiTinh.id"
+                      [(ngModel)]="selectedGioiTinhs" (click)="onGioiTinhChange(gioiTinh)"
+                      [checked]="selectedGioiTinhs === gioiTinh.id" />
+                    <label for="{{ gioiTinh.id }}">{{ gioiTinh.ten }}</label>
+                  </li>
+                </ul>
 
-                                        </div>
-                                    </div>
+              </div>
+            </div>
 
 
-                                <!-- color area end -->
+            <!-- color area end -->
 
 
-                        <!--color area end-->
+            <!--color area end-->
 
-                        <!--price slider start-->
-                        <div class="sidebar_widget price">
-                            <h2>Khoảng giá</h2>
-                             <div *ngIf="errorMsg" class="error-message">
-                                {{ errorMsg }}
-                              </div>
-                            <div class="price-range">
-                              <!-- Thông báo lỗi -->
-                              <!-- Ô nhập giá trị min -->
-                              <label for="min-price">Từ:</label>
-                              <input
-                                type="text"
-                                id="min-price"
-                                [value]="formattedgiaMin"
-                                (input)="onGiaMin($event)"
-                                placeholder="Giá thấp nhất"
-                              />
+            <!--price slider start-->
+            <div class="sidebar_widget price">
+              <h2>Khoảng giá</h2>
+              <div *ngIf="errorMsg" class="error-message">
+                {{ errorMsg }}
+              </div>
+              <div class="price-range">
+                <!-- Thông báo lỗi -->
+                <!-- Ô nhập giá trị min -->
+                <label for="min-price">Từ:</label>
+                <input type="text" id="min-price" [value]="formattedgiaMin" (input)="onGiaMin($event)"
+                  placeholder="Giá thấp nhất" />
 
-                              <!-- Ô nhập giá trị max -->
-                              <label for="max-price">Đến:</label>
-                              <input
-                                type="text"
-                                id="max-price"
-                                [value]="formattedgiaMax"
-                                (input)="onGiaMax($event)"
-                                placeholder="Giá cao nhất"
-                              />
+                <!-- Ô nhập giá trị max -->
+                <label for="max-price">Đến:</label>
+                <input type="text" id="max-price" [value]="formattedgiaMax" (input)="onGiaMax($event)"
+                  placeholder="Giá cao nhất" />
 
-                            </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-12">
+            <!--banner slider start-->
+            <div class="banner_slider mb-35">
+              <img src="assets\img\banner\bannner10.jpg" alt="">
+            </div>
+            <!--banner slider start-->
+
+            <!--shop toolbar start-->
+            <div class="search_box">
+              <!-- tìm kiếm -->
+            </div>
+
+            <!--shop toolbar end-->
+
+            <!--shop tab sản phẩm-->
+            <div class="shop_tab_product">
+              <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="large" role="tabpanel">
+                  <div class="row">
+                    <!-- Lặp qua danh sách sanPhamList để hiển thị từng sản phẩm -->
+                    <div class="col-lg-4 col-md-6" *ngFor="let product of sanPhamList">
+                      <div class="single_product">
+                        <div class="product_thumb">
+                          <!-- Hiển thị ảnh sản phẩm -->
+                          <a href="single-product.html">
+                            <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm">
+                          </a>
+                          <div class="img_icone" *ngIf="product.mauSac">
+                            <img src="assets/img/cart/span-new.png" alt="Màu sắc">
                           </div>
 
-
-
-
-                        <!--price slider end-->
-
-                        <!--wishlist block start-->
-                        <div class="sidebar_widget wishlist mb-30">
-
+                          <div class="product_action">
+                            <button class="add_to_cart" (click)="openPopup(product.chiTietSanPham.sanPham.id)">
+                              <i class="fa fa-shopping-cart"></i> Add to cart
+                            </button>
+                          </div>
 
                         </div>
-                        <!--wishlist block end-->
-
-
-
-                        <!--newsletter block start-->
-                        <div class="sidebar_widget newsletter mb-30">
-                            <div class="block_title">
-                                <h3>newsletter</h3>
-                            </div>
-                            <form action="#">
-                                <p>Sign up for your newsletter</p>
-                                <input placeholder="Your email address" type="text">
-                                <button type="submit">Subscribe</button>
-                            </form>
+                        <div class="product_content">
+                          <!-- Hiển thị tên và giá sản phẩm -->
+                          <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
+                          <h3 class="product_title">
+                            <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a>
+                          </h3>
                         </div>
-                        <!--newsletter block end-->
-
-
-
+                        <!-- <div class="product_info">
+                          <ul>
+                            <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View
+                                Detail</a></li>
+                          </ul>
+                        </div> -->
+                      </div>
                     </div>
-                    <div class="col-lg-9 col-md-12">
-                        <!--banner slider start-->
-                        <div class="banner_slider mb-35">
-                            <img src="assets\img\banner\bannner10.jpg" alt="">
-                        </div>
-                        <!--banner slider start-->
+                  </div>
 
-                        <!--shop toolbar start-->
-                        <div class="search_box">
-                           <!-- tìm kiếm -->
-                        </div>
-
-                        <!--shop toolbar end-->
-
-                        <!--shop tab sản phẩm-->
-                        <div class="shop_tab_product">
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="large" role="tabpanel">
-                                    <div class="row">
-                                        <!-- Lặp qua danh sách sanPhamList để hiển thị từng sản phẩm -->
-                                        <div class="col-lg-4 col-md-6" *ngFor="let product of sanPhamList">
-                                            <div class="single_product">
-                                                <div class="product_thumb">
-                                                    <!-- Hiển thị ảnh sản phẩm -->
-                                                    <a href="single-product.html">
-                                                        <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm">
-                                                    </a>
-                                                    <div class="img_icone" *ngIf="product.mauSac">
-                                                        <img src="assets/img/cart/span-new.png" alt="Màu sắc">
-                                                    </div>
-
-                                                    <div class="product_action">
-                                                        <button class="add_to_cart" (click)="openPopup(product.chiTietSanPham.sanPham.id)">
-                                                            <i class="fa fa-shopping-cart"></i> Add to cart
-                                                          </button>
-                                                    </div>
-
-                                                </div>
-                                                <div class="product_content">
-                                                    <!-- Hiển thị tên và giá sản phẩm -->
-                                                    <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
-                                                    <h3 class="product_title">
-                                                        <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a>
-                                                    </h3>
-                                                </div>
-                                                <div class="product_info">
-                                                    <ul>
-                                                        <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
-                                                        <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Phần phân trang -->
-                                    <div class="pagination">
-                                        <ul class="pagination-list">
-                                            <!-- Prev button, disabled if page is 0 -->
-                                            <li [ngClass]="{ 'disabled': page === 0 }">
-                                                <a href="#" (click)="changePage(page - 1, $event)">Prev</a>
-                                            </li>
-                                            <!-- Tạo các trang, đánh dấu trang hiện tại -->
-                                            <li *ngFor="let p of totalPages" [ngClass]="{ 'active': p === page }">
-                                                <a href="#" (click)="changePage(p, $event)">{{ p + 1 }}</a>
-                                            </li>
-                                            <!-- Next button, disabled if current page is the last page -->
-                                            <li [ngClass]="{ 'disabled': page === totalPages.length - 1 }">
-                                                <a href="#" (click)="changePage(page + 1, $event)">Next</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        <!--shop tab product end-->
-
-
-
-                    </div>
+                  <!-- Phần phân trang -->
+                  <div class="pagination">
+                    <ul class="pagination-list">
+                      <!-- Prev button, disabled if page is 0 -->
+                      <li [ngClass]="{ 'disabled': page === 0 }">
+                        <a href="#" (click)="changePage(page - 1, $event)">Prev</a>
+                      </li>
+                      <!-- Tạo các trang, đánh dấu trang hiện tại -->
+                      <li *ngFor="let p of totalPages" [ngClass]="{ 'active': p === page }">
+                        <a href="#" (click)="changePage(p, $event)">{{ p + 1 }}</a>
+                      </li>
+                      <!-- Next button, disabled if current page is the last page -->
+                      <li [ngClass]="{ 'disabled': page === totalPages.length - 1 }">
+                        <a href="#" (click)="changePage(page + 1, $event)">Next</a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-  <!-- Popup  -->
-  <!-- Popup -->
-<div class="popup" *ngIf="isPopupVisible">
-    <div class="popup-content">
-      <!-- Nút đóng -->
-      <span class="close" (click)="closePopup()">&times;</span>
-
-      <div class="popup-body">
-        <!-- Phần bên trái: Hình ảnh -->
-        <div class="popup-left">
-          <!-- Ảnh chính -->
-          <img [src]="currentImage" alt="Product Image" class="popup-image" />
-
-          <!-- Danh sách ảnh thu nhỏ -->
-          <div class="image-list">
-            <img
-              *ngFor="let anh of anhChiTietSanPham"
-              [src]="anh.urlAnh"
-              class="thumbnail"
-              [class.selected]="currentImage === anh.urlAnh"
-              (click)="changeImage(anh.urlAnh)"
-            />
-          </div>
-        </div>
-
-        <!-- Phần bên phải: Nội dung sản phẩm -->
-        <div class="popup-right">
-          <p>Mã sản phẩm: <strong>{{ maSanPham }}</strong></p>
-          <h2>Sản Phẩm: <strong>{{ tenSanPham }}</strong></h2>
-
-          <p><strong>Thương hiệu:</strong> {{ ThuongHieu }}</p>
-          <p><strong>Xuất xứ:</strong> {{ XuatXu }}</p>
-          <p><strong>Giới tính:</strong> {{ gioiTinh }}</p>
-
-          <p>
-            <strong>Giá:</strong>
-            <span class="price">{{ formatTien(donGia) }} VNĐ</span>
-          </p>
-
-          <div class="options">
-            <div class="colors">
-              <strong>Màu sắc:</strong>
-              <div class="option-buttons">
-                <ng-container *ngFor="let color of mauSacList">
-                  <button
-                    [class.selected]="color === selectedColor"
-                    (click)="selectColor(color)"
-                  >
-                    {{ color.ten }}
-                  </button>
-                </ng-container>
               </div>
             </div>
 
-            <div class="sizes">
-              <strong>Kích thước:</strong>
-              <div class="option-buttons">
-                <ng-container *ngFor="let kichthuoc of sizeList">
-                  <button
-                    [class.selected]="kichthuoc === selectedSize"
-                    (click)="selectSize(kichthuoc)"
-                  >
-                    {{ kichthuoc.ten }}
-                  </button>
-                </ng-container>
-              </div>
-            </div>
-          </div>
 
-          <div class="stock-status">
-            <strong>Trạng thái hàng:</strong>
-            <span *ngIf="soLuongCTSP === 0" style="color: red;">Hết hàng</span>
-            <span *ngIf="soLuongCTSP > 0" style="color: brown;">
-              Còn {{ soLuongCTSP }}
-            </span>
-          </div>
 
-          <div class="quantity-container">
-            <strong>Số lượng:</strong>
-            <div class="quantity">
-              <button (click)="decreaseQuantity()">-</button>
-              <input
-                type="text"
-                [(ngModel)]="quantity"
-                min="1"
-                [max]="soLuongCTSP"
-                (input)="onQuantityChange($event)"
-              />
-              <button (click)="increaseQuantity()">+</button>
-            </div>
-            <p class="error-message" *ngIf="err2">{{ err2 }}</p>
-          </div>
+            <!--shop tab product end-->
 
-          <button (click)="addToCart(idCTSP)"  class="add-to-cart">Thêm vào giỏ</button>
+
+
+          </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- popupend  -->
+
+<!-- Popup  -->
+<!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+  <div class="popup-content">
+    <!-- Nút đóng -->
+    <span class="close" (click)="closePopup()">&times;</span>
+
+    <div class="popup-body">
+      <!-- Phần bên trái: Hình ảnh -->
+      <div class="popup-left">
+        <!-- Ảnh chính -->
+        <img [src]="currentImage" alt="Product Image" class="popup-image" />
+
+        <!-- Danh sách ảnh thu nhỏ -->
+        <div class="image-list">
+          <img *ngFor="let anh of anhChiTietSanPham" [src]="anh.urlAnh" class="thumbnail"
+            [class.selected]="currentImage === anh.urlAnh" (click)="changeImage(anh.urlAnh)" />
+        </div>
+      </div>
+
+      <!-- Phần bên phải: Nội dung sản phẩm -->
+      <div class="popup-right">
+        <p>Mã sản phẩm: <strong>{{ maSanPham }}</strong></p>
+        <h2>Sản Phẩm: <strong>{{ tenSanPham }}</strong></h2>
+
+        <p><strong>Thương hiệu:</strong> {{ ThuongHieu }}</p>
+        <p><strong>Xuất xứ:</strong> {{ XuatXu }}</p>
+        <p><strong>Giới tính:</strong> {{ gioiTinh }}</p>
+
+        <p>
+          <strong>Giá:</strong>
+          <span class="price">{{ formatTien(donGia) }} VNĐ</span>
+        </p>
+
+        <div class="options">
+          <div class="colors">
+            <strong>Màu sắc:</strong>
+            <div class="option-buttons">
+              <ng-container *ngFor="let color of mauSacList">
+                <button [class.selected]="color === selectedColor" (click)="selectColor(color)">
+                  {{ color.ten }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="sizes">
+            <strong>Kích thước:</strong>
+            <div class="option-buttons">
+              <ng-container *ngFor="let kichthuoc of sizeList">
+                <button [class.selected]="kichthuoc === selectedSize" (click)="selectSize(kichthuoc)">
+                  {{ kichthuoc.ten }}
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="stock-status">
+          <strong>Trạng thái hàng:</strong>
+          <span *ngIf="soLuongCTSP === 0" style="color: red;">Hết hàng</span>
+          <span *ngIf="soLuongCTSP > 0" style="color: brown;">
+            Còn {{ soLuongCTSP }}
+          </span>
+        </div>
+
+        <div class="quantity-container">
+          <strong>Số lượng:</strong>
+          <div class="quantity">
+            <button (click)="decreaseQuantity()">-</button>
+            <input type="text" [(ngModel)]="quantity" min="1" [max]="soLuongCTSP" (input)="onQuantityChange($event)" />
+            <button (click)="increaseQuantity()">+</button>
+          </div>
+          <p class="error-message" *ngIf="err2">{{ err2 }}</p>
+        </div>
+
+        <button class="add-to-cart" (click)="themSanPham()" [disabled]="quantity == 0">Thêm vào giỏ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- popupend  -->
