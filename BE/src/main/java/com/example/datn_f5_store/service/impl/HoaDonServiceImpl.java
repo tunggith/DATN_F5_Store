@@ -699,7 +699,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 .toLocalDate();
     }
 
-    private HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
+    public HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request) {
         try {
             this.convertHoaDon(entity, request);
             return hoaDonRepository.save(entity);
@@ -743,7 +743,6 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setDiaChiNhanHang(request.getDiaChiNhanHang());
         entity.setNgayNhanDuKien(request.getNgayNhanDuKien());
         entity.setThoiGianTao(request.getThoiGianTao());
-        entity.setGhiChu(request.getGhiChu());
         entity.setGhiChu(request.getGhiChu());
         entity.setGiaoHang(request.getGiaoHang());
         entity.setTrangThai(request.getTrangThai());

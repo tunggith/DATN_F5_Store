@@ -65,14 +65,152 @@
         </div>
         <div class="right">
           <div class="mb-3">
-            <label for="basic-url" class="form-label">Địa chỉ khách hàng: <i class="material-icons">add</i></label>
-            <div class="input-group mb-3" *ngFor="let diaChi of diaChi">
-              <input type="text" class="form-control" [value]="diaChi" disabled>
-              <span class="input-group-text" id="basic-addon2"><i class="material-icons">edit</i></span>
-            </div>
+          
+          <!-- Nút mở popup -->
+           <button (click)="openPopup()" class="btn  material-icons">+</button>
+           <div class="input-group mb-3" *ngFor="let diaChi of diaCHiData">
+            <!-- Kết hợp các trường để hiển thị -->
+            <input 
+              type="text" 
+              class="form-control" 
+              [value]="formatDiaChi(diaChi)" 
+              readonly>
+            <span class="input-group-text" (click)="openPopup(diaChi)" id="basic-addon2">
+              <i class="material-icons">edit</i>
+            </span>
+          </div>
+          
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+
+
+<!-- Popup -->
+<div class="popup" *ngIf="isPopupVisible">
+  <div class="popup-content">
+    <!-- Nút đóng popup -->
+    <button class="close" (click)="closePopup()">✖</button>
+
+    <!-- Form thêm địa chỉ -->
+    <form [formGroup]="diaChiForm" (ngSubmit)="submitDiaChi()">
+      <div class="row">
+        <!-- Số nhà -->
+        <div class="col-sm-4">
+          <label class="form-label">Số nhà</label>
+          <input type="text" class="form-control" placeholder="Nhập số nhà" formControlName="soNha">
+          <small class="text-danger" *ngIf="diaChiForm.get('soNha')?.invalid && diaChiForm.get('soNha')?.touched">
+            Vui lòng nhập số nhà.
+          </small>
+        </div>
+
+        <!-- Đường -->
+        <div class="col-sm-4">
+          <label class="form-label">Đường</label>
+          <input type="text" class="form-control" placeholder="Nhập đường" formControlName="duong">
+          <small class="text-danger" *ngIf="diaChiForm.get('duong')?.invalid && diaChiForm.get('duong')?.touched">
+            Vui lòng nhập tên đường.
+          </small>
+        </div>
+
+        <!-- Số điện thoại -->
+        <div class="col-sm-4">
+          <label class="form-label">Số điện thoại</label>
+          <input type="text" class="form-control" placeholder="Nhập số điện thoại" formControlName="sdt">
+          <small class="text-danger" *ngIf="diaChiForm.get('sdt')?.invalid && diaChiForm.get('sdt')?.touched">
+            Số điện thoại phải có 10-11 số.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Tỉnh thành -->
+        <div class="col-sm-4">
+          <label class="form-label">Tỉnh thành</label>
+          <select 
+          class="form-select" 
+          formControlName="tinhThanh" 
+          (change)="onTinhThanhChange($event)">
+          <option value="">Chọn tỉnh thành</option>
+          <option *ngFor="let province of ListTinhThanh" [value]="province.ProvinceID">
+            {{ province.ProvinceName }}
+          </option>
+        </select>
+        
+          <small class="text-danger" *ngIf="diaChiForm.get('tinhThanh')?.invalid && diaChiForm.get('tinhThanh')?.touched">
+            Vui lòng chọn tỉnh thành.
+          </small>
+        </div>
+
+        <!-- Quận huyện -->
+        <div class="col-sm-4">
+          <label class="form-label">Quận huyện</label>
+          <select 
+          class="form-select" 
+          formControlName="quanHuyen" 
+          [disabled]="!diaChiForm.get('tinhThanh')?.value" 
+          (change)="onQuanHuyenChange($event)">
+          <option value="">Chọn quận huyện</option>
+          <option *ngFor="let district of districts" [value]="district.DistrictID">
+            {{ district.DistrictName }}
+          </option>
+        </select>        
+          <small class="text-danger" *ngIf="diaChiForm.get('quanHuyen')?.invalid && diaChiForm.get('quanHuyen')?.touched">
+            Vui lòng chọn quận huyện.
+          </small>
+        </div>
+
+        <!-- Phường xã -->
+        <div class="col-sm-4">
+          <label class="form-label">Phường xã</label>
+          <select 
+            class="form-select" 
+            formControlName="phuongXa" 
+            [disabled]="!diaChiForm.get('quanHuyen')?.value">
+            <option value="">Chọn phường xã</option>
+            <option *ngFor="let ward of wards" [value]="ward.WardCode">
+              {{ ward.WardName }}
+            </option>
+          </select>
+          <small class="text-danger" *ngIf="diaChiForm.get('phuongXa')?.invalid && diaChiForm.get('phuongXa')?.touched">
+            Vui lòng chọn phường xã.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Loại địa chỉ -->
+        <div class="col-sm-4">
+          <label class="form-label">Loại địa chỉ</label>
+          <select class="form-select" formControlName="loaiDiaChi">
+            <option value="">Chọn loại địa chỉ</option>
+            <option value="Nhà riêng">Nhà riêng</option>
+            <option value="Văn phòng">Văn phòng</option>
+          </select>
+          <small class="text-danger" *ngIf="diaChiForm.get('loaiDiaChi')?.invalid && diaChiForm.get('loaiDiaChi')?.touched">
+            Vui lòng chọn loại địa chỉ.
+          </small>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Nút Lưu -->
+        <div class="col-sm-6">
+          <button type="submit" class="btn btn-primary" [disabled]="diaChiForm.invalid">
+            {{ isEditing ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ' }}
+          </button>
+        </div>        
+        <!-- Nút Hủy -->
+        <div class="col-sm-6">
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">Hủy</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+

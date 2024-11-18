@@ -20,10 +20,12 @@ public class DiaChiKhachHangDto {
     private Integer id;
     private String soNha;
     private String duong;
+    private String sdt;
     private String phuongXa;
     private String quanHuyen;
     private String tinhThanh;
     private String quocGia;
+
     private String loaiDiaChi;
     private String trangThai;
 }

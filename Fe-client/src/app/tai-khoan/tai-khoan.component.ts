@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DangNhapService } from '../dang-nhap/dang-nhap.service';
 import { DatePipe } from '@angular/common';
 import Swal from "sweetalert2";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-tai-khoan',
@@ -11,7 +12,9 @@ import Swal from "sweetalert2";
 })
 export class TaiKhoanComponent implements OnInit {
   urlAnh: string = 'assets/default-person-icon.png'; // Đường dẫn ảnh mặc định
+  diaCHiData: any[] =[];
   khachHang = {
+    id:0,
     ma: '',
     ten: '',
     gioiTinh: 0,
@@ -22,16 +25,43 @@ export class TaiKhoanComponent implements OnInit {
   };
   diaChi: any[] = [];
   errors: any = {}; // Dùng để lưu lỗi cho từng trường
-
+  idKhachHang: number = 0;
   constructor(
     private dangNhapService: DangNhapService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private fb: FormBuilder
+    
+  ) {
+
+    {
+      // Khởi tạo form
+      this.diaChiForm = this.fb.group({
+        idKhachHang: [],
+        soNha: ['', Validators.required],
+        sdt: ['', [Validators.required, Validators.pattern(/^[0-9]{10,11}$/)]],
+        duong: ['', Validators.required],
+        phuongXa: ['', Validators.required],
+        quanHuyen: ['', Validators.required],
+        tinhThanh: ['', Validators.required],
+        quocGia: ['Việt Nam'],
+        loaiDiaChi: ['Nhà riêng', Validators.required],
+        trangThai: ['Còn sử dụng']
+      });
+
+    }
+   }
 
   ngOnInit(): void {
+    this.loadData();
+  }
+
+
+  loadData():void{
     this.detailKhachHang();
     this.getDiaChiKhachHang();
+    this.loadProvinces();
   }
+
 
   // Kiểm tra tên khách hàng hợp lệ
   isValidName(name: string): boolean {
@@ -110,6 +140,10 @@ export class TaiKhoanComponent implements OnInit {
           if (!this.khachHang.anh) {
             this.khachHang.anh = this.urlAnh;
           }
+
+         
+          this.idKhachHang = this.khachHang.id;
+          console.log("id khách hàng là ",this.idKhachHang);
         },
         error => {
           console.error("Không thể lấy thông tin khách hàng:", error);
@@ -130,7 +164,12 @@ export class TaiKhoanComponent implements OnInit {
     if (id !== '') {
       this.dangNhapService.diaChiKhachHang(id).subscribe(
         data => {
-          this.diaChi = data.result.content.map((diaChiItem: any) => this.formatDiaChi(diaChiItem));
+          
+          console.log("địa data chỉ lấy ra là",data)
+          this.diaChi = data;
+          this.diaCHiData = data.result.content;
+          console.log("địa chỉ lấy ra là",this.diaChi)
+          console.log("địa chỉ data lấy ra là",this.diaCHiData)
         },
         error => {
           console.error("Không thể lấy địa chỉ khách hàng:", error);
@@ -192,4 +231,449 @@ export class TaiKhoanComponent implements OnInit {
     }
   }
 
+   // Danh sách địa chỉ của khách hàng
+   customersDiaChi: any[] = [];
+   // Các biến hỗ trợ chọn địa chỉ
+   phuongXa: string = '';
+   quanHuyen: string = '';
+   tinhThanh: string = '';
+   ListTinhThanh: any[] = [];
+   districts: any[] = [];
+   wards: any[] = [];
+   // Biến điều khiển phân trang
+   page: number = 0;
+   size: number = 2;
+   pagination: any = [];
+   idTinhThanh: number = 0;
+
+   idTinh: number = 0
+   idXa: number = 0
+   idhuyen: number = 0
+   
+   tenTinh: String = ''
+   tenXa: String = ''
+   tenhuyen: String = ''
+ 
+   // Biến kiểm soát popup
+   isPopupVisible: boolean = false;
+ 
+   // Form quản lý địa chỉ
+   diaChiForm: FormGroup;
+ 
+   // Địa chỉ mới (template để thêm địa chỉ)
+   diaChiMoi: any = {
+     soNha: '',
+     duong: '',
+     sdt: '',
+     phuongXa: '',
+     quanHuyen: '',
+     tinhThanh: '',
+     quocGia: '',
+     loaiDiaChi: 'Nhà riêng',
+     trangThai: 'Còn sử dụng'
+   };
+ 
+   
+    
+ 
+ 
+   // Hàm load danh sách tỉnh thành
+   loadProvinces() {
+     this.dangNhapService.getProvinces().subscribe({
+       next: (data: any) => {
+         this.ListTinhThanh = data?.data || [];
+         console.log('Danh sách tỉnh thành:', this.ListTinhThanh);
+       },
+       error: (err) => console.error('Lỗi khi tải tỉnh thành:', err)
+     });
+   }
+ 
+   onTinhThanhChange(event: any): void {
+    const tinhThanhId = event.target.value;
+    if (tinhThanhId) {
+      this.dangNhapService.getDistricts(Number(tinhThanhId)).subscribe({
+        next: (data: any) => {
+          this.districts = data?.data || [];
+          console.log('Danh sách quận/huyện:', this.districts);
+          this.diaChiForm.patchValue({ quanHuyen: '', phuongXa: '' });
+          this.wards = [];
+        },
+        error: (err) => console.error('Lỗi khi tải quận huyện:', err)
+      });
+    }
+  }
+  
+  onQuanHuyenChange(event: any): void {
+    const districtId = event.target.value;
+  
+    if (districtId) {
+      this.dangNhapService.getWards(Number(districtId)).subscribe({
+        next: (data: any) => {
+          this.wards = data?.data || [];
+          console.log('Danh sách phường/xã:', this.wards);
+  
+          // Reset phường xã trong form khi quận huyện thay đổi
+          this.diaChiForm.patchValue({ phuongXa: '' });
+  
+          // Gọi hàm cập nhật khách hàng nếu cần
+          this.updateKhachHangAfterDistrictChange(districtId);
+        },
+        error: (err) => console.error('Lỗi khi tải phường xã:', err)
+      });
+    }
+  }
+  
+  // Hàm gọi updateKhachHang sau khi Quận Huyện được thay đổi
+  updateKhachHangAfterDistrictChange(districtId: number): void {
+    // Chuẩn bị dữ liệu cập nhật
+    const formValue = this.diaChiForm.value;
+    const updatedCustomerData = {
+      id: this.khachHang.id,
+      ma: this.khachHang.ma,
+      ten: this.khachHang.ten,
+      gioiTinh: this.khachHang.gioiTinh.toString(),
+      ngayThangNamSinh: this.datePipe.transform(this.khachHang.ngayThangNamSinh, 'yyyy-MM-ddTHH:mm:ss') || '',
+      email: this.khachHang.email,
+      roles: 'USER', // Giữ vai trò mặc định
+      anh: this.khachHang.anh || this.urlAnh,
+      sdt: this.khachHang.sdt,
+      userName: this.khachHang.ma, // Dùng mã khách hàng làm username
+      password: '', // Để trống nếu không cần thay đổi mật khẩu
+      trangThai: 'Hoạt động', // Giá trị mặc định
+      diaChi: {
+        soNha: formValue.soNha,
+        duong: formValue.duong,
+        quanHuyen: this.districts.find(district => district.DistrictID === Number(districtId))?.DistrictName || '',
+        phuongXa: this.wards.find(ward => ward.WardCode === formValue.phuongXa)?.WardName || '',
+        tinhThanh: this.ListTinhThanh.find(province => province.ProvinceID === Number(formValue.tinhThanh))?.ProvinceName || ''
+      }
+    };
+  
+    // Gọi API update khách hàng
+    this.dangNhapService.updateDiaChiKhachHang(this.khachHang.id, updatedCustomerData).subscribe({
+      next: (response) => {
+        console.log('Cập nhật thành công:', response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công!',
+          text: 'Cập nhật thông tin khách hàng thành công sau khi thay đổi quận/huyện!',
+          confirmButtonText: 'OK'
+        });
+      },
+      error: (err) => {
+       console.log("lỗi gì đó rồi:) ")
+      }
+    });
+  }
+  
+
+ 
+   // Hàm chỉnh sửa địa chỉ
+   editAddress(address: any) {
+     this.diaChiForm.patchValue(address);
+     this.openPopup();
+   }
+ 
+   // Hàm xóa địa chỉ
+   deleteAddress(id: any) {
+     this.customersDiaChi = this.customersDiaChi.filter((addr) => addr.id !== id);
+     console.log('Danh sách địa chỉ sau khi xóa:', this.customersDiaChi);
+   }
+ 
+
+   diaChiDangSua: any = null; // Địa chỉ đang được chỉnh s
+   isEditing: boolean = false; // Kiểm tra chế độ sửa
+
+   openPopup(diaChi: any = null): void {
+    console.log('Địa chỉ đang chỉnh sửa:', diaChi);
+  
+    if (diaChi) {
+      // Trạng thái chỉnh sửa
+      this.isEditing = true;
+      this.diaChiDangSua = diaChi; // Lưu địa chỉ đang chỉnh sửa
+      console.log('Địa chỉ đang sửa là', this.diaChiDangSua);
+  
+      // Tìm ProvinceID từ ProvinceName
+      const selectedTinhThanh = this.ListTinhThanh.find(
+        tinh => tinh.ProvinceName.trim().toLowerCase() === diaChi.tinhThanh.trim().toLowerCase()
+      );
+  
+      if (selectedTinhThanh) {
+        // Gán giá trị Tỉnh Thành vào form và load Quận/Huyện
+        this.diaChiForm.patchValue({ tinhThanh: selectedTinhThanh.ProvinceID });
+        this.onTinhThanhChange({ target: { value: selectedTinhThanh.ProvinceID } } as any);
+  
+        setTimeout(() => {
+          // Tìm DistrictID từ DistrictName sau khi danh sách được load
+          const selectedQuanHuyen = this.districts.find(
+            huyen => huyen.DistrictName.trim().toLowerCase() === diaChi.quanHuyen.trim().toLowerCase()
+          );
+          if (selectedQuanHuyen) {
+            this.diaChiForm.patchValue({ quanHuyen: selectedQuanHuyen.DistrictID });
+            this.onQuanHuyenChange({ target: { value: selectedQuanHuyen.DistrictID } } as any);
+  
+            setTimeout(() => {
+              // Tìm WardCode từ WardName sau khi danh sách được load
+              const selectedPhuongXa = this.wards.find(
+                xa => xa.WardName.trim().toLowerCase() === diaChi.phuongXa.trim().toLowerCase()
+              );
+              if (selectedPhuongXa) {
+                this.diaChiForm.patchValue({ phuongXa: selectedPhuongXa.WardCode });
+              }
+              console.log('selectedPhuongXa:', selectedPhuongXa);
+            }, 300); // Thời gian chờ để load wards
+          }
+          console.log('selectedQuanHuyen:', selectedQuanHuyen);
+        }, 300); // Thời gian chờ để load districts
+      }
+  
+      console.log('selectedTinhThanh:', selectedTinhThanh);
+  
+      // Gán các trường khác vào form
+      this.diaChiForm.patchValue({
+        soNha: diaChi.soNha,
+        duong: diaChi.duong,
+        sdt: diaChi.sdt,
+        loaiDiaChi: diaChi.loaiDiaChi || 'Nhà riêng'
+      });
+    } else {
+      // Trạng thái thêm mới
+      this.isEditing = false;
+      this.diaChiDangSua = null;
+      this.diaChiForm.reset(); // Reset form cho trường hợp thêm mới
+    }
+  
+    this.isPopupVisible = true; // Hiển thị popup
+  }
+  
+  
+  
+  
+ 
+   // Đóng popup
+closePopup() {
+     this.isPopupVisible = false;
+     this.diaChiForm.reset();
+   }
+createDiaChi() {
+    console.log('Đã vào thêm địa chỉ');
+  
+    if (this.diaChiForm.valid) {
+      const formValue = this.diaChiForm.value;
+  
+      // Kiểm tra trường hợp Quận/Huyện trống
+      if (!formValue.quanHuyen) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Quận/Huyện không được để trống.',
+          confirmButtonText: 'OK'
+        });
+        return; // Dừng thực hiện nếu Quận/Huyện không được chọn
+      }
+  
+console.log('Form Value:', formValue);
+console.log('ListTinhThanh:', this.ListTinhThanh);
+console.log('Districts:', this.districts);
+console.log('Wards:', this.wards);
+
+const tinhThanhName = this.ListTinhThanh.find(province => province.ProvinceID === Number(formValue.tinhThanh))?.ProvinceName || '';
+const quanHuyenName = this.districts.find(district => district.DistrictID === Number(formValue.quanHuyen))?.DistrictName || '';
+const phuongXaName = this.wards.find(ward => ward.WardCode === formValue.phuongXa)?.WardName || '';
+
+
+const selectedTinhThanh = this.ListTinhThanh.find(province => province.ProvinceName === tinhThanhName)?.ProvinceID || '';
+const selectedQuanHuyen = this.districts.find(district => district.DistrictName === quanHuyenName)?.DistrictID || '';
+const selectedPhuongXa = this.wards.find(ward => ward.WardName === phuongXaName)?.WardCode || '';
+
+
+      console.log("tinhThanhName",tinhThanhName)
+      console.log("quanHuyenName",quanHuyenName)
+      console.log("phuongXaName",phuongXaName)
+
+
+      console.log("selectedTinhThanh",selectedTinhThanh)
+      console.log("selectedQuanHuyen",selectedQuanHuyen)
+      console.log("selectedPhuongXa",selectedPhuongXa)
+
+
+      const params = {
+        idKhachHang: this.idKhachHang,
+        soNha: formValue.soNha,
+        sdt: formValue.sdt,
+        duong: formValue.duong,
+        phuongXa: phuongXaName,
+        quanHuyen: quanHuyenName,
+        tinhThanh: tinhThanhName,
+        quocGia: 'Việt Nam',
+        loaiDiaChi: formValue.loaiDiaChi,
+        trangThai: 'Còn sử dụng'
+      };
+  
+      this.dangNhapService.addDiaChi(params).subscribe({
+        next: (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Thành công!',
+            text: 'Địa chỉ được thêm thành công!',
+            confirmButtonText: 'OK'
+          });
+          this.closePopup();
+          this.loadData();
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Lỗi!',
+            text: err.error || 'Có lỗi xảy ra khi thêm địa chỉ. Vui lòng thử lại.',
+            confirmButtonText: 'OK'
+          });
+          console.error('Lỗi khi thêm địa chỉ:', err);
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Thông tin chưa đầy đủ',
+        text: 'Vui lòng điền đầy đủ thông tin trong form.',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+  
+  submitDiaChi(): void {
+    if (this.diaChiForm.valid) {
+      const formValue = this.diaChiForm.value;
+  
+      const diaChiData = {
+        id: this.isEditing ? this.diaChiDangSua.id : 0, // ID chỉ có khi chỉnh sửa
+        idKhachHang: this.idKhachHang,
+        soNha: formValue.soNha,
+        sdt: formValue.sdt,
+        duong: formValue.duong,
+        phuongXa: this.wards.find(ward => ward.WardCode === formValue.phuongXa)?.WardName || '',
+        quanHuyen: this.districts.find(district => district.DistrictID === Number(formValue.quanHuyen))?.DistrictName || '',
+        tinhThanh: this.ListTinhThanh.find(province => province.ProvinceID === Number(formValue.tinhThanh))?.ProvinceName || '',
+        quocGia: 'Việt Nam',
+        loaiDiaChi: formValue.loaiDiaChi || 'Nhà riêng',
+        trangThai: 'Còn sử dụng'
+      };
+  
+      console.log('Dữ liệu gửi đến API:', diaChiData); // Log dữ liệu trước khi gửi
+      console.log('Dữ liệu  isEditing gửi đến API:', this.isEditing); // Log dữ liệu trước khi gửi
+  
+      if (this.isEditing) {
+        console.log("update địa chỉ")
+        // Gọi API cập nhật
+        this.dangNhapService.updateDiaChi(diaChiData.id, diaChiData).subscribe({
+          next: (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công!',
+              text: 'Cập nhật địa chỉ thành công!',
+              confirmButtonText: 'OK'
+            });
+            this.loadData(); // Làm mới danh sách địa chỉ
+            this.closePopup();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi!',
+              text: 'Đã xảy ra lỗi khi cập nhật địa chỉ.',
+              confirmButtonText: 'OK'
+            });
+            console.error('Lỗi khi cập nhật địa chỉ:', err);
+          }
+        });
+      } else {
+        // Gọi API thêm mới
+        this.dangNhapService.addDiaChi(diaChiData).subscribe({
+          next: (response) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công!',
+              text: 'Thêm địa chỉ thành công!',
+              confirmButtonText: 'OK'
+            });
+            this.loadData(); // Làm mới danh sách địa chỉ
+            this.closePopup();
+          },
+          error: (err) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi!',
+              text: 'Đã xảy ra lỗi khi thêm địa chỉ.',
+              confirmButtonText: 'OK'
+            });
+            console.error('Lỗi khi thêm địa chỉ:', err);
+          }
+        });
+      }
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Thông báo!',
+        text: 'Vui lòng điền đầy đủ thông tin!',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+  
+  
+  
+  
+  updateCustomer() {
+    // Kiểm tra form trước khi gửi
+    this.validateForm();
+    if (Object.keys(this.errors).length > 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi!',
+        text: 'Vui lòng kiểm tra thông tin và thử lại.',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+  
+    // Cấu trúc dữ liệu gửi đi
+    const customerData = {
+      id: this.khachHang.id,
+      ma: this.khachHang.ma,
+      ten: this.khachHang.ten,
+      gioiTinh: this.khachHang.gioiTinh.toString(),
+      ngayThangNamSinh: this.datePipe.transform(this.khachHang.ngayThangNamSinh, 'yyyy-MM-ddTHH:mm:ss') || '',
+      email: this.khachHang.email,
+      roles: 'USER', // Giá trị mặc định
+      anh: this.khachHang.anh || this.urlAnh,
+      sdt: this.khachHang.sdt,
+      userName: this.khachHang.ma, // Tạm thời dùng mã khách hàng làm username
+      password: '', // Để trống nếu không cần cập nhật mật khẩu
+      trangThai: 'Hoạt động' // Giá trị mặc định
+    };
+  
+    // Gọi API cập nhật thông tin
+    this.dangNhapService.updateDiaChiKhachHang(this.idKhachHang, customerData).subscribe({
+      next: (response) => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Thành công!',
+          text: 'Cập nhật thông tin khách hàng thành công!',
+          confirmButtonText: 'OK'
+        });
+        console.log('Cập nhật thành công:', response);
+      },
+      error: (err) => {
+        console.error('Lỗi khi cập nhật thông tin khách hàng:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Lỗi!',
+          text: 'Đã xảy ra lỗi khi cập nhật thông tin. Vui lòng thử lại.',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  }
+  
 }
+
