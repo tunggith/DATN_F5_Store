@@ -34,4 +34,10 @@ export class GioHangService {
   remove(id:number):Observable<any>{
     return this.http.get(`${this.API_URL}/remove/${id}`);
   }
+  luuLocalStogate(request:any):Observable<any>{
+    return this.http.post(`${this.API_URL}/luu`,request);
+  }
+  xuly(request:any):Observable<any>{
+    return this.http.post(`${this.API_URL}/xu-ly`,request);
+  }
 }

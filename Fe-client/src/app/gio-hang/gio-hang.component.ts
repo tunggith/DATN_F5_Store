@@ -50,6 +50,7 @@ export class GioHangComponent implements OnInit {
     }));
     console.log('Giỏ hàng từ localStorage:', this.chiTietGioHang);
   }
+
   // Lấy tất cả giỏ hàng từ dịch vụ (dành cho khách hàng có idKhachHang)
   getAllGioHang(): void {
     if (this.idKhachHang) {
@@ -86,50 +87,139 @@ export class GioHangComponent implements OnInit {
     return this.tongTien - this.giaTriGiam + this.phiShip;
   }
 
+  luuKhachHang(): void {
+    // Lấy dữ liệu giỏ hàng từ localStorage
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    if (cart.length > 0) {
+      this.gioHangService.luuLocalStogate(cart).subscribe({
+        next: (response) => {
+          console.log('Lưu giỏ hàng thành công:', response);
+        },
+        error: (err) => {
+          console.error('Lỗi khi lưu giỏ hàng:', err);
+        },
+      });
+    } else {
+      this.showWarningMessage('Giỏ hàng trống, không thể lưu!');
+    }
+  }
   // Xử lý khi người dùng gửi đơn hàng (thanh toán)
   onSubmit(): void {
+    if (!this.idKhachHang) {
+      // Nếu idKhachHang không tồn tại, gọi hàm lưu giỏ hàng và tiếp tục thanh toán sau khi lưu xong
+      this.luuKhachHang();
+      this.tienHanhThanhToan();
+    }
+
+    // Nếu idKhachHang tồn tại, tiến hành thanh toán ngay
+    this.tienHanhThanhToan();
+  }
+  tienHanhThanhToan(): void {
     // Kiểm tra nếu chi tiết giỏ hàng và idChiTietGioHang hợp lệ
     if (this.idChiTietGioHang.length > 0) {
       const request = {
         hoaDonRequest: {
           id: 0,
-          idKhachHang: this.idKhachHang || 0,
+          idKhachHang: this.idKhachHang || 1,
           idNhanVien: 0,
           idVoucher: 0,
-          idThanhToan: 0,
-          hinhThucThanhToan: 2,
-          ma: '',
+          idThanhToan: 1,
+          hinhThucThanhToan: 1,
           tongTienBanDau: this.tongTien || 0,
           phiShip: this.phiShip || 0,
           giaTriGiam: this.giaTriGiam || 0,
           tongTienSauVoucher: this.tinhTongTienSauVoucher(),
-          tenNguoiNhan: this.tenNguoiNhan || "string",
-          sdtNguoiNhan: this.sdtNguoiNhan || "string",
-          emailNguoiNhan: this.emailNguoiNhan || "string",
-          diaChiNhanHang: this.diaChiNhanHang || "string",
+          tenNguoiNhan: this.tenNguoiNhan || '',
+          sdtNguoiNhan: this.sdtNguoiNhan || '',
+          emailNguoiNhan: this.emailNguoiNhan || '',
+          diaChiNhanHang: this.diaChiNhanHang || '',
           ngayNhanDuKien: new Date().toISOString(),
           thoiGianTao: new Date().toISOString(),
           giaoHang: 1,
           ghiChu: '',
-          trangThai: ''
+          trangThai: '',
         },
-        idChiTietGioHang: this.idChiTietGioHang || [0]
+        idChiTietGioHang: this.idChiTietGioHang || [0],
       };
 
       this.gioHangService.thanhToan(request).subscribe({
         next: (response) => {
           this.showSuccessMessage('Thanh toán thành công!');
           this.getAllGioHang();
+          // Xóa giỏ hàng khỏi localStorage
+          localStorage.removeItem('cart');
+          console.log('Giỏ hàng đã được xóa khỏi localStorage.');
+          this.getKhachHangLocal();
         },
         error: (err) => {
           this.showErrorMessage('Thanh toán thất bại!');
           console.error(err);
-        }
+        },
       });
     } else {
       this.showWarningMessage('Vui lòng kiểm tra lại giỏ hàng và thông tin thanh toán!');
     }
   }
+
+  tienHanhXuLy(): void {
+    const gioHangRequests = this.idChiTietGioHang.map((id: number) => ({
+      idChiTietSanPham: id,
+      soLuong: this.getSoLuongById(id), // Hàm lấy số lượng sản phẩm
+    }));
+
+    const thanhToanRequest = {
+      hoaDonRequest: {
+        id: 0,
+        idKhachHang: this.idKhachHang || 1,
+        idNhanVien: 0,
+        idVoucher: 0,
+        idThanhToan: 1,
+        hinhThucThanhToan: 1,
+        tongTienBanDau: this.tongTien || 0,
+        phiShip: this.phiShip || 0,
+        giaTriGiam: this.giaTriGiam || 0,
+        tongTienSauVoucher: this.tinhTongTienSauVoucher(),
+        tenNguoiNhan: this.tenNguoiNhan || '',
+        sdtNguoiNhan: this.sdtNguoiNhan || '',
+        emailNguoiNhan: this.emailNguoiNhan || 'hatung18102004@gmail.com',
+        diaChiNhanHang: this.diaChiNhanHang || '',
+        ngayNhanDuKien: new Date().toISOString(),
+        thoiGianTao: new Date().toISOString(),
+        giaoHang: 1,
+        ghiChu: '',
+        trangThai: '',
+      },
+      idChiTietGioHang: this.idChiTietGioHang || [0],
+    };
+
+    const request = {
+      gioHangRequests,
+      thanhToanRequest,
+    };
+
+    // Gọi service để xử lý
+    this.gioHangService.xuly(request).subscribe({
+      next: (response) => {
+        this.showSuccessMessage('Thanh toán thành công!');
+        this.getAllGioHang();
+        localStorage.removeItem('cart');
+        this.getKhachHangLocal();
+      },
+      error: (err) => {
+        this.showErrorMessage('Xử lý thất bại! Vui lòng thử lại.');
+        console.error(err);
+      },
+    });
+  }
+
+  // Hàm lấy số lượng sản phẩm theo id (giả sử cart là mảng object lưu trong localStorage)
+  getSoLuongById(id: number): number {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const item = cart.find((c: any) => c.idChiTietSanPham === id);
+    return item ? item.soLuong : 0;
+  }
+
   themSanPham(id: number): void {
     const idKhString = localStorage.getItem('id'); // Lấy id dưới dạng chuỗi
 
