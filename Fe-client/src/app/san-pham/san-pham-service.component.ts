@@ -29,7 +29,7 @@ export class SanPhamService {
   getThuongHieu(): Observable<any> {
     return this.http.get(`${this.apiUrl}/thuong-hieu-getAll`);
   }
-  
+
   getSanPhamPhanTrang(page: number, size: number): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -39,8 +39,8 @@ export class SanPhamService {
 
     return this.http.get(`${this.apiUrl}/getSanPhamPhanTrang`, { params });
   }
- 
-  
+
+
   getSanPhamloc(gioiTinh: string, thuongHieu: string, xuatXu: string, giaMin: number, giaMax: number, mauSac: string, kichThuoc: string, page: number = 0, size: number = 10): Observable<any> {
     const params = new HttpParams()
       .set('gioiTinh', gioiTinh)
@@ -65,6 +65,14 @@ export class SanPhamService {
 
     return this.http.get<any[]>(`${this.apiUrl}/get-anh-by-id-ctsp`, { params });
   }
+<<<<<<< HEAD
   
+=======
+
+  getSanPhamById(id: number): Observable<any> {
+    return this.http.delete<any>(`http://localhost:8080/api/v1/customer/GetSanPhamById/${id}`); 
+  }
+
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 

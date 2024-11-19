@@ -63,4 +63,14 @@ public class UserClientController {
     private ResponseEntity<Object> getAll(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(userClientService.getDiaChiByKhachHang(id),HttpStatus.OK);
     }
+
+
+    @PutMapping("/update-dia-chi/{id}")
+    private ResponseEntity<Object> updateDiaChi(@PathVariable Integer id, @RequestBody DiaChiKhachHangResquest request) {
+        // Gán ID từ URL vào request để đảm bảo thông tin đầy đủ
+        request.setId(id);
+        return new ResponseEntity<>(userClientService.updateDiaChiClient(request), HttpStatus.OK);
+    }
+
+
 }

@@ -103,12 +103,12 @@
                         <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
                       </h3>
                     </div>
-                    <div class="product_info">
+                    <!-- <div class="product_info">
                       <ul>
                         <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
                       </ul>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <ng-template #noData>
@@ -142,12 +142,12 @@
                         <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten || 'Unnamed Product' }}</a>
                       </h3>
                     </div>
-                    <div class="product_info">
+                    <!-- <div class="product_info">
                       <ul>
                         <li><a href="#" title="Add to Wishlist">Add to Wishlist</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#modal_box" title="Quick view">View Detail</a></li>
                       </ul>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
                 <ng-template #noData>
@@ -190,7 +190,14 @@
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- Popup -->
+=======
+  <!--  modal -->
+
+
+<!-- Popup -->
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 <div class="popup" *ngIf="isPopupVisible">
   <div class="popup-content">
     <!-- Nút đóng -->
@@ -282,11 +289,19 @@
           <p class="error-message" *ngIf="err2">{{ err2 }}</p>
         </div>
 
+<<<<<<< HEAD
         <button class="add-to-cart">Thêm vào giỏ</button>
+=======
+        <button class="add-to-cart" (click)="themSanPham()" [disabled]="quantity == 0">Thêm vào giỏ</button>
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
       </div>
     </div>
   </div>
 </div>
 
+<<<<<<< HEAD
 <!-- popupend  -->
+=======
+
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   

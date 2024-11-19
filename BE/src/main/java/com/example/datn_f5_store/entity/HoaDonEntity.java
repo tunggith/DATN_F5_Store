@@ -40,6 +40,8 @@ public class HoaDonEntity {
     private Double tongTienBanDau;
     @Column(name = "PHI_SHIP")
     private Double phiShip;
+    @Column(name = "GIA_TRI_GIAM")
+    private Double giaTriGiam;
     @Column(name = ConfigContanst.HoaDon.TONG_TIEN_SAU_VOUCHER)
     private Double tongTienSauVoucher;
     @Column(name = ConfigContanst.HoaDon.TEN_NGUOI_NHAN)

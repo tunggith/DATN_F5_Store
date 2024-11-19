@@ -25,6 +25,7 @@ public class HoaDonDto {
     private String ma;
     private Double tongTienBanDau;
     private Double phiShip;
+    private Double giTriGiam;
     private Double tongTienSauVoucher;
     private String tenNguoiNhan;
     private String sdtNguoiNhan;

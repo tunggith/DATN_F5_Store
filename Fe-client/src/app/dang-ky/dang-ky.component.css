@@ -8,7 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
+    z-index: 99;
 }
 
 .close {
@@ -17,33 +17,74 @@
     right: 34%;
     font-size: 24px;
 }
+
 .form-login {
     background-color: #fff;
     width: 35%;
     padding: 10px;
     border-radius: 10px;
 }
-.form-login form{
+
+.form-login form {
     display: flex;
     padding: 10px;
 }
-.form-login form div{
+
+.form-login form div {
     width: 100%;
 }
+
 .form-control {
     width: 100%;
 }
-.image-user{
+
+.upload-container {
+    flex: 1;
+    /* Để mỗi container chiếm một nửa chiều rộng */
+    max-width: 100%;
+    margin-left: 30%;
+}
+
+.image-upload-container {
+    position: relative;
+    /* Để có thể định vị ô input upload */
+    width: 150px;
+    /* Chiều rộng khung hình tròn */
+    height: 150px;
+    /* Chiều cao khung hình tròn */
+    border-radius: 50%;
+    /* Bo tròn thành hình tròn */
+    overflow: hidden;
+    /* Ẩn phần hình ảnh vượt ra ngoài khung tròn */
+    border: 2px solid #ced4da;
+    /* Đặt đường viền cho khung */
     display: flex;
+    /* Sử dụng flexbox để căn giữa hình ảnh */
+    justify-content: center;
+    /* Căn giữa hình ảnh */
+    align-items: center;
+    /* Căn giữa hình ảnh theo chiều dọc */
+    cursor: pointer;
+    /* Con trỏ khi di chuột lên */
 }
-.image-user .material-icons{
-    margin-top:18%;
-    margin-left: -5%;
-    color: gray;
+
+.image-upload-container input[type="file"] {
+    position: absolute;
+    /* Đặt ô input ở vị trí tuyệt đối */
+    width: 100%;
+    /* Chiếm toàn bộ chiều rộng của container */
+    height: 100%;
+    /* Chiếm toàn bộ chiều cao của container */
+    opacity: 0;
+    /* Ẩn ô input */
+    cursor: pointer;
+    /* Hiển thị con trỏ khi di chuột lên */
 }
-.material-icons:hover{
+
+.material-icons:hover {
     cursor: pointer;
 }
+
 .logo-user {
     border: 1px solid gray;
     border-radius: 50%;
@@ -61,4 +102,17 @@
 
 .btn {
     border-radius: 5px;
+}
+
+.form-check {
+    display: flex;
+}
+
+.form-check-input {
+    width: 15px;
+    margin: -10px 0;
+}
+
+.form-check-label {
+    font-size: 15px;
 }

@@ -22,6 +22,12 @@ public interface IGioHangRepository extends JpaRepository<GioHangEntity,Integer>
 """
     )
     Page<GioHangResponse> getallPhanTrang(Pageable pageable);
+    GioHangEntity findByKhachHang_Id(Integer id);
+
+    @Query("""
+select p from GioHangEntity p where p.khachHang.id = ?1
+ """)
+    Page<GioHangEntity> findByIdKhachHang(Pageable pageable, Integer idkh);
 
 
 }

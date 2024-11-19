@@ -24,6 +24,7 @@ public class DiaChiKhachHangDto {
     private String quanHuyen;
     private String tinhThanh;
     private String quocGia;
+
     private String loaiDiaChi;
     private String trangThai;
 }

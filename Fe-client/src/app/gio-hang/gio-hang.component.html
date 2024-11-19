@@ -1,7 +1,138 @@
 <div class="pos_page">
-    <div class="container">
-        <div class="pos_page_inner">
-            
+  <div class="container">
+    <div class="pos_page_inner">
+      <div class="content-left">
+        <div style="display: flex; padding: 10px;" *ngFor="let gioHang of chiTietGioHang">
+          <div class="form-check">
+            <input type="checkbox" [(ngModel)]="gioHang.checked" (change)="onCheckboxChange(gioHang)">
+          </div>
+          <div>
+            <img [src]="gioHang.urlAnh?.urlAnh" alt="Ảnh sản phẩm">
+          </div>
+          <div class="name-san-pham">
+            <h3>{{gioHang.chiTietSanPham?.sanPham?.ten}} {{gioHang.chiTietSanPham?.size?.ten}}
+              {{gioHang.chiTietSanPham?.mauSac?.ten}}</h3>
+          </div>
+          <div class="so-luong" style="display: flex; justify-content: center;">
+            <span class="material-icons" (click)="xoaSanPham(gioHang.id)">remove</span>
+            <h4>{{gioHang.soLuong}}</h4>
+            <span class="material-icons" (click)="themSanPham(gioHang.chiTietSanPham?.id)">add</span>
+          </div>
+          <div class="gia">
+            <h3>{{ (gioHang.chiTietSanPham?.donGia * gioHang.soLuong) | number:'1.0-0' }}</h3> VNĐ
+            <span class="material-icons" (click)="remove(gioHang.id)">delete</span>
+          </div>
         </div>
+      </div>
+      <div class="content-right">
+
+          <div>
+      <label for="voucherSelect">Chọn Voucher:</label>
+      <select id="voucherSelect" >
+        <option *ngFor="let item of voucher" [value]="item.id">
+          {{ item.ten }}
+        </option>
+      </select>
     </div>
+
+    <div class="address-container">
+      <div class="address-row">
+        <!-- Số nhà -->
+        <div class="form-group">
+          <label for="soNha">Số nhà:</label>
+          <input id="soNha" type="text" [(ngModel)]="soNha" (input)="onAddressInput()" placeholder="Nhập số nhà" />
+        </div>
+    
+        <!-- Đường -->
+        <div class="form-group">
+          <label for="duong">Đường:</label>
+          <input id="duong" type="text" [(ngModel)]="duong" (input)="onAddressInput()" placeholder="Nhập tên đường" />
+        </div>
+      </div>
+    
+      <div class="address-row">
+        <!-- Chọn tỉnh/thành -->
+        <div class="form-group">
+          <label for="tinhThanhSelect">Tỉnh/Thành:</label>
+          <select id="tinhThanhSelect" [(ngModel)]="selectedTinhThanh" (change)="onTinhThanhChange($event)">
+            <option value="" disabled selected>Chọn tỉnh/thành</option>
+            <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+              {{ province.ProvinceName }}
+            </option>
+          </select>
+        </div>
+    
+        <!-- Chọn quận/huyện -->
+        <div class="form-group">
+          <label for="quanHuyenSelect">Quận/Huyện:</label>
+          <select id="quanHuyenSelect" [(ngModel)]="selectedQuanHuyen" (change)="onQuanHuyenChange($event)" [disabled]="!districts.length">
+            <option value="" disabled selected>Chọn quận/huyện</option>
+            <option *ngFor="let district of districts" [value]="district.DistrictID">
+              {{ district.DistrictName }}
+            </option>
+          </select>
+        </div>
+    
+        <!-- Chọn phường/xã -->
+        <div class="form-group">
+          <label for="phuongXaSelect">Phường/Xã:</label>
+          <select id="phuongXaSelect" [(ngModel)]="selectedPhuongXa" (change)="onPhuongXaChange($event)" [disabled]="!wards.length">
+            <option value="" disabled selected>Chọn phường/xã</option>
+            <option *ngFor="let ward of wards" [value]="ward.WardCode">
+              {{ ward.WardName }}
+            </option>
+          </select>
+        </div>
+      </div>
+    
+      <div class="address-row">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input id="email" type="email" name="email" placeholder="Nhập email" />
+        </div>
+    
+        <!-- Số điện thoại -->
+        <div class="form-group">
+          <label for="phone">Số điện thoại:</label>
+          <input id="phone" type="tel" name="phone" placeholder="Nhập số điện thoại" />
+        </div>
+      </div>
+    </div>
+    
+    
+    <div>
+      <!-- Hiển thị phí vận chuyển -->
+      <p *ngIf="phiVanChuyen !== null">Phí vận chuyển: {{ phiVanChuyen | currency:'VND' }}</p>
+    </div>
+    
+    
+    
+
+        <H2>Thông tin đơn hàng</H2>
+        <div>
+          <span>Tổng tiền: {{tongTien | number:'1.0-0'}} VNĐ</span>
+        </div>
+        <div>
+          <span>Giá trị giảm: {{giaTriGiam | number:'1.0-0'}} VNĐ</span>
+        </div>
+        <div>
+          <span>Phí vận chuyển: {{phiVanChuyen | number:'1.0-0'}} VNĐ</span>
+        </div>
+        <div>
+          <span>Cần thanh toán: {{canThanhToan | number:'1.0-0'}} VNĐ</span>
+        </div>
+        <div>
+          <span>Phương thức thanh toán: </span>
+          <select class="form-select" aria-label="Default select example">\
+            <option value="1">Thanh toán khi nhận hàng</option>
+            <option value="2">Chuyển khoản</option>
+          </select>
+        </div>
+        <div>
+          <button (click)="tienHanhXuLy()">Đặt hàng</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

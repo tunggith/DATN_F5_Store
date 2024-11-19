@@ -190,6 +190,11 @@
 
 
 
+<<<<<<< HEAD
+=======
+
+/* and css modal  */
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 /* Popup tổng thể */
 .popup {
   position: fixed;
@@ -198,6 +203,7 @@
   transform: translate(-50%, -50%);
   z-index: 1000;
   width: 90%;
+<<<<<<< HEAD
   max-width: 700px; /* Giảm chiều rộng */
   background: white;
   border-radius: 10px;
@@ -206,15 +212,31 @@
   display: flex;
   flex-direction: column;
   gap: 10px; /* Giảm khoảng cách */
+=======
+  max-width: 800px; /* Tăng chiều rộng */
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   overflow: hidden;
 }
 
 /* Nút đóng */
 .close {
   position: absolute;
+<<<<<<< HEAD
   top: 8px; /* Căn trên sát hơn */
   right: 12px; /* Căn phải sát hơn */
   font-size: 16px; /* Giảm kích thước chữ */
+=======
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   cursor: pointer;
   color: #555;
 }
@@ -226,7 +248,11 @@
 /* Phần nội dung chính */
 .popup-body {
   display: flex;
+<<<<<<< HEAD
   gap: 15px; /* Giảm khoảng cách giữa các phần */
+=======
+  gap: 20px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   justify-content: space-between;
 }
 
@@ -236,28 +262,48 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+<<<<<<< HEAD
   gap: 8px; /* Giảm khoảng cách giữa các thành phần */
+=======
+  gap: 10px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 .popup-image {
   width: 100%;
+<<<<<<< HEAD
   max-width: 250px; /* Giảm chiều rộng */
   height: 250px; /* Giảm chiều cao */
   object-fit: contain;
   border-radius: 6px;
+=======
+  max-width: 300px;
+  height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   border: 1px solid #ddd;
 }
 
 /* Danh sách ảnh thu nhỏ */
 .image-list {
   display: flex;
+<<<<<<< HEAD
   gap: 8px; /* Giảm khoảng cách */
+=======
+  gap: 10px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   justify-content: center;
 }
 
 .thumbnail {
+<<<<<<< HEAD
   width: 45px; /* Giảm kích thước */
   height: 45px;
+=======
+  width: 50px;
+  height: 50px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -280,23 +326,40 @@
   flex: 1; /* Chiếm 50% chiều rộng */
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 12px; /* Giảm khoảng cách */
   font-size: 13px; /* Giảm kích thước chữ */
+=======
+  gap: 15px;
+  font-size: 14px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   text-align: left;
 }
 
 .popup-right h2 {
+<<<<<<< HEAD
   font-size: 16px; /* Giảm kích thước tiêu đề */
+=======
+  font-size: 18px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   font-weight: bold;
 }
 
 .popup-right p {
+<<<<<<< HEAD
   margin: 4px 0; /* Giảm khoảng cách */
+=======
+  margin: 5px 0;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 .popup-right .price {
   color: red;
+<<<<<<< HEAD
   font-size: 14px; /* Giảm kích thước giá */
+=======
+  font-size: 16px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   font-weight: bold;
 }
 
@@ -304,26 +367,43 @@
 .options {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 12px; /* Giảm khoảng cách */
+=======
+  gap: 15px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 .colors,
 .sizes {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 4px;
+=======
+  gap: 5px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 .option-buttons {
   display: flex;
   flex-wrap: wrap;
+<<<<<<< HEAD
   gap: 8px; /* Giảm khoảng cách */
+=======
+  gap: 10px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 /* Các nút trong option-buttons (mặc định) */
 .option-buttons button {
+<<<<<<< HEAD
   position: relative;
   padding: 5px 10px; /* Giảm padding */
+=======
+  position: relative; /* Để sử dụng pseudo-element */
+  padding: 6px 12px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   font-size: 12px;
   border-radius: 4px;
   border: 1px solid #ddd;
@@ -341,14 +421,21 @@
 
 /* Khi nút được chọn */
 .option-buttons button.selected {
+<<<<<<< HEAD
   background-color: transparent;
   border: 2px solid #514a07d6;
   color: inherit;
+=======
+  background-color: transparent; /* Nền trong suốt */
+  border: 2px solid #514a07d6; /* Viền đổi màu */
+  color: inherit; /* Giữ nguyên màu chữ */
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   transition: border-color 0.3s ease;
 }
 
 /* Thêm dấu tick khi được chọn */
 .option-buttons button.selected::after {
+<<<<<<< HEAD
   content: "✓";
   position: absolute;
   bottom: -5px;
@@ -358,16 +445,33 @@
   font-weight: bold;
 }
 
+=======
+  content: "✓"; /* Biểu tượng dấu tick */
+  position: absolute;
+  bottom: -5px; /* Căn dưới */
+  right: -1px; /* Căn phải */
+  font-size: 16px; /* Kích thước dấu tick */
+  color: #514a07d6; /* Màu sắc dấu tick (giống màu viền) */
+  font-weight: bold;
+}
+
+
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 /* Bộ chọn số lượng */
 .quantity-container {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   gap: 8px; /* Giảm khoảng cách */
+=======
+  gap: 10px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 
 .quantity {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 8px; /* Giảm khoảng cách */
 }
 
@@ -383,6 +487,23 @@
 .quantity button {
   padding: 4px 8px; /* Giảm padding */
   font-size: 13px; /* Giảm kích thước chữ */
+=======
+  gap: 10px;
+}
+
+.quantity input {
+  width: 50px;
+  text-align: center;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.quantity button {
+  padding: 5px 10px;
+  font-size: 14px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   border: 1px solid #ddd;
   background: #dfdcdc;
   border-radius: 4px;
@@ -396,9 +517,15 @@
 
 /* Nút thêm vào giỏ */
 .add-to-cart {
+<<<<<<< HEAD
   margin-top: 8px;
   padding: 8px 12px; /* Giảm padding */
   font-size: 14px; /* Giảm kích thước chữ */
+=======
+  margin-top: 10px;
+  padding: 10px 15px;
+  font-size: 16px;
+>>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
   font-weight: bold;
   background: #28a745;
   color: white;
