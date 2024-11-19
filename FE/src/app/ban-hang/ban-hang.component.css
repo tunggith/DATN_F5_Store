@@ -180,7 +180,7 @@
 .san-pham-popup span {
     padding: 5px;
     width: 150px;
-    background-color: rgb(243, 69, 69);
+    background-color: rgb(18, 16, 128);
     color: #fff;
     height: 30px;
     border-radius: 5%;
@@ -191,7 +191,7 @@
 }
 
 .payment button:hover {
-    background-color: rgb(243, 69, 69);
+    background-color: rgb(13, 21, 107);
 }
 
 .profile-pay {
