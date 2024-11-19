@@ -83,12 +83,12 @@
                     </div>
                   </div>                                  
                   <div class="form-group">
-                    <label for="moTa">mô tả </label> 
+                    <label for="moTa">Mô tả </label>
                     <textarea id="moTa" class="form-control" formControlName="moTa" placeholder="Nhập ghi chú (không bắt buộc)"></textarea>
                 </div>
                 
                   <div class="form-group">
-                      <label>Chọn Màu Sắc <span class="text-danger">*</span></label>
+                      <label>Chọn màu sắc <span class="text-danger">*</span></label>
                       <div class="checkbox-group color-size-grid">
                           <div class="color-size-item" *ngFor="let mau of mauSacList">
                               <input 
@@ -104,7 +104,7 @@
                       </div>
                   </div>
                   <div class="form-group">
-                      <label>Chọn Kích Thước <span class="text-danger">*</span></label>
+                      <label>Chọn kích thước <span class="text-danger">*</span></label>
                       <div class="checkbox-group color-size-grid">
                           <div class="color-size-item" *ngFor="let size of sizes">
                               <input 
@@ -189,7 +189,7 @@
             
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="thuongHieu">Thương Hiệu</label>
+                    <label for="thuongHieu">Thương hiệu</label>
                     <select id="thuongHieu" class="form-control" formControlName="thuongHieu" required>
                       <option value="">Chọn thương hiệu</option>
                       <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
@@ -204,7 +204,7 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-group gioi-tinh">
-                    <label>Giới Tính</label>
+                    <label>Giới tính</label>
                     <nav *ngFor="let gioiTinh of gioiTinhList" class="form-check">
                       <input
                         type="radio"
@@ -224,7 +224,7 @@
               
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>Trạng Thái</label>
+                    <label>Trạng thái</label>
                     <div class="form-check form-check-inline">
                       <input
                         type="radio"

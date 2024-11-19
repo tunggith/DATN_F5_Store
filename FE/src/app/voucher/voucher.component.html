@@ -5,7 +5,7 @@
     <div class="col-md-12">
       <form [formGroup]="searchForm" class="search-form mb-4">
         <div class="border rounded p-4 mb-4">
-          <h4 class="mb-3">Lọc Voucher</h4>
+          <h4 class="mb-3">Lọc voucher</h4>
           <div class="row d-flex align-items-center flex-wrap">
   
             <!-- Search Input -->
@@ -54,12 +54,12 @@
             </button>
         </div>         
             <div class="modal-body">
-  <h4 class="mb-3">Thêm/Sửa Voucher</h4>
+  <h4 class="mb-3">Thêm/Sửa voucher</h4>
   <form [formGroup]="voucherForm" (ngSubmit)="createOrUpdateVoucher()">
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label for="ma">Mã Voucher</label>
+          <label for="ma">Mã voucher</label>
           <input type="text" id="ma" class="form-control" required formControlName="ma" 
           [ngClass]="{'error-message': voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)}"
           pattern="^[A-Za-z0-9]+$" />
@@ -70,7 +70,7 @@
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="ten">Tên Voucher</label>
+          <label for="ten">Tên voucher</label>
           <input type="text" id="ten" class="form-control" required formControlName="ten" 
           [ngClass]="{'error-message': voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)}"
           pattern="^[A-Za-z0-9àáảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựđĐ%. ]+$" />
@@ -81,7 +81,7 @@
       </div> 
       <div class="col-md-4">
         <div class="form-group">
-          <label for="kieuGiamGia">Kiểu Giảm Giá</label>
+          <label for="kieuGiamGia">Kiểu giảm giá</label>
           <select id="kieuGiamGia" class="form-control" required formControlName="kieuGiamGia">
             <option value="VND">VND</option>
             <option value="%">%</option>
@@ -96,7 +96,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label for="soLuong">Số Lượng</label>
+          <label for="soLuong">Số lượng</label>
           <input type="number" id="soLuong" class="form-control" required formControlName="soLuong" 
           [ngClass]="{'error-message': voucherForm.get('soLuong').invalid && (voucherForm.get('soLuong').touched || voucherForm.get('soLuong').dirty)}"
           min="0" max="9999999" />
@@ -107,7 +107,7 @@
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="giaTriVoucher">Giá Trị Voucher</label>
+          <label for="giaTriVoucher">Giá trị voucher</label>
           <input type="number" id="giaTriVoucher" class="form-control" required formControlName="giaTriVoucher" 
           [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}"
           min="0" max="99999999" />
@@ -118,7 +118,7 @@
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="giaTriGiamToiDa">Giá Trị Giảm Tối Đa</label>
+          <label for="giaTriGiamToiDa">Giá trị giảm tối đa</label>
           <input type="number" id="giaTriGiamToiDa" class="form-control" required formControlName="giaTriGiamToiDa" 
           [ngClass]="{'error-message': voucherForm.get('giaTriGiamToiDa').invalid && (voucherForm.get('giaTriGiamToiDa').touched || voucherForm.get('giaTriGiamToiDa').dirty)}"
           min="0" max="99999999" />
@@ -132,7 +132,7 @@
     <div class="row">
       <div class="col-md-4">
         <div class="form-group">
-          <label for="giaTriHoaDonToiThieu">Giá Trị Hóa Đơn Tối Thiểu</label>
+          <label for="giaTriHoaDonToiThieu">Giá trị hóa đơn tối thiểu</label>
           <input type="number" id="giaTriHoaDonToiThieu" class="form-control" required formControlName="giaTriHoaDonToiThieu" 
           [ngClass]="{'error-message': voucherForm.get('giaTriHoaDonToiThieu').invalid && (voucherForm.get('giaTriHoaDonToiThieu').touched || voucherForm.get('giaTriHoaDonToiThieu').dirty)}"
           min="0" max="99999999" />
@@ -143,7 +143,7 @@
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
+          <label for="thoiGianBatDau">Thời gian bắt đầu</label>
           <input type="datetime-local" id="thoiGianBatDau" class="form-control" required formControlName="thoiGianBatDau"
           [ngClass]="{'error-message': voucherForm.get('thoiGianBatDau').invalid && (voucherForm.get('thoiGianBatDau').touched || voucherForm.get('thoiGianBatDau').dirty)}" />
         </div>
@@ -153,7 +153,7 @@
       </div>
       <div class="col-md-4">
         <div class="form-group">
-          <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
+          <label for="thoiGianKetThuc">Thời gian kết thúc</label>
           <input type="datetime-local" id="thoiGianKetThuc" class="form-control" required formControlName="thoiGianKetThuc" 
           [ngClass]="{'error-message': voucherForm.get('thoiGianKetThuc').invalid && (voucherForm.get('thoiGianKetThuc').touched || voucherForm.get('thoiGianKetThuc').dirty)}" />
         </div>
@@ -167,7 +167,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
-          <label for="moTa">Mô Tả</label>
+          <label for="moTa">Mô tả</label>
           <input type="text" id="moTa" class="form-control" formControlName="moTa" />
         </div>
       </div>
@@ -191,7 +191,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3" style="margin-bottom: -50rem; padding-bottom: -50rem; text-align: right;">
     <button [disabled]="role!=='admin'" type="button" click="resetForm()" class="btn" data-toggle="modal" data-target="#sanPhamModal">
-      Thêm Voucher
+      Thêm voucher
    </button>
 </div>
 
@@ -200,8 +200,8 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Mã Voucher</th>
-        <th>Tên Voucher</th>
+        <th>Mã voucher</th>
+        <th>Tên voucher</th>
         <th>Giá trị voucher</th>
         <th>Kiểu giảm giá</th>
         <th>Giá trị giảm tối đa</th>
@@ -240,7 +240,6 @@
     </tbody>
   </table>
 </div>
-
 
   
 <div class="pagination-container">

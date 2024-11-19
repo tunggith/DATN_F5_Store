@@ -4,7 +4,6 @@
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
             <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
                 đơn</a>
-
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
@@ -251,8 +250,8 @@
                             <th scope="row">{{i+1}}</th>
                             <td>{{hoaDon.ma}}</td>
                             <td>{{hoaDon.khachHang.ten}}</td>
-                            <td *ngIf="hoaDon.giaoHang==1">có</td>
-                            <td *ngIf="hoaDon.giaoHang==0">không</td>
+                            <td *ngIf="hoaDon.giaoHang==1">Có</td>
+                            <td *ngIf="hoaDon.giaoHang==0">Không</td>
                             <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>

@@ -6,7 +6,7 @@
       <div class="col-md-12">
         <form [formGroup]="searchForm" class="search-form mb-4">
           <div class="border rounded p-4 mb-4">
-            <h4 class="mb-3">Lọc Khuyến mãi</h4>
+            <h4 class="mb-3">Lọc khuyến mãi</h4>
             <div class="row d-flex align-items-center flex-wrap">
 
               <!-- Search Input -->
@@ -89,7 +89,7 @@
                     
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="kieuKhuyenMai">Kiểu Khuyến Mãi</label>
+                            <label for="kieuKhuyenMai">Kiểu khuyến mãi</label>
                             <select id="kieuKhuyenMai" class="form-control" [(ngModel)]="currentKhuyenMai.kieuKhuyenMai"
                               name="kieuKhuyenMai" required #kieuKhuyenMai="ngModel">                            
                               <option value="VND">VND</option>
@@ -106,7 +106,7 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label for="soLuong">Số Lượng</label>
+                            <label for="soLuong">Số lượng</label>
                             <input type="number" id="soLuong" class="form-control" [(ngModel)]="currentKhuyenMai.soLuong" 
                               name="soLuong" required min="0" max="9999999" #soLuong="ngModel">
                             <div *ngIf="soLuong.invalid && (soLuong.dirty || soLuong.touched)" class="error-message">
@@ -119,7 +119,7 @@
                     
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label for="giaTriKhuyenMai">Giá Trị Khuyến Mãi</label>
+                            <label for="giaTriKhuyenMai">Giá trị khuyến mãi</label>
                             <input type="number" id="giaTriKhuyenMai" class="form-control"
                               [(ngModel)]="currentKhuyenMai.giaTriKhuyenMai" name="giaTriKhuyenMai" required min="1" max="9999999"
                               #giaTriKhuyenMai="ngModel">
@@ -136,7 +136,7 @@
                       <div class="row">
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
+                            <label for="thoiGianBatDau">Thời gian bắt đầu</label>
                             <input type="datetime-local" id="thoiGianBatDauInput" class="form-control"
                               [(ngModel)]="currentKhuyenMai.thoiGianBatDau" name="thoiGianBatDau" required #thoiGianBatDau="ngModel">
                             <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)"
@@ -148,7 +148,7 @@
                     
                         <div class="col-md-6">
                           <div class="form-group">
-                            <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
+                            <label for="thoiGianKetThuc">Thời gian kết thúc</label>
                             <input type="datetime-local" id="thoiGianKetThucInput" class="form-control"
                               [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" name="thoiGianKetThuc" required #thoiGianKetThuc="ngModel">
                             <div *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)"
@@ -162,7 +162,7 @@
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
-                            <label for="moTa">Mô Tả</label>
+                            <label for="moTa">Mô tả</label>
                             <input type="text" id="moTa" class="form-control" [(ngModel)]="currentKhuyenMai.moTa"
                               name="moTa">
                           </div>
@@ -276,7 +276,7 @@
       style="margin-bottom: -50rem; padding-bottom: -50rem;">
       <div>
         <button [disabled]="role!=='admin'" type="button"  click="resetForm()" class="btn" data-toggle="modal" data-target="#sanPhamModal">
-          Thêm Khuyến mãi
+          Thêm khuyến mãi
         </button>
       </div>
     </div>
@@ -295,12 +295,12 @@
               <tr>
                 <th>Mã</th>
                 <th>Tên</th>
-                <th>Kiểu Khuyến Mãi</th>
-                <th>Số Lượng</th>
-                <th>Giá Trị</th>
-                <th>Thời Gian Bắt Đầu</th>
-                <th>Thời Gian Kết Thúc</th>
-                <th>Mô Tả</th>
+                <th>Kiểu khuyến mãi</th>
+                <th>Số lượng</th>
+                <th>Giá trị</th>
+                <th>Thời gian bắt đầu</th>
+                <th>Thời gian kết thúc</th>
+                <th>Mô tả</th>
                 <th>Trạng thái</th>
                 <th>Hành động</th>
               </tr>
@@ -351,7 +351,7 @@
     <div *ngIf="isChiTietModalOpen" class="modal-overlay">
       <div class="modal-content">
         <button type="button" class="close-btn" (click)="closeChiTietModal()">×</button>
-        <h5 class="modal-title">Chi Tiết Sản Phẩm: {{ selectedSanPhamName }}</h5>
+        <h5 class="modal-title">Chi tiết sản phẩm: {{ selectedSanPhamName }}</h5>
         <!-- Lọc sản phẩm -->
         <div class="row mb-3">
           <div class="col-md-4">
