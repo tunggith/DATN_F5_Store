@@ -893,4 +893,12 @@ export class BanHangComponent implements OnInit {
       }
     )
   }
+
+  sanitizeSoNha(value: string): string {
+    return value.replace(/[^a-zA-Z0-9\s]/g, '');
+  }
+
+  sanitizeSoDienThoai(value: string): string {
+    return value.replace(/[^0-9]/g, '');
+  }
 }
