@@ -21,7 +21,7 @@ import { TraCuuDonHangComponent } from 'src/app/tra-cuu-don-hang/tra-cuu-don-han
     LienHeComponent,
     GioHangComponent,
     TaiKhoanComponent,
-    TraCuuDonHangComponent
+    TraCuuDonHangComponent,
   ],
   imports: [
     CommonModule,

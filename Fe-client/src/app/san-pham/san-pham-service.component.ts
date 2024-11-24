@@ -65,14 +65,10 @@ export class SanPhamService {
 
     return this.http.get<any[]>(`${this.apiUrl}/get-anh-by-id-ctsp`, { params });
   }
-<<<<<<< HEAD
-  
-=======
 
   getSanPhamById(id: number): Observable<any> {
     return this.http.delete<any>(`http://localhost:8080/api/v1/customer/GetSanPhamById/${id}`); 
   }
 
->>>>>>> 4928c1bedfde3934414355089aa8eb515da4df31
 }
 

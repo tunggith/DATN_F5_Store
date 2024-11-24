@@ -6,11 +6,14 @@ import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.entity.SizeEntity;
+import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
+import com.example.datn_f5_store.request.AddImagesRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.PagingModel;
 import com.example.datn_f5_store.response.ResultModel;
 import com.example.datn_f5_store.service.IHomeClientService;
+import com.example.datn_f5_store.service.impl.ChiTietSanPhamImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +39,8 @@ public class HomeController {
     private IHomeClientService sevice;
     @Autowired
     private ISanPhamRepository repossp;
+    @Autowired
+    private ChiTietSanPhamImpl ctsp_Sevice;
 
     @GetMapping("/new-san-pham")
     public ResponseEntity<?> getSanPhamnew(){
@@ -142,6 +149,48 @@ public class HomeController {
         return sevice.getChiTietByMauSacAndSizeAndSanPham( idMauSac, idSize, idSanPham);
     }
 
+
+    @GetMapping("/group-by-mau-sac/{idSanPham}")
+    public ResponseEntity<?> getGroupByMauSac(@PathVariable Integer idSanPham) {
+        try {
+            // Gọi service để lấy danh sách màu sắc
+            List<MauSacEntity> result = (List<MauSacEntity>) ctsp_Sevice.getGroupByMauSac(idSanPham);
+
+            // Kiểm tra kết quả trả về
+            if (result.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("Không có dữ liệu nhóm màu sắc cho sản phẩm này.");
+            }
+
+            // Trả về danh sách màu sắc
+            return ResponseEntity.ok(result);
+
+        } catch (RuntimeException e) {
+            // Xử lý lỗi và trả về thông báo lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Có lỗi xảy ra khi lấy dữ liệu nhóm màu sắc: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/add-images-by-product-and-color")
+    public ResponseEntity<?> addImagesByProductAndColor(@RequestBody AddImagesRequest payload) {
+        try {
+            ctsp_Sevice.addImagesByProductAndColor(payload.getIdSanPham(), payload.getIdMauSac(), payload.getUrls());
+            return ResponseEntity.ok("Hình ảnh đã được thêm thành công.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Có lỗi xảy ra khi thêm hình ảnh: " + e.getMessage());
+        }
+    }
+
+
+    @GetMapping("/mau-sac/{idMauSac}/san-pham/{idSanPham}")
+    public ResponseEntity<List<AnhChiTietSanPham>> getAnhByMauSacAndSanPham(
+            @PathVariable("idMauSac") Integer idMauSac,
+            @PathVariable("idSanPham") Integer idSanPham) {
+        List<AnhChiTietSanPham> result = sevice.findByMauSacAndSanPham(idMauSac, idSanPham);
+        return ResponseEntity.ok(result);
+    }
 }
 
 
