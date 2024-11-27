@@ -4,7 +4,7 @@
       <div class="content-left">
         <div style="display: flex; padding: 10px;" *ngFor="let gioHang of chiTietGioHang">
           <div class="form-check">
-            <input type="checkbox" [(ngModel)]="gioHang.checked" (change)="onCheckboxChange(gioHang)">
+            <input type="checkbox" [checked]="gioHang.trangThai === 'active'"  (change)="onChangCheck(gioHang.id)">
           </div>
           <div>
             <img [src]="gioHang.urlAnh?.urlAnh" alt="Ảnh sản phẩm">
@@ -41,6 +41,7 @@
         <div>
           <label for="voucherSelect">Chọn Voucher:</label>
           <select id="voucherSelect" (change)="onChangeVoucher($event)">
+            <option value="">--Chọn Voucher</option>
             <option *ngFor="let item of voucher" [value]="item.id">
               {{ item.ten }}
             </option>
@@ -49,6 +50,13 @@
 
         <div class="address-container">
           <div class="address-row">
+            
+            <!-- Số nhà -->
+            <div class="form-group">
+              <label for="soNha">Tên người nhận:</label>
+              <input id="soNha" type="text" [(ngModel)]="tenNguoiNhan" (input)="onAddressInput()" placeholder="Tên người nhận"
+                [(ngModel)]="tenNguoiNhan" />
+            </div>
             <!-- Số nhà -->
             <div class="form-group">
               <label for="soNha">Số nhà:</label>

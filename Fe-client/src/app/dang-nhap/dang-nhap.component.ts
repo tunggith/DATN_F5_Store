@@ -27,6 +27,7 @@ export class DangNhapComponent implements OnInit {
         this.hoTen = response.result.content.ten;
         localStorage.setItem('id',this.id);
         localStorage.setItem('hoTen',this.hoTen);
+        this.router.navigate(['/trang-chu']);
         this.showSuccessMessage("đăng nhập thành công");
         this.close();
       },

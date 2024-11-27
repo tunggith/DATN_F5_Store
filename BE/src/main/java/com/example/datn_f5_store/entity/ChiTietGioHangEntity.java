@@ -26,5 +26,7 @@ public class ChiTietGioHangEntity {
     private ChiTietSanPhamEntity chiTietSanPham;
     @Column(name = ConfigContanst.ChiTietGioHang.SO_LUONG)
     private Integer soLuong;
+    @Column(name = ConfigContanst.ChiTietGioHang.TRANG_THAI)
+    private String trangThai;
 
 }

@@ -53,6 +53,9 @@ export class NavbarComponent implements OnInit {
   getRedirectTaiKhoan(){
     this.router.navigate(['/tai-khoan']);
   }
+  getRedirectGioHang(){
+    this.router.navigate(['/gio-hang']);
+  }
   // =================== Thông báo ===================
 
   showSuccessMessage(message: string) {

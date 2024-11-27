@@ -20,4 +20,6 @@ public interface IGioHangClientService {
     DataResponse themSanPham(Integer idKhachHang,ChiTietGioHangRequest request);
     DataResponse xoaSanPham(Integer id);
     DataResponse xoaChiTietGioHang(Integer id);
+    DataResponse updateTrangThai(Integer id);
+
 }

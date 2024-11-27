@@ -22,10 +22,10 @@ public class ThanhToanClientController {
     @Autowired
     private ThanhToanClientService thanhToanClientService;
 
-    @PostMapping("/thanh-toan")
-    public ResponseEntity<Object> thanhToan(@RequestBody ThanhToanRequest request) {
-        return new ResponseEntity<>(thanhToanClientService.thanhToan(request), HttpStatus.OK);
-    }
+//    @PostMapping("/thanh-toan")
+//    public ResponseEntity<Object> thanhToan(@RequestBody ThanhToanRequest request) {
+//        return new ResponseEntity<>(thanhToanClientService.thanhToan(request), HttpStatus.OK);
+//    }
     @PostMapping("/luu")
     public ResponseEntity<Object> luu(@RequestBody List<ChiTietGioHangRequest> requests){
         return new ResponseEntity<>(thanhToanClientService.luuGioHang(requests), HttpStatus.OK);

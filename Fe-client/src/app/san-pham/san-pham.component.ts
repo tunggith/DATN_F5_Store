@@ -722,6 +722,7 @@ export class SanPhamComponent implements OnInit {
             urlAnh:{
               urlAnh:this.currentImage
             },
+            trangThai:'unactive',
             chiTietSanPham:{
               id:this.idCTSP,
               sanPham:{

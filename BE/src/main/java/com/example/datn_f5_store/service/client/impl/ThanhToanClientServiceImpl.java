@@ -151,10 +151,25 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             // 1. Nếu có danh sách chi tiết giỏ hàng, lưu vào cơ sở dữ liệu
             if (gioHangRequests != null && !gioHangRequests.isEmpty()) {
                 List<ChiTietGioHangEntity> chiTietGioHangEntities = gioHangRequests.stream().map(request -> {
-                    ChiTietGioHangEntity entity = new ChiTietGioHangEntity();
-                    ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
-                    entity.setChiTietSanPham(chiTietSanPham);
-                    entity.setSoLuong(request.getSoLuong());
+                    // Tìm chi tiết giỏ hàng hiện có theo ID từ request
+                    ChiTietGioHangEntity entityOld = chiTietGioHangRepository.findById(request.getId()).orElse(null);
+
+                    ChiTietGioHangEntity entity;
+
+                    if (entityOld == null) {
+                        // Nếu không tìm thấy, tạo mới entity
+                        entity = new ChiTietGioHangEntity();
+                        ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
+                        entity.setChiTietSanPham(chiTietSanPham);
+                        entity.setSoLuong(request.getSoLuong());
+                    } else {
+                        // Nếu đã tồn tại, cập nhật entity hiện có
+                        entity = entityOld;
+                        ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
+                        entity.setChiTietSanPham(chiTietSanPham); // Cập nhật thông tin sản phẩm chi tiết
+                        entity.setSoLuong(request.getSoLuong());  // Cập nhật số lượng
+                    }
+
                     System.out.println("Chi tiết giỏ hàng trước khi lưu: " + entity);
                     return entity;
                 }).collect(Collectors.toList());
@@ -171,6 +186,7 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
                 thanhToanRequest.setIdChiTietGioHang(savedIds);
             }
 
+
             // 2. Thực hiện logic thanh toán như cũ
             HoaDonEntity hoaDon = new HoaDonEntity();
             KhachHangEntity khachHang = khachHangRepository.findById(thanhToanRequest.getHoaDonRequest().getIdKhachHang()).orElse(null);
@@ -180,6 +196,8 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             if (thanhToanRequest.getHoaDonRequest().getIdVoucher() != null) {
                 VoucherEntity voucher = voucherRepository.findById(thanhToanRequest.getHoaDonRequest().getIdVoucher()).orElse(null);
                 hoaDon.setVoucher(voucher);
+                voucher.setSoLuong(voucher.getSoLuong()-1);
+                voucherRepository.save(voucher);
             }
             PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(thanhToanRequest.getHoaDonRequest().getIdThanhToan()).orElse(null);
             hoaDon.setMa(this.generateMaHoaDon());
@@ -196,7 +214,11 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             hoaDon.setThoiGianTao(new Date());
             hoaDon.setGiaoHang(thanhToanRequest.getHoaDonRequest().getGiaoHang());
             hoaDon.setGhiChu(thanhToanRequest.getHoaDonRequest().getGhiChu());
-            hoaDon.setTrangThai("Chờ xác nhận");
+            if(thanhToanRequest.getHoaDonRequest().getIdThanhToan()==1){
+                hoaDon.setTrangThai("Đã xác nhận");
+            }else {
+                hoaDon.setTrangThai("Chờ xác nhận");
+            }
             hoaDon.setGiaTriGiam(thanhToanRequest.getHoaDonRequest().getGiaTriGiam());
             HoaDonEntity hoaDon1 = hoaDonRepository.save(hoaDon);
 
@@ -212,12 +234,14 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
                 hoaDonChiTiet.setTrangThai("Thành công");
                 chiTietHoaDonRepository.save(hoaDonChiTiet);
 
-                // 4. Trừ số lượng sản phẩm trong ChiTietSanPhamEntity sau khi thanh toán
-                ChiTietSanPhamEntity chiTietSanPham = chiTiet.getChiTietSanPham();
-                if (chiTietSanPham != null) {
-                    int soLuongConLai = chiTietSanPham.getSoLuong() - chiTiet.getSoLuong();
-                    chiTietSanPham.setSoLuong(soLuongConLai);
-                    chiTietSanPhamRepository.save(chiTietSanPham);  // Lưu lại đối tượng đã cập nhật
+                if (thanhToanRequest.getHoaDonRequest().getIdThanhToan() == 2) {
+                    // 4. Trừ số lượng sản phẩm trong ChiTietSanPhamEntity sau khi thanh toán
+                    ChiTietSanPhamEntity chiTietSanPham = chiTiet.getChiTietSanPham();
+                    if (chiTietSanPham != null) {
+                        int soLuongConLai = chiTietSanPham.getSoLuong() - chiTiet.getSoLuong();
+                        chiTietSanPham.setSoLuong(soLuongConLai);
+                        chiTietSanPhamRepository.save(chiTietSanPham);  // Lưu lại đối tượng đã cập nhật
+                    }
                 }
             }
 
@@ -245,7 +269,6 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             return new DataResponse(false, new ResultModel<>(null, "Xử lý giỏ hàng hoặc thanh toán thất bại!"));
         }
     }
-
 
 
     public String generateMaHoaDon() {

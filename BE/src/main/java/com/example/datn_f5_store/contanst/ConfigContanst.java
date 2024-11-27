@@ -10,6 +10,7 @@ public class ConfigContanst {
         public static final String ID_GIO_HANG = "ID_GIO_HANG";
         public static final String ID_CHI_TIET_SAN_PHAM = "ID_CHI_TIET_SAN_PHAM";
         public static final String SO_LUONG = "SO_LUONG";
+        public static final String TRANG_THAI = "TRANG_THAI";
     }
 
     public static class ChiTietHoaDon{
