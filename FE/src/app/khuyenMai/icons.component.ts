@@ -1041,6 +1041,23 @@ getAttributeLabel(attributeType: string): string {
   }
 }
 
+validateYear(value: string): void {
+  const selectedDate = new Date(value);
+  const year = selectedDate.getFullYear();
 
+  if (year < 1950 || year > 2150) {
+    alert('Năm phải nằm trong khoảng từ 1950 đến 2150.');
+    this.currentKhuyenMai.thoiGianBatDau = ''; // Reset giá trị nếu không hợp lệ
+  }
+}
+validateYear2(value: string): void {
+  const selectedDate = new Date(value);
+  const year = selectedDate.getFullYear();
+
+  if (year < 1950 || year > 2150) {
+    alert('Năm phải nằm trong khoảng từ 1950 đến 2150.');
+    this.currentKhuyenMai.thoiGianKetThuc = ''; // Reset giá trị nếu không hợp lệ
+  }
+}
 
 }

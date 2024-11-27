@@ -137,10 +137,17 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <label for="thoiGianBatDau">Thời Gian Bắt Đầu</label>
-                            <input type="datetime-local" id="thoiGianBatDauInput" class="form-control"
-                              [(ngModel)]="currentKhuyenMai.thoiGianBatDau" name="thoiGianBatDau" required #thoiGianBatDau="ngModel">
-                            <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)"
-                              class="error-message">
+                            <input 
+                              type="datetime-local" 
+                              id="thoiGianBatDauInput" 
+                              class="form-control"
+                              [(ngModel)]="currentKhuyenMai.thoiGianBatDau" 
+                              name="thoiGianBatDau" 
+                              required 
+                              #thoiGianBatDau="ngModel"
+                              [disabled]="currentKhuyenMai.trangThai === 'Đang diễn ra'"
+                              (ngModelChange)="validateYear($event)">
+                            <div *ngIf="thoiGianBatDau.invalid && (thoiGianBatDau.dirty || thoiGianBatDau.touched)" class="error-message">
                               <div *ngIf="thoiGianBatDau.errors?.required">Thời gian bắt đầu không hợp lệ.</div>
                             </div>
                           </div>
@@ -149,14 +156,24 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <label for="thoiGianKetThuc">Thời Gian Kết Thúc</label>
-                            <input type="datetime-local" id="thoiGianKetThucInput" class="form-control"
-                              [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" name="thoiGianKetThuc" required #thoiGianKetThuc="ngModel">
-                            <div *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)"
+                            <input 
+                              type="datetime-local" 
+                              id="thoiGianKetThucInput" 
+                              class="form-control"
+                              [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" 
+                              name="thoiGianKetThuc" 
+                              required 
+                              #thoiGianKetThuc="ngModel"
+                              (ngModelChange)="validateYear2($event)">
+                            <div 
+                              *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)" 
                               class="error-message">
                               <div *ngIf="thoiGianKetThuc.errors?.required">Thời gian kết thúc không hợp lệ</div>
                             </div>
                           </div>
                         </div>
+                        
+                        
                       </div>
                     
                       <div class="row">
