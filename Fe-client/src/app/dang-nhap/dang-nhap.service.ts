@@ -126,4 +126,7 @@ export class DangNhapService {
   luuLocalStogate(id:string,request: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/luu/${id}`, request);
   }
+  doiMatKhau(id:string,passwordOld:string,passwordNew:string):Observable<any>{
+    return this.http.put(`${this.baseUrl}/change-password?id=${id}&passwordOld=${passwordOld}&passwordNew=${passwordNew}`,{});
+  }
 }

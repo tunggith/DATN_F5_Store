@@ -86,4 +86,12 @@ public class UserController {
     ) {
         return new ResponseEntity<>(userService.changePassword(username, passwordOld, passwordNew), HttpStatus.OK);
     }
+    @PostMapping("change-password")
+    private ResponseEntity<Object> changePassword(
+            @Parameter(name = "username") @RequestParam String username,
+            @Parameter(name = "passwordOld") @RequestParam String passwordOld,
+            @Parameter(name = "passwordNew") @RequestParam String passwordNew
+    ) {
+        return new ResponseEntity<>(userService.resetPassword(username, passwordOld, passwordNew), HttpStatus.OK);
+    }
 }

@@ -18,13 +18,34 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public DataResponse changePassword(String username,String passwordOld,String passwordNew) {
+    public DataResponse resetPassword(String username, String passwordOld, String passwordNew) {
         // Tìm nhân viên dựa trên tên đăng nhập
         NhanVienEntity entity = nhanVienRepository.findByUsername(username);
 
         if (entity != null) {
             // Kiểm tra mật khẩu cũ
             if (passwordOld.equals(entity.getPassword())) {
+                // Mã hóa mật khẩu mới
+                String newEncodedPassword = passwordEncoder.encode(passwordNew);
+                entity.setPassword(newEncodedPassword);
+                nhanVienRepository.save(entity);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi mật khẩu thành công!"));
+            } else {
+                throw new RuntimeException("Mật khẩu cũ không đúng!");
+            }
+        } else {
+            throw new RuntimeException("Tài khoản không tồn tại!");
+        }
+    }
+
+    @Override
+    public DataResponse changePassword(String username, String passwordOld, String passwordNew) {
+        // Tìm nhân viên dựa trên tên đăng nhập
+        NhanVienEntity entity = nhanVienRepository.findByUsername(username);
+
+        if (entity != null) {
+            // Kiểm tra mật khẩu cũ
+            if (passwordEncoder.matches(passwordOld, entity.getPassword())) {
                 // Mã hóa mật khẩu mới
                 String newEncodedPassword = passwordEncoder.encode(passwordNew);
                 entity.setPassword(newEncodedPassword);

@@ -49,11 +49,11 @@ public class UserClientController {
     }
     @PutMapping("/change-password")
     private ResponseEntity<Object> changePassword(
-            @Parameter(name = "username")@RequestParam String username,
+            @Parameter(name = "id")@RequestParam Integer id,
             @Parameter(name = "passwordOld")@RequestParam String passwordOld,
             @Parameter(name = "passwordNew")@RequestParam String passwordNew
     ){
-        return new ResponseEntity<>(userClientService.changePassword(username,passwordOld,passwordNew),HttpStatus.OK);
+        return new ResponseEntity<>(userClientService.changePassword(id,passwordOld,passwordNew),HttpStatus.OK);
     }
     @GetMapping("/detail-dia-chi/{id}")
     private ResponseEntity<Object> detailDiaChi(@Parameter(name = "id")@PathVariable Integer id){

@@ -23,6 +23,7 @@ export class TaiKhoanComponent implements OnInit {
     ngayThangNamSinh: '',
     anh: ''
   };
+  popupPs:boolean=false;
   diaChi: any[] = [];
   errors: any = {}; // Dùng để lưu lỗi cho từng trường
   idKhachHang: number = 0;
@@ -54,7 +55,13 @@ export class TaiKhoanComponent implements OnInit {
     this.loadData();
   }
 
-
+  openPopupPassword():void{
+    this.popupPs=true;
+  }
+  closePopupPassword():void{
+    this.popupPs=false;
+  }
+  
   loadData():void{
     this.detailKhachHang();
     this.getDiaChiKhachHang();
