@@ -43,6 +43,16 @@ export class GioHangComponent implements OnInit {
   duong: string = '';
   vnpTransactionStatus: string | null = null;
   popup: boolean = false;
+  errors: {
+    tenNguoiNhan?: string;
+    soNha?: string;
+    duong?: string;
+    selectedTinhThanh?: string;
+    selectedQuanHuyen?: string;
+    selectedPhuongXa?: string;
+    emailNguoiNhan?: string;
+    sdtNguoiNhan?: string;
+  } = {};
 
 
   // Giả sử bạn sẽ lấy chi tiết giỏ hàng từ API và lưu lại vào đây
@@ -74,9 +84,9 @@ export class GioHangComponent implements OnInit {
     // Xử lý queryParams từ VNPay
     this.route.queryParams.subscribe(params => {
       this.vnpTransactionStatus = params['vnp_TransactionStatus'];
-      if (this.vnpTransactionStatus == '00'&&!this.idKhachHang) {
+      if (this.vnpTransactionStatus == '00' && !this.idKhachHang) {
         const request = this.thongTinThanhToan();
-          this.xuLyThanhToanBinhThuong(request);
+        this.xuLyThanhToanBinhThuong(request);
       }
     });
   }
@@ -156,8 +166,8 @@ export class GioHangComponent implements OnInit {
       this.canThanhToan = this.tongTien; // Cập nhật tổng tiền có thể thanh toán
       // Thực hiện thanh toán nếu thỏa mãn các điều kiện
       const request = this.thongTinThanhToan();
-      if (this.vnpTransactionStatus == '00'&&request) {
-          this.xuLyThanhToanBinhThuong(request);
+      if (this.vnpTransactionStatus == '00' && request) {
+        this.xuLyThanhToanBinhThuong(request);
       }
     } else {
       console.log('Không có sản phẩm "active" hoặc trạng thái giao dịch không hợp lệ.');
@@ -228,6 +238,83 @@ export class GioHangComponent implements OnInit {
       thanhToanRequest,
     };
   }
+  validateForm(): boolean {
+    let isValid = true;
+
+    // Reset thông báo lỗi
+    this.errors = {};
+
+    // Biểu thức chính quy để kiểm tra ký tự đặc biệt hoặc số
+    const specialCharOrNumberRegex = /[^a-zA-Z\u00C0-\u017F\s]/;
+
+    // Validate tên người nhận
+    if (!this.tenNguoiNhan || this.tenNguoiNhan.trim() === '') {
+      this.errors.tenNguoiNhan = 'Vui lòng nhập tên người nhận.';
+      isValid = false;
+    } else if (specialCharOrNumberRegex.test(this.tenNguoiNhan)) {
+      this.errors.tenNguoiNhan = 'Tên người nhận không được chứa ký tự đặc biệt hoặc số.';
+      isValid = false;
+    }
+
+    const numberRegex = /^[0-9]+$/;
+
+    // Validate số nhà
+    if (!this.soNha || this.soNha.trim() === '') {
+      this.errors.soNha = 'Vui lòng nhập số nhà.';
+      isValid = false;
+    } else if (!numberRegex.test(this.soNha)) {
+      this.errors.soNha = 'Số nhà phải là một giá trị số.';
+      isValid = false;
+    }
+
+    // Validate đường
+    if (!this.duong || this.duong.trim() === '') {
+      this.errors.duong = 'Vui lòng nhập tên đường.';
+      isValid = false;
+    }
+
+    // Validate tỉnh/thành
+    if (!this.selectedTinhThanh) {
+      this.errors.selectedTinhThanh = 'Vui lòng chọn tỉnh/thành.';
+      isValid = false;
+    }
+    // Validate quận/huyện
+    if (!this.selectedQuanHuyen) {
+      this.errors.selectedQuanHuyen = 'Vui lòng chọn quận/huyện.';
+      isValid = false;
+    }
+    // Validate phường/xã
+    if (!this.selectedPhuongXa) {
+      this.errors.selectedPhuongXa = 'Vui lòng chọn phường/xã.';
+      isValid = false;
+    }
+
+    // Validate email
+    if (!this.emailNguoiNhan || !this.isValidEmail(this.emailNguoiNhan)) {
+      this.errors.emailNguoiNhan = 'Email không hợp lệ.';
+      isValid = false;
+    }
+
+    // Validate số điện thoại
+    if (!this.sdtNguoiNhan || !this.isValidPhoneNumber(this.sdtNguoiNhan)) {
+      this.errors.sdtNguoiNhan = 'Số điện thoại không hợp lệ.';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
+  // Hàm kiểm tra định dạng email
+  isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  // Hàm kiểm tra định dạng số điện thoại
+  isValidPhoneNumber(phone: string): boolean {
+    const phoneRegex = /^[0-9]{10,11}$/;
+    return phoneRegex.test(phone);
+  }
 
   getdataAdress() {
     this.tenNguoiNhan = localStorage.getItem('tenNguoiNhan') || '';
@@ -259,6 +346,11 @@ export class GioHangComponent implements OnInit {
     localStorage.setItem('giaTriGiam', this.giaTriGiam.toString());
   }
   tienHanhXuLy(): void {
+    // Gọi hàm validate
+    if (!this.validateForm()) {
+      this.showErrorMessage('Form không hợp lệ. Vui lòng kiểm tra lại!');
+      return;
+    }
     const title =
       'Bạn chắc chắn muốn đặt hóa đơn này chứ?\n' +
       '- Nếu bạn muốn đổi trả hoặc sản phẩm có vấn đề\n' +

@@ -123,6 +123,7 @@ export class DangNhapService {
     return this.http.post(`${this.baseUrl}/add-dia-chi`, null, { params: queryParams });
   }
 
-
- 
+  luuLocalStogate(id:string,request: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/luu/${id}`, request);
+  }
 }

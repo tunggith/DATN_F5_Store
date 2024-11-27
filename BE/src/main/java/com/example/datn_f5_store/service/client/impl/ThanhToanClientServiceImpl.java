@@ -20,9 +20,8 @@ import com.example.datn_f5_store.repository.ILichSuHoaDonRepository;
 import com.example.datn_f5_store.repository.INhanVienRepository;
 import com.example.datn_f5_store.repository.IThanhToanRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
+import com.example.datn_f5_store.request.ChiTietGioHangLocalRequest;
 import com.example.datn_f5_store.request.ChiTietGioHangRequest;
-import com.example.datn_f5_store.request.GioHangRequest;
-import com.example.datn_f5_store.request.HoaDonRequest;
 import com.example.datn_f5_store.request.ThanhToanRequest;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
@@ -68,14 +67,17 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
     private SendEmailService sendEmailService;
 
     @Override
-    public DataResponse luuGioHang(List<ChiTietGioHangRequest> requests) {
+    public DataResponse luuGioHang(Integer id,List<ChiTietGioHangLocalRequest> requests) {
         try {
+            GioHangEntity gioHangEntity = gioHangRepository.findByKhachHang_Id(id);
             // Chuyển đổi từ DTO (ChiTietGioHangRequest) sang Entity (ChiTietGioHangEntity)
             List<ChiTietGioHangEntity> chiTietGioHangEntities = requests.stream().map(request -> {
                 ChiTietGioHangEntity entity = new ChiTietGioHangEntity();
                 ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
+                entity.setGioHang(gioHangEntity);
                 entity.setChiTietSanPham(chiTietSanPham);
                 entity.setSoLuong(request.getSoLuong());
+                entity.setTrangThai(request.getTrangThai());
                 return entity;
             }).collect(Collectors.toList());
 
@@ -83,7 +85,7 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             List<ChiTietGioHangEntity> savedEntities = chiTietGioHangRepository.saveAll(chiTietGioHangEntities);
 
             // Trả về phản hồi thành công
-            return new DataResponse(true, new ResultModel<>(null, "thành công!"));
+            return new DataResponse(true, new ResultModel<>(null, savedEntities));
         } catch (Exception e) {
             e.printStackTrace();
             // Trả về phản hồi thất bại

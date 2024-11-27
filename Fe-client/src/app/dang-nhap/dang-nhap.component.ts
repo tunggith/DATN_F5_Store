@@ -12,9 +12,9 @@ export class DangNhapComponent implements OnInit {
   @Output() closePopup = new EventEmitter<void>();
   username: string = '';
   password: string = '';
-  id:string='';
-  hoTen:string='';
-  constructor(private dangNhapService: DangNhapService,private router:Router) { }
+  id: string = '';
+  hoTen: string = '';
+  constructor(private dangNhapService: DangNhapService, private router: Router) { }
   ngOnInit(): void { }
   close() {
     this.closePopup.emit();
@@ -25,17 +25,44 @@ export class DangNhapComponent implements OnInit {
       response => {
         this.id = response.result.content.id;
         this.hoTen = response.result.content.ten;
-        localStorage.setItem('id',this.id);
-        localStorage.setItem('hoTen',this.hoTen);
+        localStorage.setItem('id', this.id);
+        localStorage.setItem('hoTen', this.hoTen);
+
+        // Kiểm tra nếu có giỏ hàng (cart) trong localStorage
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        if (Array.isArray(cart) && cart.length > 0) {
+          // Dữ liệu giỏ hàng có tồn tại, gọi API lưu giỏ hàng
+          const cartRequests = cart.filter((item: CartItem) => item.chiTietSanPham)
+            .map((item: CartItem) => ({
+              idChiTietSanPham: item.chiTietSanPham.id,
+              soLuong: item.soLuong,
+              trangThai: item.trangThai
+            }));
+
+          // Gọi API lưu thông tin giỏ hàng một lần cho tất cả các sản phẩm
+          if (cartRequests.length > 0) {
+            this.dangNhapService.luuLocalStogate(this.id, cartRequests).subscribe(
+              response => {
+                console.log('Dữ liệu giỏ hàng đã được lưu thành công', response);
+              },
+              error => {
+                console.error('Có lỗi khi lưu giỏ hàng', error);
+              }
+            );
+          }
+        }
+
         this.router.navigate(['/trang-chu']);
-        this.showSuccessMessage("đăng nhập thành công");
+        this.showSuccessMessage("Đăng nhập thành công");
         this.close();
       },
       error => {
         this.handleError(error);
       }
-    )
+    );
   }
+
   // =================== Thông báo ===================
 
   showSuccessMessage(message: string) {
@@ -88,4 +115,17 @@ export class DangNhapComponent implements OnInit {
     }
     this.showErrorMessage(errorMessage);
   }
+}
+interface ChiTietSanPham {
+  id: number;
+  sanPham: { ten: string };
+  size: { ten: string };
+  mauSac: { ten: string };
+  // Các thuộc tính khác
+}
+
+interface CartItem {
+  chiTietSanPham: ChiTietSanPham;
+  soLuong: number;
+  trangThai: string;
 }
