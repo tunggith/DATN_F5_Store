@@ -24,8 +24,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class HomeClientIPLM implements IHomeClientService {
@@ -179,6 +182,24 @@ public String getKhoangGia(Integer idSanPham) {
     public List<ChiTietSanPhamEntity> getChiTietByMauSacAndSizeAndSanPham(Integer idMauSac, Integer idSize, Integer idSanPham) {
         return spctRepo.findChiTietByMauSacAndSizeAndSanPham(idMauSac, idSize, idSanPham);
     }
+
+
+    public Integer getTotalQuantityByIdSanPham(Integer idSanPham) {
+        return spctRepo.getSoLuongByidSP(idSanPham);
+    }
+
+
+    public List<AnhChiTietSanPham> findByMauSacAndSanPham(Integer idMauSac, Integer idSanPham) {
+        List<AnhChiTietSanPham> listAnh = anhRepo.findByMauSac(idMauSac, idSanPham);
+
+        // Dùng Set để lưu URL đã thấy và chỉ lấy ảnh đầu tiên cho mỗi URL
+        Set<String> seenUrls = new HashSet<>();
+        return listAnh.stream()
+                .filter(anh -> seenUrls.add(anh.getUrlAnh()))
+                .collect(Collectors.toList());
+    }
+
+
 
 }
 

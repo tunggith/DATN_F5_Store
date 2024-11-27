@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -236,6 +237,27 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             @Param("idSanPham") Integer idSanPham
     );
 
+
+    @Query("SELECT SUM(c.soLuong) FROM ChiTietSanPhamEntity c WHERE c.sanPham.id = :idSanPham")
+    Integer getSoLuongByidSP(@Param("idSanPham") Integer idSanPham);
+
+    @Query("""
+    SELECT DISTINCT c.mauSac 
+    FROM ChiTietSanPhamEntity c 
+    WHERE c.sanPham.id = :idSanPham
+""")
+    List<MauSacEntity> groupByMauSac(@Param("idSanPham") Integer idSanPham);
+
+    @Query("""
+    SELECT ctsp 
+    FROM ChiTietSanPhamEntity ctsp 
+    WHERE ctsp.sanPham.id = :idSanPham 
+      AND ctsp.mauSac.id = :idMauSac
+""")
+    List<ChiTietSanPhamEntity> findBySanPhamIdAndMauSacId(
+            @Param("idSanPham") Integer idSanPham,
+            @Param("idMauSac") Integer idMauSac
+    );
 }
 
 

@@ -2,9 +2,7 @@
     <div class="container-fluid">
         <div class="tab">
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
-            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
-                đơn</a>
-
+            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa dđơn</a>
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
@@ -15,7 +13,9 @@
                             (customerSelected)="onCustomerSelected($event)">
                         </app-customer-popup>
                     </div>
+                 
                     <div class="san-pham-popup">
+                        <!-- <span title="Sản phẩm" (click)="openPopupSanPham()">Quét QR</span> -->
                         <span title="Sản phẩm" (click)="openPopupSanPham()" style="display: inline-flex; align-items: center; padding: 2px 6px; background: linear-gradient(135deg, #1c1f53, #292e9e); color: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
                             <i class="material-icons" style="margin-right: 2px; font-size: 14px;">add</i>Sản phẩm
                         </span>
@@ -323,3 +323,4 @@
             </div>
         </div>
     </div>
+</div>

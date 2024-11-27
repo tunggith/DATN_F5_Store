@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,6 +9,7 @@ export class SevricesanphamService {
  
   private apiUrl = 'http://localhost:8080/api/v1'; // URL gốc API cho sản phẩm
   private apispct = 'http://localhost:8080/api/v1/chi_tiet_san_pham';  // URL gốc API cho sản phẩm
+  private apiUrl2 = 'http://localhost:8080/api/v1/customer';  // URL gốc API cho sản phẩm
   private defaultSize = 3;  // Kích thước mặc định là 3
 
   // private apiUrl = 'http://localhost:8080/api/v1/anh-chi-tiet-san-pham/create';
@@ -174,5 +175,50 @@ deleteImage(id: number): Observable<any> {
   return this.http.delete(`${this.apiUrl}/anh-chi-tiet-san-pham/delete/${id}`);
 }
 
+
+getTongSoLuong(idSanPham: number): Observable<number> {
+  const url = `${this.apispct}/tong-so-luong/${idSanPham}`;
+  return this.http.get<number>(url);
+}
+
+
+
+getMauSacBySanPham(idSanPham: number): Observable<any> {
+  return this.http.get<any>(`http://localhost:8080/api/v1/customer/group-by-mau-sac/${idSanPham}`);
+}
+
+uploadImageByColor(idSanPham: number, idMauSac: number, selectedImage: string | ArrayBuffer): Observable<any> {
+  const payload = {
+    idSanPham: idSanPham,
+    idMauSac: idMauSac,
+    urlAnh: selectedImage
+  };
+  return this.http.post(`${this.apiUrl}/upload-image-by-color`, payload);
+}
+
+
+uploadImageByColors(idSanPham: number, idMauSac: number, urls: string[]): Observable<any> {
+  const payload = {
+    idSanPham: idSanPham,
+    idMauSac: idMauSac,
+    urls: urls,
+  };
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
+
+  return this.http.post(`${this.apiUrl2}/add-images-by-product-and-color`, payload, {
+    headers,
+    responseType: 'text', // Nếu API trả về text
+  });
+}
+
+
+
+getProductsByColorAndProduct(idMauSac: number, idSanPham: number): Observable<any> {
+  const url = `${this.apiUrl2}/mau-sac/${idMauSac}/san-pham/${idSanPham}`;
+  return this.http.get<any>(url);
+}
 
 }  
