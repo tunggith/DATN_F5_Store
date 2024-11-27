@@ -2,7 +2,8 @@
     <div class="container-fluid">
         <div class="tab">
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
-            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa dđơn</a>
+            <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
+                đơn</a>
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
@@ -13,7 +14,7 @@
                             (customerSelected)="onCustomerSelected($event)">
                         </app-customer-popup>
                     </div>
-                 
+
                     <div class="san-pham-popup">
                         <!-- <span title="Sản phẩm" (click)="openPopupSanPham()">Quét QR</span> -->
                         <span title="Sản phẩm" (click)="openPopupSanPham()" style="display: inline-flex; align-items: center; padding: 2px 6px; background: linear-gradient(135deg, #1c1f53, #292e9e); color: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
@@ -102,7 +103,7 @@
                                     <div class="mb-3">
                                         <label for="soDienThoai" class="form-label">Số điện thoại</label>
                                         <input type="number" class="form-control" id="soDienThoai"
-                                            [(ngModel)]="soDienThoai" name="soDienThoai" 
+                                            [(ngModel)]="soDienThoai" name="soDienThoai"
                                             (input)="soDienThoai = sanitizeSoDienThoai(soDienThoai)"
                                             (blur)="soDienThoai ? (soDienThoai.length < 10 || soDienThoai.length > 11 ? showErrorMessage('Số điện thoại phải từ 10-11 số') : null) : showErrorMessage('Vui lòng nhập số điện thoại')">
                                         <span class="text-danger" *ngIf="!soDienThoai">Vui lòng nhập số điện thoại</span>
@@ -111,7 +112,7 @@
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" [(ngModel)]="email"
-                                            name="email" 
+                                            name="email"
                                             (blur)="email ? (!email.includes('@') ? showErrorMessage('Email không hợp lệ') : null) : showErrorMessage('Vui lòng nhập email')">
                                         <span class="text-danger" *ngIf="!email">Vui lòng nhập email</span>
                                         <span class="text-danger" *ngIf="email && !email.includes('@')">Email không hợp lệ</span>
@@ -119,7 +120,7 @@
                                     <div class="mb-3">
                                         <label for="soNha" class="form-label">Số nhà</label>
                                         <input type="number" class="form-control" id="soNha" [(ngModel)]="soNha"
-                                            name="soNha" 
+                                            name="soNha"
                                             (input)="soNha = sanitizeSoNha(soNha)"
                                             (blur)="soNha ? null : showErrorMessage('Vui lòng nhập số nhà')">
                                         <span class="text-danger" *ngIf="!soNha">Vui lòng nhập số nhà</span>
@@ -206,13 +207,6 @@
                                     </mat-option>
                                 </mat-autocomplete>
                             </form>
-                        </div>
-                        <div>
-                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
-                                    style="text-align: center;">
-                                    {{phuongThuc.tenPhuongThuc}}</option>
-                            </select>
                         </div> 
                         <div>
                             <div>
@@ -242,6 +236,14 @@
                         <div>
                             <span>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VND</span>
                         </div>
+                        <div>
+                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
+                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
+                                    style="text-align: center;">
+                                    {{phuongThuc.tenPhuongThuc}}</option>
+                            </select>
+                        </div>
+                        <app-popup-qr *ngIf="popupQr" (closePopup)="closePopupQr()" (confirmPayment)="confirmQr()"></app-popup-qr>
                         <div class="payment">
                             <button (click)="thanhtoanHoaDon(activeInvoidID)" style="width: 100%;height: 40px;"><i
                                     class="material-icons" style="margin-right: 5px;margin-top: -3px;">payments</i>Thanh
@@ -276,8 +278,8 @@
                             <th scope="row">{{i+1}}</th>
                             <td>{{hoaDon.ma}}</td>
                             <td>{{hoaDon.khachHang.ten}}</td>
-                            <td *ngIf="hoaDon.giaoHang==1">có</td>
-                            <td *ngIf="hoaDon.giaoHang==0">không</td>
+                            <td *ngIf="hoaDon.giaoHang==1">Có</td>
+                            <td *ngIf="hoaDon.giaoHang==0">Không</td>
                             <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>

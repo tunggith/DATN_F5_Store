@@ -4,7 +4,7 @@
       <div class="content-left">
         <div style="display: flex; padding: 10px;" *ngFor="let gioHang of chiTietGioHang">
           <div class="form-check">
-            <input type="checkbox" [(ngModel)]="gioHang.checked" (change)="onCheckboxChange(gioHang)">
+            <input type="checkbox" [checked]="gioHang.trangThai === 'active'"  (change)="onChangCheck(gioHang.id)">
           </div>
           <div>
             <img [src]="gioHang.urlAnh?.urlAnh" alt="Ảnh sản phẩm">
@@ -27,20 +27,21 @@
       <div class="content-right">
         <H2>Thông tin đơn hàng</H2>
         <div>
-          <span>Tổng tiền: {{tongTien | number:'1.0-0'}} VNĐ</span>
+          <span>Tổng tiền: {{tongTien | number:'1.0-0'}} VND</span>
         </div>
         <div>
-          <span>Giá trị giảm: {{giaTriGiam | number:'1.0-0'}} VNĐ</span>
+          <span>Giá trị giảm: {{giaTriGiam | number:'1.0-0'}} VND</span>
         </div>
         <div>
-          <span>Phí vận chuyển: {{phiVanChuyen | number:'1.0-0'}} VNĐ</span>
+          <span>Phí vận chuyển: {{phiVanChuyen | number:'1.0-0'}} VND</span>
         </div>
         <div>
-          <span>Cần thanh toán: {{canThanhToan+phiVanChuyen | number:'1.0-0'}} VNĐ</span>
+          <span>Cần thanh toán: {{canThanhToan+phiVanChuyen | number:'1.0-0'}} VND</span>
         </div>
         <div>
           <label for="voucherSelect">Chọn Voucher:</label>
           <select id="voucherSelect" (change)="onChangeVoucher($event)">
+            <option value="">--Chọn Voucher</option>
             <option *ngFor="let item of voucher" [value]="item.id">
               {{ item.ten }}
             </option>
@@ -49,11 +50,20 @@
 
         <div class="address-container">
           <div class="address-row">
+            
+            <!-- Số nhà -->
+            <div class="form-group">
+              <label for="soNha">Tên người nhận:</label>
+              <input id="soNha" type="text" [(ngModel)]="tenNguoiNhan" (input)="onAddressInput()" placeholder="Tên người nhận"
+                [(ngModel)]="tenNguoiNhan" />
+                <div *ngIf="errors['tenNguoiNhan']" class="text-danger">{{ errors['tenNguoiNhan'] }}</div>
+            </div>
             <!-- Số nhà -->
             <div class="form-group">
               <label for="soNha">Số nhà:</label>
               <input id="soNha" type="text" [(ngModel)]="soNha" (input)="onAddressInput()" placeholder="Nhập số nhà"
                 [(ngModel)]="soNha" />
+                <div *ngIf="errors['soNha']" class="text-danger">{{ errors['soNha'] }}</div>
             </div>
 
             <!-- Đường -->
@@ -61,6 +71,7 @@
               <label for="duong">Đường:</label>
               <input id="duong" type="text" [(ngModel)]="duong" (input)="onAddressInput()" placeholder="Nhập tên đường"
                 [(ngModel)]="duong" />
+                <div *ngIf="errors['duong']" class="text-danger">{{ errors['duong'] }}</div>
             </div>
           </div>
 
@@ -74,6 +85,7 @@
                   {{ province.ProvinceName }}
                 </option>
               </select>
+              <div *ngIf="errors['selectedTinhThanh']" class="text-danger">{{ errors['selectedTinhThanh'] }}</div>
             </div>
 
             <!-- Chọn quận/huyện -->
@@ -86,6 +98,7 @@
                   {{ district.DistrictName }}
                 </option>
               </select>
+              <div *ngIf="errors['selectedQuanHuyen']" class="text-danger">{{ errors['selectedQuanHuyen'] }}</div>
             </div>
 
             <!-- Chọn phường/xã -->
@@ -98,6 +111,7 @@
                   {{ ward.WardName }}
                 </option>
               </select>
+              <div *ngIf="errors['selectedPhuongXa']" class="text-danger">{{ errors['selectedPhuongXa'] }}</div>
             </div>
           </div>
 
@@ -106,12 +120,14 @@
             <div class="form-group">
               <label for="email">Email:</label>
               <input id="email" type="email" name="email" placeholder="Nhập email" [(ngModel)]="emailNguoiNhan" />
+              <div *ngIf="errors['emailNguoiNhan']" class="text-danger">{{ errors['emailNguoiNhan'] }}</div>
             </div>
 
             <!-- Số điện thoại -->
             <div class="form-group">
               <label for="phone">Số điện thoại:</label>
               <input id="phone" type="tel" name="phone" placeholder="Nhập số điện thoại" [(ngModel)]="sdtNguoiNhan" />
+              <div *ngIf="errors['sdtNguoiNhan']" class="text-danger">{{ errors['sdtNguoiNhan'] }}</div>
             </div>
           </div>
         </div>

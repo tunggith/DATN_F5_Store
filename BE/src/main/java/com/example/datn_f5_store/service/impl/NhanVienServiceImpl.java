@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,7 +29,8 @@ public class NhanVienServiceImpl implements NhanVienService {
     private INhanVienRepository nhanVienRepo;
     @Autowired
     private SendEmailService sendEmailService;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Override
     public Page<NhanVienDto> getAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -71,23 +73,29 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public DataResponse create(NhanVienRequest request) {
-        //Kiem tra du lieu dau vao
-        if (!this.checkNhanVien(request)){
-            //check trung ma nhan vien
-            if (!this.checkDuplicate(request)){
+        // Kiểm tra dữ liệu đầu vào
+        if (!this.checkNhanVien(request)) {
+            // Kiểm tra trùng mã nhân viên
+            if (!this.checkDuplicate(request)) {
+                // Tạo mã nhân viên và thông tin tài khoản
                 request.setMa(this.generateMaNhanVien());
                 request.setUsername(request.getEmail());
-                request.setPassword(this.generatePassword());
-                //luu hoac cap nhat nhan vien
+
+                // Tạo mật khẩu ban đầu và mã hóa trước khi lưu
+                String rawPassword = this.generatePassword();
+                String encodedPassword = passwordEncoder.encode(rawPassword);
+                request.setPassword(encodedPassword);
+
+                // Lưu hoặc cập nhật nhân viên
                 DataResponse response = this.saveOfUpdate(new NhanVienEntity(), request);
-                if(response.isStatus()){
+                if (response.isStatus()) {
+                    // Gửi email với thông tin tài khoản và mật khẩu không mã hóa
                     String toEmail = request.getEmail();
                     String username = request.getUsername();
-                    String password = request.getPassword();
-                    sendEmailService.sendSimpleEmail(toEmail,username,password);
+                    sendEmailService.sendSimpleEmail(toEmail, username, rawPassword);
                     return response;
-                }else {
-                    return  response;
+                } else {
+                    return response;
                 }
             } else {
                 return new DataResponse(false, new ResultModel<>(null, "Mã nhân viên đã tồn tại!"));
@@ -96,6 +104,7 @@ public class NhanVienServiceImpl implements NhanVienService {
             return new DataResponse(false, new ResultModel<>(null, "Dữ liệu đầu vào lỗi!"));
         }
     }
+
 
     //Phuong thuc cap nhat nhan vien
     @Override
@@ -227,5 +236,6 @@ public class NhanVienServiceImpl implements NhanVienService {
         String uuidPart = UUID.randomUUID().toString().substring(0, 2);
         return "NV"+ uuidPart + timeFormat;
     }
+
 }
 

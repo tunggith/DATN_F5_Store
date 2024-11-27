@@ -51,6 +51,13 @@
 .content-bottom .left{
     width: 45%;
 }
+.content-bottom .left button{
+  border: none;
+  border-radius:5px;
+}
+.content-bottom .left button:hover{
+  cursor: pointer;
+}
 .content-bottom .right i{
     color: gray;
 }

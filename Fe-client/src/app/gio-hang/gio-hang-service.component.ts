@@ -49,6 +49,9 @@ export class GioHangService {
   getdiaChi(): Observable<any[]> {
     return this.http.get<any[]>(`${this.api}/getAllDiaChiKhachHang_PhanTrang_TimKiem`);
   }
+  changeCheck(id:number):Observable<any>{
+    return this.http.put(`${this.API_URL}/update-trang-thai/${id}`,{});
+  }
   vnPay(amount: number): Observable<any> {
     return this.http.get(`${this.vnPayUrl}/createPay?amount=${amount}`);
   }

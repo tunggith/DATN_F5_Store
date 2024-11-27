@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import * as moment from 'moment-timezone';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 
 @Component({
@@ -14,9 +15,7 @@ import * as moment from 'moment-timezone';
 })
 export class VoucherComponent implements OnInit {
 
-  convertToLocalTime(dateString: string): string {
-    return moment(dateString).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm'); // Thay đổi múi giờ tùy thuộc vào địa phương
-  }
+  
   role:string='';
   vouchers: any[] = [];
   searchForm: FormGroup;
@@ -54,8 +53,9 @@ export class VoucherComponent implements OnInit {
       giaTriVoucher: [0, [Validators.required, Validators.min(0)]],
       giaTriGiamToiDa: [0, [Validators.required, Validators.min(0)]],
       giaTriHoaDonToiThieu: [0, [Validators.required, Validators.min(0)]],
-      thoiGianBatDau: ['', Validators.required],
-      thoiGianKetThuc: ['', Validators.required],
+      thoiGianBatDau: ['', [Validators.required, this.validateYear]],
+      thoiGianKetThuc: ['', [Validators.required, this.validateYear]],
+      trangThai:[''],
       moTa: ['']
     });
     // Lắng nghe sự thay đổi của tất cả các trường trong form tìm kiếm
@@ -341,6 +341,19 @@ searchVouchers(values: any): void {
   goToPage(pageNumber: number): void {
     this.page = pageNumber;
     this.getAllVouchers(); // Gọi lại để tải dữ liệu cho trang đã chọn
+  }
+
+  validateYear(control: AbstractControl): ValidationErrors | null {
+    const selectedDate = new Date(control.value);
+    const selectedYear = selectedDate.getFullYear();
+  
+    if (selectedYear < 1950) {
+      return { yearTooSmall: true }; // Trả về lỗi nếu năm nhỏ hơn 1950
+    } 
+    if(selectedYear > 2150){
+      return { yearTooSmall: true }; // Trả về lỗi nếu năm nhỏ hơn 1950
+    }
+    return null; // Không có lỗi
   }
 
 }

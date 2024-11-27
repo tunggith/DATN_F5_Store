@@ -15,8 +15,8 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'lien-he', component: LienHeComponent },
   { path: 'tai-khoan', component: TaiKhoanComponent },
   { path: 'tra-cuu-don-hang', component: TraCuuDonHangComponent },
-  { path: 'gio-hang', component: GioHangComponent }
-  
+  { path: 'gio-hang', component: GioHangComponent },
+
 ];
 
 @NgModule({

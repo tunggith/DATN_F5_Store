@@ -170,14 +170,18 @@ public class UserClientServiceImpl implements UserClientService {
     }
 
     @Override
-    public DataResponse changePassword(String username, String passwordOld, String passwordNew) {
-        KhachHangEntity entity = khachHangRepository.findByUserNameAndPassword(username,passwordOld);
+    public DataResponse changePassword(Integer id, String passwordOld, String passwordNew) {
+        KhachHangEntity entity = khachHangRepository.findById(id).orElse(null);
         if(entity==null) {
             throw new RuntimeException("Vui lòng kiểm tra lại tên đăng nhập hoặc mật khẩu cũ!");
         }else {
-            entity.setPassword(passwordNew);
-            khachHangRepository.save(entity);
-            return new DataResponse(true,new ResultModel<>(null,"Đổi mật khẩu thành công!"));
+            if(passwordOld.equals(entity.getPassword())) {
+                entity.setPassword(passwordNew);
+                khachHangRepository.save(entity);
+                return new DataResponse(true, new ResultModel<>(null, "Đổi mật khẩu thành công!"));
+            }else {
+                throw new RuntimeException("Mật khẩu cũ không chính xác");
+            }
         }
     }
 

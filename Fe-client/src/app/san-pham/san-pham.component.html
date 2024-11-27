@@ -284,7 +284,7 @@
           <div class="colors">
             <strong>Màu sắc:</strong>
             <div class="option-buttons">
-              <ng-container *ngFor="let color of mauSacList">
+              <ng-container *ngFor="let color of mauSacListsp">
                 <button [class.selected]="color === selectedColor" (click)="selectColor(color)">
                   {{ color.ten }}
                 </button>
@@ -295,7 +295,7 @@
           <div class="sizes">
             <strong>Kích thước:</strong>
             <div class="option-buttons">
-              <ng-container *ngFor="let kichthuoc of sizeList">
+              <ng-container *ngFor="let kichthuoc of sizeListSp">
                 <button [class.selected]="kichthuoc === selectedSize" (click)="selectSize(kichthuoc)">
                   {{ kichthuoc.ten }}
                 </button>

@@ -2,6 +2,7 @@ package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
+import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IKhuyenMaiRepository;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
@@ -187,79 +188,54 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
     // hàm cập nhập Khuyến mãi theo id
     @Override
     public DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id) {
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("UTC")); // Get the current time in UTC
-        KhuyenMaiEntity khuyenMaiEntity = khuyenMaiRepository.findById(id).orElse(null);
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
+        KhuyenMaiEntity khuyenmai = khuyenMaiRepository.findById(id).get();
 
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
                 if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
-                }
-                if (khuyenMaiRequest.getThoiGianBatDau().isAfter(khuyenMaiRequest.getThoiGianKetThuc())) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu."));
+                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
                 }
 
-                // Check the status
-                if (khuyenMaiEntity != null && !khuyenMaiEntity.getThoiGianBatDau().isAfter(currentDateTime) &&
-                        khuyenMaiEntity.getTrangThai().trim().equalsIgnoreCase("Đang diễn ra")) {
-                    // Update promotion information
-                    khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
-                    khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
-                    khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
-                    khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
-                    khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
-                    khuyenMaiEntity.setThoiGianSua(Timestamp.valueOf(currentDateTime)); // Update in UTC
-                    khuyenMaiEntity.setNguoiSua("ADMIN");
+                LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
+                LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
 
-                    // Check the status based on the updated times
-                    LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
-                    LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
+                if (thoiGianBatDau == null) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
+                }
+                if (thoiGianKetThuc == null) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
+                }
+                if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
+                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                }
 
-                    if (thoiGianKetThuc.isBefore(currentDateTime)) {
-                        khuyenMaiEntity.setTrangThai("Đã kết thúc");
-                    } else if (thoiGianBatDau.isEqual(currentDateTime) || thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
-                        khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                    } else {
-                        khuyenMaiEntity.setTrangThai("Sắp diễn ra");
-                    }
+                // Update voucher properties
+                khuyenmai.setTen(khuyenMaiRequest.getTen());
+                khuyenmai.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
+                khuyenmai.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
+                khuyenmai.setThoiGianBatDau(thoiGianBatDau);
+                khuyenmai.setThoiGianKetThuc(thoiGianKetThuc);
+                khuyenmai.setSoLuong(khuyenMaiRequest.getSoLuong());
+                khuyenmai.setThoiGianSua(Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+                khuyenmai.setNguoiSua("ADMIN");
+                khuyenmai.setMoTa(khuyenMaiRequest.getMoTa());
 
-                    khuyenMaiRepository.save(khuyenMaiEntity);
-                    return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
+                // Check status based on date and time
+                if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                    khuyenmai.setTrangThai("Đã kết thúc");
+                } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
+                    khuyenmai.setTrangThai("Đang diễn ra");
                 } else {
-                    // Update promotion information for non-active promotions
-                    if (khuyenMaiEntity != null) {
-                        khuyenMaiEntity.setTen(khuyenMaiRequest.getTen());
-                        khuyenMaiEntity.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
-                        khuyenMaiEntity.setMoTa(khuyenMaiRequest.getMoTa());
-                        khuyenMaiEntity.setSoLuong(khuyenMaiRequest.getSoLuong());
-                        khuyenMaiEntity.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
-                        khuyenMaiEntity.setThoiGianBatDau(khuyenMaiRequest.getThoiGianBatDau());
-                        khuyenMaiEntity.setThoiGianKetThuc(khuyenMaiRequest.getThoiGianKetThuc());
-                        khuyenMaiEntity.setThoiGianSua(Timestamp.valueOf(currentDateTime)); // Update in UTC
-                        khuyenMaiEntity.setNguoiSua("ADMIN");
-
-                        // Check the status based on the updated times
-                        LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
-                        LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
-
-                        if (thoiGianKetThuc.isBefore(currentDateTime)) {
-                            khuyenMaiEntity.setTrangThai("Đã kết thúc");
-                        } else if (thoiGianBatDau.isEqual(currentDateTime) || thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
-                            khuyenMaiEntity.setTrangThai("Đang diễn ra");
-                        } else {
-                            khuyenMaiEntity.setTrangThai("Sắp diễn ra");
-                        }
-
-                        khuyenMaiRepository.save(khuyenMaiEntity);
-                        return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
-                    } else {
-                        return new DataResponse(false, new ResultModel<>(null, "Không tìm thấy khuyến mãi với id đã cho"));
-                    }
+                    khuyenmai.setTrangThai("Sắp diễn ra");
                 }
+
+                khuyenMaiRepository.save(khuyenmai);
+                return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
             }
-            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
+            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
         } catch (Exception e) {
-            return new DataResponse(false, new ResultModel<>(null, "Đã xảy ra lỗi: " + e.getMessage()));
+            return new DataResponse(false, new ResultModel<>(null, "Sửa thất bại do lỗi : " + e.getMessage()));
         }
     }
 

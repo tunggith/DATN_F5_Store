@@ -955,3 +955,42 @@ button:hover {
 #updateProductDetailModal{
   z-index: 2000;
 }
+
+#chiTietModal .modal-dialog {
+  max-width: 800px; /* Adjust width as needed */
+  max-height: 90vh; /* Ensure it doesn't exceed viewport height */
+}
+
+#chiTietModal .modal-content {
+  border-radius: 12px; /* Consistent border radius */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Consistent shadow */
+}
+
+#chiTietModal .modal-header {
+  background-color: #003366; /* Consistent header color */
+  color: #fff;
+}
+
+#chiTietModal .modal-body {
+  max-height: calc(90vh - 130px); /* Adjust for header/footer */
+  overflow-y: auto; /* Enable scrolling */
+}
+
+#chiTietModal .table-responsive {
+  max-height: 300px; /* Adjust table height */
+  overflow-y: auto; /* Enable scrolling */
+}
+
+#chiTietModal .pagination {
+  margin-top: 20px;
+  justify-content: center;
+}
+
+#chiTietModal .btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+#chiTietModal .btn-secondary:hover {
+  background-color: #5a6268;
+}

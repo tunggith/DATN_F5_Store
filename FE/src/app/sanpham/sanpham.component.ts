@@ -90,16 +90,22 @@ selectedGioiTinh: number = 0;
     this.chiTietSanPhamForm = this.fb.group({
       idMauSac: ['', Validators.required],
       idSize: ['', Validators.required],
-      donGia: [0, Validators.required],
+      donGia: ['', [Validators.required, Validators.min(0)]], // Khởi tạo donGia với validator
       soLuong: [0, Validators.required],
       moTa: [''],  // Không cần `Validators.required`
       trangThai: ['Còn hàng', Validators.required]
+    });
+
+    // Kiểm tra trạng thái form
+    this.chiTietSanPhamForm.valueChanges.subscribe(value => {
+        console.log('Form Value:', value);
+        console.log('Form Valid:', this.chiTietSanPhamForm.valid);
     });
     
 
     this.attributeForm = this.fb.group({
       type: ['', Validators.required],  // Validator kiểm tra loại thuộc tính phải được chọn
-      ma: ['', [Validators.required]],    // Validator kiểm tra mã thuộc tính phải không được để trống
+      ma:   ['', [Validators.required, Validators.pattern('^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểẾẾỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếềểễệỉịọỏốồổỗộớờởỡợụủứừễếềểễệỉịọỏốồổỗộớờởỡợụủứừựỳỵỷỹ ]*$')]]   ,    // Validator kiểm tra mã thuộc tính phải không được để trống
       ten:  ['', [Validators.required, Validators.pattern('^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểẾẾỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếềểễệỉịọỏốồổỗộớờởỡợụủứừễếềểễệỉịọỏốồổỗộớờởỡợụủứừựỳỵỷỹ ]*$')]]   
      
     });
@@ -262,7 +268,26 @@ selectedGioiTinh: number = 0;
       if (idChiTietSanPham) {
         this.selectedChiTietSanPhamId = idChiTietSanPham; // Lưu ID chi tiết sản phẩm đã chọn
         this.isUpdateProductDetailModalOpen = true; // Hiển thị modal cập nhật
-    
+        if (idChiTietSanPham) {
+          this.selectedChiTietSanPhamId = idChiTietSanPham;
+      
+          // Hiển thị modal mới
+          ($('#updateProductDetailModal') as any).modal({
+            backdrop: 'static',
+            keyboard: false
+          });
+      
+          // Điều chỉnh z-index để xếp chồng
+          $('#updateProductDetailModal').css('z-index', 1050 + ($('.modal:visible').length * 10));
+          
+          // Tăng chiều cao của modal lên đáng kể
+          const currentHeight = $('#updateProductDetailModal').height();
+          $('#updateProductDetailModal').css('height', (currentHeight + 300) + 'px'); // Tăng thêm 200px
+          
+          // Kéo modal lên một chút
+          $('#updateProductDetailModal').css('top', '-21%'); // Điều chỉnh giá trị '10%' để kéo modal lên
+         // Điều chỉnh giá trị '10%' để kéo modal lên
+        }
         // Gọi API lấy dữ liệu chi tiết sản phẩm theo ID
         this.sanPhamService.getChiTietSanPhamById(idChiTietSanPham).subscribe(
           (response: any) => {
@@ -698,7 +723,7 @@ resetForm() {
     loadAllChiTietSanPham() {
       this.sanPhamService.getAllChiTietSanPham().subscribe(
         (data: any[]) => {
-          this.chiTietSanPhamList = data;  // Gán dữ liệu vào danh sách
+          this.chiTietSanPhamList = data;  // Gán dữ liệu v��o danh sách
         },
         (error) => {
           console.error('Lỗi khi lấy danh sách chi tiết sản phẩm:', error);
@@ -798,7 +823,7 @@ resetForm() {
         trangThai: this.chiTietSanPhamForm.value.trangThai
       };
   
-      // Kiểm tra trùng lặp size và màu sắc trước khi gửi yêu cầu
+      // Kiểm tra trùng lặp size và màu sắc trư���c khi gửi yêu cầu
       this.sanPhamService.checkTrungChiTietSanPham(
         this.selectedSanPhamId,
         chiTietSanPhamData.idMauSac,
@@ -862,6 +887,7 @@ resetForm() {
   openChiTietModal(sanPhamId: number) {
     this.selectSanPhamChiTiet(sanPhamId);
     this.isChiTietModalOpen = true;
+    ($('#chiTietModal') as any).modal('show');
   }
   
   closeChiTietModal() {

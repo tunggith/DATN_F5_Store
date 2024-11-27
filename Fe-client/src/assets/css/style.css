@@ -146,7 +146,7 @@
 	justify-content: flex-end;
 }
 .header_middel {
-	padding: 15px 20px;
+	padding: 15px 0px;
 }
 .search_bar form {
   position: relative;

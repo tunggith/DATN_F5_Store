@@ -61,8 +61,10 @@
             <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
             <small *ngIf="errors.sdt" class="text-danger">{{ errors.sdt }}</small>
           </div>
-          <button type="button" class="btn btn-outline-primary" (click)="updateKhachHang()">Cập nhật</button>
+          <button type="button" (click)="updateKhachHang()">Cập nhật</button>
+          <button type="button" style="margin-left: 10px;" (click)="openPopupPassword()">Đổi mật khẩu</button>
         </div>
+        <app-doi-mat-khau *ngIf="popupPs" (closePopup)="closePopupPassword()"></app-doi-mat-khau>
         <div class="right">
           <div class="mb-3">
 

@@ -381,7 +381,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
             }
 
             if (request.getHinhThucThanhToan() == 0) {
-                request.setTrangThai("Đã xác nhận");
+                if (request.getIdThanhToan()==1){
+                    request.setTrangThai("Hoàn thành");
+                }else {
+                    request.setTrangThai("Đã xác nhận");
+                }
             } else {
                 request.setTrangThai("Chờ xác nhận");
             }
@@ -655,8 +659,27 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
 
         // Lưu hóa đơn đã cập nhật
-        hoaDonRepository.save(hoaDon);
+        HoaDonEntity hoaDon1 = hoaDonRepository.save(hoaDon);
+        // Kiểm tra điều kiện để trừ số lượng sản phẩm
+        if (hoaDon1.getTrangThai().equals("Hoàn thành") && hoaDon1.getHinhThucThanhToan() != 0 && hoaDon1.getThanhToan().getId() == 1) {
+            // Lấy danh sách sản phẩm từ hóa đơn chi tiết
+            List<ChiTietHoaDonEntity> chiTietList = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
 
+            for (ChiTietHoaDonEntity chiTiet : chiTietList) {
+                // Lấy sản phẩm từ chi tiết hóa đơn
+                ChiTietSanPhamEntity sanPham = chiTietSanPhamRepository.findById(chiTiet.getChiTietSanPham().getId()).orElse(null);
+
+                // Trừ số lượng sản phẩm
+                int soLuongHienTai = sanPham.getSoLuong();
+                int soLuongTru = chiTiet.getSoLuong();
+
+                // Cập nhật số lượng
+                sanPham.setSoLuong(soLuongHienTai - soLuongTru);
+
+                // Lưu sản phẩm đã cập nhật vào cơ sở dữ liệu
+                chiTietSanPhamRepository.save(sanPham);
+            }
+        }
         // Lấy lịch sử hóa đơn cũ
         List<LichSuHoaDonEntity> lichSuOld = lichSuHoaDonRepository.findByHoaDon_Id(id);
 

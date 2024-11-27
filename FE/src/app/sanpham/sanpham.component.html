@@ -17,10 +17,10 @@
         <div class="modal-body">
           <div class="form-group">
               <label for="colorSelect"><b>Chọn màu sắc:</b></label>
-              <select 
-                  id="colorSelect" 
-                  class="form-control" 
-                  [(ngModel)]="selectedColorId" 
+              <select
+                  id="colorSelect"
+                  class="form-control"
+                  [(ngModel)]="selectedColorId"
                   (change)="onColorChange($event)">
                   <option value="" selected>-- Chọn màu sắc --</option>
                   <option *ngFor="let mau of danhSachMau" [value]="mau.id">
@@ -127,7 +127,7 @@
             
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="thuongHieu">Thương Hiệu</label>
+                    <label for="thuongHieu">Thương hiệu</label>
                     <select id="thuongHieu" class="form-control" formControlName="thuongHieu" required>
                       <option value="">Chọn thương hiệu</option>
                       <option *ngFor="let thuongHieu of thuongHieuList" [value]="thuongHieu.id">{{ thuongHieu.ten }}</option>
@@ -142,7 +142,7 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <div class="form-group gioi-tinh">
-                    <label>Giới Tính</label>
+                    <label>Giới tính</label>
                     <nav *ngFor="let gioiTinh of gioiTinhList" class="form-check">
                       <input
                         type="radio"
@@ -162,7 +162,7 @@
               
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>Trạng Thái</label>
+                    <label>Trạng thái</label>
                     <div class="form-check form-check-inline">
                       <input
                         type="radio"
@@ -332,10 +332,10 @@
                 <td>{{ sanpham.trangThai }}</td>
                 <td>
                   <nav clnavss="buttonv1">
-                    <i  (click)="viewProductDetails(sanpham.id)" class="fa fa-eye"></i> 
-                    <i  data-toggle="modal" data-target="#sanPhamModal" (click)="selectSanPham(sanpham)" class="fa fa-edit" *ngIf="role==='admin'"></i>
-                    <i  data-toggle="modal" data-target="#uploadImageModal" (click)="chonSphinh2(sanpham.id, sanpham.ten)"  (click) ="resetModal" class="fa fa-image"></i> <!-- Biểu tượng hình ảnh -->
-              
+                    <i  (click)="viewProductDetails(sanpham.id)" class="fa fa-eye" title="Xem chi tiết sản phẩm"></i> 
+                    <i  data-toggle="modal" data-target="#sanPhamModal" (click)="selectSanPham(sanpham)" class="fa fa-edit" *ngIf="role==='admin'" title="Sửa sản phẩm"></i>
+                    <i  data-toggle="modal" data-target="#uploadImageModal" (click)="chonSphinh2(sanpham.id, sanpham.ten)"  (click) ="resetModal" class="fa fa-image" title="Thêm hình ảnh"></i> <!-- Biểu tượng hình ảnh -->
+
                   </nav>
               
                 </td>
@@ -368,53 +368,60 @@
 
 
 <!-- Modal cập nhật chi tiết sản phẩm -->
-<div *ngIf="isUpdateProductDetailModalOpen" id="updateProductDetailModal" f class="custom-modal-overlay">
-  <div class="custom-modal">
-    <div class="modal-header">
-      <h5 style="font-weight: bold;" class="modal-title">Cập nhật Chi Tiết Sản Phẩm: {{ selectedSanPhamName }}</h5>
-      <button type="button" class="close" (click)="closeUpdateModal()" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form [formGroup]="chiTietSanPhamForm" (ngSubmit)="onSubmitUpdateChiTietSanPham()">
-        
-        <div class="mb-3">
-          <label for="idMauSac" class="form-label">Màu sắc</label>
-          <select id="idMauSac" class="form-control" formControlName="idMauSac" required>
-            <option *ngFor="let mau of mauSacList" [value]="mau.id">{{ mau.ten }}</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="idSize" class="form-label">Kích thước</label>
-          <select id="idSize" class="form-control" formControlName="idSize" required>
-            <option *ngFor="let size of sizes" [value]="size.id">{{ size.ten }}</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="donGia" class="form-label">Đơn giá</label>
-          <input type="number" id="donGia" class="form-control" formControlName="donGia" required>
-        </div>
-        
-        <div class="form-group">
-          <label for="moTa">Mô tả</label>
-          <textarea id="moTa" class="form-control" formControlName="moTa" placeholder="Nhập mô tả (không bắt buộc)"></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="soLuong" class="form-label">Số lượng</label>
-          <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
-          <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
-            <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
-            <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+<div class="modal fade" id="updateProductDetailModal" tabindex="-1" role="dialog" aria-labelledby="updateProductDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateProductDetailModalLabel">Cập nhật Chi Tiết Sản Phẩm: {{ selectedSanPhamName }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="chiTietSanPhamForm" (ngSubmit)="onSubmitUpdateChiTietSanPham()">
+          <div class="mb-3">
+            <label for="idMauSac" class="form-label">Màu sắc</label>
+            <select id="idMauSac" class="form-control" formControlName="idMauSac" required>
+              <option *ngFor="let mau of mauSacList" [value]="mau.id">{{ mau.ten }}</option>
+            </select>
           </div>
-        </div>
-        
 
-        <button type="submit" class="btn btn-primary">Cập nhật Chi Tiết</button>
-      </form>
+          <div class="mb-3">
+            <label for="idSize" class="form-label">Kích thước</label>
+            <select id="idSize" class="form-control" formControlName="idSize" required>
+              <option *ngFor="let size of sizes" [value]="size.id">{{ size.ten }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="donGia" class="form-label">Đơn giá</label>
+            <input type="number" id="donGia" class="form-control" formControlName="donGia" min="0" required>
+            <div *ngIf="chiTietSanPhamForm.get('donGia').invalid && (chiTietSanPhamForm.get('donGia').dirty || chiTietSanPhamForm.get('donGia').touched)" class="text-danger">
+              <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.required">Đơn giá là bắt buộc.</small>
+              <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.min">Đơn giá phải là số không âm.</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="moTa">Mô tả</label>
+            <input id="moTa" class="form-control" formControlName="moTa" placeholder="Nhập mô tả (không bắt buộc)">
+          </div>
+
+          <div class="mb-3">
+            <label for="soLuong" class="form-label">Số lượng</label>
+            <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
+            <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
+              <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
+              <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Cập nhật Chi Tiết</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
     </div>
   </div>
 </div>
@@ -470,7 +477,7 @@
 
           <div class="col-md-4">
             <label for="donGia" class="form-label">Đơn giá</label>
-            <input type="number" id="donGia" class="form-control" [(ngModel)]="selectedPrice" 
+            <input type="number" id="donGia" class="form-control" [(ngModel)]="selectedPrice"
                    (input)="updatePrice($event.target.value)" placeholder="Nhập giá" />
           </div>
         </div>
@@ -500,8 +507,8 @@
                 <td>{{ chiTiet.moTa }}</td>
                 <td>{{ chiTiet.trangThai }}</td>
                 <td>
-                  <i class="fa fa-edit" (click)="openUpdateProductDetailModal(chiTiet.id)" *ngIf="role==='admin'"></i>
-                  <i class="fa fa-image" (click)="chonSphinh2(chiTiet.id, selectedSanPhamName)" data-toggle="modal" data-target="#uploadImageModal"></i>
+                  <i class="fa fa-edit" (click)="openUpdateProductDetailModal(chiTiet.id)" *ngIf="role==='admin'" title="Sửa chi tiết sản phẩm"></i>
+                  <!-- <i class="fa fa-image" (click)="chonSphinh2(chiTiet.id, selectedSanPhamName)" data-toggle="modal" data-target="#uploadImageModal"></i> -->
                 </td>
               </tr>
             </tbody>
@@ -521,8 +528,8 @@
               </li>
           </ul>
           </nav>
-         
-    
+
+
         </div>
       </div>
       <div class="modal-footer">
@@ -552,7 +559,7 @@
                     <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.min">Đơn giá phải là số không âm.</small>
                   </div>
                 </div>
-                
+
                   <div class="mb-3">
                     <label for="soLuong" class="form-label">Số lượng</label>
                     <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
@@ -560,20 +567,20 @@
                       <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
                       <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
                     </div>
-                  </div>                                  
+                  </div>
                   <div class="form-group">
-                    <label for="moTa">mô tả </label> 
+                    <label for="moTa">mô tả </label>
                     <textarea id="moTa" class="form-control" formControlName="moTa" placeholder="Nhập ghi chú (không bắt buộc)"></textarea>
                 </div>
-                
+
                   <div class="form-group">
                       <label>Chọn Màu Sắc <span class="text-danger">*</span></label>
                       <div class="checkbox-group color-size-grid">
                           <div class="color-size-item" *ngFor="let mau of mauSacList">
-                              <input 
-                                  type="checkbox" 
-                                  [value]="mau.id" 
-                                  (change)="onMauSacChange(mau.id, $event.target.checked)" 
+                              <input
+                                  type="checkbox"
+                                  [value]="mau.id"
+                                  (change)="onMauSacChange(mau.id, $event.target.checked)"
                                   [checked]="chiTietSanPhamForm.get('mauSacs')?.value.includes(mau.id)">
                               {{ mau.ten }}
                           </div>
@@ -586,10 +593,10 @@
                       <label>Chọn Kích Thước <span class="text-danger">*</span></label>
                       <div class="checkbox-group color-size-grid">
                           <div class="color-size-item" *ngFor="let size of sizes">
-                              <input 
-                                  type="checkbox" 
-                                  [value]="size.id" 
-                                  (change)="onSizeChange(size.id, $event.target.checked)" 
+                              <input
+                                  type="checkbox"
+                                  [value]="size.id"
+                                  (change)="onSizeChange(size.id, $event.target.checked)"
                                   [checked]="chiTietSanPhamForm.get('sizes')?.value.includes(size.id)">
                               {{ size.ten }}
                           </div>
@@ -609,8 +616,8 @@
           </div>
           <div class="modal-footer">
               <button type="button"  (click)="resetChiTietSanPhamForm()" data-dismiss="modal">Đóng</button>
-              <button [disabled]="!isValidSelection" 
-              (click)="renderChiTietSanPham()" 
+              <button [disabled]="!isValidSelection"
+              (click)="renderChiTietSanPham()"
               class="btn ">Lưu Chi Tiết Sản Phẩm</button>
           </div>
       </div>

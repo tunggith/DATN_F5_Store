@@ -12,7 +12,7 @@ public interface UserClientService {
     DataResponse detailclient(Integer id);
     DataResponse createDiaChiClient(DiaChiKhachHangResquest resquest);
     DataResponse updateAnh(Integer id,KhachHangRequest request);
-    DataResponse changePassword(String username,String passwordOld,String passwordNew);
+    DataResponse changePassword(Integer id,String passwordOld,String passwordNew);
     DataResponse detailDiaChi(Integer id);
     DataResponse getDiaChiByKhachHang(Integer id);
     DataResponse updateDiaChiClient(DiaChiKhachHangResquest request);
