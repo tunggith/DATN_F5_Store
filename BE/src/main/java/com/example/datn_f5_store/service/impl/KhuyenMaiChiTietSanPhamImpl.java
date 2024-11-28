@@ -20,6 +20,7 @@ import  com.example.datn_f5_store.response.ResultModel;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -173,9 +174,13 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
         }
     }
 
+    @Override
     @Scheduled(cron = "0 0 12 * * ?")
     public void upDateTrangThaiKhuyenMaiCtSp() {
         try {
+
+
+            List<Integer> updatedProductIds = new ArrayList<>();
             // Khai báo thời gian hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
 
@@ -194,11 +199,9 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     }
-
                     khuyenMaictsp.setTrangThai("Đang áp dụng");
                     iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
                     khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
-                    khuyenMaictsp.setTrangThai("Đang diễn ra");
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                 }
 
@@ -211,6 +214,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
+                    updatedProductIds.add(khuyenMaictsp.getChiTietSanPham().getId());
+
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
@@ -221,13 +226,24 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
+                    updatedProductIds.add(khuyenMaictsp.getChiTietSanPham().getId());
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
+                this.cachedUpdatedIds = updatedProductIds;
+                System.out.println("Danh sách ID đã thay đổi: " + updatedProductIds);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private List<Integer> cachedUpdatedIds = new ArrayList<>(); // Danh sách ID được lưu
+
+
+    @Override
+    public List<Integer> getCachedUpdatedIds() {
+        return cachedUpdatedIds; // Trả về danh sách
     }
 
 

@@ -1,13 +1,8 @@
 package com.example.datn_f5_store.service.impl;
 
-import com.example.datn_f5_store.dto.KhachHangDto;
-import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.dto.VoucherDto;
-import com.example.datn_f5_store.entity.KhachHangEntity;
-import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
-import com.example.datn_f5_store.repository.IKhachHangRepository;
 import com.example.datn_f5_store.repository.IVoucherRepository;
 import com.example.datn_f5_store.request.VoucherRequest;
 import com.example.datn_f5_store.service.VoucherService;
@@ -15,20 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.ResultModel;
-
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 @Service
 public class VoucherServicelmpl implements VoucherService {
@@ -39,7 +32,7 @@ public class VoucherServicelmpl implements VoucherService {
     // hàm Find all VouCher
     @Override
     public Page<VoucherDto> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "thoiGianTao"));
         Page<VoucherEntity> voucher = iVoucherRepository.findAll(pageable);
 
         Page<VoucherDto> voucherDtos = voucher.map(entity -> new VoucherDto(
@@ -87,6 +80,9 @@ public class VoucherServicelmpl implements VoucherService {
                     if (voucher.getThoiGianBatDau().isAfter(voucher.getThoiGianKetThuc())) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước Thời gian bắt đầu"));
                     }
+                    if(voucher.getGiaTriVoucher() > voucher.getGiaTriHoaDonToiThieu()){
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị hóa đơn tối thiểu không được nhỏ hơn giá trị voucher"));
+                    }
 
                     // Gán giá trị cho voucher
                     voucher1.setMa(voucher.getMa());
@@ -94,8 +90,8 @@ public class VoucherServicelmpl implements VoucherService {
                     voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
                     voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
                     voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau()); // Giữ nguyên LocalDateTime
-                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc()); // Giữ nguyên LocalDateTime
+                    voucher1.setThoiGianBatDau(voucher.getThoiGianBatDau());
+                    voucher1.setThoiGianKetThuc(voucher.getThoiGianKetThuc());
                     voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
                     voucher1.setSoLuong(voucher.getSoLuong());
                     voucher1.setNguoiTao("ADMIN");
@@ -149,6 +145,9 @@ public class VoucherServicelmpl implements VoucherService {
                 }
                 if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
                     return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                }
+                if(voucher.getGiaTriVoucher() > voucher.getGiaTriHoaDonToiThieu()){
+                    return new DataResponse(false, new ResultModel<>(null, "Giá trị hóa đơn tối thiểu không được nhỏ hơn giá trị voucher"));
                 }
 
                 // Update voucher properties

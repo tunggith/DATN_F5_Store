@@ -310,11 +310,13 @@
               </tr>
               <tr></tr>
               <tr>
+     
                 <th>Mã</th>
                 <th>Tên</th>
-                <th>Kiểu Khuyến Mãi</th>
+               
                 <th>Số Lượng</th>
                 <th>Giá Trị</th>
+                <th>Kiểu Khuyến Mãi</th>
                 <th>Thời Gian Bắt Đầu</th>
                 <th>Thời Gian Kết Thúc</th>
                 <th>Mô Tả</th>
@@ -323,12 +325,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let khuyenMai of khuyenMais">
+              <tr *ngFor="let khuyenMai of khuyenMais">              
                 <td>{{ khuyenMai.ma }}</td>
                 <td>{{ khuyenMai.ten }}</td>
-                <td>{{ khuyenMai.kieuKhuyenMai }}</td>
+               
                 <td>{{ khuyenMai.soLuong }}</td>
-                <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
+                <td>{{ khuyenMai.giaTriKhuyenMai | number:'1.0-0' }}</td>
+                <td>{{ khuyenMai.kieuKhuyenMai }}</td>
                 <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ khuyenMai.moTa }}</td>
@@ -420,13 +423,13 @@
                 <td>
                   <div class="button-container">
                     <!-- Hiển thị nút "Thêm" khi chưa được thêm vào khuyến mãi -->
-                    <button *ngIf="!isAddedMap[chiTiet.id]" type="button" class="btn-add"
+                    <button  type="button" class="btn-add"
                       (click)="addKhuyenMaiSanPham(chiTiet, $event)">
                       <i class="material-icons">add_circle</i>
                     </button>
 
                     <!-- Hiển thị nút "Xóa" khi đã được thêm vào khuyến mãi -->
-                    <button *ngIf="isAddedMap[chiTiet.id]" type="button" class="btn-remove"
+                    <button  type="button" class="btn-remove"
                       (click)="removeKhuyenMaiSanPham(chiTiet)">
                       <i class="material-icons">delete</i>
                     </button>

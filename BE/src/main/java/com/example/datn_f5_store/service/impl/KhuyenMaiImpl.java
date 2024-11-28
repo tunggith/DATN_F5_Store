@@ -2,8 +2,6 @@ package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
-import com.example.datn_f5_store.entity.VoucherEntity;
-import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IKhuyenMaiRepository;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
 import com.example.datn_f5_store.response.DataResponse;
@@ -13,12 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import  com.example.datn_f5_store.response.ResultModel;
-
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -34,7 +31,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
     // Hàm để lấy tất cả các Khuyến mãi đang có và thực hiện phân trang
     @Override
     public Page<KhuyenMaiDto> getAll(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "thoiGianTao"));
         Page<KhuyenMaiEntity> khuyenMaiEntities = khuyenMaiRepository.findAll(pageable);
 
         Page<KhuyenMaiDto> khuyenMaiDtos = khuyenMaiEntities.map(entity -> new KhuyenMaiDto(
@@ -231,7 +228,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 }
 
                 khuyenMaiRepository.save(khuyenmai);
-                return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
+                return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
         } catch (Exception e) {
