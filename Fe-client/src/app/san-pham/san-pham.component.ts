@@ -627,7 +627,8 @@ export class SanPhamComponent implements OnInit {
 
 
   openPopup(productId: number) {
-    // gọi hàm thực thi
+    this.idCTSP = productId;
+    // gọi hàm thực thi 
     this.loadSizes(productId)
     this.loadColors(productId)
     this.getSanPham(productId)
@@ -638,12 +639,12 @@ export class SanPhamComponent implements OnInit {
     // Thực hiện logic khác tại đây nếu cần
 
     setTimeout(() => {
-      if (this.mauSacListsp.length >= 0) {
-        this.selectedColor = this.mauSacListsp[0]; // Chọn màu đầu tiên
+      if (this.mauSacList.length >= 0) {
+        this.selectedColor = this.mauSacList[0]; // Chọn màu đầu tiên
         console.log('Màu sắc mặc định:', this.selectedColor);
       }
-      if (this.sizeListSp.length >= 0) {
-        this.selectedSize = this.sizeListSp[0]; // Chọn kích thước đầu tiên
+      if (this.sizeList.length >= 0) {
+        this.selectedSize = this.sizeList[0]; // Chọn kích thước đầu tiên
         console.log('Kích thước mặc định:', this.selectedSize);
       }
 
@@ -710,7 +711,7 @@ export class SanPhamComponent implements OnInit {
 
   themSanPham(): void {
     const idKhString = localStorage.getItem('id'); // Lấy id dưới dạng chuỗi
-
+    console.log("id ctsp hien tai ",this.idCTSP)
     // Kiểm tra xem ID khách hàng có tồn tại trong localStorage hay không
     if (!idKhString) {
         // Nếu không có khách hàng, tạo một đối tượng request mới
