@@ -125,8 +125,8 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                     if (ma == null || ma.isEmpty()) {
                         return new DataResponse(false, new ResultModel<>(null, "Mã không được để trống"));
                     }
-                    if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
-                        return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 99 khi kiểu khuyến mãi là %."));
+                    if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 100) {
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 100 khi kiểu khuyến mãi là %."));
                     }
                     if (khuyenMaiRequest.getThoiGianBatDau().isAfter(khuyenMaiRequest.getThoiGianKetThuc())) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
@@ -190,8 +190,8 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
-                if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 99) {
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 100) {
+                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
                 }
 
                 LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();

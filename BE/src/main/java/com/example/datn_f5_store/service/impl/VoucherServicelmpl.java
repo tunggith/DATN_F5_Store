@@ -68,8 +68,8 @@ public class VoucherServicelmpl implements VoucherService {
                 // Kiểm tra trùng mã voucher
                 if (checkTrungMaVoucher(voucher.getMa())) {
                     // Kiểm tra điều kiện cho giảm giá
-                    if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99) {
-                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                    if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 100) {
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
                     }
                     if (voucher.getThoiGianBatDau() == null) {
                         return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
@@ -130,8 +130,8 @@ public class VoucherServicelmpl implements VoucherService {
 
         try {
             if (CheckVoucher(voucher)) {
-                if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 99) {
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 99"));
+                if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 100) {
+                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
                 }
 
                 LocalDateTime thoiGianBatDau = voucher.getThoiGianBatDau();
