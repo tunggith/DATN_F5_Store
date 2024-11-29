@@ -201,7 +201,6 @@ export class GioHangComponent implements OnInit {
         soLuong: this.getSoLuongById(id),
       }));
     }
-
     // Kiểm tra nếu không có mục nào được chọn
     if (!gioHangRequests || gioHangRequests.length === 0) {
       this.showErrorMessage('Vui lòng chọn ít nhất một sản phẩm để thanh toán!');
@@ -365,7 +364,6 @@ export class GioHangComponent implements OnInit {
     if (!request) {
       return; // Dừng nếu không có sản phẩm được chọn
     }
-
     // Kiểm tra hình thức thanh toán
     if (this.idThanhToan == 2) {
       // Gọi API VNPay để lấy link thanh toán
@@ -414,8 +412,8 @@ export class GioHangComponent implements OnInit {
         this.removeAdressLocal();
       },
       error: (err) => {
-        console.error(err);
-        this.showErrorMessage('Xử lý thất bại! Vui lòng thử lại.');
+        console.log('lỗi:',err);
+        this.handleError(err);
       },
     });
   }
@@ -474,8 +472,29 @@ export class GioHangComponent implements OnInit {
       const existingProductIndex = cart.findIndex((item: any) => item.idChiTietSanPham === id);
 
       if (existingProductIndex !== -1) {
-        // Nếu sản phẩm đã có trong giỏ hàng, cộng dồn số lượng
-        cart[existingProductIndex].soLuong += 1; // Cộng thêm 1 số lượng sản phẩm
+        // Nếu sản phẩm đã có trong giỏ hàng, lấy số lượng tồn kho để kiểm tra
+        this.gioHangService.getSoLuong(id).subscribe(
+          response => {
+            const soLuongTonKho = response.result.content.soLuong; // Lấy số lượng tồn kho từ API
+            const tongSoLuong = cart[existingProductIndex].soLuong + 1; // Tính tổng số lượng nếu cộng thêm 1 sản phẩm
+
+            if (tongSoLuong > soLuongTonKho) {
+              // Thông báo lỗi nếu tổng số lượng vượt quá tồn kho
+              this.showErrorMessage('Bạn đã thêm sản phẩm với số lượng tối đa');
+            } else {
+              // Cộng thêm 1 sản phẩm vào giỏ hàng
+              cart[existingProductIndex].soLuong += 1;
+
+              // Lưu lại giỏ hàng vào localStorage
+              localStorage.setItem('cart', JSON.stringify(cart));
+              this.getKhachHangLocal();
+            }
+          },
+          error => {
+            console.error('Lỗi khi lấy số lượng tồn kho:', error);
+            this.showErrorMessage('Không thể kiểm tra số lượng tồn kho!');
+          }
+        );
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ
         const newProduct = {

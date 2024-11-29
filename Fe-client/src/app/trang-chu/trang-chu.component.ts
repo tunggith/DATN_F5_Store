@@ -203,14 +203,14 @@ export class TrangChuComponent implements OnInit {
     // Kiểm tra xem ID khách hàng có tồn tại trong localStorage hay không
     if (!idKhString) {
       const request = {
-        id: this.idSsanPham,
+        id: this.idCTSP,
         idGioHang: 0,
-        idChiTietSanPham: this.idSsanPham,
+        idChiTietSanPham: this.idCTSP,
         soLuong: this.quantity || 1, // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
         urlAnh: {
           urlAnh: this.currentImage
         },
-        trangThai:'unactive',
+        trangThai: 'unactive',
         chiTietSanPham: {
           id: this.idCTSP,
           sanPham: {
@@ -233,16 +233,23 @@ export class TrangChuComponent implements OnInit {
 
       if (existingProductIndex !== -1) {
         // Nếu sản phẩm đã tồn tại trong giỏ hàng, cộng dồn số lượng
-        cart[existingProductIndex].soLuong += request.soLuong;
+        const tongSoLuong = cart[existingProductIndex].soLuong + request.soLuong;
+        if (tongSoLuong > this.soLuongCTSP) {
+          // Thông báo lỗi nếu tổng số lượng vượt quá số lượng tồn kho
+          this.showErrorMessage('Bạn đã thêm sản phẩm với số lượng tối đa');
+        } else {
+          // Cộng dồn số lượng
+          cart[existingProductIndex].soLuong += request.soLuong;
+          this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
+        }
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
         cart.push(request);
+        this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
       }
 
       // Lưu lại giỏ hàng vào localStorage
       localStorage.setItem('cart', JSON.stringify(cart));
-
-      this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
     } else {
       const request = {
         id: 0,
@@ -278,6 +285,7 @@ export class TrangChuComponent implements OnInit {
     if (this.selectedColor !== null && this.selectedSize !== null) {
       console.log('Đã được chọn:');
       console.log("id sản phẩm là ", this.idSsanPham)
+      console.log("id ctsp:",this.idCTSP);
       console.log('Màu sắc:', this.selectedColor);
       console.log('Kích thước:', this.selectedSize);
       this.loadAnhChiTietSanPham(this.selectedColor.id, this.selectedSize.id, this.idSsanPham)
@@ -342,6 +350,7 @@ export class TrangChuComponent implements OnInit {
           this.anhChiTietSanPham = response;
           const chiTiet = response[0]?.chiTietSanPham;
           if (chiTiet) {
+            this.idCTSP = chiTiet.id
             this.soLuongCTSP = chiTiet.soLuong || 0;
             this.donGiaDau = chiTiet.donGia || 0;
             this.donGia = this.donGiaDau;

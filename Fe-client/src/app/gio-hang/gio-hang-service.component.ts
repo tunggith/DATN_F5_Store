@@ -55,4 +55,10 @@ export class GioHangService {
   vnPay(amount: number): Observable<any> {
     return this.http.get(`${this.vnPayUrl}/createPay?amount=${amount}`);
   }
+  getSoLuong(id:number):Observable<any>{
+    return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
+  }
+  getSoLuonghai(id:number):Observable<any>{
+    return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
+  }
 }

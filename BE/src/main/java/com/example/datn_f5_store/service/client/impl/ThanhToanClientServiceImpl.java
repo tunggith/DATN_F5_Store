@@ -217,9 +217,9 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             hoaDon.setGiaoHang(thanhToanRequest.getHoaDonRequest().getGiaoHang());
             hoaDon.setGhiChu(thanhToanRequest.getHoaDonRequest().getGhiChu());
             if(thanhToanRequest.getHoaDonRequest().getIdThanhToan()==1){
-                hoaDon.setTrangThai("Đã xác nhận");
-            }else {
                 hoaDon.setTrangThai("Chờ xác nhận");
+            }else {
+                hoaDon.setTrangThai("Đã xác nhận");
             }
             hoaDon.setGiaTriGiam(thanhToanRequest.getHoaDonRequest().getGiaTriGiam());
             HoaDonEntity hoaDon1 = hoaDonRepository.save(hoaDon);
@@ -241,6 +241,9 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
                     ChiTietSanPhamEntity chiTietSanPham = chiTiet.getChiTietSanPham();
                     if (chiTietSanPham != null) {
                         int soLuongConLai = chiTietSanPham.getSoLuong() - chiTiet.getSoLuong();
+                        if(soLuongConLai<0){
+                            throw new RuntimeException("Số lượng sản phẩm không đủ vui lòng liên hệ với Chăm sóc khách hàng để được hỗ trợ!");
+                        }
                         chiTietSanPham.setSoLuong(soLuongConLai);
                         chiTietSanPhamRepository.save(chiTietSanPham);  // Lưu lại đối tượng đã cập nhật
                     }
@@ -266,6 +269,8 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             sendEmailService.sendSimpleEmailCamOn(emailNguoiNhan, maHoaDon);
 
             return new DataResponse(true, new ResultModel<>(null, "Xử lý giỏ hàng và thanh toán thành công!"));
+        } catch (RuntimeException e){
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return new DataResponse(false, new ResultModel<>(null, "Xử lý giỏ hàng hoặc thanh toán thất bại!"));

@@ -87,7 +87,11 @@ public class GiohangClientImpl implements IGioHangClientService {
 
         if (existingChiTiet != null) {
             // Nếu tồn tại, cộng dồn số lượng
-            existingChiTiet.setSoLuong(existingChiTiet.getSoLuong() + request.getSoLuong());
+            Integer soLuong = existingChiTiet.getSoLuong() + request.getSoLuong();
+            if(soLuong>chiTietSanPham.getSoLuong()){
+                throw new RuntimeException("Bạn đã thêm sản phẩm với số lượng tối đa");
+            }
+            existingChiTiet.setSoLuong(soLuong);
             chiTietGioHangRepository.save(existingChiTiet);
         } else {
             // Nếu không tồn tại, tạo mới

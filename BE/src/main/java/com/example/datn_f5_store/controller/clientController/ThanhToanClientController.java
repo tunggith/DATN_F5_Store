@@ -39,16 +39,11 @@ public class ThanhToanClientController {
     @PostMapping("/xu-ly")
     public ResponseEntity<?> xuLyGioHangVaThanhToan(
             @RequestBody XuLyGioHangVaThanhToanRequest request) {
-        try {
-            DataResponse response = thanhToanClientService.xuLyGioHangVaThanhToan(
-                    request.getGioHangRequests(),
-                    request.getThanhToanRequest()
-            );
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new DataResponse(false, new ResultModel<>(null,"thất bại")));
-        }
+        DataResponse response = thanhToanClientService.xuLyGioHangVaThanhToan(
+                request.getGioHangRequests(),
+                request.getThanhToanRequest()
+        );
+        return ResponseEntity.ok(response);
+
     }
 }
