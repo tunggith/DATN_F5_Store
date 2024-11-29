@@ -402,7 +402,7 @@
         <div class="table-responsive2">
           <table class="table table-striped">
             <thead class="text-primary">
-              <tr>
+              <tr>     
                 <th>Mã</th>
                 <th>Màu sắc</th>
                 <th>Kích thước</th>
@@ -413,28 +413,31 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let chiTiet of filteredChiTietSanPhamList">
+              <tr *ngFor="let chiTiet of filteredChiTietSanPhamList">              
                 <td>{{ chiTiet.ma }}</td>
                 <td>{{ chiTiet.mauSac.ten }}</td>
                 <td>{{ chiTiet.size.ten }}</td>
                 <td>{{ chiTiet.donGia | number: '1.0-0' }}₫</td>
                 <td>{{ chiTiet.soLuong }}</td>
                 <td>{{ chiTiet.trangThai }}</td>
+
                 <td>
                   <div class="button-container">
-                    <!-- Hiển thị nút "Thêm" khi chưa được thêm vào khuyến mãi -->
-                    <button  type="button" class="btn-add"
-                      (click)="addKhuyenMaiSanPham(chiTiet, $event)">
-                      <i class="material-icons">add_circle</i>
-                    </button>
-
-                    <!-- Hiển thị nút "Xóa" khi đã được thêm vào khuyến mãi -->
-                    <button  type="button" class="btn-remove"
+                    <!-- Hiển thị nút "Thêm" khi chưa được thêm vào khuyến mãi (check = false) -->
+                    <input 
+                      *ngIf="!chiTiet.checkKm" 
+                      type="checkbox" 
+                      [value]="chiTiet.id" 
+                      (change)="onCheckboxChange($event, chiTiet.id)" />
+          
+                    <!-- Hiển thị nút "Xóa" khi đã được thêm vào khuyến mãi (check = true) -->
+                    <button *ngIf="chiTiet.checkKm" type="button" class="btn-remove"
                       (click)="removeKhuyenMaiSanPham(chiTiet)">
                       <i class="material-icons">delete</i>
                     </button>
                   </div>
                 </td>
+
               </tr>
             </tbody>
           </table>

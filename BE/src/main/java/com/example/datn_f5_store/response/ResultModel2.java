@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ResultModel<T> {
-    private com.example.datn_f5_store.response.PagingModel pagination;
+public class ResultModel2<T> {
+
     private T content;
-
+    private Integer id;
 }
-

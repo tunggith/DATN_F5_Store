@@ -33,4 +33,5 @@ public class ChiTietSanPhamReponse {
     private Integer soLuong;
 
     private String trangThai;
+    private Boolean checkKm;
 }

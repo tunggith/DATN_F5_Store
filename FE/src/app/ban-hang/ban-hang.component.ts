@@ -675,6 +675,7 @@ export class BanHangComponent implements OnInit {
       this.phuongXa = ''; // Nếu không tìm thấy, gán rỗng
     }
   }
+  
   getShippingFee() {
     const shippingFeeData = {
       "from_province_id": 201,          // Mã tỉnh gửi hàng

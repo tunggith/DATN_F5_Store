@@ -102,6 +102,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     double giaTriGiam = ((double) khuyenMai.getGiaTriKhuyenMai() / 100);
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() / (1 - giaTriGiam));
                 }
+                chiTietSanPham.setCheckKm(false);
                 chiTietSanPhamRepository.save(chiTietSanPham);  // Cập nhật lại giá trong DB
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
             }
@@ -116,9 +117,12 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
     // hàm thêm khuyến mãi vào sản phẩm
     @Override
     public DataResponse createKhuyenMaictsp(KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest) {
+
         // Lấy ra Khuyến mãi và Sản Phầm Chi tiết theo id
         KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPhamRequest.getKhuyenMai().getId()).orElseThrow(() -> new RuntimeException("Khuyến mãi không tồn tại"));
+
         ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(khuyenMaiChiTietSanPhamRequest.getChiTietSanPham().getId()).orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại"));
+
         Optional<KhuyenMaiChiTietSanPham> checkSpct = iKhuyenMaiChiTietSanPhamRepository.findFirstByChiTietSanPham(chiTietSanPham);
         KhuyenMaiChiTietSanPham khuyenMaiChiTietSanPham = new KhuyenMaiChiTietSanPham();
         try {
@@ -149,6 +153,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Chưa áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
+                chiTietSanPham.setCheckKm(true);
+                chiTietSanPhamRepository.save(chiTietSanPham);
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
@@ -160,11 +166,13 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() - khuyenMai.getGiaTriKhuyenMai());
                 }
+                chiTietSanPham.setCheckKm(true);
                 chiTietSanPhamRepository.save(chiTietSanPham);
                 khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Đang áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
+
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
@@ -200,6 +208,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     }
                     khuyenMaictsp.setTrangThai("Đang áp dụng");
+
                     iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
                     khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
@@ -214,8 +223,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
-                    updatedProductIds.add(khuyenMaictsp.getChiTietSanPham().getId());
-
+                    khuyenMaictsp.getChiTietSanPham().setCheckKm(false);
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
@@ -226,6 +234,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                         double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
                     }
+                    khuyenMaictsp.getChiTietSanPham().setCheckKm(false);
                     updatedProductIds.add(khuyenMaictsp.getChiTietSanPham().getId());
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());

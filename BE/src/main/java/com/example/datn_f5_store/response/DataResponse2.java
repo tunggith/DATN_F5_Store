@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DataResponse {
+public class DataResponse2 {
     private boolean status;
-    private ResultModel<?> result;
-
+    private ResultModel2<?> result;
 }

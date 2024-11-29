@@ -32,6 +32,7 @@ public class ConfigContanst {
         public static final String SO_LUONG = "SO_LUONG";
         public static final String NGAY_NHAP = "NGAY_NHAP";
         public static final String TRANG_THAI = "TRANG_THAI";
+        public static final String CHECKKM = "checkKM";
     }
     public static class ChucVu{
         public static final String TABLE = "chuc_vu";

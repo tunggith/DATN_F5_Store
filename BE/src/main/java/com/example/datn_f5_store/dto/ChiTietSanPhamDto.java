@@ -28,4 +28,6 @@ public class ChiTietSanPhamDto {
 
     private String trangThai;
 
+    private Boolean checkKm;
+
 }

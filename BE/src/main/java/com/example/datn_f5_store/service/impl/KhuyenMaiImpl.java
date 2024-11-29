@@ -5,6 +5,8 @@ import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.repository.IKhuyenMaiRepository;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
 import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.DataResponse2;
+import com.example.datn_f5_store.response.ResultModel2;
 import com.example.datn_f5_store.service.KhuyenMaiService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +117,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
 
     @Override
-    public DataResponse create(KhuyenMaiRequest khuyenMaiRequest) {
+    public DataResponse2 create(KhuyenMaiRequest khuyenMaiRequest) {
         LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("UTC")); // Lấy thời gian hiện tại theo UTC
         KhuyenMaiEntity khuyenMaiEntity = new KhuyenMaiEntity();
         try {
@@ -123,13 +125,13 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 if (!checkTrungMaKhuyenmai(khuyenMaiRequest.getMa())) {
                     String ma = khuyenMaiRequest.getMa();
                     if (ma == null || ma.isEmpty()) {
-                        return new DataResponse(false, new ResultModel<>(null, "Mã không được để trống"));
+                        return new DataResponse2(false, new ResultModel2<>( "Mã không được để trống",null));
                     }
                     if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 100) {
-                        return new DataResponse(false, new ResultModel<>(null, "Giá trị khuyến mãi không được vượt quá 100 khi kiểu khuyến mãi là %."));
+                        return new DataResponse2(false, new ResultModel2<>( "Giá trị khuyến mãi không được vượt quá 100 khi kiểu khuyến mãi là %.",null));
                     }
                     if (khuyenMaiRequest.getThoiGianBatDau().isAfter(khuyenMaiRequest.getThoiGianKetThuc())) {
-                        return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                        return new DataResponse2(false, new ResultModel2<>( "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu",null));
                     }
 
                     khuyenMaiEntity.setMa(ma);
@@ -160,20 +162,20 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                         khuyenMaiEntity.setTrangThai("Sắp diễn ra");
                     }
 
-                    // Ghi log thời gian bắt đầu và kết thúc
-                    System.out.println("Thời gian bắt đầu (UTC): " + thoiGianBatDauUTC);
-                    System.out.println("Thời gian kết thúc (UTC): " + thoiGianKetThucUTC);
 
-                    // Lưu khuyến mãi
-                    khuyenMaiRepository.save(khuyenMaiEntity);
-                    return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi thành công"));
+                     khuyenMaiRepository.save(khuyenMaiEntity);
+
+
+                    return new DataResponse2(true, new ResultModel2<>("Thêm Khuyến mãi thành công",khuyenMaiEntity.getId()));
+
+
                 } else {
-                    return new DataResponse(false, new ResultModel<>(null, "Mã Khuyến mãi đã tồn tại!"));
+                    return new DataResponse2(false, new ResultModel2<>( "Mã Khuyến mãi đã tồn tại!",null));
                 }
             }
-            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc < 0, Vui lòng kiểm tra lại"));
+            return new DataResponse2(false, new ResultModel2<>("Các trường dữ liệu không được để trống hoặc < 0, Vui lòng kiểm tra lại",null));
         } catch (Exception e) {
-            return new DataResponse(false, new ResultModel<>(null, "Đã xảy ra lỗi: " + e.getMessage()));
+            return new DataResponse2(false, new ResultModel2<>( "Đã xảy ra lỗi: " + e.getMessage(),null));
         }
     }
 
