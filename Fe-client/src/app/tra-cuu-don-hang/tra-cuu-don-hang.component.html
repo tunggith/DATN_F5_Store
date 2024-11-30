@@ -1,68 +1,141 @@
 <div class="pos_page">
   <div class="container">
-    <br>
-    <div class="search-container">
-      <h3>Tra cứu thông tin đơn hàng</h3>
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-        <div>
-          <input class="search-input" formControlName="ma" placeholder="Nhập mã hóa đơn" style="margin-bottom: 10px"/>
-        <h6 *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</h6>
-          <button type="submit" [disabled]="searchForm.invalid" class="btn-submit">Tra cứu</button>
+    <div class="pos_page_inner">
+      <div class="order-details">
+        <div class="search-container">
+          <h3>Tra cứu thông tin đơn hàng</h3>
+          <br>
+          <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+            <div>
+              <input
+                class="search-input"
+                formControlName="ma"
+                placeholder="Nhập mã hóa đơn"
+                style="margin-bottom: 10px"
+              />
+              <h6 *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</h6>
+              <button type="submit" [disabled]="searchForm.invalid" class="btn-submit">
+                Tra cứu
+              </button>
+            </div>
+          </form>
         </div>
-      </form>
+
+
+        <!-- Hiển thị timeline trạng thái hóa đơn nếu tìm thấy -->
+        <div *ngIf="hoaDonCT.length > 0" class="row main-timeline10">
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+            [ngClass]="{
+          active: trangThaiHoaDon === 'Chờ xác nhận' ||
+            trangThaiHoaDon === 'Đã xác nhận' ||
+            trangThaiHoaDon === 'Đang giao hàng' ||
+            trangThaiHoaDon === 'Hoàn thành'
+        }"
+          >
+            <div class="timeline-inner">
+              <h4>Chờ xác nhận</h4>
+              <div class="timeline-icon">
+                <i class="fa fa-solid fa-exclamation"></i>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+            [ngClass]="{
+          active: trangThaiHoaDon === 'Đã xác nhận' ||
+            trangThaiHoaDon === 'Đang giao hàng' ||
+            trangThaiHoaDon === 'Hoàn thành'
+        }"
+          >
+            <div class="timeline-inner">
+              <h4>Đã xác nhận</h4>
+              <div class="timeline-icon">
+                <i class="fa fa-solid fa-check"></i>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+            [ngClass]="{
+          active: trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'
+        }"
+          >
+            <div class="timeline-inner">
+              <h4>Đang giao hàng</h4>
+              <div class="timeline-icon">
+                <i class="fa fa-solid fa-truck"></i>
+              </div>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
+            [ngClass]="{ active: trangThaiHoaDon === 'Hoàn thành' }"
+          >
+            <div class="timeline-inner">
+              <h4>Hoàn thành</h4>
+              <div class="timeline-icon">
+                <i class="fa fa-regular fa-credit-card"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hiển thị thông tin tổng quan hóa đơn -->
+        <div *ngIf="hoaDonCT.length > 0">
+          <h3>Thông tin đơn hàng</h3>
+          <div><strong>Tổng tiền ban đầu:</strong> {{ hoaDonCT[0].hoaDon.tongTienBanDau | number: '1.0-0' }} VND</div>
+          <div><strong>Phí vận chuyển:</strong> {{ hoaDonCT[0].hoaDon.phiShip | number: '1.0-0' }} VND</div>
+          <div><strong>Giảm
+            giá:</strong> {{ (hoaDonCT[0].hoaDon.tongTienBanDau - hoaDonCT[0].hoaDon.tongTienSauVoucher || 0) | number: '1.0-0' }}
+            VND
+          </div>
+          <div>
+            <strong>Tổng tiền phải thanh toán:</strong>
+            {{
+              (hoaDonCT[0].hoaDon.tongTienSauVoucher + hoaDonCT[0].hoaDon.phiShip - (hoaDonCT[0].hoaDon.giaTriGiam || 0))
+                | number: '1.0-0'
+            }}
+            VND
+          </div>
+          <div><strong>Địa chỉ nhận hàng:</strong> {{ hoaDonCT[0].hoaDon.diaChiNhanHang }}</div>
+
+          <!-- Bảng chi tiết sản phẩm -->
+          <h3>Danh sách sản phẩm</h3>
+          <table class="table table-bordered custom-table">
+            <thead class="table-secondary">
+            <tr>
+              <th>Mã hóa đơn</th>
+              <th>Tên sản phẩm</th>
+<!--              <th>Xuất xứ</th>-->
+<!--              <th>Thương hiệu</th>-->
+<!--              <th>Giới tính</th>-->
+<!--              <th>Màu sắc</th>-->
+<!--              <th>Size</th>-->
+              <th>Đơn giá</th>
+              <th>Số lượng mua</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let chiTiet of hoaDonCT; let j = index">
+              <td>{{ chiTiet.hoaDon.ma }}</td>
+              <td>{{ chiTiet.chiTietSanPham?.sanPham?.ten }} -
+                {{ chiTiet.chiTietSanPham?.sanPham?.thuongHieu?.ten }} -
+                {{ chiTiet.chiTietSanPham?.mauSac?.ten }} -
+                {{ chiTiet.chiTietSanPham?.size?.ten }}
+              </td>
+<!--              <td>{{ chiTiet.chiTietSanPham.sanPham.xuatXu.ten }}</td>-->
+<!--              <td>{{ chiTiet.chiTietSanPham.sanPham.thuongHieu.ten }}</td>-->
+<!--              <td>{{ chiTiet.chiTietSanPham.sanPham.gioiTinh.ten }}</td>-->
+<!--              <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>-->
+<!--              <td>{{ chiTiet.chiTietSanPham.size.ten }}</td>-->
+              <td>{{ chiTiet.chiTietSanPham.donGia | number:'1.0-0' }} VND</td>
+              <td>{{ chiTiet.soLuong }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-
-
-    <!-- Hiển thị timeline trạng thái hóa đơn nếu tìm thấy -->
-    <div *ngIf="hoaDon" class="row main-timeline10">
-      <!-- Trạng thái Chờ xác nhận -->
-      <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-           [ngClass]="{'active': trangThaiHoaDon === 'Chờ xác nhận' || trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'}">
-        <div class="timeline-inner">
-          <h4>Chờ xác nhận</h4>
-          <div class="timeline-icon">
-            <i class="fa fa-solid fa-exclamation"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Trạng thái Đã xác nhận -->
-      <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-           [ngClass]="{'active': trangThaiHoaDon === 'Đã xác nhận' || trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'}">
-        <div class="timeline-inner">
-          <h4>Đã xác nhận</h4>
-          <div class="timeline-icon">
-            <i class="fa fa-solid fa-check"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Trạng thái Đang giao hàng -->
-      <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-           [ngClass]="{'active': trangThaiHoaDon === 'Đang giao hàng' || trangThaiHoaDon === 'Hoàn thành'}">
-        <div class="timeline-inner">
-          <h4>Đang giao hàng</h4>
-          <div class="timeline-icon">
-            <i class="fa fa-solid fa-truck"></i>
-          </div>
-        </div>
-      </div>
-
-      <!-- Trạng thái Hoàn thành -->
-      <div class="col-lg-3 col-md-4 col-sm-6 col-12 timeline"
-           [ngClass]="{'active': trangThaiHoaDon === 'Hoàn thành'}">
-        <div class="timeline-inner">
-          <h4>Hoàn thành</h4>
-          <div class="timeline-icon">
-            <i class="fa fa-regular fa-credit-card"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!--    &lt;!&ndash; Hiển thị thông báo lỗi nếu không tìm thấy hóa đơn &ndash;&gt;-->
-    <!--    <div *ngIf="errorMessage" class="error-message">-->
-    <!--      {{ errorMessage }}-->
-    <!--    </div>-->
   </div>
 </div>
