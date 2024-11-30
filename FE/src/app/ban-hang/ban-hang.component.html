@@ -4,7 +4,6 @@
             <a (click)="selectTab('taoMoi')" [class.active]="activeTab === 'taoMoi'">Tạo mới</a>
             <a (click)="selectTab('danhSachHoaDon')" [class.active]="activeTab === 'danhSachHoaDon'">Danh sách hóa
                 đơn</a>
-
         </div>
         <!--form tạo mới-->
         <div *ngIf="activeTab==='taoMoi'">
@@ -15,8 +14,12 @@
                             (customerSelected)="onCustomerSelected($event)">
                         </app-customer-popup>
                     </div>
+
                     <div class="san-pham-popup">
-                        <span title="Sản phẩm" (click)="openPopupSanPham()">Chọn sản phẩm</span>
+                        <!-- <span title="Sản phẩm" (click)="openPopupSanPham()">Quét QR</span> -->
+                        <span title="Sản phẩm" (click)="openPopupSanPham()" style="display: inline-flex; align-items: center; padding: 2px 6px; background: linear-gradient(135deg, #1c1f53, #292e9e); color: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+                            <i class="material-icons" style="margin-right: 2px; font-size: 14px;">add</i>Sản phẩm
+                        </span>
                     </div>
                     <div class="order-list" id="order-list">
                         <div *ngIf="!checkHoaDon">
@@ -46,7 +49,7 @@
                         <div *ngIf="!hasError&&!checkHoaDon&&activeTab==='taoMoi'">
                             <table class="table table-hover">
                                 <thead class="text-dark">
-                                    <th>Stt</th>
+                                    <th>STT</th>
                                     <th>Tên sản phẩm</th>
                                     <th>Số lượng</th>
                                     <th>Tổng tiền</th>
@@ -68,7 +71,7 @@
                                                         (click)="increaseQuantity(cthd.chiTietSanPham?.id)">add</i></button>
                                             </div>
                                         </td>
-                                        <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
+                                        <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VND</td>
                                         <td><button class="select-invoice"><i class="material-icons"
                                                     (click)="removeHoaDonChiTiet(cthd.id)">delete_forever</i></button>
                                         </td>
@@ -82,72 +85,95 @@
                 </div>
             </div>
             <div class="row">
-                <div class="hoa-don-create" style="display: flex;">
-                    <div class="address">
+                <div class="hoa-don-create" style="display: flex; gap: 20px; padding: 20px;">
+                    <div class="address" style="flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <h2 style="margin-left: 10px;">Thông tin thanh toán</h2>
                         <div *ngIf="icon==='toggle_on'">
-                            <h3 style="text-align: center;">Địa chỉ nhận hàng</h3>
+                            <h4 style="text-align: center; font-weight: bold; color: #00325b; margin: 15px 0; text-transform: uppercase; font-size: 18px; border-bottom: 2px solid #2196F3; padding-bottom: 8px;">Địa chỉ nhận hàng</h4>
                             <form class="form_address" (ngSubmit)="submitAddress()">
                                 <div>
                                     <div class="mb-3">
                                         <label for="hoTen" class="form-label">Họ và Tên</label>
                                         <input type="text" class="form-control" id="hoTen" [(ngModel)]="hoTenNguoiNhan"
-                                            name="hoTen" required>
+                                            name="hoTen" maxlength="25"
+                                            (blur)="hoTenNguoiNhan ? (hoTenNguoiNhan.length > 25 ? showErrorMessage('Họ tên không được quá 25 ký tự') : null) : showErrorMessage('Vui lòng nhập họ tên')">
+                                        <span class="text-danger" *ngIf="!hoTenNguoiNhan">Vui lòng nhập họ tên</span>
+                                        <span class="text-danger" *ngIf="hoTenNguoiNhan?.length > 25">Họ tên không được quá 25 ký tự</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="soDienThoai" class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="soDienThoai"
-                                            [(ngModel)]="soDienThoai" name="soDienThoai" required>
+                                        <input type="number" class="form-control" id="soDienThoai"
+                                            [(ngModel)]="soDienThoai" name="soDienThoai"
+                                            (input)="soDienThoai = sanitizeSoDienThoai(soDienThoai)"
+                                            (blur)="soDienThoai ? (soDienThoai.length < 10 || soDienThoai.length > 11 ? showErrorMessage('Số điện thoại phải từ 10-11 số') : null) : showErrorMessage('Vui lòng nhập số điện thoại')">
+                                        <span class="text-danger" *ngIf="!soDienThoai">Vui lòng nhập số điện thoại</span>
+                                        <span class="text-danger" *ngIf="soDienThoai && (soDienThoai.length < 10 || soDienThoai.length > 11)">Số điện thoại phải từ 10-11 số</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email" [(ngModel)]="email"
-                                            name="email" required>
+                                            name="email"
+                                            (blur)="email ? (!email.includes('@') ? showErrorMessage('Email không hợp lệ') : null) : showErrorMessage('Vui lòng nhập email')">
+                                        <span class="text-danger" *ngIf="!email">Vui lòng nhập email</span>
+                                        <span class="text-danger" *ngIf="email && !email.includes('@')">Email không hợp lệ</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="soNha" class="form-label">Số nhà</label>
-                                        <input type="text" class="form-control" id="soNha" [(ngModel)]="soNha"
-                                            name="soNha" required>
+                                        <input type="number" class="form-control" id="soNha" [(ngModel)]="soNha"
+                                            name="soNha"
+                                            (input)="soNha = sanitizeSoNha(soNha)"
+                                            (blur)="soNha ? null : showErrorMessage('Vui lòng nhập số nhà')">
+                                        <span class="text-danger" *ngIf="!soNha">Vui lòng nhập số nhà</span>
                                     </div>
                                 </div>
                                 <div>
                                     <div class="mb-3">
                                         <label for="duong" class="form-label">Đường</label>
                                         <input type="text" class="form-control" id="duong" [(ngModel)]="duong"
-                                            name="duong" required>
+                                            name="duong" (blur)="duong ? null : showErrorMessage('Vui lòng nhập tên đường')">
+                                        <span class="text-danger" *ngIf="!duong">Vui lòng nhập tên đường</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
                                         <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh"
-                                            name="tinhThanh" (change)="onTinhThanhChange($event)" required>
+                                            name="tinhThanh" (change)="onTinhThanhChange($event)"
+                                            (blur)="selectedTinhThanh ? null : showErrorMessage('Vui lòng chọn tỉnh/thành')">
+                                            <option value="">Chọn tỉnh/thành</option>
                                             <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{
                                                 tinh.ProvinceName }}
                                             </option>
                                         </select>
+                                        <span class="text-danger" *ngIf="!selectedTinhThanh">Vui lòng chọn tỉnh/thành</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="quanHuyen" class="form-label">Quận/ huyện</label>
                                         <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen"
-                                            name="quanHuyen" (change)="onQuanHuyenChange($event)" required>
+                                            name="quanHuyen" (change)="onQuanHuyenChange($event)"
+                                            (blur)="selectedQuanHuyen ? null : showErrorMessage('Vui lòng chọn quận/huyện')">
+                                            <option value="">Chọn quận/huyện</option>
                                             <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
                                                 quan.DistrictName }}
                                             </option>
                                         </select>
+                                        <span class="text-danger" *ngIf="!selectedQuanHuyen">Vui lòng chọn quận/huyện</span>
                                     </div>
                                     <div class="mb-3">
                                         <label for="phuongXa" class="form-label">Phường/ xã</label>
                                         <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa"
-                                            name="phuongXa" (change)="onPhuongXaChange($event)" required>
+                                            name="phuongXa" (change)="onPhuongXaChange($event)"
+                                            (blur)="selectedPhuongXa ? null : showErrorMessage('Vui lòng chọn phường/xã')">
+                                            <option value="">Chọn phường/xã</option>
                                             <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{
                                                 phuong.WardName }}
                                             </option>
                                         </select>
+                                        <span class="text-danger" *ngIf="!selectedPhuongXa">Vui lòng chọn phường/xã</span>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div class="voucher">
+                    <div class="voucher" [ngClass]="{'expanded': icon === 'toggle_on'}" style="flex: 1; background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                         <form class="example-form">
                             <input type="text" placeholder="Nhập hoặc chọn khách hàng...." [formControl]="myControl"
                                 [matAutocomplete]="auto">
@@ -161,7 +187,7 @@
                             </mat-autocomplete>
                         </form>
                         <div>
-                            <span>Tổng tiền tạm tính: {{tongTienBanDau | number:'1.0-0' }} VNĐ</span>
+                            <span>Tổng tiền tạm tính: {{tongTienBanDau | number:'1.0-0' }} VND</span>
                         </div>
                         <div class="giao-hang">
                             <span>Giao hàng: <i class="material-icons toggle-icon"
@@ -181,13 +207,6 @@
                                     </mat-option>
                                 </mat-autocomplete>
                             </form>
-                        </div>
-                        <div>
-                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
-                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
-                                    style="text-align: center;">
-                                    {{phuongThuc.tenPhuongThuc}}</option>
-                            </select>
                         </div> 
                         <div>
                             <div>
@@ -204,22 +223,30 @@
                             </div>
                         </div>
                         <div>
-                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div>
                             <span>Số tiền được giảm: {{ (tongTienBanDau-tongTienSauVoucher||0) | number:'1.0-0' }}
-                                VNĐ</span>
+                                VND</span>
                         </div>
                         <div>
                             <span>Tổng tiền phải thanh toán: {{(tongTienSauVoucher+phiVanChuyen||0) | number:'1.0-0' }}
-                                VNĐ</span>
+                                VND</span>
                         </div>
                         <div>
-                            <span>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VNĐ</span>
+                            <span>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VND</span>
                         </div>
+                        <div>
+                            <select class="form-select" (change)="getIdThanhToan($event.target.value)">
+                                <option *ngFor="let phuongThuc of phuongThucThanhToan" [value]="phuongThuc.id"
+                                    style="text-align: center;">
+                                    {{phuongThuc.tenPhuongThuc}}</option>
+                            </select>
+                        </div>
+                        <app-popup-qr *ngIf="popupQr" (closePopup)="closePopupQr()" (confirmPayment)="confirmQr()"></app-popup-qr>
                         <div class="payment">
-                            <button (click)="thanhtoanHoaDon(activeInvoidID)"><i
-                                    class="material-icons">payments</i>Thanh
+                            <button (click)="thanhtoanHoaDon(activeInvoidID)" style="width: 100%;height: 40px;"><i
+                                    class="material-icons" style="margin-right: 5px;margin-top: -3px;">payments</i>Thanh
                                 toán</button>
                         </div>
                     </div>
@@ -235,7 +262,7 @@
             <div class="row">
                 <table class="table table-hover">
                     <thead>
-                        <th scope="col">Stt</th>
+                        <th scope="col">STT </th>
                         <th scope="col">Mã hóa đơn</th>
                         <th scope="col">Tên khách hàng</th>
                         <th scope="col">Giao hàng</th>
@@ -251,13 +278,13 @@
                             <th scope="row">{{i+1}}</th>
                             <td>{{hoaDon.ma}}</td>
                             <td>{{hoaDon.khachHang.ten}}</td>
-                            <td *ngIf="hoaDon.giaoHang==1">có</td>
-                            <td *ngIf="hoaDon.giaoHang==0">không</td>
+                            <td *ngIf="hoaDon.giaoHang==1">Có</td>
+                            <td *ngIf="hoaDon.giaoHang==0">Không</td>
                             <td>{{hoaDon.thanhToan.tenPhuongThuc}}</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                             <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                             <td>{{hoaDon.thoiGianTao}}</td>
-                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VNĐ
+                            <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VND
                             </td>
                             <td class="button-select">
                                 <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"
@@ -297,3 +324,4 @@
             </div>
         </div>
     </div>
+</div>

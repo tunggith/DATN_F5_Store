@@ -6,7 +6,7 @@ import { SevricesanphamService } from '../sanpham/sevricesanpham.service';
 import { KhuyenMaiSanPhamChiTietService } from '../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.service';
 import { DataResponse } from '../models/data-response.model';
 import Swal from 'sweetalert2';
-import * as moment from 'moment-timezone';
+
 
 @Component({
   selector: 'app-khuyen-mai',
@@ -228,9 +228,10 @@ createKhuyenMai() {
             confirmButton: 'custom-confirm-button'
           }
         });
+        this.addPromotionToProducts(response.result.id);
         this.resetForm();
         this.loadKhuyenMais();       
-        this.addPromotionToProducts(response.result.id);
+       
        
       } else {
         Swal.fire({
@@ -263,7 +264,6 @@ createKhuyenMai() {
   editKhuyenMai(): void {
     // Chuyển đổi thoiGianBatDau và thoiGianKetThuc sang UTC
     const { thoiGianBatDau, thoiGianKetThuc, ...khuyenMaiData } = this.currentKhuyenMai;
-  
     this.currentKhuyenMai.thoiGianBatDau = thoiGianBatDau;
     this.currentKhuyenMai.thoiGianKetThuc = thoiGianKetThuc;
   
@@ -283,10 +283,10 @@ createKhuyenMai() {
               confirmButton: 'custom-confirm-button'
             }
           });
-          this.resetForm();
-          this.loadKhuyenMais();
           this.addPromotionToProducts(response.result.id);
           console.log('Id sửa :',response.result.id);
+          this.resetForm();
+          this.loadKhuyenMais();
         } else {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',
@@ -555,8 +555,6 @@ removeKhuyenMaiSanPham(chiTietSanPham: any) {
     }
   );
 }
-
-
 
 
 
@@ -1020,19 +1018,27 @@ addPromotionToProducts(promotionId: number): void {
       khuyenMai: { id: promotionId },
       chiTietSanPham: { id: productId }
     };
-    console.log('dữ liệu thêm kmsp :',request);
-    return this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request).toPromise();
+    console.log('Dữ liệu thêm khuyến mãi:', request);
+    return this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request)
+      .toPromise()
+      .then(() => ({ productId, success: true }))
+      .catch((error) => ({ productId, success: false, error }));
   });
 
-
   Promise.all(promises)
-    .then(() => {
+    .then(results => {
+      console.log("Kết quả từng sản phẩm:", results);
+      const failed = results.filter(r => !r.success);
+      if (failed.length > 0) {
+        console.error("Một số sản phẩm không được thêm:", failed);
+      }
       this.resetForm();
     })
     .catch((error) => {
       console.error("Lỗi khi gắn khuyến mãi vào sản phẩm:", error);
     });
 }
+
 
 
 }

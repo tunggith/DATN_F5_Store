@@ -21,4 +21,5 @@ public class GioHangChiTietDto {
 
     private Integer soLuong;
     private AnhChiTietSanPham urlAnh;
+    private String trangThai;
 }

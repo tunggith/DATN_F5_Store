@@ -14,7 +14,9 @@ export class SanPhamComponent implements OnInit {
   ThuongHieuList: any[] = [];
   xuatXuList: any[] = [];
   sizeList: any[] = [];
+  sizeListSp: any[] = [];
   mauSacList: any[] = [];
+  mauSacListsp: any[] = [];
   gioiTinhList: any[] = [];
   sanPhamPage: any[] = [];
   totalPages: number[] = []; // Mảng chứa các số trang
@@ -416,8 +418,8 @@ export class SanPhamComponent implements OnInit {
   ThuongHieu: string = ''
   XuatXu: string = ''
   gioiTinh: string = ''
-  kichThuoc:string = ''
-  mauSac:string=''
+  kichThuoc: string = ''
+  mauSac: string = ''
   selectedColor: any = null; // Lưu màu sắc được chọn
   selectedSize: any = null; // Lưu kích thước được chọ
   anhChiTietSanPham: any[] = []; // Lưu danh sách ảnh chi tiết sản phẩm
@@ -480,6 +482,7 @@ export class SanPhamComponent implements OnInit {
           this.anhChiTietSanPham = response;
           const chiTiet = response[0]?.chiTietSanPham;
           if (chiTiet) {
+            this.idCTSP = chiTiet.id
             this.soLuongCTSP = chiTiet.soLuong || 0;
             this.donGiaDau = chiTiet.donGia || 0;
             this.donGia = this.donGiaDau;
@@ -600,8 +603,8 @@ export class SanPhamComponent implements OnInit {
     this.trangChuService.getSizes(id).subscribe(
       (response: any[]) => {
         console.log("size theo id sp", response)
-        this.sizeList = response;
-        console.log('sizeList:', this.sizeList);
+        this.sizeListSp = response;
+        console.log('sizeList:', this.sizeListSp);
       },
       (error) => {
         console.error('Error loading sizes:', error);
@@ -614,8 +617,8 @@ export class SanPhamComponent implements OnInit {
     this.trangChuService.getMau(id).subscribe(
       (response: any[]) => {
         console.log("màu theo id sp", response)
-        this.mauSacList = response;
-        console.log('mauSacList:', this.mauSacList);
+        this.mauSacListsp = response;
+        console.log('mauSacList:', this.mauSacListsp);
       },
       (error) => {
         console.error('Error loading mauSacList:', error);
@@ -625,7 +628,8 @@ export class SanPhamComponent implements OnInit {
 
 
   openPopup(productId: number) {
-    // gọi hàm thực thi
+    this.idCTSP = productId;
+    // gọi hàm thực thi 
     this.loadSizes(productId)
     this.loadColors(productId)
     this.getSanPham(productId)
@@ -708,80 +712,89 @@ export class SanPhamComponent implements OnInit {
 
   themSanPham(): void {
     const idKhString = localStorage.getItem('id'); // Lấy id dưới dạng chuỗi
-
+    console.log("id ctsp hien tai ", this.idCTSP)
     // Kiểm tra xem ID khách hàng có tồn tại trong localStorage hay không
     if (!idKhString) {
-        // Nếu không có khách hàng, tạo một đối tượng request mới
-        const request = {
-            id: this.idSsanPham,
-            idGioHang: 0,
-            idChiTietSanPham: this.idCTSP,
-            soLuong: this.quantity || 1, // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
-            urlAnh:{
-              urlAnh:this.currentImage
-            },
-            chiTietSanPham:{
-              id:this.idCTSP,
-              sanPham:{
-                ten:this.tenSanPham
-              },
-              size:{
-                ten:this.kichThuoc
-              },
-              mauSac:{
-                ten:this.mauSac
-              },
-              donGia:this.donGia
-            },
-        };
+      // Nếu không có khách hàng, tạo một đối tượng request mới
+      const request = {
+        id: this.idCTSP,
+        idGioHang: 0,
+        idChiTietSanPham: this.idCTSP,
+        soLuong: this.quantity || 1, // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
+        urlAnh: {
+          urlAnh: this.currentImage
+        },
+        trangThai: 'unactive',
+        chiTietSanPham: {
+          id: this.idCTSP,
+          sanPham: {
+            ten: this.tenSanPham
+          },
+          size: {
+            ten: this.kichThuoc
+          },
+          mauSac: {
+            ten: this.mauSac
+          },
+          donGia: this.donGia
+        },
+      };
 
-        // Lấy hoặc tạo một giỏ hàng từ localStorage
-        let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Giỏ hàng mặc định là mảng rỗng
+      // Lấy hoặc tạo một giỏ hàng từ localStorage
+      let cart = JSON.parse(localStorage.getItem('cart') || '[]'); // Giỏ hàng mặc định là mảng rỗng
 
-        // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
-        const existingProductIndex = cart.findIndex((item: any) => item.idChiTietSanPham === request.idChiTietSanPham);
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng hay chưa
+      const existingProductIndex = cart.findIndex((item: any) => item.idChiTietSanPham === request.idChiTietSanPham);
 
-        if (existingProductIndex !== -1) {
-            // Nếu sản phẩm đã tồn tại trong giỏ hàng, cộng dồn số lượng
-            cart[existingProductIndex].soLuong += request.soLuong;
+      if (existingProductIndex !== -1) {
+        // Nếu sản phẩm đã tồn tại trong giỏ hàng, cộng dồn số lượng
+        const tongSoLuong = cart[existingProductIndex].soLuong + request.soLuong;
+        if (tongSoLuong > this.soLuongCTSP) {
+          // Thông báo lỗi nếu tổng số lượng vượt quá số lượng tồn kho
+          this.showErrorMessage('Bạn đã thêm sản phẩm với số lượng tối đa');
         } else {
-            // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
-            cart.push(request);
+          // Cộng dồn số lượng
+          cart[existingProductIndex].soLuong += request.soLuong;
+          this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
         }
+      } else {
+        // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
+        cart.push(request);
+      }
 
-        // Lưu giỏ hàng vào localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
+      // Lưu giỏ hàng vào localStorage
+      localStorage.setItem('cart', JSON.stringify(cart));
 
-        this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
+      this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
     } else {
-        // Nếu có ID khách hàng, gọi API để thêm sản phẩm vào giỏ hàng
-        const idKh = Number(idKhString);
-        if (isNaN(idKh)) {
-            console.error('ID khách hàng không hợp lệ!');
-            return; // Nếu ID không hợp lệ, dừng lại
+      // Nếu có ID khách hàng, gọi API để thêm sản phẩm vào giỏ hàng
+      const idKh = Number(idKhString);
+      if (isNaN(idKh)) {
+        console.error('ID khách hàng không hợp lệ!');
+        return; // Nếu ID không hợp lệ, dừng lại
+      }
+
+      const request = {
+        id: 0,
+        idGioHang: 0,
+        idChiTietSanPham: this.idCTSP,
+        soLuong: this.quantity || 1 // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
+      };
+
+      // Gọi API thêm sản phẩm vào giỏ hàng của khách hàng
+      this.GioHangService.themSanPham(idKh, request).subscribe(
+        response => {
+          // Sau khi thêm sản phẩm vào giỏ hàng, có thể cập nhật thông tin bổ sung
+          this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
+        },
+        error => {
+          this.handleError(error);
         }
-
-        const request = {
-            id: 0,
-            idGioHang: 0,
-            idChiTietSanPham: this.idCTSP,
-            soLuong: this.quantity || 1 // Đảm bảo số lượng mặc định là 1 nếu không có giá trị
-        };
-
-        // Gọi API thêm sản phẩm vào giỏ hàng của khách hàng
-        this.GioHangService.themSanPham(idKh, request).subscribe(
-            response => {
-                // Sau khi thêm sản phẩm vào giỏ hàng, có thể cập nhật thông tin bổ sung
-                this.showSuccessMessage('Thêm sản phẩm vào giỏ thành công!');
-            },
-            error => {
-                this.handleError(error);
-            }
-        );
+      );
     }
-}
+  }
 
-  
+
 
   // Xử lý khi người dùng giảm số lượng
   decreaseQuantity(): void {

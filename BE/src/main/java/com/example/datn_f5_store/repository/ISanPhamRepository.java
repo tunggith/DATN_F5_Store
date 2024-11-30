@@ -17,7 +17,8 @@ public interface ISanPhamRepository extends JpaRepository<SanPhamEntity,Integer>
     @Query("SELECT sp FROM SanPhamEntity sp WHERE "
             + "(:thuongHieuId IS NULL OR sp.thuongHieu.id = :thuongHieuId) AND "
             + "(:xuatXuId IS NULL OR sp.xuatXu.id = :xuatXuId) AND "
-            + "(:gioiTinhId IS NULL OR sp.gioiTinh.id = :gioiTinhId)")
+            + "(:gioiTinhId IS NULL OR sp.gioiTinh.id = :gioiTinhId) "
+            + "ORDER BY sp.id DESC")
     Page<SanPhamEntity> filterSanPham(@Param("thuongHieuId") Long thuongHieuId,
                                 @Param("xuatXuId") Long xuatXuId,
                                 @Param("gioiTinhId") Long gioiTinhId,

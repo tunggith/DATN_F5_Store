@@ -39,4 +39,31 @@ public class SendEmailService {
             return new DataResponse(false,new ResultModel<>(null,"Send email exception"));
         }
     }
+    public DataResponse sendSimpleEmailCamOn(String toEmail,String maHoaDon){
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("f5storefall24@gmail.com");
+            message.setTo(toEmail);
+            String subject = "Cảm ơn vì đã mua hàng tại F5-store";
+            message.setSubject(subject);
+            String body = "Kính gửi: "+toEmail+" ,\n" +
+                    "\n" +
+                    "Chúng tôi xin chân thành cảm ơn bạn vì đã tin tưởng mua hàng tại F5-store chúng tôi. Dưới đây là thông tin mã đơn hàng của bạn:\n" +
+                    "\n" +
+                    "Mã Đơn hàng: "+maHoaDon+" \n" +
+                    "Bạn có thể truy cập vào trang web của chúng tôi để tra cứu mã đơn hàng.\n" +
+                    "\n" +
+                    "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!\n" +
+                    "\n" +
+                    "Trân trọng!\n";
+            message.setText(body);
+            mailSender.send(message);
+            return new DataResponse(true, new ResultModel<>(null,"Send email successfully"));
+        }catch (Exception e){
+            e.printStackTrace();
+            return new DataResponse(false,new ResultModel<>(null,"Send email exception"));
+        }
+    }
+
+
 }

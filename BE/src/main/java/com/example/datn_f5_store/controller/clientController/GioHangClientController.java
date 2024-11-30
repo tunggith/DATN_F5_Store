@@ -79,5 +79,9 @@ public class GioHangClientController {
 
         return ResponseEntity.ok(dataResponse);
     }
+    @PutMapping("/update-trang-thai/{id}")
+    public ResponseEntity<Object> updateTrangThai(@Parameter(name = "id")@PathVariable Integer id){
+        return new ResponseEntity<>(gioHangClientService.updateTrangThai(id),HttpStatus.OK);
+    }
 
 }

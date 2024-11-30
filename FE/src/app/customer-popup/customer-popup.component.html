@@ -1,34 +1,102 @@
 <div class="popup">
-    <form class="add-customer" (ngSubmit)="addCustomer()" >
-        <span class="close" (click)="close()">×</span>  
-        <div>
-            <label>Họ tên</label>
-            <input type="text" [(ngModel)]="customer.ten" name="ten">
-        </div>
-        <div class="check-input">
-            <label>Giới tính:</label>
-            <div class="input-radio">
-                <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh"
-                    value="0">
-                <label class="form-check-label">Nam</label>
+
+    <form class="add-customer" [formGroup]="customerForm" (ngSubmit)="addCustomer()">
+        <button type="button" class="btn-close" (click)="close()" aria-label="Close"
+            style="position: absolute; top: 10px; right: 10px; padding: 8px; background: none; border: none; cursor: pointer;">
+            <i class="material-icons" style="font-size: 24px;">close</i>
+        </button>
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="form-label" style="font-weight: bold;text-align: start;color: black;">Họ và tên</label>
+                <input type="text" formControlName="ten">
+                <div *ngIf="customerForm.get('ten').invalid && (customerForm.get('ten').dirty || customerForm.get('ten').touched)">
+                    <small class="text-danger" *ngIf="customerForm.get('ten').errors?.required">
+                        Vui lòng nhập tên khách hàng
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('ten').errors?.pattern">
+                        Tên chỉ được chứa chữ cái, khoảng trắng và dấu
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('ten').errors?.minlength">
+                        Tên phải có ít nhất 3 ký tự
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('ten').errors?.maxlength">
+                        Tên không được vượt quá 25 ký tự
+                    </small>
+                </div>
             </div>
-            <div class="input-radio">
-                <input class="form-check-input" type="radio" [(ngModel)]="customer.gioiTinh" name="gioiTinh" value="1">
-                <label class="form-check-label">Nữ</label>
+        </div>
+        <div class="row check-input">
+            <div class="col-sm-12">
+                <label class="form-label" style="font-weight: bold;text-align: start;color: black;">Giới tính:</label>
+                <div style="display: flex;">
+                    <div style=" white-space: nowrap;">
+                        <input style="width: 15px;height: 15px;margin-right: -16px;" type="radio"
+                            formControlName="gioiTinh" value="0" name="gioiTinh" checked id="gioiTinhNam" required>
+                        <label for="gioiTinhNam">Nam</label>
+                    </div>
+                    <div style="white-space: nowrap;">
+                        <input style="width: 15px;height: 15px;margin-right: -16px;" type="radio"
+                            formControlName="gioiTinh" value="1" name="gioiTinh" id="gioiTinhNu">
+                        <label for="gioiTinhNu">Nữ</label>
+                    </div>
+                    <div style="white-space: nowrap;">
+                        <input style="width: 15px;height: 15px;margin-right: -16px;" type="radio"
+                            formControlName="gioiTinh" value="2" name="gioiTinh" id="gioiTinhKhac">
+                        <label for="gioiTinhKhac" style="margin-right: -10px;">Khác</label>
+                    </div>
+                </div>
             </div>
         </div>
-        <div>
-            <label>Ngày tháng năm sinh</label>
-            <input type="date" [(ngModel)]="customer.ngayThangNamSinh" name="ngayThangNamSinh">
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="form-label" style="font-weight: bold;text-align: start;color: black;">Ngày tháng năm
+                    sinh</label>
+                <input type="date" formControlName="ngayThangNamSinh" class="form-control" id="ngayThangNamSinh" required>
+                <div
+                    *ngIf="customerForm.get('ngayThangNamSinh').invalid && (customerForm.get('ngayThangNamSinh').dirty || customerForm.get('ngayThangNamSinh').touched)">
+                    <small class="text-danger" *ngIf="customerForm.get('ngayThangNamSinh').errors?.required">
+                        Ngày sinh không được để trống
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('ngayThangNamSinh').errors?.ageInvalid">
+                        Ngày sinh phải lớn hơn hoặc bằng 18 tuổi
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('ngayThangNamSinh').errors?.ageTooHigh">
+                        Ngày sinh phải nhỏ hơn 100 tuổi
+                    </small>
+                </div>
+            </div>
         </div>
-        <div>
-            <label>Email</label>
-            <input type="email" [(ngModel)]="customer.email" name="email">
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="form-label" style="font-weight: bold;text-align: start;color: black;">Email</label>
+                <input type="email" formControlName="email">
+                <div *ngIf="customerForm.get('email').invalid && (customerForm.get('email').dirty || customerForm.get('email').touched)">
+                    <small class="text-danger" *ngIf="customerForm.get('email').errors?.required">
+                        Email không được để trống
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('email').errors?.email">
+                        Email không hợp lệ
+                    </small>
+                </div>
+            </div>
         </div>
-        <div>
-            <label>Số điện thoại</label>
-            <input type="text" [(ngModel)]="customer.sdt" name="sdt">
+        <div class="row">
+            <div class="col-sm-12">
+                <label class="form-label" style="font-weight: bold;text-align: start;color: black;">Số điện
+                    thoại</label>
+                <input type="text" formControlName="sdt">
+                <div *ngIf="customerForm.get('sdt').invalid && (customerForm.get('sdt').dirty || customerForm.get('sdt').touched)">
+                    <small class="text-danger" *ngIf="customerForm.get('sdt').errors?.required">
+                        Số điện thoại không được để trống
+                    </small>
+                    <small class="text-danger" *ngIf="customerForm.get('sdt').errors?.pattern">
+                        Số điện thoại không hợp lệ
+                    </small>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Thêm</button>
+        <button type="submit" [disabled]="customerForm.invalid"
+            style="background-color: #003366;color: white;border: none;padding: 10px 20px;border-radius: 5px;cursor: pointer;">Thêm
+            khách hàng</button>
     </form>
 </div>

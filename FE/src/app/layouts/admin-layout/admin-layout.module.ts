@@ -32,6 +32,7 @@ import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
 import { HoaDonChoComponent } from 'app/hoa-don-cho/hoa-don-cho.component';
 import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
 import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-hang.component';
+import { PopupQrComponent } from 'app/popup-qr/popup-qr.component';
 
 
 @NgModule({
@@ -72,6 +73,7 @@ import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-h
     HoaDonChoComponent,
     PopupSanPhamComponent,
     ThongTinDonHangComponent,
+    PopupQrComponent,
   ],
 })
 

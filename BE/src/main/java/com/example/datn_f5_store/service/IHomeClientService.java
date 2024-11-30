@@ -34,4 +34,5 @@ public interface IHomeClientService {
 
     List<ChiTietSanPhamEntity> getChiTietByMauSacAndSizeAndSanPham(Integer idMauSac, Integer idSize, Integer idSanPham);
 
+     List<AnhChiTietSanPham> findByMauSacAndSanPham(Integer idMauSac, Integer idSanPham);
 }

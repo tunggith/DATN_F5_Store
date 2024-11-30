@@ -65,7 +65,8 @@ public class GiohangClientImpl implements IGioHangClientService {
                     entity.getGioHang(),
                     entity.getChiTietSanPham(),
                     entity.getSoLuong(),
-                    anh
+                    anh,
+                    entity.getTrangThai()
             );
         }).collect(Collectors.toList());
     }
@@ -86,7 +87,11 @@ public class GiohangClientImpl implements IGioHangClientService {
 
         if (existingChiTiet != null) {
             // Nếu tồn tại, cộng dồn số lượng
-            existingChiTiet.setSoLuong(existingChiTiet.getSoLuong() + request.getSoLuong());
+            Integer soLuong = existingChiTiet.getSoLuong() + request.getSoLuong();
+            if(soLuong>chiTietSanPham.getSoLuong()){
+                throw new RuntimeException("Bạn đã thêm sản phẩm với số lượng tối đa");
+            }
+            existingChiTiet.setSoLuong(soLuong);
             chiTietGioHangRepository.save(existingChiTiet);
         } else {
             // Nếu không tồn tại, tạo mới
@@ -94,6 +99,7 @@ public class GiohangClientImpl implements IGioHangClientService {
             chiTietGioHang.setGioHang(gioHangEntity);
             chiTietGioHang.setChiTietSanPham(chiTietSanPham);
             chiTietGioHang.setSoLuong(request.getSoLuong());
+            chiTietGioHang.setTrangThai("unactive");
             chiTietGioHangRepository.save(chiTietGioHang);
         }
 
@@ -141,5 +147,17 @@ public class GiohangClientImpl implements IGioHangClientService {
             // Trường hợp không tìm thấy chi tiết giỏ hàng
             return new DataResponse(false, new ResultModel<>(null, "Chi tiết giỏ hàng không tồn tại!"));
         }
+    }
+
+    @Override
+    public DataResponse updateTrangThai(Integer id) {
+        ChiTietGioHangEntity entity = chiTietGioHangRepository.findById(id).orElse(null);
+        if(entity.getTrangThai().equals("active")){
+            entity.setTrangThai("unactive");
+        }else {
+            entity.setTrangThai("active");
+        }
+        chiTietGioHangRepository.save(entity);
+        return new DataResponse(true,new ResultModel<>(null,"update thành công"));
     }
 }

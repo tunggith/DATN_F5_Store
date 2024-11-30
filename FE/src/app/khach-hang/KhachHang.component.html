@@ -16,8 +16,10 @@
                                         <div class="image-upload-container">
                                             <input type="file" class="form-control" id="anh" name="anh"
                                                 (change)="onFileSelected($event)" required>
-                                            <div class="image-preview" *ngIf="newKhachHang.anh">
+                                            <div class="image-preview" *ngIf="newKhachHang.anh" (click)="document.getElementById('anh').click()">
                                                 <img [src]="newKhachHang.anh" alt="Ảnh nhân viên" />
+                                                <div class="change-photo-overlay">
+                                                </div>
                                             </div>
                                             <label for="anh" class="upload-label" *ngIf="!newKhachHang.anh"><i
                                                     class="material-icons">add_a_photo</i></label>
@@ -77,13 +79,16 @@
                                             placeholder="Nhập số điện thoại" formControlName="sdt" required>
                                         <div *ngIf="khachHangForm.get('sdt').invalid && khachHangForm.get('sdt').touched">
                                             <small class="text-danger"
-                                                *ngIf="khachHangForm.get('sdt').errors?.required">Số điện
-                                                thoại không được để trống.</small>
+                                                *ngIf="khachHangForm.get('sdt').errors?.required">
+                                                Số điện thoại không được để trống.
+                                            </small>
                                             <small class="text-danger"
-                                                *ngIf="khachHangForm.get('sdt')?.errors?.pattern">Số điện thoại phải là
-                                                10 hoặc 11 ký tự và phải là số.</small>
-                                            <small class="text-danger" *ngIf="validationErrors?.sdt">{{
-                                                validationErrors.sdt }}</small>
+                                                *ngIf="khachHangForm.get('sdt')?.errors?.pattern">
+                                                Số điện thoại .
+                                            </small>
+                                            <small class="text-danger" *ngIf="validationErrors?.sdt">
+                                                {{ validationErrors.sdt }}
+                                            </small>
                                         </div>
                                 </div>
                             </div>

@@ -9,6 +9,7 @@ import com.example.datn_f5_store.service.ISanPhamClientservice;
 import com.example.datn_f5_store.service.ISizeService;
 import com.example.datn_f5_store.service.IThuongHieuService;
 import com.example.datn_f5_store.service.IXuatXuService;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -136,6 +138,14 @@ public class SanPhamClientController {
 
         // Trả về kết quả phân trang
         return ResponseEntity.ok(result);
+    }
+    @GetMapping("get-so-luong/{id}")
+    public ResponseEntity<Object> getSoLuong(@Parameter(name = "id")@PathVariable Integer id){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = iSanPhamClientservice.getSoLuong(id);
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
     }
 
 }

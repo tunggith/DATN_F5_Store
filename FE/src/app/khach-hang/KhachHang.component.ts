@@ -52,7 +52,11 @@ export class KhachHangComponent implements OnInit {
       ten: ['', [Validators.required,  Validators.minLength(3),
         Validators.maxLength(25), Validators.pattern('^[a-zA-ZÀ-ỹà-ỹ\\s]+$')]],
       ngayThangNamSinh: ['', [Validators.required, this.validateAge]],
-      sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
+      sdt: ['', [
+        Validators.required, 
+        Validators.pattern('^(0|84)[0-9]{9,10}$'),
+        Validators.pattern('^(?!.*?(\\d)\\1{9}).*$')
+      ]],
       username: [''],
       password: [''],
       email: ['', [Validators.required, Validators.email]],

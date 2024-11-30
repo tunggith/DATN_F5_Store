@@ -1,7 +1,9 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.KhuyenMaiDto;
+import com.example.datn_f5_store.entity.AnhChiTietSanPham;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
+import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.MauSacEntity;
@@ -12,16 +14,20 @@ import com.example.datn_f5_store.repository.IMauSacRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -34,6 +40,10 @@ public class ChiTietSanPhamImpl {
     ISizeRepository repo_size;
     @Autowired
     ISanPhamRepository repo_sanPham;
+
+    @Autowired
+    IAnhChiTietSanPhamRepository repo_anh;
+
 
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
@@ -230,5 +240,48 @@ public class ChiTietSanPhamImpl {
     public boolean isDuplicateChiTietSanPham(Long sanPhamId, Long mauSacId, Long sizeId, Long chiTietSanPhamId) {
         return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeIdAndNotId(sanPhamId, mauSacId, sizeId, chiTietSanPhamId);
     }
+
+    public Integer getSanPhambyidSP(Integer idSanPham) {
+        return repo_ctsp.getSoLuongByidSP(idSanPham);
+    }
+
+    public List<MauSacEntity> getGroupByMauSac(Integer idSanPham) {
+        try {
+            // Gọi repository để lấy danh sách các màu sắc
+            return repo_ctsp.groupByMauSac(idSanPham);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Có lỗi xảy ra khi lấy danh sách màu sắc: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Thêm danh sách ảnh cho tất cả các Spct của một sản phẩm theo màu sắc.
+     *
+     * @param idSanPham ID sản phẩm
+     * @param idMauSac ID màu sắc
+     * @param urls Danh sách URL ảnh
+     */
+    @Transactional
+    public void addImagesByProductAndColor(Integer idSanPham, Integer idMauSac, List<String> urls) {
+        // Tìm tất cả các Spct theo sản phẩm và màu sắc
+        List<ChiTietSanPhamEntity> spctList = repo_ctsp.findBySanPhamIdAndMauSacId(idSanPham, idMauSac);
+
+        if (spctList.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy sản phẩm chi tiết với màu sắc tương ứng.");
+        }
+
+        // Duyệt qua danh sách Spct và thêm ảnh
+        for (ChiTietSanPhamEntity spct : spctList) {
+            for (String url : urls) {
+                AnhChiTietSanPham anhSpct = new AnhChiTietSanPham();
+                anhSpct.setChiTietSanPham(spct);
+                anhSpct.setUrlAnh(url);
+                repo_anh.save(anhSpct);
+            }
+        }
+    }
+
 
 }

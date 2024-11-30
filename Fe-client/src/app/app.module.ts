@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ComponentsModule } from "./components/components.module";
 import { HttpClientModule } from '@angular/common/http';
-import { TraCuuDonHangComponent } from './tra-cuu-don-hang/tra-cuu-don-hang.component';
 import { RouterModule } from '@angular/router';
 
 

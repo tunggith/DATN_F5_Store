@@ -101,15 +101,16 @@ public class PdfExportService {
             int nam = calendar.get(Calendar.YEAR);
             String maHoaDon = hoaDon.getMa();
             double tongTien = 0;
-            if(hoaDon.getGiaoHang()==0&&hoaDon.getVoucher()==null){
-                tongTien  = hoaDon.getTongTienSauVoucher();
-            }else if(hoaDon.getGiaoHang()!=0&&hoaDon.getVoucher()==null){
-                tongTien  = hoaDon.getTongTienSauVoucher()+ hoaDon.getPhiShip();
-            }else if(hoaDon.getGiaoHang()==0&&hoaDon.getVoucher()!=null){
-                tongTien  = hoaDon.getTongTienSauVoucher()- hoaDon.getGiaTriGiam();
-            }else{
-                tongTien  = hoaDon.getTongTienSauVoucher()+hoaDon.getPhiShip()- hoaDon.getGiaTriGiam();
+            if (hoaDon.getGiaoHang() == 0 && hoaDon.getVoucher() == null) {
+                tongTien = hoaDon.getTongTienSauVoucher();
+            } else if (hoaDon.getGiaoHang() != 0 && hoaDon.getVoucher() == null) {
+                tongTien = hoaDon.getTongTienSauVoucher() + hoaDon.getPhiShip();
+            } else if (hoaDon.getGiaoHang() == 0 && hoaDon.getVoucher() != null) {
+                tongTien = hoaDon.getTongTienSauVoucher() - hoaDon.getGiaTriGiam();
+            } else {
+                tongTien = hoaDon.getTongTienSauVoucher() + hoaDon.getPhiShip() - hoaDon.getGiaTriGiam();
             }
+            String tenNhanVien = "";
             String email = "";
             String sdt = "";
             String diaChi = "";
@@ -133,11 +134,14 @@ public class PdfExportService {
                 sdt = hoaDon.getSdtNguoiNhan();
                 diaChi = hoaDon.getDiaChiNhanHang();
             }
+            if (hoaDon.getHinhThucThanhToan() == 0) {
+                tenNhanVien = hoaDon.getNhanVien().getTen();
+            }
             document.add(new Paragraph("Ngày " + ngay + ",tháng " + thang + ",năm " + nam)
                     .setTextAlignment(TextAlignment.RIGHT));
             document.add(new Paragraph("Khách hàng:" + khachHang)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Nhân viên thanh toán:" + hoaDon.getNhanVien().getTen())
+            document.add(new Paragraph("Nhân viên thanh toán:" + tenNhanVien)
                     .setTextAlignment(TextAlignment.LEFT));
             document.add(new Paragraph("Mã hóa đơn:" + maHoaDon)
                     .setTextAlignment(TextAlignment.LEFT));
@@ -199,8 +203,10 @@ public class PdfExportService {
             }
             cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + "VNĐ"));
             cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + "VNĐ"));
-            cell.add(new Paragraph("Nhân viên thanh toán").setFont(boldFont));
-            cell.add(new Paragraph(hoaDon.getNhanVien().getTen()));
+            if (hoaDon.getHinhThucThanhToan() == 0) {
+                cell.add(new Paragraph("Nhân viên thanh toán").setFont(boldFont));
+                cell.add(new Paragraph(tenNhanVien));
+            }
 
             table1.addCell(cell);
             document.add(table1);

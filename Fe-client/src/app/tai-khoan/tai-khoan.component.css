@@ -51,6 +51,13 @@
 .content-bottom .left{
     width: 45%;
 }
+.content-bottom .left button{
+  border: none;
+  border-radius:5px;
+}
+.content-bottom .left button:hover{
+  cursor: pointer;
+}
 .content-bottom .right i{
     color: gray;
 }
@@ -69,4 +76,164 @@
 .gioi-tinh input[type="radio"] {
     width: 15px;
     margin-right: 5px; /* Khoảng cách giữa nút radio và nhãn */
+}
+/* css popup */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .content {
+    position: relative;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 800px;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  /* css nát */
+  /* Tổng quan cho popup */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* Màu nền mờ */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Nội dung của popup */
+.popup-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%; /* Chiều rộng */
+  max-width: 600px; /* Giới hạn chiều rộng tối đa */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out; /* Hiệu ứng xuất hiện */
+}
+
+/* Hiệu ứng mờ dần */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Nút đóng */
+.popup-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.popup-content .close:hover {
+  color: red;
+}
+
+/* Các nhãn và input */
+.form-label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.form-control, .form-select {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Phần lỗi */
+.text-danger {
+  font-size: 12px;
+  color: red;
+  margin-top: -5px;
+}
+
+/* Row */
+.row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Column */
+.col-sm-4, .col-sm-6 {
+  flex: 1;
+}
+
+/* Nút */
+.btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
 }

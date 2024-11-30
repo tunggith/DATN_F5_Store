@@ -2,8 +2,10 @@ package com.example.datn_f5_store.controller;
 
 
 import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
+import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 
+import com.example.datn_f5_store.request.AddImagesRequest;
 import com.example.datn_f5_store.response.ChiTietSanPhamReponse;
 import com.example.datn_f5_store.response.DataResponse;
 import com.example.datn_f5_store.response.PagingModel;
@@ -229,6 +231,50 @@ public ResponseEntity<?> filterChiTietSanPham(
         return ResponseEntity.ok(isDuplicate);
     }
 
+    @GetMapping("/tong-so-luong/{idSanPham}")
+    public ResponseEntity<Integer> getTotalQuantity(@PathVariable Integer idSanPham) {
+        Integer totalQuantity = ctsp_Sevice.getSanPhambyidSP(idSanPham);
+        return ResponseEntity.ok(totalQuantity);
+    }
 
+    @GetMapping("/group-by-mau-sac/{idSanPham}")
+    public ResponseEntity<?> getGroupByMauSac(@PathVariable Integer idSanPham) {
+        try {
+            // Gọi service để lấy danh sách màu sắc
+            List<MauSacEntity> result = (List<MauSacEntity>) ctsp_Sevice.getGroupByMauSac(idSanPham);
+
+            // Kiểm tra kết quả trả về
+            if (result.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                        .body("Không có dữ liệu nhóm màu sắc cho sản phẩm này.");
+            }
+
+            // Trả về danh sách màu sắc
+            return ResponseEntity.ok(result);
+
+        } catch (RuntimeException e) {
+            // Xử lý lỗi và trả về thông báo lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Có lỗi xảy ra khi lấy dữ liệu nhóm màu sắc: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * API thêm danh sách ảnh cho tất cả các Spct của một sản phẩm theo màu sắc.
+     *
+     * @param payload DTO chứa thông tin ID sản phẩm, ID màu sắc, và danh sách URL ảnh
+     * @return ResponseEntity phản hồi trạng thái thành công hoặc lỗi
+     */
+    @PostMapping("/add-images-by-product-and-color")
+    public ResponseEntity<?> addImagesByProductAndColor(@RequestBody AddImagesRequest payload) {
+        try {
+            ctsp_Sevice.addImagesByProductAndColor(payload.getIdSanPham(), payload.getIdMauSac(), payload.getUrls());
+            return ResponseEntity.ok("Hình ảnh đã được thêm thành công.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Có lỗi xảy ra khi thêm hình ảnh: " + e.getMessage());
+        }
+    }
 
 }

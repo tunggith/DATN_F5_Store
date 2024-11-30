@@ -47,11 +47,9 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                 entity.getId(),
                 entity.getSoNha(),
                 entity.getDuong(),
-                entity.getSdt(),
                 entity.getPhuongXa(),
                 entity.getQuanHuyen(),
                 entity.getTinhThanh(),
-
                 entity.getQuocGia(),
                 entity.getLoaiDiaChi(),
                 entity.getTrangThai()
@@ -89,7 +87,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
                         entity.getId(),
                         entity.getSoNha(),
                         entity.getDuong(),
-                        entity.getSdt(),
                         entity.getPhuongXa(),
                         entity.getQuanHuyen(),
                         entity.getTinhThanh(),
@@ -110,8 +107,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
             check = true;
         }
         if (resquest.getDuong() == null || resquest.getDuong().isEmpty()) {
-            check = true;
-        } if (resquest.getSdt() == null || resquest.getSdt().isEmpty()) {
             check = true;
         }
         if (resquest.getPhuongXa() == null || resquest.getPhuongXa().isEmpty()) {
@@ -145,7 +140,6 @@ public class DiaChiKhachHangImpl implements IDiaChiKhachHangService {
         entity.setKhackHang(khachHang);
         entity.setSoNha(request.getSoNha());
         entity.setDuong(request.getDuong());
-        entity.setSdt(request.getSdt());
         entity.setPhuongXa(request.getPhuongXa());
         entity.setQuanHuyen(request.getQuanHuyen());
         entity.setTinhThanh(request.getTinhThanh());

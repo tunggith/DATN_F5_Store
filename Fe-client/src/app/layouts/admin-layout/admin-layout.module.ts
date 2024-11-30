@@ -10,6 +10,7 @@ import { GioHangComponent } from 'src/app/gio-hang/gio-hang.component';
 import { TaiKhoanComponent } from 'src/app/tai-khoan/tai-khoan.component';
 import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { TraCuuDonHangComponent } from 'src/app/tra-cuu-don-hang/tra-cuu-don-hang.component';
+import { DoiMatKhauComponent } from 'src/app/doi-mat-khau/doi-mat-khau.component';
 
 
 
@@ -22,6 +23,7 @@ import { TraCuuDonHangComponent } from 'src/app/tra-cuu-don-hang/tra-cuu-don-han
     GioHangComponent,
     TaiKhoanComponent,
     TraCuuDonHangComponent,
+    DoiMatKhauComponent,
   ],
   imports: [
     CommonModule,
