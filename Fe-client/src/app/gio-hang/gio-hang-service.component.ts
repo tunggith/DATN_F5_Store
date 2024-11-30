@@ -61,4 +61,7 @@ export class GioHangService {
   getSoLuonghai(id:number):Observable<any>{
     return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
   }
+  getDiaChi(id:string):Observable<any>{
+    return this.http.get(`${this.API_URL}/get-all-dia-chi/${id}`);
+  }
 }

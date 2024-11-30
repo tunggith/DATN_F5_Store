@@ -32,4 +32,5 @@ public interface IHoaDonService {
     DataResponse updateHoaDon(Integer id,Double tongTienUpdate,Integer idNhanVien);
     DataResponse huyUpdateHoaDon(Integer id);
     HoaDonEntity saveOrUpdate(HoaDonEntity entity, HoaDonRequest request);
+    DataResponse updateNote(Integer id,String ghiChu);
 }

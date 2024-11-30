@@ -42,7 +42,7 @@ export class ThongTinDonHangComponent implements OnInit {
   phuongXa: string = '';
   quanHuyen: string = '';
   tinhThanh: string = '';
-  giaTriGiam:number=0;
+  giaTriGiam: number = 0;
   constructor(
     private banHangService: BanHangService,
     private authServie: AuthService,
@@ -88,6 +88,21 @@ export class ThongTinDonHangComponent implements OnInit {
     this.detailChiTietHoaDon(this.id);
     this.getIdThongTinDonHang(this.id);
   }
+  addNote() {
+    const note = window.prompt('Nhập ghi chú:', '');  // 'Nhập ghi chú:' là thông điệp hiển thị trong prompt, còn '' là giá trị mặc định.
+
+    if (note !== null) {
+      // Người dùng đã nhập ghi chú
+      console.log('Ghi chú:', note);
+      // Gọi API hoặc thực hiện hành động khác với ghi chú
+      this.banHangService.addNote(this.id, note).subscribe(response => {
+        this.showSuccessMessage('Thêm ghi chú thành công!');
+      });
+    } else {
+      // Người dùng đã hủy bỏ
+      console.log('Người dùng đã hủy bỏ việc nhập ghi chú');
+    }
+  }
   //================= chi tiết thông tin đơn hàng==================
   getIdThongTinDonHang(id: number): void {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
@@ -115,30 +130,30 @@ export class ThongTinDonHangComponent implements OnInit {
       }
     )
   }
-  showdiaChi(){
-    const [soNha,duong,phuongXa,quanHuyen,tinhThanh] = this.diaChiNhanHang.split(",").map(part=>part.trim());
-        this.soNha = soNha;
-        this.duong = duong;
-        const privince = this.provinces.find(p=>p.ProvinceName===tinhThanh);
-        this.selectedTinhThanh = privince ? privince.ProvinceID : null;
-        if(this.selectedTinhThanh){
-            this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
-                data => {
-                    this.districts = data['data'];
-                    const district = this.districts.find(d=> d.DistrictName===quanHuyen);
-                    this.selectedQuanHuyen = district ? district.DistrictID : null;
-                    if(this.selectedQuanHuyen){
-                        this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
-                            data=>{
-                                this.wards = data['data'];
-                                const ward = this.wards.find(w=>w.WardName===phuongXa);
-                                this.selectedPhuongXa = ward ? ward.WardCode : null;
-                            }
-                        );
-                    }
-                }
+  showdiaChi() {
+    const [soNha, duong, phuongXa, quanHuyen, tinhThanh] = this.diaChiNhanHang.split(",").map(part => part.trim());
+    this.soNha = soNha;
+    this.duong = duong;
+    const privince = this.provinces.find(p => p.ProvinceName === tinhThanh);
+    this.selectedTinhThanh = privince ? privince.ProvinceID : null;
+    if (this.selectedTinhThanh) {
+      this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+        data => {
+          this.districts = data['data'];
+          const district = this.districts.find(d => d.DistrictName === quanHuyen);
+          this.selectedQuanHuyen = district ? district.DistrictID : null;
+          if (this.selectedQuanHuyen) {
+            this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+              data => {
+                this.wards = data['data'];
+                const ward = this.wards.find(w => w.WardName === phuongXa);
+                this.selectedPhuongXa = ward ? ward.WardCode : null;
+              }
             );
+          }
         }
+      );
+    }
   }
   updateTrangThaiHoaDon(id: number): void {
     if (this.diaChiNhanHang == null && this.trangThaiHoaDon == 'đã xác nhận' && this.idGiaoHang === 1) {

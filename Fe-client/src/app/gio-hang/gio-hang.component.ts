@@ -33,8 +33,8 @@ export class GioHangComponent implements OnInit {
   idThanhToan: string | number = '';
   soLuong: string = '';
   // địa chỉ kh
-  provinces: any[] = []; // Danh sách tỉnh/thành
-  districts: any[] = []; // Danh sách quận/huyện
+  provinces: any[] = [];
+  districts: any[] = [];
   wards: any[] = []; // Danh sách phường/xã
   selectedTinhThanh: number = 0; // ID tỉnh/thành đã chọn
   selectedQuanHuyen: number = 0; // ID quận/huyện đã chọn
@@ -70,7 +70,6 @@ export class GioHangComponent implements OnInit {
     this.loadProvinces();
     this.loadvoucher();
     this.loadDiaChi();
-
     // Lấy idKhachHang từ localStorage khi component được khởi tạo
     this.idKhachHang = localStorage.getItem('id') || '';
 
@@ -98,6 +97,7 @@ export class GioHangComponent implements OnInit {
       checked: true
     }));
     this.updateTotalAmount();
+    this.loadDetailDiaChi();
     console.log('Giỏ hàng từ localStorage:', this.chiTietGioHang);
   }
 
@@ -110,6 +110,7 @@ export class GioHangComponent implements OnInit {
             ...item
           }));
           this.updateTotalAmount();
+          this.getDiaChi(this.idKhachHang);
           console.log('chi tiết giỏ hàng:', this.chiTietGioHang);
         },
         error: (err) => {
@@ -358,7 +359,6 @@ export class GioHangComponent implements OnInit {
     if (!isConfirmed) {
       return;
     }
-
     // Lấy thông tin thanh toán
     const request = this.thongTinThanhToan();
     if (!request) {
@@ -412,7 +412,7 @@ export class GioHangComponent implements OnInit {
         this.removeAdressLocal();
       },
       error: (err) => {
-        console.log('lỗi:',err);
+        console.log('lỗi:', err);
         this.handleError(err);
       },
     });
@@ -764,6 +764,7 @@ export class GioHangComponent implements OnInit {
       (data: any) => {  // Sử dụng any cho dữ liệu trả về
         if (data && Array.isArray(data['data'])) {
           this.provinces = data['data'];  // Gán danh sách tỉnh/thành
+          
         } else {
           console.error('Dữ liệu tỉnh/thành không đúng định dạng', data);
         }
@@ -773,7 +774,52 @@ export class GioHangComponent implements OnInit {
       }
     );
   }
+  getDiaChi(id: string): void {
+    this.gioHangService.getDiaChi(id).subscribe(
+      response => {
+        const diaChi = response.result.content[0];
+        console.log(diaChi);
+        this.tenNguoiNhan = diaChi.khackHang.ten;
+        this.soNha = diaChi.soNha;
+        this.duong = diaChi.duong;
+        this.selectedTinhThanhName = diaChi.tinhThanh;
+        this.selectedQuanHuyenName = diaChi.quanHuyen;
+        this.selectedPhuongXaName = diaChi.phuongXa;
+        this.emailNguoiNhan = diaChi.khackHang.email;
+        this.sdtNguoiNhan = diaChi.khackHang.sdt;
+        this.loadDetailDiaChi();
+      }
+    )
+  }
+  loadDetailDiaChi(): void {
+    
+    const province = this.provinces.find(p => p.ProvinceName === this.selectedTinhThanhName);
 
+    this.selectedTinhThanh = province ? province.ProvinceID : null;
+
+    if (this.selectedTinhThanh) {
+      this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+        (data: any) => {
+          this.districts = data['data']; // Hoặc districtResponse nếu không có thuộc tính `data`
+
+          const district = this.districts.find(d => d.DistrictName === this.selectedQuanHuyenName);
+          this.selectedQuanHuyen = district ? district.DistrictID : null;
+
+          if (this.selectedQuanHuyen) {
+            this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+              (data: any) => {
+                // Đảm bảo `wardResponse` chứa danh sách phường/xã
+                this.wards = data['data']; // Hoặc wardResponse nếu không có thuộc tính `data`
+
+                const ward = this.wards.find(w => w.WardName === this.selectedPhuongXaName);
+                this.selectedPhuongXa = ward ? ward.WardCode : null;
+              }
+            );
+          }
+        }
+      );
+    }
+  }
   // Xử lý khi chọn tỉnh/thành
   onTinhThanhChange(event: any): void {
     const provinceId = Number(event.target.value);

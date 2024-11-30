@@ -153,4 +153,11 @@ public class HoaDonController {
     private ResponseEntity<Object> huyCapNhat(@Parameter(name = "id")@PathVariable Integer id){
         return new ResponseEntity<>(hoaDonService.huyUpdateHoaDon(id),HttpStatus.OK);
     }
+    @PutMapping("/note/{id}")
+    private ResponseEntity<Object> updateNote(
+            @Parameter(name = "id")@PathVariable Integer id,
+            @Parameter(name = "ghiChu")@RequestParam String ghiChu
+    ){
+        return new ResponseEntity<>(hoaDonService.updateNote(id,ghiChu),HttpStatus.OK);
+    }
 }

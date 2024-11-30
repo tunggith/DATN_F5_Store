@@ -750,6 +750,14 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
     }
 
+    @Override
+    public DataResponse updateNote(Integer id,String ghiChu) {
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
+        hoaDon.setGhiChu(ghiChu);
+        hoaDonRepository.save(hoaDon);
+        return new DataResponse(true,new ResultModel<>(null,"update ghi chú thành công"));
+    }
+
     private Boolean isNullHoaDon(HoaDonRequest request) {
         if (request.getIdNhanVien() == null) {
             return new DataResponse(false, new ResultModel<>(null, "nhân viên không được null")).isStatus();
@@ -782,7 +790,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setSdtNguoiNhan(request.getSdtNguoiNhan());
         entity.setEmailNguoiNhan(request.getEmailNguoiNhan());
         entity.setDiaChiNhanHang(request.getDiaChiNhanHang());
-        entity.setNgayNhanDuKien(request.getNgayNhanDuKien());
+        entity.setNgayNhanDuKien(new Date());
         entity.setThoiGianTao(request.getThoiGianTao());
         entity.setGhiChu(request.getGhiChu());
         entity.setGiaoHang(request.getGiaoHang());
