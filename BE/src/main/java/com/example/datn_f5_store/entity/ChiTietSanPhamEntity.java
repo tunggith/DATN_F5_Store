@@ -47,4 +47,7 @@ public class ChiTietSanPhamEntity {
     private Integer soLuong;
     @Column(name = ConfigContanst.ChiTietSanPham.TRANG_THAI)
     private String trangThai;
+
+    @Column(name = ConfigContanst.ChiTietSanPham.CHECKKM)
+    private Boolean checkKm;
 }

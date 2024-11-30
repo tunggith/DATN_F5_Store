@@ -39,4 +39,7 @@ public class ChiTietSanphamRequest {
 
     @NotBlank(message = "Trạng thái không được để trống.")
     private String trangThai; // Nếu cần để là String
+
+
+
 }

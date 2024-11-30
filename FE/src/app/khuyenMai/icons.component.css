@@ -274,7 +274,8 @@ table-striped tbody tr:nth-of-type(odd) {
   padding: 20px;
   border-radius: 8px;
   max-width: 500px;
-  width: 100%;
+  width: 70%;
+  height: 70%;
 }
 
 /* Đảm bảo nút nằm ở giữa */
@@ -391,9 +392,8 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-
+  top: 1px;
+  right: 11px;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;

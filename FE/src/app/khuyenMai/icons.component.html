@@ -6,7 +6,7 @@
       <div class="col-md-12">
         <form [formGroup]="searchForm" class="search-form mb-4">
           <div class="border rounded p-4 mb-4">
-            <h4 class="mb-3">Lọc khuyến mãi</h4>
+            <h4 class="mb-3">Lọc Khuyến mãi</h4>
             <div class="row d-flex align-items-center flex-wrap">
 
               <!-- Search Input -->
@@ -137,13 +137,13 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <label for="thoiGianBatDau">Thời gian bắt đầu</label>
-                            <input
-                              type="datetime-local"
-                              id="thoiGianBatDauInput"
+                            <input 
+                              type="datetime-local" 
+                              id="thoiGianBatDauInput" 
                               class="form-control"
-                              [(ngModel)]="currentKhuyenMai.thoiGianBatDau"
-                              name="thoiGianBatDau"
-                              required
+                              [(ngModel)]="currentKhuyenMai.thoiGianBatDau" 
+                              name="thoiGianBatDau" 
+                              required 
                               #thoiGianBatDau="ngModel"
                               [disabled]="currentKhuyenMai.trangThai === 'Đang diễn ra'"
                               (ngModelChange)="validateYear($event)">
@@ -156,24 +156,24 @@
                         <div class="col-md-6">
                           <div class="form-group">
                             <label for="thoiGianKetThuc">Thời gian kết thúc</label>
-                            <input
-                              type="datetime-local"
-                              id="thoiGianKetThucInput"
+                            <input 
+                              type="datetime-local" 
+                              id="thoiGianKetThucInput" 
                               class="form-control"
-                              [(ngModel)]="currentKhuyenMai.thoiGianKetThuc"
-                              name="thoiGianKetThuc"
-                              required
+                              [(ngModel)]="currentKhuyenMai.thoiGianKetThuc" 
+                              name="thoiGianKetThuc" 
+                              required 
                               #thoiGianKetThuc="ngModel"
                               (ngModelChange)="validateYear2($event)">
-                            <div
-                              *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)"
+                            <div 
+                              *ngIf="thoiGianKetThuc.invalid && (thoiGianKetThuc.dirty || thoiGianKetThuc.touched)" 
                               class="error-message">
                               <div *ngIf="thoiGianKetThuc.errors?.required">Thời gian kết thúc không hợp lệ</div>
                             </div>
                           </div>
                         </div>
-
-
+                        
+                        
                       </div>
                     
                       <div class="row">
@@ -188,7 +188,7 @@
                     
                       <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid">
                         <i class="material-icons" style="vertical-align: middle;">add</i>
-                        {{ isEditing ? 'Cập Nhật' : 'Thêm Khuyến Mãi' }}
+                        {{ isEditing ? 'Cập nhật' : 'Thêm khuyến mãi' }}
                       </button>
                       <button type="button" class="btn btn-secondary w-100 mt-2" (click)="resetForm()">
                         <i class="material-icons" style="vertical-align: middle;">cancel</i>
@@ -312,9 +312,9 @@
               <tr>
                 <th>Mã</th>
                 <th>Tên</th>
-                <th>Kiểu khuyến mãi</th>
                 <th>Số lượng</th>
                 <th>Giá trị</th>
+                <th>Kiểu khuyến mãi</th>
                 <th>Thời gian bắt đầu</th>
                 <th>Thời gian kết thúc</th>
                 <th>Mô tả</th>
@@ -326,9 +326,9 @@
               <tr *ngFor="let khuyenMai of khuyenMais">
                 <td>{{ khuyenMai.ma }}</td>
                 <td>{{ khuyenMai.ten }}</td>
-                <td>{{ khuyenMai.kieuKhuyenMai }}</td>
                 <td>{{ khuyenMai.soLuong }}</td>
-                <td>{{ khuyenMai.giaTriKhuyenMai }}</td>
+                <td>{{ khuyenMai.giaTriKhuyenMai | number:'1.0-0' }}</td>
+                <td>{{ khuyenMai.kieuKhuyenMai }}</td>
                 <td>{{ khuyenMai.thoiGianBatDau | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ khuyenMai.thoiGianKetThuc | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ khuyenMai.moTa }}</td>
@@ -414,24 +414,27 @@
                 <td>{{ chiTiet.ma }}</td>
                 <td>{{ chiTiet.mauSac.ten }}</td>
                 <td>{{ chiTiet.size.ten }}</td>
-                <td>{{ chiTiet.donGia | number: '1.0-0' }}₫</td>
+                <td>{{ chiTiet.donGia | number: '1.0-0' }}VND</td>
                 <td>{{ chiTiet.soLuong }}</td>
                 <td>{{ chiTiet.trangThai }}</td>
+
                 <td>
                   <div class="button-container">
-                    <!-- Hiển thị nút "Thêm" khi chưa được thêm vào khuyến mãi -->
-                    <button *ngIf="!isAddedMap[chiTiet.id]" type="button" class="btn-add"
-                      (click)="addKhuyenMaiSanPham(chiTiet, $event)">
-                      <i class="material-icons">add_circle</i>
-                    </button>
+                    <!-- Hiển thị nút "Thêm" khi chưa được thêm vào khuyến mãi (check = false) -->
+                    <input
+                      *ngIf="!chiTiet.checkKm"
+                      type="checkbox"
+                      [value]="chiTiet.id"
+                      (change)="onCheckboxChange($event, chiTiet.id)" />
 
-                    <!-- Hiển thị nút "Xóa" khi đã được thêm vào khuyến mãi -->
-                    <button *ngIf="isAddedMap[chiTiet.id]" type="button" class="btn-remove"
+                    <!-- Hiển thị nút "Xóa" khi đã được thêm vào khuyến mãi (check = true) -->
+                    <button *ngIf="chiTiet.checkKm" type="button" class="btn-remove"
                       (click)="removeKhuyenMaiSanPham(chiTiet)">
                       <i class="material-icons">delete</i>
                     </button>
                   </div>
                 </td>
+
               </tr>
             </tbody>
           </table>

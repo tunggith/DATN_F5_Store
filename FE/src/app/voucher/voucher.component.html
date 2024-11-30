@@ -243,10 +243,10 @@
           <tr *ngFor="let voucher of vouchers">
             <td>{{ voucher.ma }}</td>
             <td>{{ voucher.ten }}</td>
-            <td>{{ voucher.giaTriVoucher }}</td>
+            <td>{{ voucher.giaTriVoucher | number:'1.0-0'   }}</td>
             <td>{{ voucher.kieuGiamGia }}</td>
-            <td>{{ voucher.giaTriGiamToiDa }}</td>
-            <td>{{ voucher.giaTriHoaDonToiThieu }}</td>
+            <td>{{ voucher.giaTriGiamToiDa | number:'1.0-0' }}</td>
+            <td>{{ voucher.giaTriHoaDonToiThieu | number:'1.0-0' }}</td>
             <td>{{ voucher.soLuong }}</td>
             <td>{{ voucher.thoiGianBatDau | date: 'dd/MM/yyyy HH:mm' }}</td>
             <td>{{ voucher.thoiGianKetThuc | date: 'dd/MM/yyyy HH:mm' }}</td>

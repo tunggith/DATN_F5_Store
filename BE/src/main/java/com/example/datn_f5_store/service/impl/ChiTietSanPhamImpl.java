@@ -218,7 +218,8 @@ public class ChiTietSanPhamImpl {
                 entity.getMoTa(),
                 entity.getDonGia(),
                 entity.getSoLuong(),
-                entity.getTrangThai()
+                entity.getTrangThai(),
+                entity.getCheckKm()
         ));
     }
 
