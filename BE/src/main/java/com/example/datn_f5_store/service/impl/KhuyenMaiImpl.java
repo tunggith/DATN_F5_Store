@@ -186,27 +186,27 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
     // hàm cập nhập Khuyến mãi theo id
     @Override
-    public DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id) {
+    public DataResponse2 update(KhuyenMaiRequest khuyenMaiRequest, Integer id) {
         LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
         KhuyenMaiEntity khuyenmai = khuyenMaiRepository.findById(id).get();
 
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
                 if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 100) {
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
+                    return new DataResponse2(false, new ResultModel2<>( "Giá trị giảm % chỉ được tối đa là 100",null));
                 }
 
                 LocalDateTime thoiGianBatDau = khuyenMaiRequest.getThoiGianBatDau();
                 LocalDateTime thoiGianKetThuc = khuyenMaiRequest.getThoiGianKetThuc();
 
                 if (thoiGianBatDau == null) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
+                    return new DataResponse2(false, new ResultModel2<>( "Thời gian Bắt đầu không được để trống",null));
                 }
                 if (thoiGianKetThuc == null) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
+                    return new DataResponse2(false, new ResultModel2<>( "Thời gian Kết thúc không được để trống",null));
                 }
                 if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                    return new DataResponse2(false, new ResultModel2<>( "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu",null));
                 }
 
                 // Update voucher properties
@@ -230,11 +230,11 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 }
 
                 khuyenMaiRepository.save(khuyenmai);
-                return new DataResponse(true, new ResultModel<>(null, "Sửa Khuyến mãi thành công"));
+                return new DataResponse2(true, new ResultModel2<>( "Sửa Khuyến mãi thành công",khuyenmai.getId()));
             }
-            return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
+            return new DataResponse2(false, new ResultModel2<>( "Các trường dữ liệu không được để trống hoặc giá trị phải > 0",null));
         } catch (Exception e) {
-            return new DataResponse(false, new ResultModel<>(null, "Sửa thất bại do lỗi : " + e.getMessage()));
+            return new DataResponse2(false, new ResultModel2<>( "Sửa thất bại do lỗi : " + e.getMessage(),null));
         }
     }
 

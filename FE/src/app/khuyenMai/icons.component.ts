@@ -286,6 +286,7 @@ createKhuyenMai() {
           this.resetForm();
           this.loadKhuyenMais();
           this.addPromotionToProducts(response.result.id);
+          console.log('Id sửa :',response.result.id);
         } else {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',

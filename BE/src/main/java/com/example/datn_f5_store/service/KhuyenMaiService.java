@@ -19,7 +19,7 @@ public interface KhuyenMaiService {
     Page<KhuyenMaiDto> findByTenOrMa(int page, int size, String tim);
     Page<KhuyenMaiDto> findByTrangThai(int page, int size, String trangThai);
     DataResponse2 create(KhuyenMaiRequest khuyenMaiRequest);
-    DataResponse update(KhuyenMaiRequest khuyenMaiRequest, Integer id);
+    DataResponse2 update(KhuyenMaiRequest khuyenMaiRequest, Integer id);
     KhuyenMaiEntity findById(Integer id);
     Page<KhuyenMaiDto> findKhuyenMaiByDate(int page, int size, LocalDateTime start, LocalDateTime end);
     public void CapNhapTrangThaiKhuyenMaiDhh();
