@@ -9,7 +9,7 @@ import { TraCuuDonHangService } from "./tra-cuu-don-hang.service"; // Đảm b�
 })
 export class TraCuuDonHangComponent {
   searchForm: FormGroup;
-  hoaDon: any = null;  // Dữ liệu hóa đơn
+  hoaDonCT: any[] = [];  // Dữ liệu hóa đơn là mảng
   trangThaiHoaDon: string | null = null;  // Trạng thái hóa đơn
   errorMessage: string | null = null;  // Lỗi khi không tìm thấy
 
@@ -27,13 +27,21 @@ export class TraCuuDonHangComponent {
     const ma = this.searchForm.value.ma;  // Sử dụng mã hóa đơn để tìm kiếm
     this.traCuuDonHangService.findDonHangByMa(ma).subscribe({
       next: (data) => {
-        this.hoaDon = data;
-        this.trangThaiHoaDon = data.trangThai;  // Giả sử 'trangThai' chứa trạng thái hiện tại
+        this.hoaDonCT = data;  // Gán dữ liệu trả về (mảng)
+        console.log('Dữ liệu hóa đơn: ', this.hoaDonCT);
+
+        // Giả sử trạng thái nằm ở phần tử đầu tiên
+        if (this.hoaDonCT.length > 0) {
+          this.trangThaiHoaDon = this.hoaDonCT[0].hoaDon.trangThai;
+        } else {
+          this.trangThaiHoaDon = null;
+        }
+
         this.errorMessage = null;  // Xóa lỗi nếu tìm thấy
       },
       error: () => {
         this.errorMessage = 'Không tìm thấy đơn hàng nào với mã này!';
-        this.hoaDon = null;  // Xóa kết quả nếu không tìm thấy
+        this.hoaDonCT = [];  // Xóa kết quả nếu không tìm thấy
         this.trangThaiHoaDon = null;
       },
     });

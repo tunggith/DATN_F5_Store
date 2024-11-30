@@ -264,3 +264,22 @@
   border: 1px black;
   text-align: center;
 }
+
+.order-details {
+  margin-top: 20px;
+  padding: 15px;
+  /*border: 1px solid #ccc;*/
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.order-details div {
+  margin-bottom: 10px;
+}
+
+.order-details strong {
+  color: #333;
+}
+.pos_page_inner{
+  padding: 10px;
+}

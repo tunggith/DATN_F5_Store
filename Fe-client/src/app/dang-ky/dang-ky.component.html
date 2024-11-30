@@ -5,7 +5,7 @@
             <div class="image-upload-container" (click)="document.getElementById('anh')?.click()">
                 <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)" required>
                 <div class="image-preview" *ngIf="khachHangNew.anh">
-                    <img [src]="khachHangNew.anh" alt="Ảnh nhân viên" />
+                    <img [src]="khachHangNew.anh" alt="Ảnh khách hàng" />
                 </div>
                 <label for="anh" class="upload-label" *ngIf="!khachHangNew.anh">
                     <i class="material-icons">add_a_photo</i>
