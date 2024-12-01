@@ -425,6 +425,8 @@ text-align: center;
   border-radius: 8px; /* Bo tròn các góc */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
   padding: 20px;
+  width: 50%;
+  height: 85%;
 }
 
 /* Tiêu đề modal */
