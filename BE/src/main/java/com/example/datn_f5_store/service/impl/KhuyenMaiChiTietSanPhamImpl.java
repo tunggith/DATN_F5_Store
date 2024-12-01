@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import  com.example.datn_f5_store.response.ResultModel;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -111,6 +113,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
 
     // hàm thêm khuyến mãi vào sản phẩm
     @Override
+    @Transactional
     public DataResponse createKhuyenMaictsp(KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest) {
 
         // Lấy ra Khuyến mãi và Sản Phầm Chi tiết theo id
@@ -144,7 +147,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
-                khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
+                khuyenMaiRepository.decrementSoLuong(khuyenMai.getId());
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Chưa áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
@@ -163,7 +166,7 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 }
                 chiTietSanPham.setCheckKm(true);
                 chiTietSanPhamRepository.save(chiTietSanPham);
-                khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
+                khuyenMaiRepository.decrementSoLuong(khuyenMai.getId());
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Đang áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
