@@ -15,6 +15,7 @@ import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
 import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
 import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-hang.component';
 import { PopupQrComponent } from 'app/popup-qr/popup-qr.component';
+import { QrScannerComponent } from 'app/qr-scanner/qr-scanner.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'ban-hang', component: BanHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },

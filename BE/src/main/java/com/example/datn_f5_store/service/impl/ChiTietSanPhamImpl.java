@@ -14,6 +14,11 @@ import com.example.datn_f5_store.repository.IMauSacRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
+import com.example.datn_f5_store.utils.QrCodeUtil;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +30,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +53,8 @@ public class ChiTietSanPhamImpl {
     @Autowired
     IAnhChiTietSanPhamRepository repo_anh;
 
+    @Autowired
+    QrCodeUtil qrCodeUtil;
 
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
@@ -116,8 +127,11 @@ public class ChiTietSanPhamImpl {
         chiTietSanPham.setCheckKm(false);
 
         // Lưu chi tiết sản phẩm
-        repo_ctsp.save(chiTietSanPham);
+        ChiTietSanPhamEntity chiTietSanPhamResult = repo_ctsp.save(chiTietSanPham);
 
+        String qrCode = this.generateQrCode(chiTietSanPhamResult.getId().toString());
+        chiTietSanPhamResult.setQrCode(qrCode);
+        repo_ctsp.save(chiTietSanPhamResult);
         // Trả về thông báo thành công kèm theo HTTP 201 Created
         return ResponseEntity.status(201).body("Lưu chi tiết sản phẩm thành công!");
     }
@@ -288,6 +302,24 @@ public class ChiTietSanPhamImpl {
             }
         }
     }
+    public static String generateQrCode(String data) {
+        StringBuilder result = new StringBuilder();
+        if (!data.isEmpty()) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
 
+            try {
+                QRCodeWriter writer = new QRCodeWriter();
+                BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, 300, 300);
+
+                BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+                ImageIO.write(bufferedImage,"png",os);
+                result.append("data:image/png;base64,");
+                result.append(new String(Base64.getEncoder().encode(os.toByteArray())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result.toString();
+    }
 
 }

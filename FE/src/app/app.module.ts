@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { CustomerService } from './khach-hang/KhachHang.service';
 import { InterceptorService } from './interceptor.service';
+import { QrScannerComponent } from './qr-scanner/qr-scanner.component';
 
 
 @NgModule({

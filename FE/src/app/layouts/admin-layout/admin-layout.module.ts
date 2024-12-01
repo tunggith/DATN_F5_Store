@@ -33,6 +33,7 @@ import { HoaDonChoComponent } from 'app/hoa-don-cho/hoa-don-cho.component';
 import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
 import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-hang.component';
 import { PopupQrComponent } from 'app/popup-qr/popup-qr.component';
+import { QrScannerComponent } from 'app/qr-scanner/qr-scanner.component';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { PopupQrComponent } from 'app/popup-qr/popup-qr.component';
     PopupSanPhamComponent,
     ThongTinDonHangComponent,
     PopupQrComponent,
+    QrScannerComponent,
   ],
 })
 

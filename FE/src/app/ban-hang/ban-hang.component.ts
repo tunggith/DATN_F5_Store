@@ -44,6 +44,7 @@ export class BanHangComponent implements OnInit {
   popupHd: boolean = false;
   popupCho: boolean = false;
   popupSanPham: boolean = false;
+  popupScanQr: boolean = false;
   popupQr: boolean = false;
   idKhachHang: number = 1;
   idKhachHanghd: number = 1;
@@ -338,6 +339,10 @@ export class BanHangComponent implements OnInit {
   openPopupSanPham(): void {
     this.popupSanPham = true;
   }
+  openPopupScanQr(): void {
+    this.popupScanQr = true;
+    console.log('ccos chay');
+  }
   closePopup() {
     this.popup = false;
     this.loadKhachHang();
@@ -354,6 +359,10 @@ export class BanHangComponent implements OnInit {
   }
   closePopupSanPham() {
     this.popupSanPham = false;
+    this.getChiTietHoaDon(this.activeInvoidID);
+  }
+  closePopupScanQr() {
+    this.popupScanQr = false;
     this.getChiTietHoaDon(this.activeInvoidID);
   }
   closePopupQr() {
