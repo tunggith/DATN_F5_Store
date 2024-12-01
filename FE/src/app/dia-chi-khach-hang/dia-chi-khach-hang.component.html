@@ -31,22 +31,6 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="mb-3">
-                        <label class="form-label">Số điện thoại</label>
-                        <input type="text" class="form-control" placeholder="Nhập số điện thoại" formControlName="sdt">
-                        <div *ngIf="diaChiForm.get('sdt').invalid && diaChiForm.get('sdt').touched">
-                            <small class="text-danger" *ngIf="diaChiForm.get('sdt').errors?.required">
-                                Vui lòng nhập số điện thoại
-                            </small>
-                            <small class="text-danger" *ngIf="diaChiForm.get('sdt').errors?.pattern">
-                                Số điện thoại phải có 10-11 số
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="mb-3">
                         <div>
                             <label for="" class="form-label">Tỉnh thành</label>
                             <select class="form-select" aria-label="Default select example"
@@ -65,6 +49,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <div>
@@ -105,8 +91,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Quốc gia</label>
@@ -118,6 +102,8 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-sm-4">
                     <div class="mb-3">
                         <label class="form-label">Loại địa chỉ</label>

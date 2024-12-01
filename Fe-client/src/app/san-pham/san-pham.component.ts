@@ -428,6 +428,7 @@ export class SanPhamComponent implements OnInit {
   soLuongCTSP: number = 0;
   donGiaDau: number = 0;
   donGia: Number = 0;
+  checkKm: boolean = false;
   selectedProductId: number = 0;
   // ======================== //
 
@@ -484,8 +485,9 @@ export class SanPhamComponent implements OnInit {
           if (chiTiet) {
             this.idCTSP = chiTiet.id
             this.soLuongCTSP = chiTiet.soLuong || 0;
-            this.donGiaDau = chiTiet.donGia || 0;
-            this.donGia = this.donGiaDau;
+            this.donGiaDau = chiTiet.donGiaBanDau || 0;
+            this.donGia = chiTiet.donGia || 0;
+            this.checkKm = chiTiet.checkKm;
             this.currentImage = response[0]?.urlAnh || '';
             this.idCTSP = response[0]?.chiTietSanPham.id;
             this.kichThuoc = response[0]?.chiTietSanPham.size.ten;
@@ -530,8 +532,9 @@ export class SanPhamComponent implements OnInit {
           const chiTietsp = response[0];
           console.log("chiTietsp sản phẩm lấy đc là :", chiTietsp)
           this.soLuongCTSP = chiTietsp.soLuong || 0;
-          this.donGiaDau = chiTietsp.donGia || 0;
-          this.donGia = this.donGiaDau;
+          this.donGiaDau = chiTietsp.donGiaBanDau || 0;
+          this.donGia = chiTietsp.donGia || 0;
+          this.checkKm = chiTietsp.checkKm;
           this.idCTSP = chiTietsp.id;
           console.log('id la ctsp ', this.idCTSP)
           this.quantity = 0

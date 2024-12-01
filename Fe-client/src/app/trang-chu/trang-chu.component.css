@@ -143,6 +143,8 @@
   font-size: 1rem;
   text-decoration: none;
   font-weight: bold;
+  border: none;
+  background-color: #fff;
 }
 
 .add_to_cart i {
@@ -157,6 +159,12 @@
   font-size: 1.2rem;
   color: #ff6a3d;
   font-weight: bold;
+}
+.product_price_sales{
+  font-size: 1.2rem;
+  color: #ff6a3d;
+  font-weight: bold;
+  text-decoration: line-through;
 }
 
 .mota {
@@ -501,6 +509,13 @@ css tiền
   color: red;
   font-size: 16px;
   font-weight: bold;
+}
+.popup-right .price-sale {
+  margin-left: 5px;
+  color: red;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: line-through;
 }
 
 /* Màu sắc và kích thước */

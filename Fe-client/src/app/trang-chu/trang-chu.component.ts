@@ -193,6 +193,7 @@ export class TrangChuComponent implements OnInit {
   currentImage: string = ''; // Ảnh chính mặc định
   soLuongCTSP: number = 0;
   donGiaDau: number = 0;
+  checkKm:boolean = false;
   // ======================== //
 
 
@@ -325,8 +326,9 @@ export class TrangChuComponent implements OnInit {
           const chiTietsp = response[0];
           console.log("chiTietsp sản phẩm lấy đc là :", chiTietsp)
           this.soLuongCTSP = chiTietsp.soLuong || 0;
-          this.donGiaDau = chiTietsp.donGia || 0;
-          this.donGia = this.donGiaDau;
+          this.donGiaDau = chiTietsp.donGiaBanDau || 0;
+          this.donGia = chiTietsp.donGia || 0;
+          this.checkKm = chiTietsp.checkKm
           this.quantity = 0
         }
 
@@ -352,8 +354,9 @@ export class TrangChuComponent implements OnInit {
           if (chiTiet) {
             this.idCTSP = chiTiet.id
             this.soLuongCTSP = chiTiet.soLuong || 0;
-            this.donGiaDau = chiTiet.donGia || 0;
-            this.donGia = this.donGiaDau;
+            this.donGiaDau = chiTiet.donGiaBanDau || 0;
+            this.donGia = chiTiet.donGia || 0;
+            this.checkKm = chiTiet.checkKm;
             this.currentImage = response[0]?.urlAnh || '';
             this.quantity = 0
             this.kichThuoc = response[0]?.chiTietSanPham.size.ten;

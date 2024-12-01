@@ -195,6 +195,8 @@
                         </div>
                         <div class="product_content">
                           <!-- Hiển thị tên và giá sản phẩm -->
+                          <span class="product_price_sales" *ngIf="product.chiTietSanPham.checkKm===true">{{
+                            product.chiTietSanPham.donGiaBanDau | number }} VND</span>
                           <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
                           <h3 class="product_title">
                             <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a>
@@ -278,6 +280,7 @@
         <p>
           <strong>Giá:</strong>
           <span class="price">{{ formatTien(donGia) }} VNĐ</span>
+          <span class="price-sale" *ngIf="checkKm===true">{{ formatTien(donGiaDau) }} VND</span>
         </p>
 
         <div class="options">

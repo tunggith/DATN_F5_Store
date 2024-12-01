@@ -171,7 +171,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             "AND (:size IS NULL OR ctsp.size.id = :size) " +
             "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
             "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
-            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh) order by ctsp.id desc ")
     Page<ChiTietSanPhamEntity> findByTrangThaiAndSanPhamTrangThai(
             @Param("chiTietSanPham") String chiTietSanPham,
             @Param("sanPham") String sanPham,
@@ -189,7 +189,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             "AND (:size IS NULL OR ctsp.size.id = :size) " +
             "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
             "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
-            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh) order by ctsp.id desc ")
     Page<ChiTietSanPhamEntity> getByTrangThai(
             @Param("trangThai") String trangThai,
             @Param("sanPhamTrangThai") String sanPhamTrangThai,

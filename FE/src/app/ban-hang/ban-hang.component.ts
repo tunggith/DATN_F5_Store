@@ -281,6 +281,17 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
+  removeHoaDon(idHoaDon: number): void {
+    if (confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
+      this.banHangService.removeHoaDon(idHoaDon).subscribe(
+        response => {
+          this.showSuccessMessage('Hủy hóa đơn thành công');
+          this.getHoaDon();
+        },
+        this.handleError
+      );
+    }
+  }
   //==================xóa hóa đơn chi tiết==================
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
     if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {

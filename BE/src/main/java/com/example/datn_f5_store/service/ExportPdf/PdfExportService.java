@@ -1,12 +1,16 @@
 package com.example.datn_f5_store.service.ExportPdf;
 
 import com.example.datn_f5_store.entity.ChiTietHoaDonEntity;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.entity.DiaChiKhachHangEntity;
 import com.example.datn_f5_store.entity.HoaDonEntity;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
+import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IDiaChiKhachHangRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
 import com.example.datn_f5_store.repository.IKhachHangRepository;
+import com.example.datn_f5_store.response.DataResponse;
+import com.example.datn_f5_store.response.ResultModel;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
@@ -29,8 +33,11 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +50,8 @@ public class PdfExportService {
     IChiTietHoaDonRepository chiTietHoaDonRepository;
     @Autowired
     IDiaChiKhachHangRepository diaChiRepository;
+    @Autowired
+    IChiTietSanPhamRepository chiTietSanPhamRepository;
 
     public ByteArrayInputStream exportPdf(Integer id) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -218,5 +227,25 @@ public class PdfExportService {
         }
 
         return new ByteArrayInputStream(out.toByteArray());
+    }
+    public ByteArrayInputStream downloadImage(Integer id) {
+        try {
+            // Lấy chi tiết sản phẩm từ cơ sở dữ liệu
+            ChiTietSanPhamEntity entity = chiTietSanPhamRepository.findById(id).orElse(null);
+            if (entity == null) {
+                return null;  // Không tìm thấy sản phẩm
+            }
+
+            // Lấy dữ liệu ảnh (QR code) từ base64
+            String dataImage = entity.getQrCode().replace("data:image/png;base64,", "");
+            byte[] decodedBytes = Base64.getDecoder().decode(dataImage.trim());
+
+            // Trả về byte array dưới dạng InputStream để client tải về
+            return new ByteArrayInputStream(decodedBytes);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;  // Nếu có lỗi, trả về null
+        }
     }
 }

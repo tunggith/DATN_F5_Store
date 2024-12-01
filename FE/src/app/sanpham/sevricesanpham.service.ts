@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SevricesanphamService {
- 
+  private exportHoaDonUrl = 'http://localhost:8080/api/v1/pdf/download-image';
   private apiUrl = 'http://localhost:8080/api/v1'; // URL gốc API cho sản phẩm
   private apispct = 'http://localhost:8080/api/v1/chi_tiet_san_pham';  // URL gốc API cho sản phẩm
   private apiUrl2 = 'http://localhost:8080/api/v1/customer';  // URL gốc API cho sản phẩm
@@ -111,7 +111,7 @@ export class SevricesanphamService {
 
 
 
-// Trong sanPhamService
+  // Trong sanPhamService
   getSanPhambyid(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/san-pham/details/${id}`);
   }
@@ -119,7 +119,7 @@ export class SevricesanphamService {
 
   filterChiTietSanPham(sanPhamId: number, donGia: number | undefined, mauSacId: number | null, sizeId: number | null, page: number, size: number): Observable<any> {
     let url = `${this.apispct}/filterChiTietSanPham?sanPhamId=${sanPhamId}&page=${page}&size=${size}`;
-  
+
     if (donGia !== undefined) {
       url += `&donGia=${donGia}`;
     }
@@ -129,21 +129,21 @@ export class SevricesanphamService {
     if (sizeId !== null) {
       url += `&sizeId=${sizeId}`;
     }
-  
+
     return this.http.get<any>(url);
   }
-  
+
   checkTrungChiTietSanPham(idSanPham: number, idMauSac: number, idSize: number): Observable<boolean> {
     const url = `${this.apispct}/check-trung?idSanPham=${idSanPham}&idMauSac=${idMauSac}&idSize=${idSize}`;
     return this.http.get<boolean>(url);
   }
-  
+
   checkTrungChiTietSanPhamupdate(idSanPham: number, idMauSac: number, idSize: number, chiTietSanPhamId: number): Observable<boolean> {
     const url = `${this.apispct}/check-trung/update?sanPhamId=${idSanPham}&mauSacId=${idMauSac}&sizeId=${idSize}&chiTietSanPhamId=${chiTietSanPhamId}`;
     return this.http.get<boolean>(url);
   }
-  
-  
+
+
   filterSanPham(thuongHieuId?: number, xuatXuId?: number, gioiTinhId?: number, page: number = 0, size: number = 5): Observable<any> {
     let url = `${this.apiUrl}/san-pham/filter?page=${page}&size=${size}`;
     if (thuongHieuId) {
@@ -156,69 +156,72 @@ export class SevricesanphamService {
       url += `&gioiTinhId=${gioiTinhId}`;
     }
     return this.http.get<any>(url);
-}
+  }
 
-uploadAnh(idSpct: number, selectedImage: string | ArrayBuffer): Observable<any> {
-  const payload = {
-    idChiTietSanPham: idSpct,
-    urlAnh: selectedImage
-  };
-  return this.http.post(`${this.apiUrl}/anh-chi-tiet-san-pham/create`, payload);
-}
+  uploadAnh(idSpct: number, selectedImage: string | ArrayBuffer): Observable<any> {
+    const payload = {
+      idChiTietSanPham: idSpct,
+      urlAnh: selectedImage
+    };
+    return this.http.post(`${this.apiUrl}/anh-chi-tiet-san-pham/create`, payload);
+  }
 
-getImagesByProductId(idSpct: number): Observable<any> {
-  return this.http.get(`${this.apiUrl}/anh-chi-tiet-san-pham/get-by-san-pham/${idSpct}?page=0&size=100`);
-}
-
-
-deleteImage(id: number): Observable<any> {
-  return this.http.delete(`${this.apiUrl}/anh-chi-tiet-san-pham/delete/${id}`);
-}
+  getImagesByProductId(idSpct: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/anh-chi-tiet-san-pham/get-by-san-pham/${idSpct}?page=0&size=100`);
+  }
 
 
-getTongSoLuong(idSanPham: number): Observable<number> {
-  const url = `${this.apispct}/tong-so-luong/${idSanPham}`;
-  return this.http.get<number>(url);
-}
+  deleteImage(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/anh-chi-tiet-san-pham/delete/${id}`);
+  }
 
 
-
-getMauSacBySanPham(idSanPham: number): Observable<any> {
-  return this.http.get<any>(`http://localhost:8080/api/v1/customer/group-by-mau-sac/${idSanPham}`);
-}
-
-uploadImageByColor(idSanPham: number, idMauSac: number, selectedImage: string | ArrayBuffer): Observable<any> {
-  const payload = {
-    idSanPham: idSanPham,
-    idMauSac: idMauSac,
-    urlAnh: selectedImage
-  };
-  return this.http.post(`${this.apiUrl}/upload-image-by-color`, payload);
-}
-
-
-uploadImageByColors(idSanPham: number, idMauSac: number, urls: string[]): Observable<any> {
-  const payload = {
-    idSanPham: idSanPham,
-    idMauSac: idMauSac,
-    urls: urls,
-  };
-
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-  });
-
-  return this.http.post(`${this.apiUrl2}/add-images-by-product-and-color`, payload, {
-    headers,
-    responseType: 'text', // Nếu API trả về text
-  });
-}
+  getTongSoLuong(idSanPham: number): Observable<number> {
+    const url = `${this.apispct}/tong-so-luong/${idSanPham}`;
+    return this.http.get<number>(url);
+  }
 
 
 
-getProductsByColorAndProduct(idMauSac: number, idSanPham: number): Observable<any> {
-  const url = `${this.apiUrl2}/mau-sac/${idMauSac}/san-pham/${idSanPham}`;
-  return this.http.get<any>(url);
-}
+  getMauSacBySanPham(idSanPham: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:8080/api/v1/customer/group-by-mau-sac/${idSanPham}`);
+  }
+
+  uploadImageByColor(idSanPham: number, idMauSac: number, selectedImage: string | ArrayBuffer): Observable<any> {
+    const payload = {
+      idSanPham: idSanPham,
+      idMauSac: idMauSac,
+      urlAnh: selectedImage
+    };
+    return this.http.post(`${this.apiUrl}/upload-image-by-color`, payload);
+  }
+
+
+  uploadImageByColors(idSanPham: number, idMauSac: number, urls: string[]): Observable<any> {
+    const payload = {
+      idSanPham: idSanPham,
+      idMauSac: idMauSac,
+      urls: urls,
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post(`${this.apiUrl2}/add-images-by-product-and-color`, payload, {
+      headers,
+      responseType: 'text', // Nếu API trả về text
+    });
+  }
+
+
+
+  getProductsByColorAndProduct(idMauSac: number, idSanPham: number): Observable<any> {
+    const url = `${this.apiUrl2}/mau-sac/${idMauSac}/san-pham/${idSanPham}`;
+    return this.http.get<any>(url);
+  }
+  downloadImage(id: number): Observable<Blob> {
+    return this.http.get(`${this.exportHoaDonUrl}?id=${id}`, { responseType: 'blob' });
+  }
 
 }  

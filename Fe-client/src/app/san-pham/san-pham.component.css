@@ -1,78 +1,91 @@
 /* Mặc định, danh sách màu sắc sẽ bị ẩn */
 .layere_categorie {
-    display: none;
-    transition: max-height 0.3s ease-out;
-    max-height: 0; /* Ẩn khi đóng */
-    overflow: hidden;
-  }
-  
-  /* Khi mở rộng, thay đổi để hiển thị */
-  .layere_categorie.open {
-    display: block;
-    max-height: 500px; /* Đặt chiều cao tối đa khi mở rộng */
-  }
-  
-  .layere_categorie.closed {
-    display: block;
-    max-height: 0; /* Đặt chiều cao 0 khi đóng */
-  }
-  
-  /* css lấy khoảng tiền  */
+  display: none;
+  transition: max-height 0.3s ease-out;
+  max-height: 0;
+  /* Ẩn khi đóng */
+  overflow: hidden;
+}
 
-  /* Styling cho các ô nhập liệu giá */
+/* Khi mở rộng, thay đổi để hiển thị */
+.layere_categorie.open {
+  display: block;
+  max-height: 500px;
+  /* Đặt chiều cao tối đa khi mở rộng */
+}
+
+.layere_categorie.closed {
+  display: block;
+  max-height: 0;
+  /* Đặt chiều cao 0 khi đóng */
+}
+
+/* css lấy khoảng tiền  */
+
+/* Styling cho các ô nhập liệu giá */
 .price-input {
-    width: 120px;
-    padding: 8px;
-    font-size: 16px;
-    text-align: center;
-    margin: 0 10px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
+  width: 120px;
+  padding: 8px;
+  font-size: 16px;
+  text-align: center;
+  margin: 0 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
 /* css phân trang */
 .pagination {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center; /* Căn giữa */
-    align-items: center;     /* Căn giữa theo chiều dọc */
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  /* Căn giữa */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+}
+
+.product_price_sales {
+  font-size: 1.2rem;
+  color: #ff6a3d;
+  font-weight: bold;
+  text-decoration: line-through;
 }
 
 .pagination-list {
-    display: inline-flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .pagination-list li {
-    margin: 0 5px;
+  margin: 0 5px;
 }
 
 .pagination-list li a {
-    text-decoration: none;
-    color: #4CAF50;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 1rem;
-    background-color: #f1f1f1;
-    transition: background-color 0.3s;
+  text-decoration: none;
+  color: #4CAF50;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #f1f1f1;
+  transition: background-color 0.3s;
 }
 
 .pagination-list li a:hover {
-    background-color: #4CAF50;
-    color: white;
+  background-color: #4CAF50;
+  color: white;
 }
 
 .pagination-list li.disabled a {
-    cursor: not-allowed;
-    background-color: #ddd;
+  cursor: not-allowed;
+  background-color: #ddd;
 }
 
 .pagination-list li.active a {
-    background-color: #4CAF50;
-    color: white;
+  background-color: #4CAF50;
+  color: white;
 }
+
 .sidebar_widget.price {
   margin-bottom: 20px;
 }
@@ -94,6 +107,7 @@
   border-radius: 5px;
   font-size: 14px;
 }
+
 .error-message {
   color: red;
   font-size: 14px;
@@ -107,84 +121,124 @@
   margin-top: 10px;
 }
 
-.colors, .sizes {
-  margin-bottom: 15px; /* Khoảng cách giữa phần màu sắc và kích thước */
+.colors,
+.sizes {
+  margin-bottom: 15px;
+  /* Khoảng cách giữa phần màu sắc và kích thước */
 }
 
-.colors strong, .sizes strong {
+.colors strong,
+.sizes strong {
   display: block;
-  margin-bottom: 5px; /* Khoảng cách giữa tiêu đề và nút */
-  font-size: 14px; /* Nhỏ hơn tiêu chuẩn */
+  margin-bottom: 5px;
+  /* Khoảng cách giữa tiêu đề và nút */
+  font-size: 14px;
+  /* Nhỏ hơn tiêu chuẩn */
 }
 
 .option-buttons {
   display: flex;
-  flex-wrap: wrap; /* Đảm bảo các nút xuống dòng nếu quá dài */
-  gap: 5px; /* Khoảng cách giữa các nút */
+  flex-wrap: wrap;
+  /* Đảm bảo các nút xuống dòng nếu quá dài */
+  gap: 5px;
+  /* Khoảng cách giữa các nút */
 }
 
 .option-buttons button {
-  padding: 5px 10px; /* Nút nhỏ hơn với padding nhỏ */
-  background: #007bff; /* Màu nền mặc định */
-  color: white; /* Màu chữ */
-  border: 1px solid #007bff; /* Viền đồng màu */
-  border-radius: 4px; /* Góc bo tròn nhẹ */
+  padding: 5px 10px;
+  /* Nút nhỏ hơn với padding nhỏ */
+  background: #007bff;
+  /* Màu nền mặc định */
+  color: white;
+  /* Màu chữ */
+  border: 1px solid #007bff;
+  /* Viền đồng màu */
+  border-radius: 4px;
+  /* Góc bo tròn nhẹ */
   cursor: pointer;
-  font-size: 12px; /* Chữ nhỏ gọn */
-  transition: all 0.2s ease; /* Hiệu ứng hover */
+  font-size: 12px;
+  /* Chữ nhỏ gọn */
+  transition: all 0.2s ease;
+  /* Hiệu ứng hover */
 }
 
 .option-buttons button:hover {
-  background: #0056b3; /* Màu tối hơn khi hover */
-  border-color: #0056b3; /* Viền đồng bộ */
-  transform: scale(1.1); /* Phóng to nhẹ khi hover */
+  background: #0056b3;
+  /* Màu tối hơn khi hover */
+  border-color: #0056b3;
+  /* Viền đồng bộ */
+  transform: scale(1.1);
+  /* Phóng to nhẹ khi hover */
 }
 
 .option-buttons button:focus {
-  outline: none; /* Loại bỏ viền mặc định */
-  box-shadow: 0 0 3px rgba(0, 123, 255, 0.8); /* Hiệu ứng viền focus */
+  outline: none;
+  /* Loại bỏ viền mặc định */
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.8);
+  /* Hiệu ứng viền focus */
 }
+
 .options {
   margin-top: 10px;
 }
 
-.colors, .sizes {
-  margin-bottom: 20px; /* Khoảng cách giữa các phần */
+.colors,
+.sizes {
+  margin-bottom: 20px;
+  /* Khoảng cách giữa các phần */
 }
 
-.colors strong, .sizes strong {
+.colors strong,
+.sizes strong {
   display: block;
-  margin-bottom: 8px; /* Khoảng cách giữa tiêu đề và nút */
-  font-size: 14px; /* Giữ font nhỏ gọn */
+  margin-bottom: 8px;
+  /* Khoảng cách giữa tiêu đề và nút */
+  font-size: 14px;
+  /* Giữ font nhỏ gọn */
 }
 
 .option-buttons {
   display: flex;
-  flex-wrap: wrap; /* Cho phép nút xuống dòng */
-  gap: 8px; /* Khoảng cách giữa các nút */
-  justify-content: flex-start; /* Căn trái */
+  flex-wrap: wrap;
+  /* Cho phép nút xuống dòng */
+  gap: 8px;
+  /* Khoảng cách giữa các nút */
+  justify-content: flex-start;
+  /* Căn trái */
 }
 
 .option-buttons button {
-  padding: 5px 12px; /* Padding nhỏ hơn */
-  background: #007bff; /* Màu nền mặc định */
-  color: white; /* Màu chữ */
-  border: 1px solid #007bff; /* Viền đồng bộ */
-  border-radius: 6px; /* Góc bo mềm mại */
-  font-size: 12px; /* Chữ nhỏ gọn */
+  padding: 5px 12px;
+  /* Padding nhỏ hơn */
+  background: #007bff;
+  /* Màu nền mặc định */
+  color: white;
+  /* Màu chữ */
+  border: 1px solid #007bff;
+  /* Viền đồng bộ */
+  border-radius: 6px;
+  /* Góc bo mềm mại */
+  font-size: 12px;
+  /* Chữ nhỏ gọn */
   cursor: pointer;
-  transition: all 0.3s ease; /* Hiệu ứng hover */
+  transition: all 0.3s ease;
+  /* Hiệu ứng hover */
 }
 
 .option-buttons button:hover {
-  background: #0056b3; /* Màu nền khi hover */
-  border-color: #0056b3; /* Viền đồng bộ khi hover */
-  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+  background: #0056b3;
+  /* Màu nền khi hover */
+  border-color: #0056b3;
+  /* Viền đồng bộ khi hover */
+  transform: scale(1.05);
+  /* Phóng to nhẹ khi hover */
 }
 
 .option-buttons button:focus {
-  outline: none; /* Bỏ viền mặc định */
-  box-shadow: 0 0 4px rgba(0, 123, 255, 0.8); /* Viền sáng khi focus */
+  outline: none;
+  /* Bỏ viền mặc định */
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.8);
+  /* Viền sáng khi focus */
 }
 
 
@@ -200,7 +254,8 @@
   transform: translate(-50%, -50%);
   z-index: 1000;
   width: 90%;
-  max-width: 800px; /* Tăng chiều rộng */
+  max-width: 800px;
+  /* Tăng chiều rộng */
   background: white;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -234,7 +289,8 @@
 
 /* Phần bên trái: Hình ảnh */
 .popup-left {
-  flex: 1; /* Chiếm 50% chiều rộng */
+  flex: 1;
+  /* Chiếm 50% chiều rộng */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -279,7 +335,8 @@
 
 /* Phần bên phải: Nội dung sản phẩm */
 .popup-right {
-  flex: 1; /* Chiếm 50% chiều rộng */
+  flex: 1;
+  /* Chiếm 50% chiều rộng */
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -324,7 +381,8 @@
 
 /* Các nút trong option-buttons (mặc định) */
 .option-buttons button {
-  position: relative; /* Để sử dụng pseudo-element */
+  position: relative;
+  /* Để sử dụng pseudo-element */
   padding: 6px 12px;
   font-size: 12px;
   border-radius: 4px;
@@ -343,20 +401,28 @@
 
 /* Khi nút được chọn */
 .option-buttons button.selected {
-  background-color: transparent; /* Nền trong suốt */
-  border: 2px solid #514a07d6; /* Viền đổi màu */
-  color: inherit; /* Giữ nguyên màu chữ */
+  background-color: transparent;
+  /* Nền trong suốt */
+  border: 2px solid #514a07d6;
+  /* Viền đổi màu */
+  color: inherit;
+  /* Giữ nguyên màu chữ */
   transition: border-color 0.3s ease;
 }
 
 /* Thêm dấu tick khi được chọn */
 .option-buttons button.selected::after {
-  content: "✓"; /* Biểu tượng dấu tick */
+  content: "✓";
+  /* Biểu tượng dấu tick */
   position: absolute;
-  bottom: -5px; /* Căn dưới */
-  right: -1px; /* Căn phải */
-  font-size: 16px; /* Kích thước dấu tick */
-  color: #514a07d6; /* Màu sắc dấu tick (giống màu viền) */
+  bottom: -5px;
+  /* Căn dưới */
+  right: -1px;
+  /* Căn phải */
+  font-size: 16px;
+  /* Kích thước dấu tick */
+  color: #514a07d6;
+  /* Màu sắc dấu tick (giống màu viền) */
   font-weight: bold;
 }
 

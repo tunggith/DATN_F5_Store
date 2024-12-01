@@ -33,7 +33,6 @@ export class DiaChiKhachHangComponent implements OnInit {
   diaChiMoi: any = {
     soNha: '',
     duong: '',
-    sdt: '',
     phuongXa: '',
     quanHuyen: '',
     tinhThanh: '',
@@ -50,7 +49,6 @@ export class DiaChiKhachHangComponent implements OnInit {
     this.diaChiForm = this.fb.group({
       soNha: ['', [Validators.required]],
       duong: ['', [Validators.required]],
-      sdt: ['', [Validators.required, Validators.pattern('^[0-9]{10,11}$')]],
       phuongXa: ['', [Validators.required]],
       quanHuyen: ['', [Validators.required]], 
       tinhThanh: ['', [Validators.required]],
@@ -142,7 +140,6 @@ export class DiaChiKhachHangComponent implements OnInit {
       this.diaChiForm.patchValue({
         soNha: this.diaChiMoi.soNha,
         duong: this.diaChiMoi.duong,
-        sdt: this.diaChiMoi.sdt,
         quocGia: this.diaChiMoi.quocGia,
         loaiDiaChi: this.diaChiMoi.loaiDiaChi,
         trangThai: this.diaChiMoi.trangThai
@@ -201,13 +198,6 @@ export class DiaChiKhachHangComponent implements OnInit {
         tinhThanh: this.tinhThanh
       };
 
-      // Kiểm tra số điện thoại
-      const sdt = this.diaChiForm.get('sdt').value;
-      if (!sdt || !/^[0-9]{10,11}$/.test(sdt)) {
-        this.showWarningMessage("Số điện thoại không hợp lệ!");
-        return;
-      }
-      diaChiData.sdt = sdt;
 
       this.diaChiKhachHangService.addDiaChiKhachHang(diaChiData).subscribe(
         response => {
@@ -242,13 +232,6 @@ export class DiaChiKhachHangComponent implements OnInit {
         tinhThanh: this.tinhThanh
       };
 
-      // Kiểm tra số điện thoại
-      const sdt = this.diaChiForm.get('sdt').value;
-      if (!sdt || !/^[0-9]{10,11}$/.test(sdt)) {
-        this.showWarningMessage("Số điện thoại không hợp lệ!");
-        return;
-      }
-      diaChiData.sdt = sdt;
 
       this.diaChiKhachHangService.updateDiaChiKhachHang(this.idDiaChi, diaChiData).subscribe(
         response => {
@@ -334,7 +317,6 @@ onPhuongXaChange(event: any): void {
     this.diaChiForm.reset({
       soNha: '',
       duong: '',
-      sdt: '',
       phuongXa: '',
       quanHuyen: '',
       tinhThanh: '',

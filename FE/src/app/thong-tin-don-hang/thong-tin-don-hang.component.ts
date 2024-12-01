@@ -161,7 +161,7 @@ export class ThongTinDonHangComponent implements OnInit {
     } else {
       this.banHangService.updateTrangThaiHoaDon(id).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật thành công!');
+          this.showSuccessMessage('Cập nhật thành công!');
           this.getIdThongTinDonHang(this.hoaDonChoId);
         }
       )
@@ -211,11 +211,11 @@ export class ThongTinDonHangComponent implements OnInit {
     if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
       this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
         response => {
-          this.showSuccessMessage('xóa thành công!');
+          this.showSuccessMessage('Xóa thành công!');
           this.getIdThongTinDonHang(this.hoaDonChoId);
         },
         error => {
-          this.showErrorMessage('xóa sản phẩm thất bại!');
+          this.showErrorMessage('Xóa sản phẩm thất bại!');
           console.log('lỗi xóa hóa đơn chi tiết', error);
         }
       )
@@ -240,11 +240,11 @@ export class ThongTinDonHangComponent implements OnInit {
   }
 
   removeHoaDon(idHoaDon: number): void {
-    if (confirm('bạn có chắc chắn muốn hủy hóa đơn này không?')) {
+    if (confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
       this.banHangService.removeHoaDon(idHoaDon).subscribe(
         response => {
           this.showSuccessMessage('Hủy hóa đơn thành công');
-          this.detailChiTietHoaDon(this.id);
+          this.getIdThongTinDonHang(this.id);
         },
         this.handleError
       );
@@ -287,7 +287,7 @@ export class ThongTinDonHangComponent implements OnInit {
       // Gọi API để cập nhật địa chỉ nhận hàng
       this.banHangService.updateDiaChiNhanHang(this.id, hoaDon).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật địa chỉ thành công');
+          this.showSuccessMessage('Cập nhật địa chỉ thành công');
           this.editDiaChi = false;
           this.getIdThongTinDonHang(this.id);
         },
