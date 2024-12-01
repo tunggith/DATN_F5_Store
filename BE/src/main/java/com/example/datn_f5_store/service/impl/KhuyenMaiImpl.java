@@ -118,7 +118,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
     @Override
     public DataResponse2 create(KhuyenMaiRequest khuyenMaiRequest) {
-        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.of("UTC")); // Lấy thời gian hiện tại theo UTC
+        LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
         KhuyenMaiEntity khuyenMaiEntity = new KhuyenMaiEntity();
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
@@ -150,7 +150,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
                     khuyenMaiEntity.setThoiGianBatDau(thoiGianBatDauUTC);
                     khuyenMaiEntity.setThoiGianKetThuc(thoiGianKetThucUTC);
-                    khuyenMaiEntity.setThoiGianTao(Timestamp.valueOf(currentDateTime)); // Lưu theo UTC
+                    khuyenMaiEntity.setThoiGianTao(currentDateTime); // Lưu theo UTC
                     khuyenMaiEntity.setNguoiTao("ADMIN");
 
                     // Kiểm tra trạng thái

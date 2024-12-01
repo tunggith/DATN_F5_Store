@@ -116,7 +116,8 @@
                     <input type="number" id="giaTriVoucher" class="form-control" required
                       formControlName="giaTriVoucher"
                       [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}"
-                      min="0" max="99999999" />
+                      min="0" max="99999999" 
+                      />
                   </div>
                   <div
                     *ngIf="voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)">

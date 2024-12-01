@@ -12,6 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import javax.persistence.Version;
+
 
 @Getter
 @Setter
@@ -19,6 +21,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "KHUYEN_MAI_CHI_TIET_SAN_PHAM")
+
 public class KhuyenMaiChiTietSanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +34,6 @@ public class KhuyenMaiChiTietSanPham {
     private ChiTietSanPhamEntity chiTietSanPham;
     @Column(name = "TRANG_THAI")
     private String trangThai;
+
+
 }

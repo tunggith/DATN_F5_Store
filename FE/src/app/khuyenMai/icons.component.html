@@ -51,7 +51,7 @@
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close-btn" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close-btn" (click)="close()" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -91,7 +91,8 @@
                           <div class="form-group">
                             <label for="kieuKhuyenMai">Kiểu khuyến mãi</label>
                             <select id="kieuKhuyenMai" class="form-control" [(ngModel)]="currentKhuyenMai.kieuKhuyenMai"
-                              name="kieuKhuyenMai" required #kieuKhuyenMai="ngModel">                            
+                              name="kieuKhuyenMai" required #kieuKhuyenMai="ngModel"
+                           >                            
                               <option value="VND">VND</option>
                               <option value="%">%</option>
                             </select>
@@ -122,7 +123,8 @@
                             <label for="giaTriKhuyenMai">Giá trị khuyến mãi</label>
                             <input type="number" id="giaTriKhuyenMai" class="form-control"
                               [(ngModel)]="currentKhuyenMai.giaTriKhuyenMai" name="giaTriKhuyenMai" required min="1" max="9999999"
-                              #giaTriKhuyenMai="ngModel">
+                              #giaTriKhuyenMai="ngModel"
+                            >
                             <div *ngIf="giaTriKhuyenMai.invalid && (giaTriKhuyenMai.dirty || giaTriKhuyenMai.touched)"
                               class="error-message">
                               <div *ngIf="giaTriKhuyenMai.errors?.required">Giá trị khuyến mãi không được để trống.</div>
@@ -403,7 +405,8 @@
                 <th>Mã</th>
                 <th>Màu sắc</th>
                 <th>Kích thước</th>
-                <th>Đơn giá</th>
+                <th>Giá ban đầu</th>
+                <th>Giá khuyến mãi</th>
                 <th>Số lượng</th>
                 <th>Trạng thái</th>
                 <th>Khuyến mãi sản phẩm</th>
@@ -414,7 +417,8 @@
                 <td>{{ chiTiet.ma }}</td>
                 <td>{{ chiTiet.mauSac.ten }}</td>
                 <td>{{ chiTiet.size.ten }}</td>
-                <td>{{ chiTiet.donGia | number: '1.0-0' }}VND</td>
+                <td>{{ chiTiet.donGiaBanDau | number: '1.0-0' }} VND</td>
+                <td>{{ chiTiet.donGia | number: '1.0-0' }} VND</td>
                 <td>{{ chiTiet.soLuong }}</td>
                 <td>{{ chiTiet.trangThai }}</td>
 

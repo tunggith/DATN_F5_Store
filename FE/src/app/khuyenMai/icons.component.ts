@@ -231,8 +231,7 @@ createKhuyenMai() {
         this.addPromotionToProducts(response.result.id);
         this.resetForm();
         this.loadKhuyenMais();       
-       
-       
+             
       } else {
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
@@ -616,6 +615,10 @@ openChiTietModal(sanPhamId: number) {
 
 closeChiTietModal() {
   this.isChiTietModalOpen = false;
+}
+
+close(){
+  this.selectedProductIds = [];
 }
 
 viewProductDetails(idSanPham: number) {
@@ -1013,31 +1016,38 @@ onCheckboxChange(event: Event, productId: number): void {
 
 
 addPromotionToProducts(promotionId: number): void {
-  const promises = this.selectedProductIds.map(productId => {
+  // Loại bỏ các `productId` trùng lặp trong danh sách
+  const uniqueProductIds = Array.from(new Set(this.selectedProductIds));
+
+  uniqueProductIds.forEach((productId, index) => {
     const request = {
       khuyenMai: { id: promotionId },
       chiTietSanPham: { id: productId }
     };
-    console.log('Dữ liệu thêm khuyến mãi:', request);
-    return this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request)
-      .toPromise()
-      .then(() => ({ productId, success: true }))
-      .catch((error) => ({ productId, success: false, error }));
+
+    console.log(`Gửi yêu cầu thêm khuyến mãi cho sản phẩm ID ${productId}:`, request);
+
+    // Gọi API cho từng sản phẩm
+    this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request)
+      .subscribe({
+        next: () => {
+          console.log(`Sản phẩm ID ${productId} đã được thêm khuyến mãi thành công.`);
+        },
+        error: (error) => {
+          console.error(`Lỗi khi thêm khuyến mãi cho sản phẩm ID ${productId}:`, error);
+        },
+        complete: () => {
+          console.log(`Xử lý hoàn tất cho sản phẩm ID ${productId}`);
+        }
+      });
   });
 
-  Promise.all(promises)
-    .then(results => {
-      console.log("Kết quả từng sản phẩm:", results);
-      const failed = results.filter(r => !r.success);
-      if (failed.length > 0) {
-        console.error("Một số sản phẩm không được thêm:", failed);
-      }
-      this.resetForm();
-    })
-    .catch((error) => {
-      console.error("Lỗi khi gắn khuyến mãi vào sản phẩm:", error);
-    });
+  // Reset form hoặc cập nhật giao diện nếu cần
+  this.resetForm();
+  this.loadKhuyenMais();
 }
+
+
 
 
 

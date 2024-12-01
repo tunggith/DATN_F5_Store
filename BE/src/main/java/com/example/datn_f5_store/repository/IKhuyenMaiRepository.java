@@ -4,6 +4,7 @@ import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -25,5 +26,9 @@ public interface IKhuyenMaiRepository extends JpaRepository<KhuyenMaiEntity,Inte
 
     @Query("SELECT p FROM KhuyenMaiEntity p WHERE p.trangThai = ?1 ORDER BY p.id DESC")
     Page<KhuyenMaiEntity> findByTrangThai(String trangThai, Pageable pageable);
+
+    @Modifying
+    @Query("UPDATE KhuyenMaiEntity k SET k.soLuong = k.soLuong - 1 WHERE k.id = :khuyenMaiId AND k.soLuong > 0")
+    int decrementSoLuong(@Param("khuyenMaiId") Integer khuyenMaiId);
 
 }
