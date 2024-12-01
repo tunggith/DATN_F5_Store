@@ -112,6 +112,8 @@ public class ChiTietSanPhamImpl {
         chiTietSanPham.setSanPham(sanPham);
         chiTietSanPham.setMauSac(mauSac);
         chiTietSanPham.setSize(size);
+        chiTietSanPham.setDonGiaBanDau(ctspRequet.getDonGia());
+        chiTietSanPham.setCheckKm(false);
 
         // Lưu chi tiết sản phẩm
         repo_ctsp.save(chiTietSanPham);
@@ -151,6 +153,8 @@ public class ChiTietSanPhamImpl {
         chiTietSanPham.setSanPham(sanPham);
         chiTietSanPham.setMauSac(mauSac);
         chiTietSanPham.setSize(size);
+        chiTietSanPham.setDonGiaBanDau(ctspRequest.getDonGia());
+        chiTietSanPham.setCheckKm(false);
 
         // Lưu cập nhật chi tiết sản phẩm
         repo_ctsp.save(chiTietSanPham);
@@ -219,7 +223,9 @@ public class ChiTietSanPhamImpl {
                 entity.getDonGia(),
                 entity.getSoLuong(),
                 entity.getTrangThai(),
-                entity.getCheckKm()
+                entity.getCheckKm(),
+                entity.getDonGiaBanDau(),
+                entity.getQrCode()
         ));
     }
 

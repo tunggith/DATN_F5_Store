@@ -177,9 +177,9 @@ public class PdfExportService {
                 ).setTextAlignment(TextAlignment.CENTER)));
                 table.addCell(new Cell().add(new Paragraph(String.valueOf(x.getSoLuong())))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getChiTietSanPham().getDonGia()) + " VNĐ")))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getChiTietSanPham().getDonGia()) + " VND")))
                         .setTextAlignment(TextAlignment.CENTER));
-                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getGiaSpctHienTai()) + " VNĐ")))
+                table.addCell(new Cell().add(new Paragraph(String.valueOf(df.format(x.getGiaSpctHienTai()) + " VND")))
                         .setTextAlignment(TextAlignment.CENTER));
             }
             // Thêm bảng vào document
@@ -192,17 +192,17 @@ public class PdfExportService {
             Cell cell = new Cell();
             cell.setBorder(Border.NO_BORDER);
             cell.setTextAlignment(TextAlignment.CENTER);
-            cell.add(new Paragraph("Tổng tiền: " + df.format(hoaDon.getTongTienBanDau()) + "VNĐ"));
+            cell.add(new Paragraph("Tổng tiền: " + df.format(hoaDon.getTongTienBanDau()) + "VND"));
             if (hoaDon.getVoucher() != null) {
                 cell.add(new Paragraph("Giảm giá: " + hoaDon.getVoucher().getGiaTriVoucher() + " " + hoaDon.getVoucher().getKieuGiamGia()));
                 if (hoaDon.getGiaoHang() == 0) {
-                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VNĐ"));
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VND"));
                 } else {
-                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VNĐ"));
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VND"));
                 }
             }
-            cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + "VNĐ"));
-            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + "VNĐ"));
+            cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + "VND"));
+            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + "VND"));
             if (hoaDon.getHinhThucThanhToan() == 0) {
                 cell.add(new Paragraph("Nhân viên thanh toán").setFont(boldFont));
                 cell.add(new Paragraph(tenNhanVien));

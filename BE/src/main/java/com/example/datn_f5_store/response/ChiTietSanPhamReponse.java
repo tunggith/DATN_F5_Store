@@ -1,9 +1,11 @@
 
 package com.example.datn_f5_store.response;
 
+import com.example.datn_f5_store.contanst.ConfigContanst;
 import com.example.datn_f5_store.entity.MauSacEntity;
 import com.example.datn_f5_store.entity.SanPhamEntity;
 import com.example.datn_f5_store.entity.SizeEntity;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChiTietSanPhamReponse {
-
 
     private Integer id;
 
@@ -34,4 +35,6 @@ public class ChiTietSanPhamReponse {
 
     private String trangThai;
     private Boolean checkKm;
+    private Double donGiaBanDau;
+    private String qrCode;
 }

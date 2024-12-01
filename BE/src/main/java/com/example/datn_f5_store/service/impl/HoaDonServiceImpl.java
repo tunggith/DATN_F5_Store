@@ -319,7 +319,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 lichSuHoaDon.setTrangThaiCu(null);
                 lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
                 lichSuHoaDon.setThoiGianThucHien(hoaDon.getThoiGianTao());
-                lichSuHoaDon.setLoaiThayDoi("tạo hóa đơn");
+                lichSuHoaDon.setLoaiThayDoi("Tạo hóa đơn");
                 // Lưu lịch sử hóa đơn vào cơ sở dữ liệu
                 lichSuHoaDonRepository.save(lichSuHoaDon);
 
@@ -381,9 +381,9 @@ public class HoaDonServiceImpl implements IHoaDonService {
             }
 
             if (request.getHinhThucThanhToan() == 0) {
-                if (request.getIdThanhToan()==1){
+                if (request.getIdThanhToan() == 1) {
                     request.setTrangThai("Hoàn thành");
-                }else {
+                } else {
                     request.setTrangThai("Đã xác nhận");
                 }
             } else {
@@ -434,13 +434,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
         if (hoaDon == null) {
             return new DataResponse(false, new ResultModel<>(null, "hóa đơn không tồn tại"));
         }
-        List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
-        if (chiTietHoaDon != null) {
-            for (ChiTietHoaDonEntity x : chiTietHoaDon) {
-                ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(x.getChiTietSanPham().getId()).orElse(null);
-                if (chiTietSanPham != null) {
-                    chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + x.getSoLuong());
-                    chiTietSanPhamRepository.save(chiTietSanPham);
+        if (hoaDon.getHinhThucThanhToan() != 2 || hoaDon.getThanhToan().getId() != 1) {
+            List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
+            if (chiTietHoaDon != null) {
+                for (ChiTietHoaDonEntity x : chiTietHoaDon) {
+                    ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(x.getChiTietSanPham().getId()).orElse(null);
+                    if (chiTietSanPham != null) {
+                        chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + x.getSoLuong());
+                        chiTietSanPhamRepository.save(chiTietSanPham);
+                    }
                 }
             }
         }
@@ -751,11 +753,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse updateNote(Integer id,String ghiChu) {
+    public DataResponse updateNote(Integer id, String ghiChu) {
         HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
         hoaDon.setGhiChu(ghiChu);
         hoaDonRepository.save(hoaDon);
-        return new DataResponse(true,new ResultModel<>(null,"update ghi chú thành công"));
+        return new DataResponse(true, new ResultModel<>(null, "update ghi chú thành công"));
     }
 
     private Boolean isNullHoaDon(HoaDonRequest request) {
