@@ -186,11 +186,7 @@ public class KhuyenMaiController {
         return new ResponseEntity<>(khuyenMaiService.CapNhapTrangThaiKhuyenMai(id), HttpStatus.OK);
     }
 
-    @GetMapping("/expired-ids")
-    public ResponseEntity<List<Integer>> getExpiredIds() {
-        // Trả về danh sách ID đã cập nhật
-        return ResponseEntity.ok(khuyenMaiChiTietSanPhamService.getCachedUpdatedIds());
-    }
+
 
 
 }

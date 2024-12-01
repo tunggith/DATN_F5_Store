@@ -19,5 +19,5 @@ public interface KhuyenMaiChiTietSanPhamService {
     public void upDateTrangThaiKhuyenMaiCtSp();
     Page<KhuyenMaiChiTietSanPhamDto> getByKhuyenMai(int page, int size,int id);
 
-    public List<Integer> getCachedUpdatedIds();
+
 }

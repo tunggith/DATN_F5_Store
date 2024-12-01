@@ -239,21 +239,14 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
-                this.cachedUpdatedIds = updatedProductIds;
-                System.out.println("Danh sách ID đã thay đổi: " + updatedProductIds);
+
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private List<Integer> cachedUpdatedIds = new ArrayList<>(); // Danh sách ID được lưu
-
-
-    @Override
-    public List<Integer> getCachedUpdatedIds() {
-        return cachedUpdatedIds; // Trả về danh sách
-    }
 
 
 

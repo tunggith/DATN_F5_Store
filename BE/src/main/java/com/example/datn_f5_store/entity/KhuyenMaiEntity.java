@@ -37,7 +37,7 @@ public class KhuyenMaiEntity {
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_KET_THUC)
     private LocalDateTime thoiGianKetThuc;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_TAO)
-    private Date thoiGianTao;
+    private LocalDateTime thoiGianTao;
     @Column(name = ConfigContanst.KhuyenMai.THOI_GIAN_SUA)
     private Date thoiGianSua;
     @Column(name = ConfigContanst.KhuyenMai.NGUOI_TAO)

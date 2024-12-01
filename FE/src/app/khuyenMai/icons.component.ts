@@ -231,8 +231,7 @@ createKhuyenMai() {
         this.addPromotionToProducts(response.result.id);
         this.resetForm();
         this.loadKhuyenMais();       
-       
-       
+             
       } else {
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
@@ -616,6 +615,10 @@ openChiTietModal(sanPhamId: number) {
 
 closeChiTietModal() {
   this.isChiTietModalOpen = false;
+}
+
+close(){
+  this.selectedProductIds = [];
 }
 
 viewProductDetails(idSanPham: number) {
@@ -1013,7 +1016,10 @@ onCheckboxChange(event: Event, productId: number): void {
 
 
 addPromotionToProducts(promotionId: number): void {
-  const promises = this.selectedProductIds.map(productId => {
+  // Loại bỏ các `productId` trùng lặp trong danh sách
+  const uniqueProductIds = Array.from(new Set(this.selectedProductIds));
+
+  const promises = uniqueProductIds.map(productId => {
     const request = {
       khuyenMai: { id: promotionId },
       chiTietSanPham: { id: productId }
@@ -1038,6 +1044,7 @@ addPromotionToProducts(promotionId: number): void {
       console.error("Lỗi khi gắn khuyến mãi vào sản phẩm:", error);
     });
 }
+
 
 
 
