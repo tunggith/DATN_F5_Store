@@ -294,14 +294,14 @@ export class BanHangComponent implements OnInit {
   }
   //==================xóa hóa đơn chi tiết==================
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
-    if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
+    if (confirm('Bạn có chắc muốn xóa sản phẩm này không?')) {
       this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
         response => {
-          this.showSuccessMessage('xóa thành công!');
+          this.showSuccessMessage('Xóa thành công!');
           this.getHoaDon();
         },
         error => {
-          this.showErrorMessage('xóa sản phẩm thất bại!');
+          this.showErrorMessage('Xóa sản phẩm thất bại!');
           console.log('lỗi xóa hóa đơn chi tiết', error);
         }
       )

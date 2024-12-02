@@ -2,24 +2,14 @@ USE DATN_F5_STORE
 INSERT INTO XUAT_XU(MA, TEN) VALUES
 ('VN', N'Việt Nam'),
 ('US', N'Hoa Kỳ'),
-('JP', N'Nhật Bản'),
-('CN', N'Trung Quốc'),
-('KR', N'Hàn Quốc'),
 ('FR', N'Pháp'),
 ('DE', N'Đức'),
-('IT', N'Ý'),
-('UK', N'Anh'),
-('TH', N'Thái Lan');
+('UK', N'Anh');
 
 
 INSERT INTO THUONG_HIEU (MA, TEN) VALUES
-('NIKE', N'Nike'),
-('ADID', N'Adidas'),
-('PUMA', N'Puma'),
 ('GUCCI', N'Gucci'),
-('LV', N'Louis Vuitton'),
 ('HM', N'H&M'),
-('ZARA', N'Zara'),
 ('UNIQ', N'Uniqlo'),
 ('CK', N'Calvin Klein'),
 ('DG', N'Dolce & Gabbana');
@@ -31,27 +21,21 @@ INSERT INTO GIOI_TINH (TEN) VALUES
 
 
 INSERT INTO [SIZE] (MA, TEN) VALUES
-('XS', N'Extra Small'),
-('S', N'Small'),
-('M', N'Medium'),
-('L', N'Large'),
-('XL', N'Extra Large'),
-('XXL', N'Double Extra Large'),
-('3XL', N'Triple Extra Large'),
-('4XL', N'Four Extra Large'),
-('5XL', N'Five Extra Large'),
-('FREE', N'Free Size');
+('XS', N'XS'),
+('S', N'S'),
+('M', N'M'),
+('L', N'L'),
+('XL', N'XL'),
+('XXL', N'XXL'),
+('3XL', N'3XL');
 
 INSERT INTO MAU_SAC (MA, TEN) VALUES
 ('RED', N'Đỏ'),
 ('BLU', N'Xanh dương'),
-('GRN', N'Xanh lá'),
 ('BLK', N'Đen'),
-('WHT', N'Tráng'),
+('WHT', N'Trắng'),
 ('YEL', N'Vàng'),
-('PUR', N'Tím'),
 ('PINK', N'Hồng'),
-('ORG', N'Cam'),
 ('GRY', N'Xám');
 
 INSERT INTO PHUONG_THUC_THANH_TOAN (TEN_PHUONG_THUC, TRANG_THAI) 
@@ -67,11 +51,11 @@ INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_GIOI_TINH, MA, TEN, TRANG_T
 (3, 3, 1, 'SP003', N'Áo khoác Puma', N'Đang hoạt động'),
 (4, 4, 1, 'SP004', N'Áo sơ mi Gucci', N'Đang hoạt động'),
 (5, 5, 2, 'SP005', N'Váy Louis Vuitton', N'Đang hoạt động'),
-(6, 6, 2, 'SP006', N'Quần jean H&M', N'Đang hoạt động'),
-(7, 7, 1, 'SP007', N'Áo khoác ZARA', N'Đang hoạt động'),
-(8, 8, 1, 'SP008', N'Áo len Uniqlo', N'Đang hoạt động'),
-(9, 9, 1, 'SP009', N'Quần âu Calvin Klein', N'Đang hoạt động'),
-(10, 10, 1, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Đang hoạt động');
+(1, 1, 2, 'SP006', N'Quần jean H&M', N'Đang hoạt động'),
+(2, 2, 1, 'SP007', N'Áo khoác ZARA', N'Đang hoạt động'),
+(3, 3, 1, 'SP008', N'Áo len Uniqlo', N'Đang hoạt động'),
+(4, 4, 1, 'SP009', N'Quần âu Calvin Klein', N'Đang hoạt động'),
+(5, 5, 1, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Đang hoạt động');
 select*from SAN_PHAM
 
 
@@ -83,9 +67,9 @@ INSERT INTO CHI_TIET_SAN_PHAM (ID_SAN_PHAM, ID_MAU_SAC, ID_SIZE, MA, DON_GIA, SO
 (5, 5, 5, 'CTSP005', 1200000, 10, N'Hết hàng',0,1200000,''),
 (6, 6, 6, 'CTSP006', 600000, 15, N'Còn hàng',0,600000,''),
 (7, 7, 7, 'CTSP007', 700000, 40, N'Còn hàng',0,700000,''),
-(8, 8, 8, 'CTSP008', 400000, 25, N'Hết hàng',0,400000,''),
-(9, 9, 9, 'CTSP009', 550000, 50, N'Còn hàng',0,550000,''),
-(10, 10, 10, 'CTSP010', 950000, 30, N'Còn hàng',0,950000,'');
+(8, 1, 3, 'CTSP008', 400000, 25, N'Hết hàng',0,400000,''),
+(9, 2, 2, 'CTSP009', 550000, 50, N'Còn hàng',0,550000,''),
+(10, 3, 1, 'CTSP010', 950000, 30, N'Còn hàng',0,950000,'');
 select*from CHI_TIET_SAN_PHAM
 
 
@@ -104,7 +88,7 @@ select*from ANH_CHI_TIET_SAN_PHAM
 
 INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT,ROLES, USERNAME, [PASSWORD], TRANG_THAI) VALUES
 ('KH001', 'Khách vãng lai', null,null, null, null, null, null,null ,null,null),
-('KH002', 'Tran Thi B', 0, '1992-02-02', N'tranthib@gmail.com.com', 'anh2.jpg', '0987654321','CUSTOMER', N'tranthib', '123', N'Đang hoạt động'),
+('KH002', 'Hà Thanh Tùng', 0, '1992-02-02', N'hatunng18102004@gmail.com', 'anh2.jpg', '0987654321','CUSTOMER', N'hatunng18102004@gmail.com', '123', N'Đang hoạt động'),
 ('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@gmail.com', 'anh3.jpg', '0909123456','CUSTOMER', N'phamvanc', '123', N'Đang hoạt động'),
 ('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@gmail.com', 'anh4.jpg', '0911223344', N'lethid','CUSTOMER', '123', N'Đang hoạt động'),
 ('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@gmail.com', 'anh5.jpg', '0933445566', N'vovane','CUSTOMER', '123', N'Đang hoạt động');

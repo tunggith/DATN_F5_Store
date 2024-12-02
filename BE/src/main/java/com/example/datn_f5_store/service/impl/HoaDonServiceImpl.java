@@ -381,7 +381,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
             }
 
             if (request.getHinhThucThanhToan() == 0) {
-                if (request.getIdThanhToan() == 1) {
+                if (request.getGiaoHang() == 0) {
                     request.setTrangThai("Hoàn thành");
                 } else {
                     request.setTrangThai("Đã xác nhận");

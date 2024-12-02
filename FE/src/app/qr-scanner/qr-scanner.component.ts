@@ -41,6 +41,7 @@ export class QrScannerComponent implements AfterViewInit {
   }
 
   close() {
+    this.stopScan();
     this.closePopup.emit();
   }
 
@@ -60,7 +61,6 @@ export class QrScannerComponent implements AfterViewInit {
 
       // Đặt lại trạng thái quét
       this.isScanning = false;
-      this.close();
     }
   }
 

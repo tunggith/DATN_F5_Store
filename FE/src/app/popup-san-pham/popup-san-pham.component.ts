@@ -134,7 +134,7 @@ export class PopupSanPhamComponent implements OnInit {
         step: '1'  // Bước nhảy
       },
       customClass: {
-        confirmButton: 'btn btn-success', // Thay đổi màu cho nút xác nhận
+        confirmButton: '#003366', // Thay đổi màu cho nút xác nhận
         cancelButton: 'btn btn-danger' // Thay đổi màu cho nút hủy
       },
       focusConfirm: false,

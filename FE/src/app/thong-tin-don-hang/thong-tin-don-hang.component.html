@@ -7,10 +7,10 @@
                         <h1>Thông tin đơn hàng</h1>
                         <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
                         <div>
-                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div>
-                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen-giaTriGiam||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen-giaTriGiam||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div style="display: flex;">
                             <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden"
@@ -139,7 +139,7 @@
                                             (click)="increaseQuantityhd(cthd.chiTietSanPham?.id)">add</i></button>
                                 </div>
                             </td>
-                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
+                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VND</td>
                             <td><button [disabled]="detailHoaDon.length === 1" (click)="removeHoaDonChiTiet(cthd.id)"
                                     class="select-invoice"><i class="material-icons">delete_forever</i></button>
                             </td>
