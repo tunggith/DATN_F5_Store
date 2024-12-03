@@ -94,11 +94,11 @@ INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH,
 ('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@gmail.com', 'anh5.jpg', '0933445566', N'vovane','CUSTOMER', '123', N'Đang hoạt động');
 
 INSERT INTO DIA_CHI_KHACH_HANG (ID_KHACH_HANG,SO_NHA, DUONG, PHUONG_XA, QUAN_HUYEN, TINH_THANH, QUOC_GIA, LOAI_DIA_CHI, TRANG_THAI) VALUES
-(2, N'123', N'Nguyễn Trãi', N'Phường 1', N'Quận 1', N'TP. Hồ Chí Minh', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
-(2, N'456', N'Lê Lợi', N'Phường 2', N'Quận 3', N'Hà Nội', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
-(2, N'789', N'Phan Xích Long', N'Phường 3', N'Quận 5', N'Đà Nẵng', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
-(3, N'321', N'Trường Chinh', N'Phường 4', N'Quận 2', N'Hải Phòng', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
-(4, N'654', N'Quang Trung', N'Phường 5', N'Quận 7', N'Cần Thơ', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng');
+(2, N'123', N'Nguyễn Trãi', N'Xã Long Hưng', N'Huyện Văn Giang', N'Hưng Yên', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
+(2, N'456', N'Lê Lợi', N'Xã Liêm Phong2', N'Huyện Thanh Liêm', N'Hà Nam', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
+(2, N'789', N'Phan Xích Long', N'Phường Tân Bình', N'Thành phố Tam Điệp', N'Ninh Bình', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
+(3, N'321', N'Trường Chinh', N'Xã Hữu Sản', N'Huyện Sơn Động', N'Bắc Giang', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
+(4, N'654', N'Quang Trung', N'Xã Minh Phú', N'Huyện Sóc Sơn', N'Hà Nội', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng');
 
 
 INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, DIA_CHI, ANH,ROLES, USERNAME, [PASSWORD], THOI_GIAN_TAO, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
