@@ -30,4 +30,9 @@ public class ChiTietSanPhamDto {
 
     private Boolean checkKm;
 
+    public ChiTietSanPhamDto(Integer id, String ma,Integer soLuong) {
+        this.id = id;
+        this.ma = ma;
+        this.soLuong = soLuong;
+    }
 }
