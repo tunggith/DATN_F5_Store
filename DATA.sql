@@ -41,21 +41,21 @@ INSERT INTO MAU_SAC (MA, TEN) VALUES
 INSERT INTO PHUONG_THUC_THANH_TOAN (TEN_PHUONG_THUC, TRANG_THAI) 
 VALUES
 (N'Tiền mặt', N'Hoạt động'),
-(N'Chuyển Khoản', N'Hoạt động')
+(N'Chuyển khoản', N'Hoạt động')
 
 
 
 INSERT INTO SAN_PHAM (ID_XUAT_XU, ID_THUONG_HIEU, ID_GIOI_TINH, MA, TEN, TRANG_THAI) VALUES
-(1, 1, 1, 'SP001', N'Áo thun Nike', N'Đang hoạt động'),
-(2, 2, 1, 'SP002', N'Quần short Adidas', N'Đang hoạt động'),
-(3, 3, 1, 'SP003', N'Áo khoác Puma', N'Đang hoạt động'),
-(4, 4, 1, 'SP004', N'Áo sơ mi Gucci', N'Đang hoạt động'),
-(5, 5, 2, 'SP005', N'Váy Louis Vuitton', N'Đang hoạt động'),
-(1, 1, 2, 'SP006', N'Quần jean H&M', N'Đang hoạt động'),
-(2, 2, 1, 'SP007', N'Áo khoác ZARA', N'Đang hoạt động'),
-(3, 3, 1, 'SP008', N'Áo len Uniqlo', N'Đang hoạt động'),
-(4, 4, 1, 'SP009', N'Quần âu Calvin Klein', N'Đang hoạt động'),
-(5, 5, 1, 'SP010', N'Áo sơ mi Dolce & Gabbana', N'Đang hoạt động');
+(1, 1, 1, 'SP001', N'Áo thun Gucci', N'Đang hoạt động'),
+(2, 2, 1, 'SP002', N'Áo phông H&M', N'Đang hoạt động'),
+(3, 3, 1, 'SP003', N'Áo phông trơn Uniqlo', N'Đang hoạt động'),
+(4, 4, 1, 'SP004', N'Áo thun lạnh Gucci', N'Đang hoạt động'),
+(5, 5, 2, 'SP005', N'Áo phông ngắn tay Dolce & Gabbana', N'Đang hoạt động'),
+(1, 1, 2, 'SP006', N'Áo phông Gucci oversize', N'Đang hoạt động'),
+(2, 2, 1, 'SP007', N'Áo phông H&M cổ tròn', N'Đang hoạt động'),
+(3, 3, 1, 'SP008', N'Áo phông Uniqlo thể thao', N'Đang hoạt động'),
+(4, 4, 1, 'SP009', N'Áo phông Calvin Klein cổ tim', N'Đang hoạt động'),
+(5, 5, 1, 'SP010', N'Áo phông Dolce & Gabbana cao cấp', N'Đang hoạt động');
 select*from SAN_PHAM
 
 
@@ -74,55 +74,57 @@ select*from CHI_TIET_SAN_PHAM
 
 
 INSERT INTO ANH_CHI_TIET_SAN_PHAM (ID_CHI_TIET_SAN_PHAM, URL_ANH) VALUES
-(1, 'https://example.com/images/ctsp001.jpg'),
-(2, 'https://example.com/images/ctsp002.jpg'),
-(3, 'https://example.com/images/ctsp003.jpg'),
-(4, 'https://example.com/images/ctsp004.jpg'),
-(5, 'https://example.com/images/ctsp005.jpg'),
-(6, 'https://example.com/images/ctsp006.jpg'),
-(7, 'https://example.com/images/ctsp007.jpg'),
-(8, 'https://example.com/images/ctsp008.jpg'),
-(9, 'https://example.com/images/ctsp009.jpg'),
-(10, 'https://example.com/images/ctsp010.jpg');
+(1, 'https://cdn.vuahanghieu.com/unsafe/0x900/left/top/smart/filters:quality(90)/https://admin.vuahanghieu.com/upload/product/2024/11/ao-phong-nu-gucci-with-logo-printed-t-shirt-788093xjgl7-9074-mau-trang-size-s-672c4055039ad-07112024112141.jpg'),
+(2, 'https://bizweb.dktcdn.net/100/347/212/products/165835169e2376d099b9bcd2a9f879bb49261d5c.jpg?v=1706174286703'),
+(3, 'https://down-vn.img.susercontent.com/file/726623675382b001407d14477625fee1.webp'),
+(4, 'https://product.hstatic.net/200000329007/product/bc9d6969-ae04-494f-9e8f-bd09b396564a_e37c2b80a5b5420f8f2584a3fcfb339d_master.jpg'),
+(5, 'https://product.hstatic.net/1000205116/product/fdf9e99a-becd-4b04-ba64-d47cc4470df5_2af5b15d83114ddf9f60956372537e1c_1024x1024.jpeg'),
+(6, 'https://bizweb.dktcdn.net/100/415/697/products/nta101-p5896d4x-1-pe31-hinh-mat-sau-0.jpg?v=1723446030133'),
+(9, 'https://dongphucunicorn.com/wp-content/uploads/2019/10/ao-thun-co-tim.jpg'),
+(10, 'https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lrvrpyror0sk73.webp'),
+(7, 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgdayULm3RlrMPZU2JsZqP7nDb670GVCAvCWCPnBOzpvcO6CV1I2xiCaBvDQXTrMfJ-pNIDDFU6lO9BjsuLGc9uD8LPuUsb4gkaEW8KHN_RplRi1JCvlLCevI3Yz2acO2jE8sVXd8VRLGd1qQsSisXg_4BjLy3EGOeOjEQntGCh2fUW_gXNx0_pNYppCCY/s600/ao-thun-co-tron-thoi-trang.jpg'),
+(8, 'https://dasbui.com/wp-content/uploads/2021/09/14_438274.jpg');
 select*from ANH_CHI_TIET_SAN_PHAM
 
 INSERT INTO KHACH_HANG ( MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, ANH, SDT,ROLES, USERNAME, [PASSWORD], TRANG_THAI) VALUES
-('KH001', 'Khách vãng lai', null,null, null, null, null, null,null ,null,null),
-('KH002', 'Hà Thanh Tùng', 0, '1992-02-02', N'hatunng18102004@gmail.com', 'anh2.jpg', '0987654321','CUSTOMER', N'hatunng18102004@gmail.com', '123', N'Đang hoạt động'),
-('KH003', 'Pham Van C', 1, '1985-03-03', N'phamvanc@gmail.com', 'anh3.jpg', '0909123456','CUSTOMER', N'phamvanc', '123', N'Đang hoạt động'),
-('KH004', 'Le Thi D', 0, '1993-04-04', N'lethid@gmail.com', 'anh4.jpg', '0911223344', N'lethid','CUSTOMER', '123', N'Đang hoạt động'),
-('KH005', 'Vo Van E', 1, '1988-05-05', N'vovane@gmail.com', 'anh5.jpg', '0933445566', N'vovane','CUSTOMER', '123', N'Đang hoạt động');
+('KH001', N'Khách vãng lai', null,null, null, null, null, null,null ,null,null),
+('KH002', N'Hà Thanh Tùng', 0, '1992-02-02', N'hatung18102004@gmail.com', 'anh2.jpg', '0987654321','CUSTOMER', N'hatung18102004@gmail.com', '123', N'Đang hoạt động'),
+('KH003', N'Trần Tiến Dũng', 1, '1985-03-03', N'dyh01072004@gmail.com', 'anh3.jpg', '0909123456','CUSTOMER', N'dyh01072004@gmail.com', '123', N'Đang hoạt động'),
+('KH004', N'Phan Thanh Chuyền', 0, '1993-04-04', N'chuyenphan09@gmail.com', 'anh4.jpg', '0911223344','CUSTOMER', N'chuyenphan09@gmail.com', '123', N'Đang hoạt động'),
+('KH005', N'Nguyễn Hữu Hậu', 1, '1988-05-05', N'Hau2004sd@gmail.com', 'anh5.jpg', '0933445566','CUSTOMER', N'Hau2004sd@gmail.com', '123', N'Đang hoạt động'),
+('KH006', N'Nguyễn Ngọc Hiển', 0, '1990-03-20', N'nguyenngochien9464@gmail.com', 'anh5.jpg', '0933445566','CUSTOMER', N'nguyenngochien9464@gmail.com', '123', N'Đang hoạt động');
+
 
 INSERT INTO DIA_CHI_KHACH_HANG (ID_KHACH_HANG,SO_NHA, DUONG, PHUONG_XA, QUAN_HUYEN, TINH_THANH, QUOC_GIA, LOAI_DIA_CHI, TRANG_THAI) VALUES
 (2, N'123', N'Nguyễn Trãi', N'Xã Long Hưng', N'Huyện Văn Giang', N'Hưng Yên', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
-(2, N'456', N'Lê Lợi', N'Xã Liêm Phong2', N'Huyện Thanh Liêm', N'Hà Nam', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
+(2, N'456', N'Lê Lợi', N'Xã Liêm Phong', N'Huyện Thanh Liêm', N'Hà Nam', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
 (2, N'789', N'Phan Xích Long', N'Phường Tân Bình', N'Thành phố Tam Điệp', N'Ninh Bình', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng'),
 (3, N'321', N'Trường Chinh', N'Xã Hữu Sản', N'Huyện Sơn Động', N'Bắc Giang', N'Việt Nam', N'Công ty', N'Còn sử dụng'),
 (4, N'654', N'Quang Trung', N'Xã Minh Phú', N'Huyện Sóc Sơn', N'Hà Nội', N'Việt Nam', N'Nhà riêng', N'Còn sử dụng');
 
 
 INSERT INTO NHAN_VIEN (MA, HO_TEN, GIOI_TINH, NGAY_THANG_NAM_SINH, EMAIL, SDT, DIA_CHI, ANH,ROLES, USERNAME, [PASSWORD], THOI_GIAN_TAO, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
-('NV001', N'HÀ THANH TÙNG', 1, '1980-06-06', N'tunght@gmail.com', '0944556677', N'123 Hoàng Hoa Thám, Quận 1, TP. Hồ Chí Minh', 'anhnv1.jpg','ADMIN', N'tunght@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('NV002', N'NGUYỄN HỮU HẬU', 0, '1983-07-07', N'hau@gmail.com', '0955667788', N'456 Lê Văn Sỹ, Quận 3, TP. Hồ Chí Minh', 'anhnv2.jpg','USER', N'hau@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('NV003', N'NGUYỄN NGỌC HIỂN', 1, '1990-08-08', N'hien@gmail.com', '0966778899', N'789 Điện Biên Phủ, Quận 5, TP. Hồ Chí Minh', 'anhnv3.jpg','USER', N'hien@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('NV004', N'PHAN THANH CHUYỀN', 0, '1985-09-09', N'chuyen@gmail.com', '0977889900', N'321 Nguyễn Văn Cừ, Quận 2, TP. Hồ Chí Minh', 'anhnv4.jpg','USER', N'chuyen@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
-('NV005', N'TRẦN TIẾN DŨNG', 1, '1995-10-10', N'dung@gmail.com', '0988990011', N'654 Tôn Đức Thắng, Quận 7, TP. Hồ Chí Minh', 'anhnv5.jpg','USER', N'dung@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động');
+('NV001', N'Hà Thanh Tùng', 1, '1980-06-06', N'hatung18102004@gmail.com', '0944556677', N'Xã Phú Kim, Huyện Thạch Thất, Hà Nội', 'anhnv1.jpg','ADMIN', N'hatung18102004@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('NV002', N'Nguyễn Hữu Hậu', 0, '1983-07-07', N'Hau2004sd@gmail.com', '0955667788', N'Xã Phúc Thuận, Thị xã Phổ Yên, Thái Nguyên', 'anhnv2.jpg','USER', N'Hau2004sd@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('NV003', N'Nguyễn Ngọc Hiển', 1, '1990-08-08', N'nguyenngochien9464@gmail.com', '0966778899', N'Xã Phú Lâm, Huyện Tiên Du,Bắc Ninh', 'anhnv3.jpg','USER', N'nguyenngochien9464@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('NV004', N'Phan Thanh Chuyền', 0, '1985-09-09', N'chuyenphan09@gmail.com', '0977889900', N'Xã Nhân Hòa, Thị xã Mỹ Hào, Hưng Yên', 'anhnv4.jpg','USER', N'chuyenphan09@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động'),
+('NV005', N'Trần Tiến Dũng', 1, '1995-10-10', N'dyh01072004@gmail.com', '0988990011', N'Xã Thụy Lôi, Huyện Kim Bảng, Hà Nam', 'anhnv5.jpg','USER', N'dyh01072004@gmail.com', '123', GETDATE(), N'Admin', GETDATE(), N'Admin', N'Hoạt động');
 
 
 INSERT INTO VOUCHER (MA, TEN, GIA_TRI_VOUCHER, KIEU_GIAM_GIA, THOI_GIAN_TAO, GIA_TRI_HOA_DON_TOI_THIEU, GIA_TRI_GIAM_TOI_DA, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, MOTA, SO_LUONG, NGUOI_TAO, THOI_GIAN_SUA, NGUOI_SUA, TRANG_THAI) VALUES
-('VC001', N'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VNĐ', 100, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
-('VC002', N'Voucher Giảm 50.000 VNĐ', 50000, 'VND', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VNĐ cho đơn hàng trên 200.000 VNĐ', 200, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
-('VC003', N'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VNĐ', 50, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
-('VC004', N'Voucher Giảm 100.000 VNĐ', 100000, 'VND', GETDATE(), 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VNĐ cho đơn hàng trên 500.000 VNĐ', 80, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
-('VC005', N'Voucher Giảm 5%', 5, '%', GETDATE(), 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VNĐ', 150, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra');
+('VC001', N'Voucher Giảm 10%', 10, '%', GETDATE(), 50000, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 10% cho đơn hàng trên 500.000 VND', 100, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
+('VC002', N'Voucher Giảm 50.000 VND', 50000, 'VND', GETDATE(), 0, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), N'Giảm 50.000 VND cho đơn hàng trên 200.000 VND', 200, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
+('VC003', N'Voucher Giảm 20%', 20, '%', GETDATE(), 1000000, 300000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), N'Giảm giá 20% cho đơn hàng trên 1.000.000 VND', 50, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
+('VC004', N'Voucher Giảm 100.000 VND', 100000, 'VND', GETDATE(), 0, 100000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm 100.000 VND cho đơn hàng trên 500.000 VND', 80, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra'),
+('VC005', N'Voucher Giảm 5%', 5, '%', GETDATE(), 15000, 30000, GETDATE(), DATEADD(MONTH, 1, GETDATE()), N'Giảm giá 5% cho đơn hàng trên 300.000 VND', 150, N'Admin', GETDATE(), N'Admin', N'Đang diễn ra');
 
 INSERT INTO HOA_DON (ID_NHAN_VIEN, ID_KHACH_HANG, ID_VOUCHER, ID_PHUONG_THUC_THANH_TOAN,HINH_THUC_THANH_TOAN, MA, TONG_TIEN_BAN_DAU,PHI_SHIP, TONG_TIEN_THANH_TOAN, TEN_NGUOI_NHAN, SDT_NGUOI_NHAN, EMAIL_NGUOI_NHAN, DIA_CHI_NHAN_HANG, NGAY_NHAN_DU_KIEN, THOI_GIAN_TAO,GIA_TRI_GIAM,GIAO_HANG, GHI_CHU, TRANG_THAI) 
 VALUES
-(1, 1, 1, 1,0, N'HD001', 500000,10000, 450000, N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'Số 1, Đường ABC, Quận 1, TP.HCM', '2024-09-30', GETDATE(),0.0,1, N'Giao hàng trước 12h', N'Hoàn thành'),
-(2, 2, 2, 1,0, N'HD002', 1000000,10000, 900000, N'Trần Thị B', '0987654321', 'tranthib@gmail.com', N'Số 10, Đường XYZ, Quận 2, TP.HCM', '2024-09-25', GETDATE(),0.0,0, N'Giao hàng nhanh', N'Hoàn thành'),
-(3, 3, 3, 2,0, N'HD003', 750000,10000, 700000, N'Phạm Văn C', '0909123456', 'phamvanc@gmail.com', N'Số 5, Đường LMN, Quận 3, TP.HCM', '2024-10-01', GETDATE(),0.0,0, N'Không yêu cầu đặc biệt', N'Đã hủy'),
-(4, 4, 4, 1,0, N'HD004', 1500000,10000, 1350000, N'Vũ Thị D', '0934567890', 'vuthid@gmail.com', N'Số 20, Đường OPQ, Quận 4, TP.HCM', '2024-09-27', GETDATE(),0.0,0, N'Giao hàng sau 18h', N'Đã hủy'),
-(5, 5, 5, 1,0, N'HD005', 2000000,10000, 1800000, N'Lê Văn E', '0912340000', 'levane@gmail.com', N'Số 25, Đường RST, Quận 5, TP.HCM', '2024-09-28', GETDATE(),0.0,0, N'Yêu cầu liên lạc trước', N'Hoàn thành');
+(1, 1, 1, 1,0, N'HD001', 500000,10000, 450000, N'Hà Thanh Tùng', '0912345678', 'hatung18102004@gmail.com', N'Số 1,Xã Gia Vân , Huyện Gia Viễn, Ninh Bình', '2024-09-30', GETDATE(),0.0,1, N'Giao hàng trước 12h', N'Hoàn thành'),
+(2, 2, 2, 1,0, N'HD002', 1000000,10000, 900000, N'Nguyễn Hữu Hậu', '0987654321', 'Hau2004sd@gmail.com', N'Số 10, Xã Sơn Hà, Huyện Thái Thụy, Thái Bình', '2024-09-25', GETDATE(),0.0,0, N'Giao hàng nhanh', N'Hoàn thành'),
+(3, 3, 3, 2,0, N'HD003', 750000,10000, 700000, N'Nguyễn Ngọc Hiển', '0909123456', 'nguyenngochien9464@gmail.com', N'Số 5, Xã Đức Lý, Huyện Lý Nhân, Hà Nam', '2024-10-01', GETDATE(),0.0,0, N'Không yêu cầu đặc biệt', N'Đã hủy'),
+(4, 4, 4, 1,0, N'HD004', 1500000,10000, 1350000, N'Phan Thanh Chuyền', '0934567890', 'chuyenphan09@gmail.com', N'Số 20, Xã Thanh Sơn, Huyện Kim Bảng, Hà Nam', '2024-09-27', GETDATE(),0.0,0, N'Giao hàng sau 18h', N'Đã hủy'),
+(5, 5, 5, 1,0, N'HD005', 2000000,10000, 1800000, N'Trần Tiến Dũng', '0912340000', 'dyh01072004@gmail.com', N'Số 25, Xã Nam Tiến, Huyện Nam Trực, Nam Định', '2024-09-28', GETDATE(),0.0,0, N'Yêu cầu liên lạc trước', N'Hoàn thành');
 
 
 INSERT INTO LICH_SU_HOA_DON (ID_HOA_DON, ID_NHAN_VIEN, GHI_CHU, THOI_GIAN_THUC_HIEN, TRANG_THAI_CU, TRANG_THAI_MOI, LOAI_THAY_DOI) VALUES
@@ -143,10 +145,10 @@ INSERT INTO CHI_TIET_HOA_DON (ID_HOA_DON, ID_CHI_TIET_SAN_PHAM, MA, SO_LUONG, GI
 
 INSERT INTO KHUYEN_MAI (MA, TEN, KIEU_KHUYEN_MAI, MOTA, SO_LUONG, GIA_TRI_KHUYEN_MAI, THOI_GIAN_BAT_DAU, THOI_GIAN_KET_THUC, THOI_GIAN_TAO, THOI_GIAN_SUA, NGUOI_TAO, NGUOI_SUA, TRANG_THAI) VALUES
 ('KM001', N'Khuyến mãi Giảm 10%', '%', N'Giảm giá 10% cho tất cả sản phẩm', 100, 10, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
-('KM002', N'Khuyến mãi Giảm 50.000 VNĐ', 'VND', N'Giảm 50.000 VNĐ cho đơn hàng trên 300.000 VNĐ', 200, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
+('KM002', N'Khuyến mãi Giảm 50.000 VND', 'VND', N'Giảm 50.000 VND cho đơn hàng trên 300.000 VND', 200, 50000, GETDATE(), DATEADD(MONTH, 2, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
 ('KM003', N'Khuyến mãi Mua 1 Tặng 1', '%', N'Mua 1 sản phẩm, tặng 1 sản phẩm cùng loại', 50, 10, GETDATE(), DATEADD(MONTH, 1, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
-('KM004', N'Khuyến mãi Giảm 20%', '%', N'Giảm giá 20% cho đơn hàng trên 500.000 VNĐ', 150, 20, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
-('KM005', N'Khuyến mãi Giảm 100.000 VNĐ','VND', N'Giảm 100.000 VNĐ cho đơn hàng trên 1.000.000 VNĐ', 75, 100000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra');
+('KM004', N'Khuyến mãi Giảm 20%', '%', N'Giảm giá 20% cho đơn hàng trên 500.000 VND', 150, 20, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra'),
+('KM005', N'Khuyến mãi Giảm 100.000 VND','VND', N'Giảm 100.000 VND cho đơn hàng trên 1.000.000 VND', 75, 100000, GETDATE(), DATEADD(MONTH, 3, GETDATE()), GETDATE(), NULL, N'Admin', NULL, N'Đang diễn ra');
 INSERT INTO KHUYEN_MAI_CHI_TIET_SAN_PHAM (ID_KHUYEN_MAI, ID_CHI_TIET_SAN_PHAM, TRANG_THAI) 
 VALUES
 (1, 1, N'Hoạt động'),
