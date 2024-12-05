@@ -153,19 +153,17 @@ public class UserClientServiceImpl implements UserClientService {
 
     @Override
     public DataResponse updateAnh(Integer id,KhachHangRequest request) {
-        KhachHangEntity khachHang = khachHangRepository.findById(id).orElseThrow(()->new RuntimeException("khách hàng không tồn tại"));
+        KhachHangEntity khachHang = khachHangRepository.findById(id).orElseThrow(()->new RuntimeException("Khách hàng không tồn tại"));
         validateKhachHangRequest(request);
 
-        // Tạo đối tượng khách hàng nếu validation thành công
-        KhachHangEntity entity = new KhachHangEntity();
         khachHang.setAnh(request.getAnh());
-        entity.setTen(request.getTen());
-        entity.setGioiTinh(request.getGioiTinh());
-        entity.setNgayThangNamSinh(request.getNgayThangNamSinh());
-        entity.setEmail(request.getEmail());
-        entity.setSdt(request.getSdt());
-        entity.setTrangThai(request.getTrangThai());
-        khachHangRepository.save(entity);
+        khachHang.setTen(request.getTen());
+        khachHang.setGioiTinh(request.getGioiTinh());
+        khachHang.setNgayThangNamSinh(request.getNgayThangNamSinh());
+        khachHang.setEmail(request.getEmail());
+        khachHang.setSdt(request.getSdt());
+        khachHang.setTrangThai(request.getTrangThai());
+        khachHangRepository.save(khachHang);
         return new DataResponse(true,new ResultModel<>(null,"update thành công"));
     }
 

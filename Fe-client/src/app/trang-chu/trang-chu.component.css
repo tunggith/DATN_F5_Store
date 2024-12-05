@@ -284,6 +284,7 @@
 /* css nhấp nháy chữ */
 .blinking-text {
   animation: color-blink 1s linear infinite;
+  font-weight: bold;
 }
 
 @keyframes color-blink {
@@ -333,6 +334,7 @@
 .voucher-card p {
   font-size: 0.9rem;
   color: #666;
+  height: 40%;
   margin: 10px 0;
 }
 
@@ -345,6 +347,7 @@
   font-weight: bold;
   cursor: pointer;
   margin-top: 10px;
+  justify-content: center;
 }
 
 .copy-button:hover {
@@ -371,20 +374,14 @@ css tiền
   /* Kích thước chữ lớn */
   font-weight: bold;
   /* Đậm chữ */
-  color: #4CAF50;
+  color: black;
   /* Màu xanh lá cây */
   margin-top: 10px;
   /* Khoảng cách trên */
   display: inline-block;
   /* Đảm bảo nó không chiếm toàn bộ dòng */
   padding: 5px 10px;
-  /* Khoảng cách xung quanh */
-  background-color: #f1f1f1;
-  /* Màu nền nhẹ */
-  border-radius: 5px;
-  /* Bo góc */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Đổ bóng nhẹ */
+  border: none;
   text-align: center;
   /* Căn giữa */
 }
