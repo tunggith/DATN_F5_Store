@@ -16,7 +16,7 @@
             <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
               <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Doanh thu ngày hôm nay </h4>
               <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ DoanhthuHienTai | number }} VNĐ
+                {{ DoanhthuHienTai | number }} VND
               </p>
             </div>
           </div>
@@ -26,7 +26,7 @@
             <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
               <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Tổng doanh thu {{titler}} {{ viewType === 'day' ? 'ngày' : (viewType === 'month' ? 'tháng' : (viewType === 'quarter' ? 'quý' : 'Năm')) }}</h4>
               <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ totalDoanhThu | number }} VNĐ
+                {{ totalDoanhThu | number }} VND
               </p>
             </div>
           </div>
@@ -36,7 +36,7 @@
             <div class="revenue-box" style="padding: 15px;">
               <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">{{ viewType === 'day' ? 'Ngày' : (viewType === 'month' ? 'Tháng' : (viewType === 'quarter' ? 'Quý' : 'Năm')) }} có doanh thu cao nhất</h4>
               <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VNĐ
+                {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VND
               </p>
             </div>
           </div>

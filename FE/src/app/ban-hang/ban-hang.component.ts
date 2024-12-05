@@ -27,7 +27,7 @@ export class BanHangComponent implements OnInit {
   giaTriGiam: number = 0;
   tongTienSauVoucher: number = 0;
   tenKhachHang: string = '';
-  tienKhachDua: number = 0;
+  tienKhachDua: number| null = null;
   tienTraLai: number = 0;
   tienKhachDuaInvalid: boolean = false;
   voucher: any[] = [];
@@ -148,7 +148,10 @@ export class BanHangComponent implements OnInit {
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
     if (this.icon === 'toggle_off') {
       this.resetFormDiaChi();
+      this.phiVanChuyen = 0;
     }
+    this.getShippingFee();
+    this.loadDiaChi(this.idKhachHang);
   }
   getHoaDon(): void {
     this.banHangService.getHoaDon().subscribe(
@@ -177,7 +180,7 @@ export class BanHangComponent implements OnInit {
           this.tongTienBanDau = hoaDonData.tongTienBanDau;
           this.giaTriGiam = hoaDonData.giaTriGiam;
           this.tongTienSauVoucher = hoaDonData.tongTienBanDau;
-          this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
+          // this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
           this.tenKhachHang = hoaDonData.khachHang.ten;
           this.hasError = false;  // Có sản phẩm, không có lỗi
         } else {
@@ -202,7 +205,7 @@ export class BanHangComponent implements OnInit {
   }
 
   getTienTraLai(tienKhachDua: number): void {
-    if (isNaN(tienKhachDua) || tienKhachDua <= 0) {
+    if (isNaN(tienKhachDua) || tienKhachDua < 0) {
       this.tienKhachDuaInvalid = true;
       this.tienTraLai = 0;
     } else {
@@ -396,7 +399,7 @@ export class BanHangComponent implements OnInit {
     if (!isConfirmed) {
       return; // Nếu người dùng nhấn "Cancel", dừng lại
     }
-    if (this.tienKhachDua < this.tongTienSauVoucher) {
+    if (this.tienKhachDua < this.tongTienSauVoucher&& this.idThanhToan == 1) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
@@ -676,17 +679,18 @@ export class BanHangComponent implements OnInit {
       "cod_failed_amount": null,         // Số tiền thu hộ (nếu có, có thể để null)
       "coupon": null                     // Mã giảm giá (nếu có, có thể để null)
     };
-
-    this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
-      response => {
-        // Xử lý phí vận chuyển ở đây
-        this.phiVanChuyen = response.data.total;
-        this.tienKhachDua = this.tienKhachDua + this.phiVanChuyen;
-      },
-      error => {
-        console.error('Lỗi khi lấy phí vận chuyển:', error);
-      }
-    );
+    if(this.icon=='toggle_on'){
+      this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
+        response => {
+          // Xử lý phí vận chuyển ở đây
+          this.phiVanChuyen = response.data.total;
+          // this.tienKhachDua = this.tienKhachDua + this.phiVanChuyen;
+        },
+        error => {
+          console.error('Lỗi khi lấy phí vận chuyển:', error);
+        }
+      );
+    }
   }
 
   //=======cập nhật địa chỉ giao hàng=============
@@ -808,7 +812,7 @@ export class BanHangComponent implements OnInit {
         this.selectedVoucherId = selectedVoucher.id;
         // Tính tổng tiền sau khi áp dụng voucher
         this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
-        this.tienKhachDua = this.tongTienBanDau - finalDiscount;
+        // this.tienKhachDua = this.tongTienBanDau - finalDiscount;
       } else {
         // Nếu không đạt điều kiện, tổng tiền không thay đổi
         this.tongTienSauVoucher = this.tongTienBanDau;
