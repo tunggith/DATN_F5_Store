@@ -31,7 +31,7 @@
                                 <div>
                                     <label class="form-label">Tên khách hàng</label>
                                     <input type="text" class="form-control" id="tenKhachHang"
-                                        placeholder="Nhập tên khách hàng" formControlName="ten" required>
+                                        placeholder="  Nhập tên khách hàng" formControlName="ten" required>
                                     <div *ngIf="khachHangForm.get('ten').invalid && khachHangForm.get('ten').touched">
                                         <small class="text-danger" *ngIf="khachHangForm.get('ten').errors?.required">
                                             Vui lòng nhập tên khách hàng
@@ -76,7 +76,7 @@
                                 <div class="mt-4">
                                         <label class="form-label">Số điện thoại</label>
                                         <input type="text" class="form-control" id="sdt"
-                                            placeholder="Nhập số điện thoại" formControlName="sdt" required>
+                                            placeholder="  Nhập số điện thoại" formControlName="sdt" required>
                                         <div *ngIf="khachHangForm.get('sdt').invalid && khachHangForm.get('sdt').touched">
                                             <small class="text-danger"
                                                 *ngIf="khachHangForm.get('sdt').errors?.required">
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="mt-4" style="margin-top: 12px;">
                                     <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" placeholder="Nhập email"
+                                    <input type="email" class="form-control" id="email" placeholder="  Nhập email"
                                         formControlName="email" required>
                                     <div
                                         *ngIf="khachHangForm.get('email').invalid && khachHangForm.get('email').touched">
@@ -153,19 +153,19 @@
                             <div class="col-sm-12 text-end">
                                 <div class="text-center mt-2.5">
                                     <div style="display: inline-block; margin-left: 10px;">
-                                        <button type="submit" class="btn-submit" *ngIf="isAdding"
+                                        <button type="submit" class="btn-submit btn-dark-blue" *ngIf="isAdding"
                                             style="text-align: center;">
                                             <i class="material-icons">add</i>Thêm khách hàng
                                         </button>
 
-                                        <button type="button" class="btn-submit" *ngIf="!isAdding"
+                                        <button type="button" class="btn-submit btn-dark-blue" *ngIf="!isAdding"
                                             (click)="updateKhachHang(updateKhachHangData.id)" style="text-align: center;">
                                             <i class="material-icons">edit</i>Cập nhật khách hàng
                                         </button>
                                     </div>
 
                                     <div style="display: inline-block; margin-left: 10px;">
-                                        <button type="button" class="btn-submit" (click)="resetForm()"
+                                        <button type="button" class="btn-submit btn-dark-blue" (click)="resetForm()"
                                             style="text-align: center;">
                                             <i class="material-icons">note</i>Làm mới
                                         </button>
@@ -187,42 +187,38 @@
                 </div>
 
             </form>
-            <div class="table-responsive" style="border-radius: 8px 8px 0 0;margin-top: -15px;">
-                <!-- <div class="card " style="padding: 20px; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);margin-top: -20px;"> -->
-                <table class="table table-hover">
-                    <thead style=" background-color: #003366; color: white; border-radius: 8px 8px 0 0;">
+            <div class="table-responsive" style="border-radius: 8px 8px 0 0; margin-top: -15px; max-width: 100%;">
+                <table class="table table-hover" style="border: 1px solid #ddd;">
+                    <thead style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px 8px 0 0;">
                         <tr>
-                            <th scope="col">STT</th>
-                            <th scope="col" style="white-space: nowrap;">Mã khách hàng</th>
-                            <th scope="col" style="white-space: nowrap;">Tên khách hàng</th>
-                            <th scope="col" style="white-space: nowrap;">Giới tính</th>
-                            <th scope="col" style="white-space: nowrap;">Ngày sinh</th>
-                            <th scope="col" style="white-space: nowrap;">Email</th>
-                            <th scope="col" style="white-space: nowrap;">Ảnh</th>
-                            <th scope="col" style="white-space: nowrap;">Số điện thoại</th>
-                            <!-- <th scope="col"style="white-space: nowrap;">Password</th> -->
-                            <th scope="col" style="white-space: nowrap;">Trạng thái</th>
-                            <th scope="col">Thao tác</th>
+                            <th scope="col" style="border: 1px solid #ddd;">STT</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Mã khách hàng</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Tên khách hàng</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Giới tính</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Ngày sinh</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;text-align: center;">Email</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Ảnh</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Số điện thoại</th>
+                            <th scope="col" style="white-space: nowrap; border: 1px solid #ddd;">Trạng thái</th>
+                            <th scope="col" style="border: 1px solid #ddd;text-align: center;">Thao tác</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr *ngFor="let customer of customers; let i = index">
-                            <!-- Ẩn thằng khách hàng 001 đi nó là khách vãng lai -->
                             <ng-container *ngIf="customer.ma !== 'KH001'">
-                                <td>{{ i }}</td>
-                                <td>{{ customer.ma }}</td>
-                                <td>{{ customer.ten }}</td>
-                                <td>{{ customer.gioiTinh === '0' ? 'Nam' : (customer.gioiTinh === '1' ? 'Nữ' : 'Khác')
-                                    }}</td>
-                                <td>{{ formatDate(customer.ngayThangNamSinh) }}</td>
-                                <td>{{ customer.email }}</td>
-                                <td> <img *ngIf="customer.anh" [src]="customer.anh" alt=""
-                                        style="width: 50px; height: 50px; object-fit: cover;border-radius: 40px;">
+                                <td style="border: 1px solid #ddd;text-align: center;">{{ i }}</td>
+                                <td style="border: 1px solid #ddd;text-align: center;">{{ customer.ma }}</td>
+                                <td style="border: 1px solid #ddd;">{{ customer.ten }}</td>
+                                <td style="border: 1px solid #ddd;text-align: center;">{{ customer.gioiTinh === '0' ? 'Nam' : (customer.gioiTinh === '1' ? 'Nữ' : 'Khác') }}</td>
+                                <td style="border: 1px solid #ddd;">{{ formatDate(customer.ngayThangNamSinh) }}</td>
+                                <td style="border: 1px solid #ddd;">{{ customer.email }}</td>
+                                <td style="border: 1px solid #ddd;">
+                                    <img *ngIf="customer.anh" [src]="customer.anh" alt="" style="width: 50px; height: 50px; object-fit: cover; border-radius: 40px;">
                                 </td>
-                                <td>{{ customer.sdt }}</td>
-                                <td>{{ customer.trangThai}}</td>
-                                <td style="width: 220px;">
+                                <td style="border: 1px solid #ddd;text-align: center;">{{ customer.sdt }}</td>
+                                <td style="border: 1px solid #ddd;">{{ customer.trangThai }}</td>
+                                <td style="width: 220px; border: 1px solid #ddd;">
                                     <button (click)="showDetail(customer)" class="btn btn-dark-blue">
                                         <i class="material-icons">visibility</i>
                                     </button>
@@ -233,11 +229,9 @@
                                         <i class="material-icons">local_library</i>
                                     </button>
                                 </td>
-
                             </ng-container>
                         </tr>
                     </tbody>
-
                 </table>
             </div>
 
