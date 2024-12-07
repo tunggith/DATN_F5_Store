@@ -304,7 +304,7 @@
                                 <td *ngIf="hoaDon.hinhThucThanhToan==0">Tại quầy</td>
                                 <td *ngIf="hoaDon.hinhThucThanhToan==1">Online</td>
                                 <td>{{ hoaDon.thoiGianTao | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
-                                <td>{{hoaDon.tongTienSauVoucher + hoaDon.phiShip-hoaDon.giTriGiam| number:'1.0-0' }} VND
+                                <td>{{(hoaDon.tongTienSauVoucher + hoaDon.phiShip||0)| number:'1.0-0' }} VND
                                 </td>
                                 <td class="button-select">
                                     <div *ngIf="hoaDon.trangThai==='Chờ xác nhận'" class="choXacNhan"

@@ -83,10 +83,10 @@ export class GioHangComponent implements OnInit {
     // Xử lý queryParams từ VNPay
     this.route.queryParams.subscribe(params => {
       this.vnpTransactionStatus = params['vnp_TransactionStatus'];
-      if (this.vnpTransactionStatus == '00' && !this.idKhachHang) {
-        const request = this.thongTinThanhToan();
-        this.xuLyThanhToanBinhThuong(request);
-      }
+      // if (this.vnpTransactionStatus == '00' && !this.idKhachHang) {
+      //   const request = this.thongTinThanhToan();
+      //   this.xuLyThanhToanBinhThuong(request);
+      // }
     });
   }
   getKhachHangLocal(): void {
@@ -170,6 +170,8 @@ export class GioHangComponent implements OnInit {
       // Thực hiện thanh toán nếu thỏa mãn các điều kiện
       const request = this.thongTinThanhToan();
       if (this.vnpTransactionStatus == '00' && request) {
+        console.log("request Thanh toán:",request);
+        
         this.xuLyThanhToanBinhThuong(request);
       }
     } else {
@@ -222,7 +224,7 @@ export class GioHangComponent implements OnInit {
         idVoucher: this.selectedVoucherId || null,
         idThanhToan: this.idThanhToan || 1,
         hinhThucThanhToan: 1,
-        tongTienBanDau: this.tinhTongTienSauVoucher(),
+        tongTienBanDau: this.tongTien,
         phiShip: this.phiVanChuyen || 0,
         giaTriGiam: this.giaTriGiam || 0,
         tongTienSauVoucher: this.tinhTongTienSauVoucher(),
@@ -433,10 +435,11 @@ export class GioHangComponent implements OnInit {
 
         // Cập nhật lại localStorage với giỏ hàng mới
         localStorage.setItem('cart', JSON.stringify(updatedCart));
-        this.getAllGioHang();
-        this.getKhachHangLocal();
+        // this.getAllGioHang();
+        // this.getKhachHangLocal();
         this.resetForm();
         this.removeAdressLocal();
+        this.router.navigate(['/trang-chu']);
       },
       error: (err) => {
         console.log('lỗi:', err);
@@ -761,6 +764,7 @@ export class GioHangComponent implements OnInit {
     } else {
       // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
       this.canThanhToan = this.tongTien;
+      this.giaTriGiam = 0;
     }
   }
   loadDiaChi(): void {
