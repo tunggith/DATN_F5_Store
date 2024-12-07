@@ -10,7 +10,7 @@
                             <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div>
-                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen-giaTriGiam||0) | number:'1.0-0' }} VND</span>
+                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div style="display: flex;">
                             <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden"
