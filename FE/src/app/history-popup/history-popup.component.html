@@ -16,7 +16,7 @@
                 <tr *ngFor="let history of hoaDonHistory">
                   <th>{{history.hoaDon?.ma}}</th>
                   <th>{{history.nhanVien?.ten}}</th>
-                  <td>{{history.thoiGianThucHien}}</td>
+                  <td>{{history.thoiGianThucHien | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
                   <td>{{history.trangThaiCu}}</td>
                   <td>{{history.trangThaiMoi}}</td>
                   <td>{{history.loaiThayDoi}}</td>

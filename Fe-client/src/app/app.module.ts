@@ -4,8 +4,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { ComponentsModule } from "./components/components.module";
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { LoadingInterceptor } from './loading.interceptor';
+import { LoadingComponent } from './loading/loading.component';
 
 
 
@@ -13,8 +15,7 @@ import { RouterModule } from '@angular/router';
   declarations: [
     AppComponent,
     AdminLayoutComponent,
-
-
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,7 +24,11 @@ import { RouterModule } from '@angular/router';
     HttpClientModule,
     RouterModule
 ],
-  providers: [],
+  providers: [{
+    provide:HTTP_INTERCEPTORS,
+    useClass:LoadingInterceptor,
+    multi: true,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

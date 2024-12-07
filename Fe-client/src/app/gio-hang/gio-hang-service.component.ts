@@ -58,8 +58,8 @@ export class GioHangService {
   getSoLuong(id:number):Observable<any>{
     return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
   }
-  getSoLuonghai(id:number):Observable<any>{
-    return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
+  getListSoLuong():Observable<any>{
+    return this.http.get(`${this.API_URL}/get-list-chi-tiet`);
   }
   getDiaChi(id:string):Observable<any>{
     return this.http.get(`${this.API_URL}/get-all-dia-chi/${id}`);

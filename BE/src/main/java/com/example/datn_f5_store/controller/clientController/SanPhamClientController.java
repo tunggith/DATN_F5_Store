@@ -147,5 +147,13 @@ public class SanPhamClientController {
         dataResponse.setResult(new ResultModel<>(null,data));
         return ResponseEntity.ok(dataResponse);
     }
+    @GetMapping("/get-list-chi-tiet")
+    public ResponseEntity<Object> getListChiTiet(){
+        DataResponse dataResponse = new DataResponse();
+        dataResponse.setStatus(true);
+        var data = iSanPhamClientservice.getListChiTietSanPham();
+        dataResponse.setResult(new ResultModel<>(null,data));
+        return ResponseEntity.ok(dataResponse);
+    }
 
 }
