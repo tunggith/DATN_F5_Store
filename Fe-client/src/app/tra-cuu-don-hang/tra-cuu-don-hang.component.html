@@ -87,7 +87,7 @@
           <div><strong>Tổng tiền ban đầu:</strong> {{ hoaDonCT[0].hoaDon.tongTienBanDau | number: '1.0-0' }} VND</div>
           <div><strong>Phí vận chuyển:</strong> {{ hoaDonCT[0].hoaDon.phiShip | number: '1.0-0' }} VND</div>
           <div><strong>Giảm
-            giá:</strong> {{ (hoaDonCT[0].hoaDon.tongTienBanDau - hoaDonCT[0].hoaDon.tongTienSauVoucher || 0) | number: '1.0-0' }}
+            giá:</strong> {{ (hoaDonCT[0].hoaDon.giaTriGiam  || 0) | number: '1.0-0' }}
             VND
           </div>
           <div>
