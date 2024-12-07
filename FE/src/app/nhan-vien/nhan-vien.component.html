@@ -1,7 +1,8 @@
 <div class="main-content">
     <div class="container-fluid">
         <div class="card">
-            <div class="card-header card-header-custom">
+            <div class="card-header card-header-custom"
+                style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px 8px 0 0; margin: 0; padding: 10px;">
                 <h3 class="card-title"><i class="material-icons">group_add</i> Quản lý nhân viên</h3>
             </div>
             <div class="card-body">
@@ -9,12 +10,14 @@
                     <div class="form-row">
                         <!-- Form Upload Ảnh -->
                         <div class="form-group upload-container">
-                            <div class="image-upload-container" (click)="document.getElementById('anh').click()">
-                                <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)" required>
+                            <div class="image-upload-container" (click)="document.getElementById('anh').click()"
+                                style="margin:auto">
+                                <input type="file" class="form-control" id="anh" (change)="onFileSelected($event)"
+                                    required>
                                 <div class="image-preview" *ngIf="newNhanVien.anh">
                                     <img [src]="newNhanVien.anh" alt="Ảnh nhân viên" />
                                 </div>
-                                <label for="anh" class="upload-label" *ngIf="!newNhanVien.anh">
+                                <label for="anh" class="upload-label" *ngIf="!newNhanVien.anh" style="color: black;">
                                     <i class="material-icons">add_a_photo</i>
                                 </label>
                             </div>
@@ -22,89 +25,90 @@
 
                         <!-- Form Nhập Địa Chỉ -->
                         <div class="form-group address-container mb-3">
-                            <label for="diaChi">Địa chỉ:</label>
+                            <label for="diaChi" style="color: black;">Địa chỉ:</label>
                             <div class="address-dropdowns">
                                 <div class="dropdown-item">
-                                    <label for="tinhThanh" class="form-label">Tỉnh/ thành</label>
-                                    <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh" formControlName="tinhThanh" (change)="onTinhThanhChange($event)" required>
-                                        <option value="" disabled selected>Chọn tỉnh thành</option>
-                                        <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{ tinh.ProvinceName }}</option>
+                                    <label for="tinhThanh" class="form-label" style="color: black;">Tỉnh/ thành</label>
+                                    <select class="form-control" id="tinhThanh" [(ngModel)]="selectedTinhThanh"
+                                        formControlName="tinhThanh" (change)="onTinhThanhChange($event)" required>
+                                        <option value="" disabled [selected]="!selectedTinhThanh ">Chọn tỉnh thành
+                                        </option>
+                                        <option *ngFor="let tinh of provinces" [value]="tinh.ProvinceID">{{
+                                            tinh.ProvinceName }}</option>
                                     </select>
                                 </div>
                                 <div class="dropdown-item">
-                                    <label for="quanHuyen" class="form-label">Quận/ huyện</label>
-                                    <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen" formControlName="quanHuyen" (change)="onQuanHuyenChange($event)" required>
-                                        <option value="" disabled selected>Chọn quận huyện</option>
-                                        <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{ quan.DistrictName }}</option>
+                                    <label for="quanHuyen" class="form-label" style="color: black;">Quận/ huyện</label>
+                                    <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen"
+                                        formControlName="quanHuyen" (change)="onQuanHuyenChange($event)" required>
+                                        <option value="" disabled [selected]="!selectedQuanHuyen">Chọn quận huyện
+                                        </option>
+                                        <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
+                                            quan.DistrictName }}</option>
                                     </select>
                                 </div>
                                 <div class="dropdown-item">
-                                    <label for="phuongXa" class="form-label">Phường/ xã</label>
-                                    <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa" formControlName="phuongXa" (change)="onPhuongXaChange($event)" required>
-                                        <option value="" disabled selected>Chọn phường xã</option>
-                                        <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{ phuong.WardName }}</option>
+                                    <label for="phuongXa" class="form-label" style="color: black;">Phường/ xã</label>
+                                    <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa"
+                                        formControlName="phuongXa" (change)="onPhuongXaChange($event)" required>
+                                        <option value="" disabled [selected]="!selectedPhuongXa">Chọn phường xã</option>
+                                        <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{
+                                            phuong.WardName }}</option>
                                     </select>
                                 </div>
                             </div>
-                            <!-- <input style="margin-top: 10px" type="text" class="form-control" id="diaChi" placeholder="Số nhà"> -->
                         </div>
                     </div>
-
-
-
                     <hr>
-
                     <div class="form-row">
-
-                        <!--                        form nhap ten nhan vien-->
+                        <!--form nhap ten nhan vien-->
                         <div class="form-group">
-                            <label for="tenNhanVien">Tên nhân viên:</label>
+                            <label for="tenNhanVien" style="color: black;">Tên nhân viên:</label>
                             <input type="text" class="form-control" id="tenNhanVien" placeholder="Nhập tên nhân viên"
-                                   formControlName="ten" required>
+                                formControlName="ten" required>
                             <div *ngIf="nhanVienForm.get('ten').invalid && nhanVienForm.get('ten').touched">
                                 <small class="text-danger" *ngIf="nhanVienForm.get('ten').errors?.required">Tên nhân
                                     viên không được để trống.</small>
                                 <small class="text-danger" *ngIf="nhanVienForm.get('ten').errors?.pattern">Tên chỉ được
                                     chứa chữ cái và khoảng trắng.</small>
-                                <small class="text-danger"
-                                       *ngIf="validationErrors?.ten">{{ validationErrors.ten }}</small>
+                                <small class="text-danger" *ngIf="validationErrors?.ten">{{ validationErrors.ten
+                                    }}</small>
                             </div>
                         </div>
-
-                        <!--                        form nhap so dien thoai-->
+                        <!--form nhap so dien thoai-->
                         <div class="form-group">
-                            <label for="sdt">Số điện thoại:</label>
+                            <label for="sdt" style="color: black;">Số điện thoại:</label>
                             <input type="text" class="form-control" id="sdt" placeholder="Nhập số điện thoại"
-                                   formControlName="sdt" required>
+                                formControlName="sdt" required>
                             <div *ngIf="nhanVienForm.get('sdt').invalid && nhanVienForm.get('sdt').touched">
                                 <small class="text-danger" *ngIf="nhanVienForm.get('sdt').errors?.required">Số điện
                                     thoại không được để trống.</small>
-                                <small class="text-danger"
-                                       *ngIf="nhanVienForm.get('sdt')?.errors?.pattern">Số điện thoại phải là 10 hoặc 11 ký
+                                <small class="text-danger" *ngIf="nhanVienForm.get('sdt')?.errors?.pattern">Số điện
+                                    thoại phải là 10 hoặc 11 ký
                                     tự và phải là số.</small>
-                                <small class="text-danger"
-                                       *ngIf="validationErrors?.sdt">{{ validationErrors.sdt }}</small>
+                                <small class="text-danger" *ngIf="validationErrors?.sdt">{{ validationErrors.sdt
+                                    }}</small>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
-                        <!--                        form nhap ngay sinh-->
+                        <!--form nhap ngay sinh-->
                         <div class="form-group">
-                            <label for="ngayThangNamSinh">Ngày sinh:</label>
+                            <label for="ngayThangNamSinh" style="color: black;">Ngày sinh:</label>
                             <input type="date" class="form-control" id="ngayThangNamSinh"
-                                   formControlName="ngayThangNamSinh" required>
-                            <div *ngIf="nhanVienForm.get('ngayThangNamSinh').invalid && nhanVienForm.get('ngayThangNamSinh').touched">
+                                formControlName="ngayThangNamSinh" required>
+                            <div
+                                *ngIf="nhanVienForm.get('ngayThangNamSinh').invalid && nhanVienForm.get('ngayThangNamSinh').touched">
                                 <small class="text-danger"
-                                       *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.required">
+                                    *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.required">
                                     Ngày sinh không được để trống.
                                 </small>
                                 <small class="text-danger"
-                                       *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageInvalid">
+                                    *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageInvalid">
                                     Ngày sinh phải lớn hơn hoặc bằng 18 tuổi.
                                 </small>
                                 <small class="text-danger"
-                                       *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageTooHigh">
+                                    *ngIf="nhanVienForm.get('ngayThangNamSinh').errors?.ageTooHigh">
                                     Ngày sinh phải nhỏ hơn 100 tuổi.
                                 </small>
                                 <small class="text-danger" *ngIf="validationErrors?.ngayThangNamSinh">
@@ -112,174 +116,150 @@
                                 </small>
                             </div>
                         </div>
-
                         <!--                        form nhap email-->
                         <div class="form-group">
-                            <label for="email">Email:</label>
+                            <label for="email" style="color: black;">Email:</label>
                             <input type="email" class="form-control" id="email" placeholder="Nhập email"
-                                   formControlName="email" required>
+                                formControlName="email" required>
                             <div *ngIf="nhanVienForm.get('email').invalid && nhanVienForm.get('email').touched">
-                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.required">Email không được để trống.</small>
+                                <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.required">Email
+                                    không được để trống.</small>
                                 <small class="text-danger" *ngIf="nhanVienForm.get('email').errors?.email">Email không
                                     hợp lệ.</small>
-                                <small class="text-danger"
-                                       *ngIf="validationErrors?.email">{{ validationErrors.email }}</small>
+                                <small class="text-danger" *ngIf="validationErrors?.email">{{ validationErrors.email
+                                    }}</small>
                             </div>
                         </div>
                     </div>
-
                     <div class="form-row">
                         <!--                        form chon gioi tinh-->
                         <div class="form-group">
-                            <label>Giới tính:</label>
-                            <div>
-                                <input type="radio" id="gioiTinhNam" formControlName="gioiTinh" value="1" required>
-                                <label for="gioiTinhNam" style="margin-right: 20px;">Nam</label>
-
-                                <input type="radio" id="gioiTinhNu" formControlName="gioiTinh" value="0">
-                                <label for="gioiTinhNu" style="margin-right: 20px;">Nữ</label>
-
-                                <input type="radio" id="gioiTinhKhac" formControlName="gioiTinh" value="2">
-                                <label for="gioiTinhKhac">Khác</label>
+                            <label style="color: black;">Giới tính:</label>
+                            <div style="display: flex; gap: 20px; align-items: center;">
+                                <div style="display: flex; align-items: center;margin-left: 10px;">
+                                    <input type="radio" id="gioiTinhNam" formControlName="gioiTinh" value="1" required>
+                                    <label for="gioiTinhNam" style="color: black; margin-left: 7px; margin-top: 6px;">Nam</label>
+                                </div>
+                                <div style="display: flex; align-items: center;margin-left: 10px;">
+                                    <input type="radio" id="gioiTinhNu" formControlName="gioiTinh" value="0">
+                                    <label for="gioiTinhNu" style="color: black; margin-left: 7px; margin-top: 6px;">Nữ</label>
+                                </div>
+                                <div style="display: flex; align-items: center;margin-left: 10px;">
+                                    <input type="radio" id="gioiTinhKhac" formControlName="gioiTinh" value="2">
+                                    <label for="gioiTinhKhac" style="color: black; margin-left: 7px; margin-top: 6px;">Khác</label>
+                                </div>
                             </div>
                         </div>
-
-                        <!--                        form chon trang thai-->
+                        <!--form chon trang thai-->
                         <div class="form-group">
-                            <label>Trạng thái:</label>
-                            <div>
-                                <input type="radio" id="trangThaiHoatDong" formControlName="trangThai" value="Hoạt động"
-                                       required>
-                                <label for="trangThaiHoatDong" style="margin-right: 20px;">Hoạt động</label>
-
-                                <input type="radio" id="trangThaiKhongHoatDong" formControlName="trangThai"
-                                       value="Không hoạt động">
-                                <label for="trangThaiKhongHoatDong">Không hoạt động</label>
+                            <label style="color: black;">Trạng thái:</label>
+                            <div style="display: flex; gap: 20px; align-items: center;">
+                                <div style="display: flex; align-items: center;">
+                                    <input type="radio" id="trangThaiHoatDong" formControlName="trangThai" value="Hoạt động" required>
+                                    <label for="trangThaiHoatDong" style="color: black; margin-left: 7px;margin-top: 6px;">Hoạt động</label>
+                                </div>
+                                <div style="display: flex; align-items: center;">
+                                    <input type="radio" id="trangThaiKhongHoatDong" formControlName="trangThai" value="Không hoạt động" style="width: 15px;">
+                                    <label for="trangThaiKhongHoatDong" style="color: black; margin-left: 7px;margin-top: 6px;">Không hoạt động</label>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="text-center">
-                        <!--                        button them nhan vien-->
+                        <!--button them nhan vien-->
                         <div style="display: inline-block; margin-right: 15px;">
-                            <button type="submit" class="btn-submit">
-                                <i class="material-icons">person_add</i> Thêm nhân viên
+                            <button type="submit" class="btn-submit" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                                <i class="material-icons" style="margin-right: 8px;">add</i> Thêm nhân viên
                             </button>
                         </div>
-
-                        <!--                        button cap nhat nhan vien-->
+                        <!--button cap nhat nhan vien-->
                         <div style="display: inline-block; margin-right: 15px;">
-                            <button (click)="updateNhanVien(updateNhanVienData.id)" class="btn-submit"
-                                    [disabled]="!updateNhanVienData.id">
-                                <i class="material-icons">update</i> Cập nhật nhân viên
+                            <button (click)="updateNhanVien(updateNhanVienData.id)" class="btn-submit" [disabled]="!updateNhanVienData.id" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                                <i class="material-icons" style="margin-right: 8px;">update</i> Cập nhật nhân viên
                             </button>
                         </div>
-
-                        <!--                        button reset form-->
+                        <!-- button reset form-->
                         <div style="display: inline-block;">
-                            <button type="button" (click)="onReset()" class="btn-submit">
-                                <i class="material-icons">refresh</i> Làm mới
+                            <button type="button" (click)="onReset()" class="btn-submit" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                                <i class="material-icons" style="margin-right: 8px;">refresh</i> Làm mới
                             </button>
                         </div>
                     </div>
                 </form>
-
                 <hr>
-
-                <!--                form tim kiem nhan vien theo ma hoac ten-->
+                <!--form tim kiem nhan vien theo ma hoac ten-->
                 <div class="search-container">
                     <input type="text" [(ngModel)]="searchKeyword" (keyup)="searchNhanVien()"
-                           placeholder="Nhập tên hoặc mã nhân viên"
-                           class="search-input">
+                        placeholder="Nhập tên hoặc mã nhân viên" class="search-input">
                     <!--                    <button (click)="searchNhanVien()" class="search-button">Tìm kiếm</button>-->
                 </div>
-
                 <hr>
-
-                <!--                table hien thi danh sach nhan vien da phan trang-->
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>STT</th>
-<!--                        <th>ID</th>-->
-                        <th>Mã</th>
-                        <th>Tên</th>
-                        <th>Giới tính</th>
-                        <th>Ngày Sinh</th>
-                        <th>Email</th>
-                        <th>SĐT</th>
-                        <th>Địa chỉ</th>
-                        <th>Ảnh</th>
-                        <!--                        <th>Username</th>-->
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
-                    </tr>
+                <!--table hien thi danh sach nhan vien da phan trang-->
+                <table class="table" style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+                    <thead style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
+                        <tr>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">STT</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Mã</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;text-align: center;">Tên</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Giới tính</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Ngày Sinh</th>
+                            <th style="border: 1px solid #ddd; text-align: center; white-space: nowrap;">Email</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Số điện thoại</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;width:100px;">Địa chỉ</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Ảnh</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Trạng thái</th>
+                            <th style="border: 1px solid #ddd; white-space: nowrap;">Hành động</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let nhanVien of nhanViens; let i = index">
-                        <th scope="row">{{ i + 1 }}</th>
-<!--                        <td>{{ nhanVien.id }}</td>-->
-                        <td>{{ nhanVien.ma }}</td>
-                        <td>{{ nhanVien.ten }}</td>
-                        <td>
-                            {{
-                                nhanVien.gioiTinh === '1' ? 'Nam' :
-                                    (nhanVien.gioiTinh === '0' ? 'Nữ' : 'Khác')
-                            }}
-                        </td>
-                        <td>{{ formatDate(nhanVien.ngayThangNamSinh) }}</td>
-                        <td>{{ nhanVien.email }}</td>
-                        <td>{{ nhanVien.sdt }}</td>
-                        <td>{{ nhanVien.diaChi }}</td>
-                        <td>
-                            <img *ngIf="nhanVien.anh" [src]="nhanVien.anh" alt=""
-                                 style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #ddd;">
-                        </td>
-
-                        <!--                        <td>{{ nhanVien.username }}</td>-->
-                        <td>{{ nhanVien.trangThai }}</td>
-                        <td>
-                            <!--                            <button (click)="deleteNhanVien(nhanVien.id)">-->
-                            <!--                                <i class="material-icons">delete</i>-->
-                            <!--                            </button>-->
-
-                            <!--                            button hien thi thong tin nhan vien vua chon len form-->
-                            <div class="button-group">
-                                <button (click)="showDetail(nhanVien)" class="btn btn-info">
-                                    <i class="material-icons">info</i>
-                                    <span class="btn-text">Xem</span>
-                                </button>
-
-                                <!--                                button doi trang thai-->
-                                <button (click)="toggleStatus(nhanVien.id)" class="btn btn-toggle">
-                                    <i class="material-icons">swap_horiz</i>
-                                    <span class="btn-text">Đổi</span>
-                                </button>
-                            </div>
-
-                        </td>
-                    </tr>
+                        <tr *ngFor="let nhanVien of nhanViens; let i = index">
+                            <th scope="row" style="border: 1px solid #ddd;text-align: center;">{{ i + 1 }}</th>
+                            <td style="border: 1px solid #ddd;">{{ nhanVien.ma }}</td>
+                            <td style="border: 1px solid #ddd;">{{ nhanVien.ten }}</td>
+                            <td style="border: 1px solid #ddd;text-align: center;">{{ nhanVien.gioiTinh === '1' ?
+                                'Nam' : (nhanVien.gioiTinh === '0' ? 'Nữ' : 'Khác')}}</td>
+                            <td style="border: 1px solid #ddd;">{{
+                                formatDate(nhanVien.ngayThangNamSinh) }}</td>
+                            <td style="border: 1px solid #ddd; ">{{ nhanVien.email }}</td>
+                            <td style="border: 1px solid #ddd; ">{{ nhanVien.sdt }}</td>
+                            <td style="border: 1px solid #ddd; white-space: normal;">{{ nhanVien.diaChi }}</td>
+                            <td style="border: 1px solid #ddd; ">
+                                <img *ngIf="nhanVien.anh" [src]="nhanVien.anh" alt=""
+                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #ddd;">
+                            </td>
+                            <td style="border: 1px solid #ddd; ">{{ nhanVien.trangThai }}</td>
+                            <td style="border: 1px solid #ddd;">
+                                <div class="button-group">
+                                    <button (click)="showDetail(nhanVien)" class="btn btn-info"
+                                        style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
+                                        <i class="material-icons">visibility</i>
+                                        <span class="btn-text">Xem</span>
+                                    </button>
+                                    <button (click)="toggleStatus(nhanVien.id)" class="btn btn-toggle"
+                                        style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
+                                        <i class="material-icons">swap_horiz</i>
+                                        <span class="btn-text">Đổi</span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-
-                <!--                phan trang-->
-                <div class="pagination">
-                    <!--                    button back lai trang truoc-->
+                <!--phan trang-->
+                <div class="pagination" style="text-align: center;">
+                    <!--button back lai trang truoc-->
                     <button *ngIf="page > 0" (click)="prevPage()" class="btn btn-secondary">
                         <i class="material-icons">chevron_left</i>
                     </button>
-
-                    <!--                    hien thi so trang-->
+                    <!--hien thi so trang-->
                     <ng-container *ngIf="totalPages > 0">
-                        <button *ngFor="let num of [].constructor(totalPages); let i = index"
-                                (click)="goToPage(i)"
-                                [disabled]="i === page"
-                                class="btn btn-secondary">
+                        <button *ngFor="let num of [].constructor(totalPages); let i = index" (click)="goToPage(i)"
+                            [disabled]="i === page" class="btn btn-secondary">
                             {{ i + 1 }}
                         </button>
                     </ng-container>
-
-                    <!--                    button tien den trang sau-->
+                    <!--button tien den trang sau-->
                     <button *ngIf="page < totalPages - 1" (click)="nextPage()" class="btn btn-secondary">
                         <i class="material-icons">chevron_right</i>
                     </button>
