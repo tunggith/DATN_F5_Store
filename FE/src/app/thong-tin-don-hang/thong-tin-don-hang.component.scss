@@ -255,7 +255,7 @@
 
 .page-header button {
     border: 0;
-    background-color: rgb(244, 25, 25);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     border-radius: 45%;
 }
 
@@ -319,7 +319,7 @@
 }
 .rollback span{
     padding: 5px;
-    background-color: rgb(244, 25, 25);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     border-radius: 5px;
 }
 .rollback span:hover{
