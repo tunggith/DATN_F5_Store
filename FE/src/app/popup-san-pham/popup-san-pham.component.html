@@ -1,36 +1,36 @@
 <div class="popup">
     <div class="content">
-        <div class="card-header">
-            <span class="close" (click)="close()">×</span>
-            <h4 class="card-title">Danh sách sản phẩm</h4>
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="close" (click)="close()"><i class="material-icons">close</i></span>
             <input type="text" placeholder="Nhập tên sản phẩm hoặc mã..." [(ngModel)]="searchTerm"
-                (input)="searchProduct()">
-            <select class="form-select" aria-label="Default select example" (change)="onChangeSize($event)">
-                <option value="" selected style="text-align: center;">- - - Size - - -</option>
-                <option *ngFor="let size of size" [value]="size.id">{{size.ten}}</option>
+                (input)="searchProduct()" style="flex: 1; margin-right: 10px;height: 35px;">
+            <select class="form-select" aria-label="Default select example" (change)="onChangeSize($event)" style="flex: 1; margin-right: 10px;height: 35px;">
+                <option value="" selected style="text-align: center;">Chọn size</option>
+                <option *ngFor="let size of size" style="text-align: center;" [value]="size.id">{{size.ten}}</option>
             </select>
-            <select class="form-select" aria-label="Default select example" (change)="onChangeMauSac($event)">
-                <option value="" selected style="text-align: center;">- - - Màu sắc - - -</option>
-                <option *ngFor="let mauSac of mauSac" [value]="mauSac.id">{{mauSac.ten}}</option>
+            <select class="form-select" aria-label="Default select example" (change)="onChangeMauSac($event)" style="flex: 1; margin-right: 10px;height: 35px;">
+                <option value="" selected style="text-align: center;">Chọn màu sắc</option>
+                <option *ngFor="let mauSac of mauSac" style="text-align: center;" [value]="mauSac.id">{{mauSac.ten}}</option>
             </select>
-            <select class="form-select" aria-label="Default select example" (change)="onChangeThuongHieu($event)">
-                <option value="" selected style="text-align: center;">- - - Thương hiệu - - -</option>
-                <option *ngFor="let thuongHieu of thuongHieu" [value]="thuongHieu.id">{{thuongHieu.ten}}
-                </option>
+            <select class="form-select" aria-label="Default select example" (change)="onChangeThuongHieu($event)" style="flex: 1; margin-right: 10px;height: 35px;">
+                <option value="" selected style="text-align: center;">Chọn thương hiệu</option>
+                <option *ngFor="let thuongHieu of thuongHieu" style="text-align: center;" [value]="thuongHieu.id">{{thuongHieu.ten}}</option>
             </select>
-            <select class="form-select" aria-label="Default select example" (change)="onChangeXuatXu($event)">
-                <option value="" selected style="text-align: center;">- - - Xuất xứ - - -</option>
-                <option *ngFor="let xuatXu of xuatXu" [value]="xuatXu.id">{{xuatXu.ten}}</option>
+            <select class="form-select" aria-label="Default select example" (change)="onChangeXuatXu($event)" style="flex: 1; margin-right: 10px;height: 35px;">
+                <option value="" selected style="text-align: center;">Chọn xuất xứ</option>
+                <option *ngFor="let xuatXu of xuatXu" style="text-align: center;" [value]="xuatXu.id">{{xuatXu.ten}}</option>
             </select>
-            <select class="form-select" aria-label="Default select example" (change)="onChangeGioiTinh($event)">
-                <option value="" selected style="text-align: center;">- - - Giới tính - - -</option>
-                <option *ngFor="let gioiTinh of gioiTinh" [value]="gioiTinh.id">{{gioiTinh.ten}}
-                </option>
+            <select class="form-select" aria-label="Default select example" (change)="onChangeGioiTinh($event)" style="flex: 1; height: 35px;">
+                <option value="" selected style="text-align: center;">Chọn giới tính</option>
+                <option *ngFor="let gioiTinh of gioiTinh" style="text-align: center;" [value]="gioiTinh.id">{{gioiTinh.ten}}</option>
             </select>
         </div>
+        <h4 class="card-title" style="font-weight: bold; color: black; display: flex; align-items: center;margin-top: 10px;">
+            <i class="material-icons" style="margin-right: 10px;">list</i> Danh sách sản phẩm
+        </h4>
         <div class="card-body table-responsive">
             <table class="table table-hover">
-                <thead class="text-black">
+                <thead class="text-primary" style="white-space: nowrap;">
                     <th>Stt</th>
                     <th>Mã</th>
                     <th>Tên sản phẩm</th>
@@ -46,18 +46,18 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let ctsp of product, let i = index">
-                        <td>{{i+1}}</td>
-                        <td>{{ctsp.ma}}</td>
-                        <td>{{ctsp.san_pham?.ten}}</td>
-                        <td>{{ctsp.san_pham?.xuatXu?.ten}}</td>
-                        <td>{{ctsp.san_pham?.thuongHieu?.ten}}</td>
-                        <td>{{ctsp.mauSac?.ten}}</td>
-                        <td>{{ctsp.san_pham?.gioiTinh?.ten}}</td>
-                        <td>{{ctsp.size?.ten}}</td>
-                        <td>{{ctsp.soLuong}}</td>
-                        <td>{{ctsp.donGia | number:'1.0-0' }} VND</td>
-                        <td>{{ctsp.ten}}</td>
-                        <td><button class="select-product" (click)="selectProduct(ctsp.id)">
+                        <td style="border-left: 1px solid #ddd;text-align: center;">{{i+1}}</td>
+                        <td style="border-left: 1px solid #ddd;">{{ctsp.ma}}</td>
+                        <td style="border-left: 1px solid #ddd;">{{ctsp.san_pham?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;">{{ctsp.san_pham?.xuatXu?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;">{{ctsp.san_pham?.thuongHieu?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;white-space: nowrap;">{{ctsp.mauSac?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;text-align: center;">{{ctsp.san_pham?.gioiTinh?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;text-align: center;">{{ctsp.size?.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;text-align: center;">{{ctsp.soLuong}}</td>
+                        <td style="border-left: 1px solid #ddd;white-space: nowrap;">{{ctsp.donGia | number:'1.0-0' }} VND</td>
+                        <td style="border-left: 1px solid #ddd;">{{ctsp.ten}}</td>
+                        <td style="border-left: 1px solid #ddd;text-align: center;"><button class="select-product" (click)="selectProduct(ctsp.id)">
                                 <i class="material-icons">add_shopping_cart</i></button></td>
                     </tr>
                 </tbody>

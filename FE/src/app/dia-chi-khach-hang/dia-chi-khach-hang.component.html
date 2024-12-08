@@ -167,9 +167,9 @@
         </div>
 
         <!-- Table hiển thị dữ liệu khách hàng -->
-        <div class="table-responsive" style="box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px;">
-            <table class="table table-hover" style="table-layout: fixed; width: 100%; border-collapse: collapse; border: 1px solid #ddd; border-radius: 8px;">
-                <thead style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; white-space: nowrap;">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="text-primary">
                     <tr>
                         <th style="border: 1px solid #ddd;text-align: center;">STT</th>
                         <th style="border: 1px solid #ddd;text-align: center;">Số nhà</th>
@@ -193,7 +193,7 @@
                         <td style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;">{{ customerAddress.phuongXa }}</td>
                         <td style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;">{{ customerAddress.quocGia }}</td>
                         <td style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;">{{ customerAddress.loaiDiaChi }}</td>
-                        <td style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;">{{ customerAddress.trangThai }}</td>
+                        <td [ngStyle]="{'color': customerAddress.trangThai === 'Còn sử dụng' ? 'green' : 'red', 'font-weight': 'bold'}" style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;">{{ customerAddress.trangThai }}</td>
                         <td style="border: 1px solid #ddd; overflow: hidden; text-overflow: ellipsis;text-align: center;">
                             <button (click)="diaChiDetail(customerAddress.id)" class="btn dark-blue" style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px;text-align: center;">
                                 <i class="material-icons">edit</i>

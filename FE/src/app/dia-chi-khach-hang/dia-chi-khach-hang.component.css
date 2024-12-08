@@ -11,8 +11,7 @@
   z-index: 9;
   /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
-
-.content {
+.content{
   background-color: #ffff;
   width: 70%;
   justify-content: center;
@@ -20,22 +19,19 @@
   overflow-x: auto;
   border-radius: 10px;
 }
-
 .close {
   cursor: pointer;
   position: absolute;
   top: 23px;
-  right: 245px;
+  right:245px;
   font-size: 24px;
 }
-
-.pagination button {
+.pagination button{
   background-color: #fff;
   border: 0px;
   justify-content: center;
 
 }
-
 /* Custom radio buttons */
 .form-check-radio {
   /* appearance: none; */
@@ -61,21 +57,19 @@ button {
 .alert {
   border-radius: 8px;
 }
-
-.table-responsive {
+.table-responsive{
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .material-icons {
   vertical-align: middle;
 }
 
 /* CSS chung cho tất cả các nút */
 .btn-submit {
-  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  background-color: #003366;
   /* Màu nền chính */
   color: white;
   /* Màu chữ */
@@ -115,13 +109,11 @@ button[disabled] {
   cursor: not-allowed;
   /* Đổi con trỏ chuột khi bị disable */
 }
-
 /* Tùy chọn cho phần refresh icon */
 .btn-submit i:hover {
   color: #f1f1f1;
   /* Màu icon khi hover */
 }
-
 /* Định dạng cho select */
 .custom-select {
   /* display: block; */
@@ -241,33 +233,62 @@ button[disabled] {
   color: #ced4da;
   /* Màu của mũi tên */
 }
-
-/* Định dạng cho nhãn */
-.form-label {
-  font-weight: bold;
-  /* Chữ đậm */
-  margin-bottom: 5px;
-  /* Khoảng cách dưới nhãn */
-  color: #333;
-  /* Màu chữ */
+  /* Định dạng cho nhãn */
+  .form-label {
+      font-weight: bold;
+      /* Chữ đậm */
+      margin-bottom: 5px;
+      /* Khoảng cách dưới nhãn */
+      color: #333;
+      /* Màu chữ */
+    }
+    .btn.dark-blue {
+      background-color: #002244; /* Màu xanh thẫm */
+      color: white; /* Màu chữ trắng */
+      border: none; /* Không có viền */
+      padding: 10px 15px; /* Thêm padding để nút trông đẹp hơn */
+      border-radius: 5px; /* Bo góc cho nút */
+      cursor: pointer; /* Đổi con trỏ khi hover */
+  }
+  
+  .btn.dark-blue:hover {
+      background-color: #001A30; /* Màu xanh thẫm hơn khi hover */
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #3a3297;
+    border-radius: 12px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure all data is visible */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.btn.dark-blue {
-  background-color: #002244;
-  /* Màu xanh thẫm */
-  color: white;
-  /* Màu chữ trắng */
-  border: none;
-  /* Không có viền */
-  padding: 10px 15px;
-  /* Thêm padding để nút trông đẹp hơn */
-  border-radius: 5px;
-  /* Bo góc cho nút */
-  cursor: pointer;
-  /* Đổi con trỏ khi hover */
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
 }
 
-.btn.dark-blue:hover {
-  background-color: #001A30;
-  /* Màu xanh thẫm hơn khi hover */
+.table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-responsive {
+    overflow-y: visible; /* Ensure all data is visible */
+    border-radius: 12px; /* Rounded corners for the responsive container */
+    padding: 10px;
+    margin-bottom: 20px;
 }
