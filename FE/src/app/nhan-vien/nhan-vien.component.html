@@ -138,15 +138,18 @@
                             <div style="display: flex; gap: 20px; align-items: center;">
                                 <div style="display: flex; align-items: center;margin-left: 10px;">
                                     <input type="radio" id="gioiTinhNam" formControlName="gioiTinh" value="1" required>
-                                    <label for="gioiTinhNam" style="color: black; margin-left: 7px; margin-top: 6px;">Nam</label>
+                                    <label for="gioiTinhNam"
+                                        style="color: black; margin-left: 7px; margin-top: 6px;">Nam</label>
                                 </div>
                                 <div style="display: flex; align-items: center;margin-left: 10px;">
                                     <input type="radio" id="gioiTinhNu" formControlName="gioiTinh" value="0">
-                                    <label for="gioiTinhNu" style="color: black; margin-left: 7px; margin-top: 6px;">Nữ</label>
+                                    <label for="gioiTinhNu"
+                                        style="color: black; margin-left: 7px; margin-top: 6px;">Nữ</label>
                                 </div>
                                 <div style="display: flex; align-items: center;margin-left: 10px;">
                                     <input type="radio" id="gioiTinhKhac" formControlName="gioiTinh" value="2">
-                                    <label for="gioiTinhKhac" style="color: black; margin-left: 7px; margin-top: 6px;">Khác</label>
+                                    <label for="gioiTinhKhac"
+                                        style="color: black; margin-left: 7px; margin-top: 6px;">Khác</label>
                                 </div>
                             </div>
                         </div>
@@ -155,12 +158,16 @@
                             <label style="color: black;">Trạng thái:</label>
                             <div style="display: flex; gap: 20px; align-items: center;">
                                 <div style="display: flex; align-items: center;">
-                                    <input type="radio" id="trangThaiHoatDong" formControlName="trangThai" value="Hoạt động" required>
-                                    <label for="trangThaiHoatDong" style="color: black; margin-left: 7px;margin-top: 6px;">Hoạt động</label>
+                                    <input type="radio" id="trangThaiHoatDong" formControlName="trangThai"
+                                        value="Hoạt động" required>
+                                    <label for="trangThaiHoatDong"
+                                        style="color: black; margin-left: 7px;margin-top: 6px;">Hoạt động</label>
                                 </div>
                                 <div style="display: flex; align-items: center;">
-                                    <input type="radio" id="trangThaiKhongHoatDong" formControlName="trangThai" value="Không hoạt động" style="width: 15px;">
-                                    <label for="trangThaiKhongHoatDong" style="color: black; margin-left: 7px;margin-top: 6px;">Không hoạt động</label>
+                                    <input type="radio" id="trangThaiKhongHoatDong" formControlName="trangThai"
+                                        value="Không hoạt động" style="width: 15px;">
+                                    <label for="trangThaiKhongHoatDong"
+                                        style="color: black; margin-left: 7px;margin-top: 6px;">Không hoạt động</label>
                                 </div>
                             </div>
                         </div>
@@ -169,19 +176,23 @@
                     <div class="text-center">
                         <!--button them nhan vien-->
                         <div style="display: inline-block; margin-right: 15px;">
-                            <button type="submit" class="btn-submit" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                            <button type="submit" class="btn-submit"
+                                style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
                                 <i class="material-icons" style="margin-right: 8px;">add</i> Thêm nhân viên
                             </button>
                         </div>
                         <!--button cap nhat nhan vien-->
                         <div style="display: inline-block; margin-right: 15px;">
-                            <button (click)="updateNhanVien(updateNhanVienData.id)" class="btn-submit" [disabled]="!updateNhanVienData.id" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                            <button (click)="updateNhanVien(updateNhanVienData.id)" class="btn-submit"
+                                [disabled]="!updateNhanVienData.id"
+                                style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
                                 <i class="material-icons" style="margin-right: 8px;">update</i> Cập nhật nhân viên
                             </button>
                         </div>
                         <!-- button reset form-->
                         <div style="display: inline-block;">
-                            <button type="button" (click)="onReset()" class="btn-submit" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                            <button type="button" (click)="onReset()" class="btn-submit"
+                                style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
                                 <i class="material-icons" style="margin-right: 8px;">refresh</i> Làm mới
                             </button>
                         </div>
@@ -196,56 +207,63 @@
                 </div>
                 <hr>
                 <!--table hien thi danh sach nhan vien da phan trang-->
-                <table class="table" style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
-                    <thead style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
-                        <tr>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">STT</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Mã</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;text-align: center;">Tên</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Giới tính</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Ngày Sinh</th>
-                            <th style="border: 1px solid #ddd; text-align: center; white-space: nowrap;">Email</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Số điện thoại</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;width:100px;">Địa chỉ</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Ảnh</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Trạng thái</th>
-                            <th style="border: 1px solid #ddd; white-space: nowrap;">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let nhanVien of nhanViens; let i = index">
-                            <th scope="row" style="border: 1px solid #ddd;text-align: center;">{{ i + 1 }}</th>
-                            <td style="border: 1px solid #ddd;">{{ nhanVien.ma }}</td>
-                            <td style="border: 1px solid #ddd;">{{ nhanVien.ten }}</td>
-                            <td style="border: 1px solid #ddd;text-align: center;">{{ nhanVien.gioiTinh === '1' ?
-                                'Nam' : (nhanVien.gioiTinh === '0' ? 'Nữ' : 'Khác')}}</td>
-                            <td style="border: 1px solid #ddd;">{{
-                                formatDate(nhanVien.ngayThangNamSinh) }}</td>
-                            <td style="border: 1px solid #ddd; ">{{ nhanVien.email }}</td>
-                            <td style="border: 1px solid #ddd; ">{{ nhanVien.sdt }}</td>
-                            <td style="border: 1px solid #ddd; white-space: normal;">{{ nhanVien.diaChi }}</td>
-                            <td style="border: 1px solid #ddd; ">
-                                <img *ngIf="nhanVien.anh" [src]="nhanVien.anh" alt=""
-                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #ddd;">
-                            </td>
-                            <td style="border: 1px solid #ddd; ">{{ nhanVien.trangThai }}</td>
-                            <td style="border: 1px solid #ddd;">
-                                <div class="button-group">
-                                    <button (click)="showDetail(nhanVien)" class="btn btn-info"
-                                        style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
-                                        <i class="material-icons">visibility</i>
-                                        <span class="btn-text">Xem</span>
-                                    </button>
-                                    <button (click)="toggleStatus(nhanVien.id)" class="btn btn-toggle"
-                                        style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0;">
-                                        <i class="material-icons">swap_horiz</i>
-                                        <span class="btn-text">Đổi</span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="text-primary">
+                            <tr>
+                                <th>STT</th>
+                                <th>Mã</th>
+                                <th>Tên</th>
+                                <th style="white-space: nowrap;">Giới tính</th>
+                                <th style="white-space: nowrap;">Ngày Sinh</th>
+                                <th style="white-space: nowrap;">Email</th>
+                                <th style="white-space: nowrap;">Số điện thoại</th>
+                                <th style="white-space: nowrap;">Địa chỉ</th>
+                                <th style="white-space: nowrap;">Ảnh</th>
+                                <th style="white-space: nowrap;">Trạng thái</th>
+                                <th style="white-space: nowrap;">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let nhanVien of nhanViens; let i = index">
+                                <td style="border: 1px solid #ddd; padding: 8px;text-align: center;">{{ i + 1 }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;text-align: center;">{{ nhanVien.ma }}
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">{{ nhanVien.ten }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">{{
+                                    nhanVien.gioiTinh === '1' ? 'Nam' : (nhanVien.gioiTinh === '0' ? 'Nữ' : 'Khác')}}
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">{{
+                                    formatDate(nhanVien.ngayThangNamSinh) }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">{{ nhanVien.email }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;text-align: center;">{{ nhanVien.sdt }}
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">{{ nhanVien.diaChi }}</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">
+                                    <img *ngIf="nhanVien.anh" [src]="nhanVien.anh" alt=""
+                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #ddd;">
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    <span [ngClass]="{'badge badge-success': nhanVien.trangThai === 'Hoạt động', 'badge badge-danger': nhanVien.trangThai !== 'Hoạt động'}" style="border-radius: 12px; padding: 5px 10px;">{{ nhanVien.trangThai }}
+                                    </span>
+                                </td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">
+                                    <div class="button-group">
+                                        <button (click)="showDetail(nhanVien)" class="btn btn-info"
+                                            style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                                            <i class="material-icons">visibility</i>
+                                            <span class="btn-text">Xem</span>
+                                        </button>
+                                        <button (click)="toggleStatus(nhanVien.id)" class="btn btn-toggle"
+                                            style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: #f0f0f0; border-radius: 8px; padding: 10px 20px;">
+                                            <i class="material-icons">swap_horiz</i>
+                                            <span class="btn-text">Đổi</span>
+                                        </button>
+                                    </div>
+                                </td>
+                        </tbody>
+                    </table>
+                </div>
                 <!--phan trang-->
                 <div class="pagination" style="text-align: center;">
                     <!--button back lai trang truoc-->

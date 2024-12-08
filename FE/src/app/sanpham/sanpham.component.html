@@ -312,32 +312,33 @@
                 <th>STT</th>
                 <th>Mã sản phẩm</th>
                 <th>Tên sản phẩm</th>
-                <th>Xuất xứ</th>
-                <th>Thương hiệu</th>
-                <th>Giới tính</th>
-                <Th>Số Lượng</Th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
+                <th style="white-space: nowrap;">Xuất xứ</th>
+                <th style="white-space: nowrap;">Thương hiệu</th>
+                <th style="white-space: nowrap;">Giới tính</th>
+                <Th style="white-space: nowrap;">Số Lượng</Th>
+                <th style="white-space: nowrap;">Trạng thái</th>
+                <th style="white-space: nowrap;">Thao tác</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let sanpham of filteredSanPhamList; let i = index">
-                <td>{{ (pageSanPham - 0) * sizeSanPham + i + 1 }}</td> <!-- Số thứ tự tính theo trang -->
-                <td>{{ sanpham.ma }}</td>
+                <td style="white-space: nowrap;">{{ (pageSanPham - 0) * sizeSanPham + i + 1 }}</td> <!-- Số thứ tự tính theo trang -->
+                <td style="white-space: nowrap;">{{ sanpham.ma }}</td>
                 <td>{{ sanpham.ten }}</td>
                 <td>{{ sanpham.xuatXu?.ten }}</td>
-                <td>{{ sanpham.thuongHieu?.ten }}</td>
-                <td>{{ sanpham.gioiTinh?.ten }}</td>
-                <td>{{ sanpham.tongSoLuong }}</td> <!-- Hiển thị trực tiếp tongSoLuong -->
-                <td>{{ sanpham.trangThai }}</td>
+                <td >{{ sanpham.thuongHieu?.ten }}</td>
+                <td style="white-space: nowrap;">{{ sanpham.gioiTinh?.ten }}</td>
+                <td style="white-space: nowrap;">{{ sanpham.tongSoLuong }}</td> <!-- Hiển thị trực tiếp tongSoLuong -->
+                <td>
+                    <span [ngClass]="{'badge badge-success': sanpham.trangThai === 'Đang hoạt động', 'badge badge-danger': sanpham.trangThai !== 'Đang hoạt động'}" style="border-radius: 12px; padding: 5px 10px;">{{ sanpham.trangThai }}
+                    </span>
+                </td>
                 <td>
                   <nav clnavss="buttonv1">
                     <i  (click)="viewProductDetails(sanpham.id)" class="fa fa-eye" title="Xem chi tiết sản phẩm"></i>
                     <i  data-toggle="modal" data-target="#sanPhamModal" (click)="selectSanPham(sanpham)" class="fa fa-edit" *ngIf="role==='admin'" title="Sửa sản phẩm"></i>
                     <i  data-toggle="modal" data-target="#uploadImageModal" (click)="chonSphinh2(sanpham.id, sanpham.ten)"  (click) ="resetModal" class="fa fa-image" title="Thêm hình ảnh"></i> <!-- Biểu tượng hình ảnh -->
-
                   </nav>
-              
                 </td>
               </tr>
             </tbody>
