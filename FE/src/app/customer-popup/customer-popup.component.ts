@@ -48,7 +48,7 @@ export class CustomerPopupComponent implements OnInit {
       age--;
     }
 
-    if (age < 18) {
+    if (age < 3) {
       return { 'ageInvalid': true };
     }
     if (age >= 100) {
@@ -66,7 +66,7 @@ export class CustomerPopupComponent implements OnInit {
         Validators.maxLength(25),
         Validators.pattern(/^[a-zA-ZÀ-ỹ\s]*$/)
       ]],
-      gioiTinh: ['Nam', Validators.required],
+      gioiTinh: ['0', Validators.required],
       ngayThangNamSinh: ['', [Validators.required, this.validateAge.bind(this)]], 
       email: ['', [Validators.required, Validators.email]],
       sdt: ['', [
@@ -91,14 +91,14 @@ export class CustomerPopupComponent implements OnInit {
         gioiTinh: parseInt(this.customerForm.value.gioiTinh, 10)
       };
 
-      // Hiển thị loading ngay lập tức
-      Swal.fire({
-        title: 'Đang xử lý...',
-        allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        }
-      });
+      // // Hiển thị loading ngay lập tức
+      // Swal.fire({
+      //   title: 'Đang xử lý...',
+      //   allowOutsideClick: false,
+      //   didOpen: () => {
+      //     Swal.showLoading();
+      //   }
+      // });
 
       this.banHangService.addKhachHang(khachHang).subscribe(
         (response) => {
@@ -117,16 +117,14 @@ export class CustomerPopupComponent implements OnInit {
         (error) => {
           this.isSubmitting = false;
           console.error('Lỗi khi thêm khách hàng', error);
-          if (error.error.errors) {
             this.validationErrors = error.error.errors;
             Swal.fire({
               title: 'Lỗi!',
-              text: 'Có lỗi xảy ra khi thêm khách hàng. Vui lòng kiểm tra lại thông tin.',
+              text: error.error,
               icon: 'error',
               confirmButtonText: 'OK',
               timer: 1500
             });
-          }
         }
       );
     } else {

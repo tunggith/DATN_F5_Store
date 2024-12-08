@@ -31,7 +31,7 @@
                 <div style="display: flex;">
                     <div style=" white-space: nowrap;">
                         <input style="width: 15px;height: 15px;margin-right: -16px;" type="radio"
-                            formControlName="gioiTinh" value="0" name="gioiTinh" checked id="gioiTinhNam" required>
+                            formControlName="gioiTinh" value="0" name="gioiTinh" checked id="gioiTinhNam">
                         <label for="gioiTinhNam">Nam</label>
                     </div>
                     <div style="white-space: nowrap;">
@@ -58,7 +58,7 @@
                         Ngày sinh không được để trống
                     </small>
                     <small class="text-danger" *ngIf="customerForm.get('ngayThangNamSinh').errors?.ageInvalid">
-                        Ngày sinh phải lớn hơn hoặc bằng 18 tuổi
+                        Ngày sinh phải lớn hơn hoặc bằng 3 tuổi
                     </small>
                     <small class="text-danger" *ngIf="customerForm.get('ngayThangNamSinh').errors?.ageTooHigh">
                         Ngày sinh phải nhỏ hơn 100 tuổi

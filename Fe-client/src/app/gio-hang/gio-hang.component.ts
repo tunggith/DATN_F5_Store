@@ -252,13 +252,13 @@ export class GioHangComponent implements OnInit {
     this.errors = {};
 
     // Biểu thức chính quy để kiểm tra ký tự đặc biệt hoặc số
-    const specialCharOrNumberRegex = /[^a-zA-Z\u00C0-\u017F\s]/;
+    const specialCharOrNumberRegex = /^[a-zA-ZÀ-ỹà-ỹ\s]+$/;
 
     // Validate tên người nhận
     if (!this.tenNguoiNhan || this.tenNguoiNhan.trim() === '') {
       this.errors.tenNguoiNhan = 'Vui lòng nhập tên người nhận.';
       isValid = false;
-    } else if (specialCharOrNumberRegex.test(this.tenNguoiNhan)) {
+    } else if (!specialCharOrNumberRegex.test(this.tenNguoiNhan)) {
       this.errors.tenNguoiNhan = 'Tên người nhận không được chứa ký tự đặc biệt hoặc số.';
       isValid = false;
     }

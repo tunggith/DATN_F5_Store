@@ -14,9 +14,15 @@ export class LoadingInterceptor implements HttpInterceptor {
   constructor(private loadingService: LoadingService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log('Request started');
     this.loadingService.show(); // hiển thị loading
+  
     return next.handle(request).pipe(
-      finalize(() => this.loadingService.hide()) // Tắt loading khi API hoàn tất
+      finalize(() => {
+        console.log('Request completed');
+        this.loadingService.hide(); // Tắt loading khi API hoàn tất
+      })
     );
   }
+  
 }

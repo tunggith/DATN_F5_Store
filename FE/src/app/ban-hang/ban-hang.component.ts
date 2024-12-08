@@ -27,7 +27,7 @@ export class BanHangComponent implements OnInit {
   giaTriGiam: number = 0;
   tongTienSauVoucher: number = 0;
   tenKhachHang: string = '';
-  tienKhachDua: number| null = null;
+  tienKhachDua: number | null = null;
   tienTraLai: number = 0;
   tienKhachDuaInvalid: boolean = false;
   voucher: any[] = [];
@@ -128,6 +128,14 @@ export class BanHangComponent implements OnInit {
     });
     this.route.queryParams.subscribe(params => {
       this.vnpTransactionStatus = params['vnp_TransactionStatus'];
+    });
+    // Theo dõi thay đổi của voucherControl
+    this.voucherControl.valueChanges.subscribe(value => {
+      if (!value) {
+        console.log('Voucher đã bị xóa hoặc không hợp lệ');
+        // Đặt lại các biến liên quan đến voucher
+        this.tongTienSauVoucher = this.tongTienBanDau;// Gọi hàm khi giá trị là null hoặc rỗng
+      }
     });
   }
   //chuyển tab
@@ -399,7 +407,7 @@ export class BanHangComponent implements OnInit {
     if (!isConfirmed) {
       return; // Nếu người dùng nhấn "Cancel", dừng lại
     }
-    if (this.tienKhachDua < this.tongTienSauVoucher&& this.idThanhToan == 1) {
+    if (this.tienKhachDua < this.tongTienSauVoucher && this.idThanhToan == 1) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
@@ -446,7 +454,8 @@ export class BanHangComponent implements OnInit {
         this.getHoaDon();
         this.getByTrangThai();
         this.getIdThanhToan(1);
-        this.icon = 'toggle_off';
+        // this.icon = 'toggle_off';
+        this.resetForm();
         // Hiển thị hộp thoại xác nhận in hóa đơn
         const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
         if (printConfirm) {
@@ -662,7 +671,7 @@ export class BanHangComponent implements OnInit {
       this.phuongXa = ''; // Nếu không tìm thấy, gán rỗng
     }
   }
-  
+
   getShippingFee() {
     const shippingFeeData = {
       "from_province_id": 201,          // Mã tỉnh gửi hàng
@@ -679,7 +688,7 @@ export class BanHangComponent implements OnInit {
       "cod_failed_amount": null,         // Số tiền thu hộ (nếu có, có thể để null)
       "coupon": null                     // Mã giảm giá (nếu có, có thể để null)
     };
-    if(this.icon=='toggle_on'){
+    if (this.icon == 'toggle_on') {
       this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
         response => {
           // Xử lý phí vận chuyển ở đây
@@ -822,6 +831,8 @@ export class BanHangComponent implements OnInit {
     } else {
       // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
       this.tongTienSauVoucher = this.tongTienBanDau;
+      this.giaTriGiam = 0;
+      this.voucherControl.reset();
     }
   }
   getIdThongTinDonHang(id: number): void {
@@ -874,6 +885,25 @@ export class BanHangComponent implements OnInit {
     this.districts = [];
     this.wards = [];
   }
+  resetForm() {
+    // Đặt lại các giá trị form control
+    this.myControl.reset();
+    this.voucherControl.reset();
+
+    // Đặt lại các biến số liệu
+    this.tongTienBanDau = 0;
+    this.tienKhachDua = null;
+    this.tienKhachDuaInvalid = false;
+    this.phiVanChuyen = 0;
+    this.tongTienSauVoucher = 0;
+    this.tienTraLai = 0;
+
+    // Đặt lại các giá trị mặc định khác
+    this.icon = 'toggle_off';
+    this.popupQr = false;
+
+  }
+
   //=======lấy id nhân viên==========
   getNhanVien(): void {
     this.banHangService.getNhanVien(this.authServie.getUsername()).subscribe(

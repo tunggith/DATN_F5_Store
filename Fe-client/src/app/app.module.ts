@@ -24,11 +24,13 @@ import { LoadingComponent } from './loading/loading.component';
     HttpClientModule,
     RouterModule
 ],
-  providers: [{
-    provide:HTTP_INTERCEPTORS,
-    useClass:LoadingInterceptor,
-    multi: true,
-  }],
-  bootstrap: [AppComponent]
+providers: [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoadingInterceptor,
+    multi: true  // Đảm bảo interceptor chạy cho tất cả yêu cầu HTTP
+  }
+],
+bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -43,7 +43,7 @@
           <select id="voucherSelect" (change)="onChangeVoucher($event)">
             <option value="">--Chọn Voucher</option>
             <option *ngFor="let item of voucher" [value]="item.id">
-              {{ item.ten }}
+              {{ item.ten }} - Tối đa {{ item.giaTriGiamToiDa | number:'1.0-0'}} VND
             </option>
           </select>
         </div>

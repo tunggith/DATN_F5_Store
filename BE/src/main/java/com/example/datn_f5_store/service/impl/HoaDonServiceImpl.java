@@ -434,7 +434,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         if (hoaDon == null) {
             return new DataResponse(false, new ResultModel<>(null, "hóa đơn không tồn tại"));
         }
-        if (hoaDon.getHinhThucThanhToan() != 2 || hoaDon.getThanhToan().getId() != 1) {
+        if (hoaDon.getHinhThucThanhToan() != 1 || hoaDon.getThanhToan().getId() != 1) {
             List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
             if (chiTietHoaDon != null) {
                 for (ChiTietHoaDonEntity x : chiTietHoaDon) {

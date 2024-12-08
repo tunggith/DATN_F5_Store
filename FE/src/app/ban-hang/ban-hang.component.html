@@ -221,7 +221,7 @@
                                 <mat-autocomplete #voucherAuto="matAutocomplete"
                                     (optionSelected)="onChangeVoucher($event)">
                                     <mat-option *ngFor="let voucher of filteredVoucher | async" [value]="voucher.ten">
-                                        {{voucher.ten}}
+                                        {{voucher.ten}} - Tối đa {{voucher.giaTriGiamToiDa | number:'1.0-0'}} VND
                                     </mat-option>
                                 </mat-autocomplete>
                             </form>
