@@ -148,23 +148,23 @@ public class PdfExportService {
             }
             document.add(new Paragraph("Ngày " + ngay + ",tháng " + thang + ",năm " + nam)
                     .setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Khách hàng:" + khachHang)
+            document.add(new Paragraph("Khách hàng: " + khachHang)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Nhân viên thanh toán:" + tenNhanVien)
+            document.add(new Paragraph("Nhân viên thanh toán: " + tenNhanVien)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Mã hóa đơn:" + maHoaDon)
+            document.add(new Paragraph("Mã hóa đơn: " + maHoaDon)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Số điện thoại:" + sdt)
+            document.add(new Paragraph("Số điện thoại: " + sdt)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Email:" + email)
+            document.add(new Paragraph("Email: " + email)
                     .setTextAlignment(TextAlignment.LEFT));
-            document.add(new Paragraph("Địa chỉ:" + diaChi)
+            document.add(new Paragraph("Địa chỉ: " + diaChi)
                     .setTextAlignment(TextAlignment.LEFT));
             // Tạo bảng với 3 cột
             Table table = new Table(5);
             table.setHorizontalAlignment(HorizontalAlignment.CENTER);
             // Thêm tiêu đề cho các cột
-            table.addCell(new Cell().add(new Paragraph("Stt")).setTextAlignment(TextAlignment.CENTER)
+            table.addCell(new Cell().add(new Paragraph("STT")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
             table.addCell(new Cell().add(new Paragraph("Tên sản phẩm")).setTextAlignment(TextAlignment.CENTER)
                     .setBackgroundColor(new DeviceRgb(192, 192, 192)));
@@ -201,17 +201,21 @@ public class PdfExportService {
             Cell cell = new Cell();
             cell.setBorder(Border.NO_BORDER);
             cell.setTextAlignment(TextAlignment.CENTER);
-            cell.add(new Paragraph("Tổng tiền: " + df.format(hoaDon.getTongTienBanDau()) + "VND"));
+            cell.add(new Paragraph("Tổng tiền: " + df.format(hoaDon.getTongTienBanDau()) + " VND"));
             if (hoaDon.getVoucher() != null) {
-                cell.add(new Paragraph("Giảm giá: " + hoaDon.getVoucher().getGiaTriVoucher() + " " + hoaDon.getVoucher().getKieuGiamGia()));
+                if(hoaDon.getVoucher().getKieuGiamGia().equals("%")) {
+                    cell.add(new Paragraph("Giảm giá: " + hoaDon.getVoucher().getGiaTriVoucher() + " " + hoaDon.getVoucher().getKieuGiamGia()));
+                }else {
+                    cell.add(new Paragraph("Giảm giá: " + (df.format(hoaDon.getVoucher().getGiaTriVoucher())) + " " + hoaDon.getVoucher().getKieuGiamGia()));
+                }
                 if (hoaDon.getGiaoHang() == 0) {
-                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VND"));
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + " VND"));
                 } else {
-                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + "VND"));
+                    cell.add(new Paragraph("Đã giảm: " + (df.format(hoaDon.getGiaTriGiam())) + " VND"));
                 }
             }
-            cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + "VND"));
-            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + "VND"));
+            cell.add(new Paragraph("Phí vận chuyển: " + df.format(hoaDon.getPhiShip()) + " VND"));
+            cell.add(new Paragraph("Tổng tiền phải thanh toán: " + df.format(tongTien) + " VND"));
             if (hoaDon.getHinhThucThanhToan() == 0) {
                 cell.add(new Paragraph("Nhân viên thanh toán").setFont(boldFont));
                 cell.add(new Paragraph(tenNhanVien));

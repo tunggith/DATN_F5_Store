@@ -61,15 +61,15 @@
             <input type="text" class="form-control" [(ngModel)]="khachHang.sdt">
             <small *ngIf="errors.sdt" class="text-danger">{{ errors.sdt }}</small>
           </div>
-          <button type="button" (click)="updateKhachHang()">Cập nhật</button>
-          <button type="button" style="margin-left: 10px;" (click)="openPopupPassword()">Đổi mật khẩu</button>
+          <button class="btn-acction" type="button" (click)="updateKhachHang()">Cập nhật</button>
+          <button class="btn-acction" type="button" style="margin-left: 10px;" (click)="openPopupPassword()">Đổi mật khẩu</button>
         </div>
         <app-doi-mat-khau *ngIf="popupPs" (closePopup)="closePopupPassword()"></app-doi-mat-khau>
         <div class="right">
           <div class="mb-3">
 
             <!-- Nút mở popup -->
-            <button (click)="openPopup()" class="btn  material-icons">+</button>
+            <button (click)="openPopup()" class="btn-add material-icons">add</button>
             <div class="input-group mb-3" *ngFor="let diaChi of diaCHiData">
               <!-- Kết hợp các trường để hiển thị -->
               <input type="text" class="form-control" [value]="formatDiaChi(diaChi)" readonly>
@@ -183,13 +183,10 @@
       <div class="row">
         <!-- Nút Lưu -->
         <div class="col-sm-6">
-          <button type="submit" class="btn btn-primary" [disabled]="diaChiForm.invalid">
+          <button type="submit" class="btn-edit" [disabled]="diaChiForm.invalid">
             {{ isEditing ? 'Cập nhật địa chỉ' : 'Thêm địa chỉ' }}
           </button>
-        </div>
-        <!-- Nút Hủy -->
-        <div class="col-sm-6">
-          <button type="button" class="btn btn-secondary" (click)="closePopup()">Hủy</button>
+          <button style="margin-left: 10px;" type="button" class="btn-edit" (click)="closePopup()">Hủy</button>
         </div>
       </div>
     </form>

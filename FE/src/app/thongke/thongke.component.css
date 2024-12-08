@@ -139,4 +139,9 @@ button.btn-primary:hover {
   .card:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
-  
+  .btn-primary{
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  }
+  .btn-primary:hover{
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  }

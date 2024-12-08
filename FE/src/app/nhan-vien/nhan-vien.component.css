@@ -16,7 +16,7 @@
 }
 
 .card-header-custom {
-    background-color: #003366; /* Thay đổi mã màu theo nhu cầu */
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     color: #fff; /* Màu chữ */
 }
 
@@ -89,12 +89,12 @@
 }
 
 .table thead {
-    background-color: #003366;
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     color: white;
 }
 
 .btn-submit, .btn-update, .btn-delete {
-    background-color: #003366; /* Màu nền chính */
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); /* Màu nền chính */
     color: #fff; /* Màu chữ */
     border: none;
     padding: 10px 20px;
@@ -142,12 +142,12 @@
 }
 
 .btn-toggle {
-    background-color: #003366;        /* Màu nền nút đổi trạng thái */
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);        /* Màu nền nút đổi trạng thái */
     color: white;                     /* Màu chữ */
 }
 
 .btn-info {
-    background-color: #003366;        /* Màu nền nút thông tin */
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);        /* Màu nền nút thông tin */
     color: white;                     /* Màu chữ */
 }
 

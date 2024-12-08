@@ -28,13 +28,13 @@
                         <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div class="rollback"><span (click)="rollback()">Quay lại</span></div>

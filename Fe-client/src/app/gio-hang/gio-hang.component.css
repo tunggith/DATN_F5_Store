@@ -113,7 +113,18 @@ img {
     object-fit: cover;
     margin-right: 10px;
 }
+button {
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+    border-radius: 5px;
+    color: #fff;
+    margin-top: 25px;
+    border: none;
+}
 
+button:hover {
+    cursor: pointer;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+}
 @media (max-width: 768px) {
     .pos_page_inner {
         flex-direction: column;

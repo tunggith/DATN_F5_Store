@@ -180,7 +180,7 @@
 .san-pham-popup span {
     padding: 5px;
     width: 150px;
-    background-color: rgb(18, 16, 128);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     color: #fff;
     height: 30px;
     border-radius: 5%;
@@ -188,10 +188,15 @@
 
 .san-pham-popup span:hover {
     cursor: pointer;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
-
+.payment button{
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+    margin-right: 5px;margin-top: -3px;
+    width: 96%;height: 40px;
+}
 .payment button:hover {
-    background-color: rgb(13, 21, 107);
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 .profile-pay {
@@ -227,7 +232,7 @@
     color: #ffff;
     height: 30px;
     border: none;
-    background-color: rgb(244, 25, 25);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     border-radius: 5%;
     margin-left: 10px;
 }
@@ -256,7 +261,7 @@
 
 .card-header {
     display: flex;
-    background-color: #003366;
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 }
 
 .card-title {

@@ -4,13 +4,13 @@
     border-radius: 50%;
 }
 .header_bottom{
-    background: #003366;
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 }
 .main_menu nav ul :hover{
-    background: #0a539c;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 .main_menu nav ul  li.active a{
-    background: #0a539c;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 .main_menu nav  ul  li  a{
     text-transform: none;

@@ -24,9 +24,13 @@
     margin-top: 10px;
     border: 0px;
     border-radius: 5px;
-    background-color: rgb(18, 16, 128);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     color:#fff;
     padding: 5px;
+}
+.content button:hover{
+    cursor: pointer;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 .anh {
     display: flex;

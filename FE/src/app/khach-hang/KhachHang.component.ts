@@ -289,8 +289,8 @@ createKhachHang() {
     }
 
     // Kiểm tra các điều kiện tuổi
-    if (age < 18) {
-        return { 'ageInvalid': true }; // Tuổi dưới 18
+    if (age < 3) {
+        return { 'ageInvalid': true }; // Tuổi dưới 3
     }
     if (age >= 100) {
         return { 'ageTooHigh': true }; // Tuổi trên hoặc bằng 100

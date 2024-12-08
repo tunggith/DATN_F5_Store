@@ -133,7 +133,7 @@
 
 /* Nút hành động trong bảng */
 .btn-action {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -144,12 +144,12 @@
 }
 
 .btn-action:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Nút chính trong modal */
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 10px 16px;
@@ -160,7 +160,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Định dạng form trong modal */
@@ -315,7 +315,7 @@
 
 /* Định dạng các nút hành động trong bảng */
 .btn-action {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -326,7 +326,7 @@
 }
 
 .btn-action:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Nút điều hướng trang */
@@ -457,7 +457,7 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   border-color: #007bff;
   padding: 8px 16px;
   border-radius: 4px;
@@ -466,14 +466,14 @@
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   border-color: #004085;
 }
 
 /* Áp dụng cho tất cả các button */
 button {
   color: #fff; /* Màu chữ mặc định */
-  background-color:#004085 ; /* Màu nền trong suốt */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); /* Màu nền trong suốt */
   border: none; /* Loại bỏ đường viền */
   outline: none; /* Loại bỏ outline khi focus */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
@@ -482,13 +482,12 @@ button {
 
 /* Hiệu ứng hover cho tất cả các button */
 button:hover {
-  background-color: #133352;
-  color: #ffcc00;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   transform: scale(1);  
 }
 
 .card-s{
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
 
 }
@@ -507,7 +506,7 @@ button:hover {
 /* CSS cho phần header của thẻ */
 .card-header {
   padding: 16px;
-  background-color: #003366; /* Màu nền xanh đậm */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border-top-left-radius: 12px; /* Bo góc trên trái */
   border-top-right-radius: 12px; /* Bo góc trên phải */
@@ -521,7 +520,7 @@ button:hover {
 .card:hover {
   transform: translateY(-5px); /* Nâng thẻ lên khi hover */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn */
-  background-color: #003366; /* Đổi màu nền thành xanh đậm */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   color:#fff; /* Đổi màu chữ thành vàng */
 }
 
@@ -569,9 +568,9 @@ button:hover {
 
 /* CSS khi hover vào link */
 .page-link:hover {
-  background-color: #ffcc00;
+  background-color: #acacac;
   color: #003366;
-  border-color: #ffcc00;
+  border: none;
 }
 
 /* CSS cho trạng thái "disabled" */
@@ -585,7 +584,7 @@ button:hover {
 /* CSS cho trang hiện tại */
 .page-item.disabled .page-link span {
   color: #ffffff;
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   border-color: #003366;
   cursor: default;
   border-radius: 8px;
@@ -594,7 +593,7 @@ button:hover {
 
 /* CSS cho trạng thái khi active */
 .page-item.active .page-link {
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #ffffff;
   border-color: #003366;
   cursor: default;
@@ -675,9 +674,7 @@ button:hover {
 }
 
 .fa-eye:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   transform: scale(1.5);      /* Phóng to khi hover */
 }
 
@@ -689,9 +686,7 @@ button:hover {
 }
 
 .fa-edit:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   margin-right: 10px;
   transform: scale(1.5);      /* Phóng to khi hover */
   
@@ -706,9 +701,7 @@ button:hover {
 }
 
 .fa-image:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   margin-right: 10px;
   transform: scale(1.5);      /* Phóng to khi hover */
   
@@ -827,7 +820,7 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border-bottom: 1px solid #dee2e6;
 }
@@ -891,13 +884,13 @@ button:hover {
 }
 
 .btn-primary {
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: #004d99;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 .btn-secondary {
@@ -967,7 +960,7 @@ button:hover {
 }
 
 #chiTietModal .modal-header {
-  background-color: #003366; /* Consistent header color */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
 }
 

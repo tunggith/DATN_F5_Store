@@ -21,7 +21,7 @@
                             <i class="material-icons" style="margin-right: 2px; font-size: 14px;">qr_code_scanner</i>
                         </span>
                         <span title="Sản phẩm" (click)="openPopupSanPham()"
-                            style="display: inline-flex; align-items: center; padding: 2px 6px; background: linear-gradient(135deg, #1c1f53, #292e9e); color: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
+                            style="display: inline-flex; align-items: center; padding: 2px 6px; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); color: white; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: all 0.3s ease;">
                             <i class="material-icons" style="margin-right: 2px; font-size: 14px;">add</i>Sản phẩm
                         </span>
                     </div>
@@ -221,7 +221,7 @@
                                 <mat-autocomplete #voucherAuto="matAutocomplete"
                                     (optionSelected)="onChangeVoucher($event)">
                                     <mat-option *ngFor="let voucher of filteredVoucher | async" [value]="voucher.ten">
-                                        {{voucher.ten}}
+                                        {{voucher.ten}} - Tối đa {{voucher.giaTriGiamToiDa | number:'1.0-0'}} VND
                                     </mat-option>
                                 </mat-autocomplete>
                             </form>
@@ -264,8 +264,8 @@
                         <app-popup-qr *ngIf="popupQr" (closePopup)="closePopupQr()"
                             (confirmPayment)="confirmQr()"></app-popup-qr>
                         <div class="payment">
-                            <button (click)="thanhtoanHoaDon(activeInvoidID)" style="width: 96%;height: 40px;"><i
-                                    class="material-icons" style="margin-right: 5px;margin-top: -3px;">payments</i>Thanh
+                            <button (click)="thanhtoanHoaDon(activeInvoidID)"><i
+                                    class="material-icons">payments</i>Thanh
                                 toán</button>
                         </div>
                     </div>

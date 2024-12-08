@@ -93,7 +93,7 @@
 }
 
 .switcher ul > li:hover > a{
-    background: #00bba6;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
     color: #fff;
 }
 .header_links ul {
@@ -174,7 +174,7 @@
 	top: 0;
 }
 .search_bar form button:hover{
-    background: #00bba6;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
     color: #fff;
 }
 .header_links ul li:last-child a {
@@ -281,7 +281,7 @@
 .cart_button a {
 	padding: 5px 10px;
 	color: #fff;
-	background: #00bba6;
+	background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 	font-size: 13px;
 	text-transform: uppercase;
 	line-height: 20px;
@@ -299,7 +299,7 @@
 
 /* 2.3 header bottom css here*/
 .header_bottom {
-	background: #00BBA6;
+	background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 	height: 50px;
 	position: relative;
 }
@@ -308,7 +308,7 @@
 	content: "";
 	width: 20px;
 	height: 64px;
-	background: url(../img/ship/nav-left-teal.png) no-repeat scroll center center;
+	/* background: url(../img/ship/nav-left-teal.png) no-repeat scroll center center; */
 	left: -16px;
 	top: -1px;
 }
@@ -317,7 +317,7 @@
 	content: "";
 	width: 20px;
 	height: 64px;
-	background: url(../img/ship/nav-right-teal.png) no-repeat scroll center center;
+	/* background: url(../img/ship/nav-right-teal.png) no-repeat scroll center center; */
 	right: -16px;
 	top: -1px;
 }
@@ -692,7 +692,7 @@
 	font-size: 13px;
 }
 .block_tags a:hover{
-    background-color: #00bba6;
+    background-color: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
     color: #fff;
 }
 
@@ -968,7 +968,7 @@
 	background: #00bba6;
 }
 .banner_title.title_2 p::before{
-    border-left: 20px solid #00bba6;
+    border-left: 20px solid linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 /*banner css end*/
 
@@ -986,7 +986,7 @@
 /* 2.12 footer area css here*/
 .footer_area {
 	color: #fff;
-	background: #003366;
+	background:linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 	padding: 38px 70px 0;
 	position: relative;
 }
@@ -1885,7 +1885,7 @@
     color: #333;
 }
 .social_sharing ul li a:hover{
-    background: #00bba6;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
     color: #fff;
 }
 .product_d_inner{
