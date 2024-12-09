@@ -113,12 +113,13 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th, .table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
 }
 
 .table th {
@@ -280,12 +281,13 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th, .table td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
   font-size: 14px;
 }
 
@@ -503,7 +505,7 @@ button:hover {
   color: #003366; /* Màu chữ mặc định */
 }
 
-/* CSS cho phần header của thẻ */
+/* CSS cho phần header của th */
 .card-header {
   padding: 16px;
   background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
@@ -707,46 +709,36 @@ button:hover {
   
 }
 /* CSS chung cho các radio button */
+/* Start of Selection */
 .form-check-input[type="radio"] {
   appearance: none;
   border: 2px solid #ccc;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   position: relative;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
+  margin-right: 5px; /* Closer to label */
 }
 
 /* Hiển thị dấu chấm khi được chọn */
-.form-check-input[type="radio"] {
-  appearance: none; /* Loại bỏ giao diện mặc định */
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-/* Thay đổi màu viền khi được chọn */
 .form-check-input[type="radio"]:checked {
   border-color: #007bff;
+  background-color: #007bff; /* Fill color when checked */
 }
 
 /* Thêm màu nền nhạt khi hover hoặc focus */
 .form-check-input[type="radio"]:hover,
 .form-check-input[type="radio"]:focus {
-  background-color: #0b5da4;
+  background-color: rgba(11, 93, 164, 0.2);
   border-color: #007bff;
 }
 
 /* Tùy chỉnh label để dễ nhận biết khi radio được chọn */
 .form-check-label {
-  margin-left: 8px;
+  margin-left: 0; /* Align closer to radio */
   font-weight: normal;
   color: #333;
 }
@@ -755,6 +747,7 @@ button:hover {
   font-weight: bold;
   color: #007bff;
 }
+/* End of Selection */
 
 
 
@@ -768,9 +761,19 @@ button:hover {
 
 /* Radio buttons căn ngang hàng */
 .form-check {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  margin-right: 15px;
+  margin-bottom: 0.2rem; /* Adjusts the space between each radio button and label pair */
+}
+
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem; /* Space between inline radio buttons */
+}
+
+.form-check input[type="radio"] {
+  margin-right: 0.5rem; /* Space between the radio button and its label */
 }
 
 /* Common modal overlay styles */
@@ -846,6 +849,7 @@ button:hover {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+  /* width: 50px; */
 }
 
 /* Close button styling */
@@ -877,6 +881,7 @@ button:hover {
 
 /* Modal buttons */
 .btn {
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: 500;
@@ -912,13 +917,14 @@ button:hover {
   width: 100%;
   margin-bottom: 1rem;
   background-color: transparent;
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th,
 .table td {
   padding: 0.75rem;
   vertical-align: middle;
-  border-top: 1px solid #dee2e6;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
 }
 
 /* Form group spacing */
