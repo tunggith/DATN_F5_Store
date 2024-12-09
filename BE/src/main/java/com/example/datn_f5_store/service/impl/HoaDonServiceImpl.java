@@ -177,7 +177,11 @@ public class HoaDonServiceImpl implements IHoaDonService {
         LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
         lichSuHoaDon.setHoaDon(hoaDon);
         NhanVienEntity nhanVien = nhanVienRepository.findById(idNhanVien).orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại!"));
-        lichSuHoaDon.setNhanVien(nhanVien);
+        if(nhanVien!=null) {
+            lichSuHoaDon.setNhanVien(nhanVien);
+        }else {
+            lichSuHoaDon.setNhanVien(null);
+        }
         lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
         lichSuHoaDon.setTrangThaiMoi("Cập nhật sản phẩm");
         lichSuHoaDon.setThoiGianThucHien(new Date());
@@ -375,7 +379,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 }
             }
 
-            request.setTongTienSauVoucher(request.getTongTienBanDau());
+//            request.setTongTienSauVoucher(request.getTongTienBanDau());
             if (request.getTongTienSauVoucher() == 0) {
                 throw new RuntimeException("Không thể thanh toán hóa đơn 0đ!");
             }
