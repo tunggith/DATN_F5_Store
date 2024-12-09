@@ -256,9 +256,9 @@
                                 <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
                                     (focus)="tienKhachDua === 0 ? tienKhachDua = null : null"
                                     (input)="getTienTraLai(tienKhachDua)"
-                                    [ngClass]="{'error-border':tienKhachDua !== null && tienKhachDua < tongTienSauVoucher || tienKhachDuaInvalid}">
+                                    [ngClass]="{'error-border':tienKhachDua !== null && tienKhachDua < tongTienSauVoucher+phiVanChuyen || tienKhachDuaInvalid}">
                             </div>
-                            <div *ngIf="tienKhachDua !== null &&tienKhachDua < tongTienSauVoucher">
+                            <div *ngIf="tienKhachDua !== null &&tienKhachDua < tongTienSauVoucher+phiVanChuyen">
                                 <span class="error-text"><strong>Số tiền khách đưa không đủ!</strong></span>
                             </div>
                             <div *ngIf="tienKhachDuaInvalid">

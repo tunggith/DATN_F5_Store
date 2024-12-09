@@ -134,6 +134,9 @@ export class ThongTinDonHangComponent implements OnInit {
     const [soNha, duong, phuongXa, quanHuyen, tinhThanh] = this.diaChiNhanHang.split(",").map(part => part.trim());
     this.soNha = soNha;
     this.duong = duong;
+    this.tinhThanh = tinhThanh;
+    this.quanHuyen = quanHuyen;
+    this.phuongXa = phuongXa;
     const privince = this.provinces.find(p => p.ProvinceName === tinhThanh);
     this.selectedTinhThanh = privince ? privince.ProvinceID : null;
     if (this.selectedTinhThanh) {
@@ -272,6 +275,7 @@ export class ThongTinDonHangComponent implements OnInit {
   }
   //=======cập nhật địa chỉ giao hàng=============
   submitAddress() {
+    console.log('thông tin',this.phuongXa , this.quanHuyen , this.tinhThanh);
     if (this.hoTenNguoiNhan && this.soDienThoai && this.soNha && this.duong && this.phuongXa && this.quanHuyen && this.tinhThanh) {
       this.diaChiNhanHang = `${this.soNha}, ${this.duong}, ${this.phuongXa}, ${this.quanHuyen}, ${this.tinhThanh}`;
 
@@ -317,7 +321,6 @@ export class ThongTinDonHangComponent implements OnInit {
     const provinceId = event.target.value;
     this.selectedTinhThanh = provinceId;  // Lưu ID tỉnh/thành
     this.tinhThanh = this.provinces.find(p => p.ProvinceID === Number(provinceId))?.ProvinceName || '';  // Gán tên tỉnh/thành
-
     this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
       data => {
         this.districts = data['data'];  // Gán dữ liệu vào 'districts'
