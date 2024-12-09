@@ -58,40 +58,27 @@ h2 {
 
 .btn-submit {
   background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
-  /* Màu nền cho nút */
   color: white;
-  /* Màu chữ */
   border: none;
-  /* Không có viền */
   border-radius: 5px;
-  /* Bo góc cho nút */
   padding: 10px 15px;
-  /* Khoảng cách bên trong nút */
   transition: background-color 0.3s;
-  /* Thêm hiệu ứng chuyển màu */
 }
 
 .btn-submit:hover {
   background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
-  /* Làm đậm màu nền khi hover */
 }
 
 button {
   background-color: transparent;
-  /* Nền trong suốt */
   border: none;
-  /* Không có viền */
   color: #007bff;
-  /* Màu chữ */
   cursor: pointer;
-  /* Con trỏ khi hover */
   transition: color 0.3s;
-  /* Hiệu ứng chuyển màu chữ */
 }
 
 button:hover {
   color: white;
-  /* Màu chữ khi hover */
 }
 
 .hidden {
@@ -236,12 +223,55 @@ button:hover {
   /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
   /* Bo góc */
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 table-striped tbody tr:nth-of-type(odd) {
   background-color: #f8f9fa;
   /* Light background for better contrast */
 }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 12px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensure all data is visible */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.table-responsive {
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
+}
+/* End of Selection */
 
 .pagination-container {
   display: flex;
@@ -290,7 +320,7 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 
 .pagination button:hover i {
-  color: #007bff;
+  color: #000000;
   /* Change icon color on hover */
   font-size: 27px;
   /* Increase size further on hover */

@@ -62,11 +62,10 @@ label {
     outline: none;
 }
 .card {
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: scale(1.02);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -96,11 +95,10 @@ button.btn-primary:hover {
   }
   
   .card {
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
   
   .card:hover {
-    transform: scale(1.02);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
   
@@ -133,7 +131,7 @@ button.btn-primary:hover {
   }
   
   .card {
-    transition: all 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
   
   .card:hover {

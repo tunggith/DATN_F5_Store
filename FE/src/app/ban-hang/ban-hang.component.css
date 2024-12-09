@@ -402,32 +402,73 @@ datalist {
     font-size: 15px;
     color: #ffff;
     text-align: center;
+    font-weight: bold; /* Chữ đậm hiển thị rõ ràng */
+    width: 120px;
+    text-align: center;
+    height: 35px;
 }
 
+/* Start of Selection */
 .button-select .choXacNhan {
     background-color: green;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
 }
 
 .button-select .daXacNhan {
     background-color: #9f84c4;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .dangGiaoHang {
     background-color: red;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .hoanThanh {
     background-color: rgb(192, 59, 10);
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .daHuy {
     background-color: orange;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+/* End of Selection */
 
 .button-select:hover {
     cursor: pointer;
@@ -510,4 +551,41 @@ datalist {
         width: 100%;
         margin-top: 10px;
     }
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 12px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure all data is visible */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-responsive {
+    overflow-y: visible; /* Ensure all data is visible */
+    border-radius: 12px; /* Rounded corners for the responsive container */
+    padding: 10px;
+    margin-bottom: 20px;
 }
