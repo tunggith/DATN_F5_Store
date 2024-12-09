@@ -218,7 +218,7 @@ export class BanHangComponent implements OnInit {
       this.tienTraLai = 0;
     } else {
       this.tienKhachDuaInvalid = false;
-      this.tienTraLai = 0, tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
+      this.tienTraLai = tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
     }
   }
 
