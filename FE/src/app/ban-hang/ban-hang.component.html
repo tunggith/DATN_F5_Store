@@ -275,7 +275,7 @@
                             <span><strong>Tổng tiền phải thanh toán: {{(tongTienSauVoucher+phiVanChuyen||0) |number:'1.0-0' }} VND</strong></span>
                         </div>
                         <div>
-                            <span><strong>Tiền trả lại: {{(tienTraLai||0)|number:'1.0-0' }} VND</strong></span>
+                            <span><strong>Tiền trả lại: {{(this.tienKhachDua-tongTienSauVoucher-phiVanChuyen-giaTriGiam)|number:'1.0-0' }} VND</strong></span>
                         </div>
                         <div style="width: 92%;margin-left: 11px;height: 52px;">
                             <select class="form-select" (change)="getIdThanhToan($event.target.value)"

@@ -822,6 +822,7 @@ export class BanHangComponent implements OnInit {
         // Tính tổng tiền sau khi áp dụng voucher
         this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
         // this.tienKhachDua = this.tongTienBanDau - finalDiscount;
+        this.tienTraLai = this.tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
       } else {
         // Nếu không đạt điều kiện, tổng tiền không thay đổi
         this.tongTienSauVoucher = this.tongTienBanDau;
