@@ -67,7 +67,7 @@ public class PdfExportService {
             PdfFont font = PdfFontFactory.createFont("C:/Windows/Fonts/arial.ttf", PdfEncodings.IDENTITY_H);
             PdfFont boldFont = PdfFontFactory.createFont("C:/Windows/Fonts/arialbd.ttf", PdfEncodings.IDENTITY_H); // Arial-Bold.ttf hoặc arialbd.ttf
             String pathImage = "C:\\Users\\Admin\\DATN_F5_Store_new\\qr_banking.jpg";
-            String pathLogo = "C:\\Users\\Admin\\DATN_F5_Store_new\\Logo_hd.png";
+            String pathLogo = "C:\\Users\\Admin\\DATN_F5_Store_new\\Logo_hd.jpg";
 
             // Tạo Document với writer đã khởi tạo
             Document document = new Document(new com.itextpdf.kernel.pdf.PdfDocument(writer));
