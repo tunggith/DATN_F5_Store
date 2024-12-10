@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,12 +61,15 @@ public class HoaDonController {
     }
     @PutMapping("/thanh-toan/{id}")
     private ResponseEntity<Object> thanhToan(@RequestBody HoaDonRequest request,
-                                             @Parameter(name = "id")@PathVariable Integer id){
-        return new ResponseEntity<>(hoaDonService.update(request,id),HttpStatus.OK);
+                                             @Parameter(name = "id")@PathVariable Integer id,
+                                             @RequestHeader("Authorization") String authorizationHeader
+    ){
+        return new ResponseEntity<>(hoaDonService.update(request,id,authorizationHeader),HttpStatus.OK);
     }
     @PutMapping("/huy-hoa-don/{id}")
-    private ResponseEntity<Object> huyHoaDon(@Parameter(name = "id")@PathVariable Integer id){
-        return new ResponseEntity<>(hoaDonService.huyHoaDon(id),HttpStatus.OK);
+    private ResponseEntity<Object> huyHoaDon(@Parameter(name = "id")@PathVariable Integer id,
+                                             @RequestHeader("Authorization") String authorizationHeader){
+        return new ResponseEntity<>(hoaDonService.huyHoaDon(id,authorizationHeader),HttpStatus.OK);
     }
     @PostMapping("/chon-san-pham/{idSanPham}")
     private ResponseEntity<Object> chonSanPham(@RequestBody ChiTietHoaDonRequest request,
@@ -115,16 +119,18 @@ public class HoaDonController {
     }
     @PutMapping("/update-trang-thai-don-hang/{id}")
     private ResponseEntity<Object> updateTrangThaiDonHang(
-            @Parameter(name = "id")@PathVariable Integer id
+            @Parameter(name = "id")@PathVariable Integer id,
+            @RequestHeader("Authorization") String authorizationHeader
     ){
-        return new ResponseEntity<>(hoaDonService.updateTrangThaiHoaDon(id),HttpStatus.OK);
+        return new ResponseEntity<>(hoaDonService.updateTrangThaiHoaDon(id,authorizationHeader),HttpStatus.OK);
     }
     @PutMapping("/update-dia-chi-nhan-hang/{id}")
     private ResponseEntity<Object> updateDiaChiNhanHang(
             @Parameter(name = "id")@PathVariable Integer id,
-            @RequestBody HoaDonRequest request
+            @RequestBody HoaDonRequest request,
+            @RequestHeader("Authorization") String authorizationHeader
     ){
-        return new ResponseEntity<>(hoaDonService.updateDiaChiNhanHang(id,request),HttpStatus.OK);
+        return new ResponseEntity<>(hoaDonService.updateDiaChiNhanHang(id,request,authorizationHeader),HttpStatus.OK);
     }
     @GetMapping("/get-by-trang-thai-cho")
     private ResponseEntity<Object> getByTrangThaiCho(){
@@ -145,9 +151,10 @@ public class HoaDonController {
     private ResponseEntity<Object> capNhatSanPham(
             @Parameter(name = "id")@RequestParam Integer id,
             @Parameter(name = "tongTien")@RequestParam Double tongTien,
-            @Parameter(name = "idNhanVien")@RequestParam Integer idNhanVien
+            @Parameter(name = "idNhanVien")@RequestParam Integer idNhanVien,
+            @RequestHeader("Authorization") String authorizationHeader
     ){
-        return new ResponseEntity<>(hoaDonService.updateHoaDon(id,tongTien,idNhanVien),HttpStatus.OK);
+        return new ResponseEntity<>(hoaDonService.updateHoaDon(id,tongTien,idNhanVien,authorizationHeader),HttpStatus.OK);
     }
     @GetMapping("/huy-cap-nhat/{id}")
     private ResponseEntity<Object> huyCapNhat(@Parameter(name = "id")@PathVariable Integer id){
@@ -156,8 +163,9 @@ public class HoaDonController {
     @PutMapping("/note/{id}")
     private ResponseEntity<Object> updateNote(
             @Parameter(name = "id")@PathVariable Integer id,
-            @Parameter(name = "ghiChu")@RequestParam String ghiChu
+            @Parameter(name = "ghiChu")@RequestParam String ghiChu,
+            @RequestHeader("Authorization") String authorizationHeader
     ){
-        return new ResponseEntity<>(hoaDonService.updateNote(id,ghiChu),HttpStatus.OK);
+        return new ResponseEntity<>(hoaDonService.updateNote(id,ghiChu,authorizationHeader),HttpStatus.OK);
     }
 }

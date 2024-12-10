@@ -34,7 +34,7 @@
               <!-- Hiển thị ảnh -->
               <img [src]="image.urlAnh" alt="Ảnh đã lưu" class="img-fluid mb-2" />
               <!-- Nút xóa -->
-              <span class="remove-image" (click)="deleteSavedImage(image.id)">×</span>
+              <span *ngIf="role==='admin'"  class="remove-image" (click)="deleteSavedImage(image.id)">×</span>
             </div>
           </div>
         </div>
@@ -45,10 +45,10 @@
         </div>
 
         <!-- Chọn ảnh mới -->
-        <div class="form-group mt-3 upload-container">
+        <div class="form-group mt-3 upload-container" *ngIf="role==='admin'">
           <label for="imageInput" class="upload-label"><b>+</b></label>
           <input type="file" id="imageInput" class="form-control-file" (change)="onFilesSelected($event)"
-            accept="image/*" multiple />
+            accept="image/*" multiple/>
         </div>
 
         <!-- Hiển thị ảnh đã chọn -->
@@ -65,7 +65,7 @@
 
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-secondary" (click)="resetModal()" data-dismiss="modal">Đóng</button> -->
-        <button type="button" class="btn btn-primary" (click)="saveImagesByColor()">Lưu Ảnh</button>
+        <button type="button" class="btn btn-primary" (click)="saveImagesByColor()" [disabled]="role!=='admin'">Lưu Ảnh</button>
       </div>
     </div>
   </div>

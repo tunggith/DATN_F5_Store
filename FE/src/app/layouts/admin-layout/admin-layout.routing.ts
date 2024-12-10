@@ -20,7 +20,7 @@ import { QrScannerComponent } from 'app/qr-scanner/qr-scanner.component';
 export const AdminLayoutRoutes: Routes = [
   { path: 'ban-hang', component: BanHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'san-pham', component: SanphamComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
-  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
+  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'khuyen-mai', component: IconsComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'nhan-vien', component: NhanVienComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'khach-hang', component: KhachHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },

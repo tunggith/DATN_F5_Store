@@ -607,6 +607,9 @@ button:hover {
 .upload-container {
   display: inline-block;
   position: relative;
+  text-align: center;
+  justify-items: center;
+  justify-content: center;
 }
 
 /* Ẩn input file gốc */
@@ -629,6 +632,7 @@ button:hover {
   cursor: pointer;
   transition: all 0.3s ease; /* Hiệu ứng chuyển động tổng quát */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 /* Hiệu ứng khi di chuột vào nút */
