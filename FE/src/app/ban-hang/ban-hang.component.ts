@@ -407,7 +407,7 @@ export class BanHangComponent implements OnInit {
     if (!isConfirmed) {
       return; // Nếu người dùng nhấn "Cancel", dừng lại
     }
-    if (this.tienKhachDua < this.tongTienSauVoucher && this.idThanhToan == 1) {
+    if (this.tienKhachDua < this.tongTienSauVoucher) {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
