@@ -33,8 +33,8 @@ export class GioHangComponent implements OnInit {
   idThanhToan: string | number = '';
   soLuong: string = '';
   // địa chỉ kh
-  provinces: any[] = []; // Danh sách tỉnh/thành
-  districts: any[] = []; // Danh sách quận/huyện
+  provinces: any[] = [];
+  districts: any[] = [];
   wards: any[] = []; // Danh sách phường/xã
   selectedTinhThanh: number = 0; // ID tỉnh/thành đã chọn
   selectedQuanHuyen: number = 0; // ID quận/huyện đã chọn
@@ -70,7 +70,6 @@ export class GioHangComponent implements OnInit {
     this.loadProvinces();
     this.loadvoucher();
     this.loadDiaChi();
-
     // Lấy idKhachHang từ localStorage khi component được khởi tạo
     this.idKhachHang = localStorage.getItem('id') || '';
 
@@ -84,10 +83,10 @@ export class GioHangComponent implements OnInit {
     // Xử lý queryParams từ VNPay
     this.route.queryParams.subscribe(params => {
       this.vnpTransactionStatus = params['vnp_TransactionStatus'];
-      if (this.vnpTransactionStatus == '00' && !this.idKhachHang) {
-        const request = this.thongTinThanhToan();
-        this.xuLyThanhToanBinhThuong(request);
-      }
+      // if (this.vnpTransactionStatus == '00' && !this.idKhachHang) {
+      //   const request = this.thongTinThanhToan();
+      //   this.xuLyThanhToanBinhThuong(request);
+      // }
     });
   }
   getKhachHangLocal(): void {
@@ -98,7 +97,8 @@ export class GioHangComponent implements OnInit {
       checked: true
     }));
     this.updateTotalAmount();
-    console.log('Giỏ hàng từ localStorage:', this.chiTietGioHang);
+    this.loadDetailDiaChi();
+    // console.log('Giỏ hàng từ localStorage:', this.chiTietGioHang);
   }
 
   // Lấy tất cả giỏ hàng từ dịch vụ (dành cho khách hàng có idKhachHang)
@@ -110,7 +110,9 @@ export class GioHangComponent implements OnInit {
             ...item
           }));
           this.updateTotalAmount();
-          console.log('chi tiết giỏ hàng:', this.chiTietGioHang);
+          this.getDiaChi(this.idKhachHang);
+          // console.log('chi tiết giỏ hàng:', this.chiTietGioHang);
+
         },
         error: (err) => {
           console.error('Lỗi khi lấy giỏ hàng:', err);
@@ -163,13 +165,19 @@ export class GioHangComponent implements OnInit {
         return total + item.chiTietSanPham.donGia * item.soLuong;
       }, 0);
 
-      this.canThanhToan = this.tongTien; // Cập nhật tổng tiền có thể thanh toán
+      this.canThanhToan = this.tongTien||0; // Cập nhật tổng tiền có thể thanh toán
+      this.calculateShippingFee();
       // Thực hiện thanh toán nếu thỏa mãn các điều kiện
       const request = this.thongTinThanhToan();
       if (this.vnpTransactionStatus == '00' && request) {
+        console.log("request Thanh toán:",request);
+        
         this.xuLyThanhToanBinhThuong(request);
       }
     } else {
+      this.tongTien = 0
+      this.canThanhToan = 0;
+      this.phiVanChuyen = 0;
       console.log('Không có sản phẩm "active" hoặc trạng thái giao dịch không hợp lệ.');
     }
   }
@@ -201,7 +209,6 @@ export class GioHangComponent implements OnInit {
         soLuong: this.getSoLuongById(id),
       }));
     }
-
     // Kiểm tra nếu không có mục nào được chọn
     if (!gioHangRequests || gioHangRequests.length === 0) {
       this.showErrorMessage('Vui lòng chọn ít nhất một sản phẩm để thanh toán!');
@@ -217,7 +224,7 @@ export class GioHangComponent implements OnInit {
         idVoucher: this.selectedVoucherId || null,
         idThanhToan: this.idThanhToan || 1,
         hinhThucThanhToan: 1,
-        tongTienBanDau: this.tinhTongTienSauVoucher(),
+        tongTienBanDau: this.tongTien,
         phiShip: this.phiVanChuyen || 0,
         giaTriGiam: this.giaTriGiam || 0,
         tongTienSauVoucher: this.tinhTongTienSauVoucher(),
@@ -245,13 +252,13 @@ export class GioHangComponent implements OnInit {
     this.errors = {};
 
     // Biểu thức chính quy để kiểm tra ký tự đặc biệt hoặc số
-    const specialCharOrNumberRegex = /[^a-zA-Z\u00C0-\u017F\s]/;
+    const specialCharOrNumberRegex = /^[a-zA-ZÀ-ỹà-ỹ\s]+$/;
 
     // Validate tên người nhận
     if (!this.tenNguoiNhan || this.tenNguoiNhan.trim() === '') {
       this.errors.tenNguoiNhan = 'Vui lòng nhập tên người nhận.';
       isValid = false;
-    } else if (specialCharOrNumberRegex.test(this.tenNguoiNhan)) {
+    } else if (!specialCharOrNumberRegex.test(this.tenNguoiNhan)) {
       this.errors.tenNguoiNhan = 'Tên người nhận không được chứa ký tự đặc biệt hoặc số.';
       isValid = false;
     }
@@ -365,31 +372,51 @@ export class GioHangComponent implements OnInit {
     if (!request) {
       return; // Dừng nếu không có sản phẩm được chọn
     }
+    const requestArray = Array.isArray(request.gioHangRequests) ? request.gioHangRequests : Array.from(request.gioHangRequests);
+    // Kiểm tra số lượng sản phẩm
+    this.gioHangService.getListSoLuong().subscribe({
+      next: (response) => {
+        const detail = response.result.content;
+        const isInvalid = requestArray.some((item: any) => {
+          const detailItem = detail.find((d: any) => d.id === item.idChiTietSanPham);
+          return detailItem && item.soLuong > detailItem.soLuong;
+        });
 
-    // Kiểm tra hình thức thanh toán
-    if (this.idThanhToan == 2) {
-      // Gọi API VNPay để lấy link thanh toán
-      this.gioHangService.vnPay(this.tinhTongTienSauVoucher() + this.phiVanChuyen).subscribe({
-        next: (response: any) => {
-          const paymentUrl = response.paymentUrl;
-          if (paymentUrl) {
-            // Chuyển hướng người dùng tới VNPay
-            window.location.href = paymentUrl;
-          } else {
-            this.showErrorMessage('Không lấy được URL thanh toán VNPay!');
-          }
-        },
-        error: (error) => {
-          console.error(error);
-          this.showErrorMessage('Call API thanh toán VNPay thất bại');
-        },
-      });
-      return;
-    }
+        if (isInvalid) {
+          this.showErrorMessage('Số lượng sản phẩm không hợp lệ. Vui lòng kiểm tra lại!');
+          return;
+        }
 
-    // Nếu không thanh toán qua VNPay, xử lý thanh toán bình thường
-    this.xuLyThanhToanBinhThuong(request);
+        // Tiếp tục xử lý nếu số lượng hợp lệ
+        if (this.idThanhToan == 2) {
+          // Gọi API VNPay để lấy link thanh toán
+          this.gioHangService.vnPay(this.tinhTongTienSauVoucher() + this.phiVanChuyen).subscribe({
+            next: (response: any) => {
+              const paymentUrl = response.paymentUrl;
+              if (paymentUrl) {
+                // Chuyển hướng người dùng tới VNPay
+                window.location.href = paymentUrl;
+              } else {
+                this.showErrorMessage('Không lấy được URL thanh toán VNPay!');
+              }
+            },
+            error: (error) => {
+              console.error(error);
+              this.showErrorMessage('Call API thanh toán VNPay thất bại');
+            },
+          });
+        } else {
+          // Nếu không thanh toán qua VNPay, xử lý thanh toán bình thường
+          this.xuLyThanhToanBinhThuong(request);
+        }
+      },
+      error: (error) => {
+        console.error(error);
+        this.showErrorMessage('Lỗi khi lấy danh sách số lượng sản phẩm.');
+      },
+    });
   }
+
 
 
   xuLyThanhToanBinhThuong(request: any): void {
@@ -408,14 +435,15 @@ export class GioHangComponent implements OnInit {
 
         // Cập nhật lại localStorage với giỏ hàng mới
         localStorage.setItem('cart', JSON.stringify(updatedCart));
-        this.getAllGioHang();
-        this.getKhachHangLocal();
+        // this.getAllGioHang();
+        // this.getKhachHangLocal();
         this.resetForm();
         this.removeAdressLocal();
+        this.router.navigate(['/trang-chu']);
       },
       error: (err) => {
-        console.error(err);
-        this.showErrorMessage('Xử lý thất bại! Vui lòng thử lại.');
+        console.log('lỗi:', err);
+        this.handleError(err);
       },
     });
   }
@@ -442,7 +470,7 @@ export class GioHangComponent implements OnInit {
     const item = cart.find((c: any) => c.idChiTietSanPham === id);
 
     // Log giỏ hàng từ localStorage
-    console.log('Giỏ hàng trong localStorage:', JSON.stringify(cart, null, 2));
+    // console.log('Giỏ hàng trong localStorage:', JSON.stringify(cart, null, 2));
 
     if (item) {
       console.log('Sản phẩm tìm thấy trong localStorage:', item);
@@ -450,13 +478,13 @@ export class GioHangComponent implements OnInit {
     }
 
     // Log chi tiết giỏ hàng từ API (this.chiTietGioHang)
-    console.log('Chi tiết giỏ hàng:', this.chiTietGioHang);
+    // console.log('Chi tiết giỏ hàng:', this.chiTietGioHang);
 
     // Tìm item trong this.chiTietGioHang (dữ liệu từ API)
     const chiTietItem = this.chiTietGioHang.find((c: any) => c.id === id);
 
     // Kiểm tra lại item tìm được
-    console.log('Sản phẩm tìm thấy trong this.chiTietGioHang:', chiTietItem);
+    // console.log('Sản phẩm tìm thấy trong this.chiTietGioHang:', chiTietItem);
 
     return chiTietItem ? chiTietItem.soLuong : 0;
   }
@@ -474,8 +502,29 @@ export class GioHangComponent implements OnInit {
       const existingProductIndex = cart.findIndex((item: any) => item.idChiTietSanPham === id);
 
       if (existingProductIndex !== -1) {
-        // Nếu sản phẩm đã có trong giỏ hàng, cộng dồn số lượng
-        cart[existingProductIndex].soLuong += 1; // Cộng thêm 1 số lượng sản phẩm
+        // Nếu sản phẩm đã có trong giỏ hàng, lấy số lượng tồn kho để kiểm tra
+        this.gioHangService.getSoLuong(id).subscribe(
+          response => {
+            const soLuongTonKho = response.result.content.soLuong; // Lấy số lượng tồn kho từ API
+            const tongSoLuong = cart[existingProductIndex].soLuong + 1; // Tính tổng số lượng nếu cộng thêm 1 sản phẩm
+
+            if (tongSoLuong > soLuongTonKho) {
+              // Thông báo lỗi nếu tổng số lượng vượt quá tồn kho
+              this.showErrorMessage('Bạn đã thêm sản phẩm với số lượng tối đa');
+            } else {
+              // Cộng thêm 1 sản phẩm vào giỏ hàng
+              cart[existingProductIndex].soLuong += 1;
+
+              // Lưu lại giỏ hàng vào localStorage
+              localStorage.setItem('cart', JSON.stringify(cart));
+              this.getKhachHangLocal();
+            }
+          },
+          error => {
+            console.error('Lỗi khi lấy số lượng tồn kho:', error);
+            this.showErrorMessage('Không thể kiểm tra số lượng tồn kho!');
+          }
+        );
       } else {
         // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới vào giỏ
         const newProduct = {
@@ -681,10 +730,10 @@ export class GioHangComponent implements OnInit {
   }
   onChangeVoucher(event: any) {
     this.selectedVoucherId = event.target.value;
-    console.log(this.voucher);
+    // console.log(this.voucher);
 
     const selectedVoucher = this.voucher.find(voucher => voucher.id == Number(this.selectedVoucherId));
-    console.log(selectedVoucher);
+    // console.log(selectedVoucher);
 
     if (selectedVoucher) {
       let discountValue: number;
@@ -715,6 +764,7 @@ export class GioHangComponent implements OnInit {
     } else {
       // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
       this.canThanhToan = this.tongTien;
+      this.giaTriGiam = 0;
     }
   }
   loadDiaChi(): void {
@@ -731,7 +781,7 @@ export class GioHangComponent implements OnInit {
 
   onPaymentMethodChange(event: any): void {
     this.idThanhToan = event.target.value; // Lấy giá trị của option được chọn
-    console.log('idThanhToan:', this.idThanhToan); // In ra để kiểm tra
+    // console.log('idThanhToan:', this.idThanhToan); // In ra để kiểm tra
   }
   updateCanThanhToan(): void {
     this.canThanhToan = this.tongTien - this.giaTriGiam + this.phiVanChuyen;
@@ -745,6 +795,7 @@ export class GioHangComponent implements OnInit {
       (data: any) => {  // Sử dụng any cho dữ liệu trả về
         if (data && Array.isArray(data['data'])) {
           this.provinces = data['data'];  // Gán danh sách tỉnh/thành
+          this.loadDetailDiaChi();
         } else {
           console.error('Dữ liệu tỉnh/thành không đúng định dạng', data);
         }
@@ -754,7 +805,52 @@ export class GioHangComponent implements OnInit {
       }
     );
   }
+  getDiaChi(id: string): void {
+    this.gioHangService.getDiaChi(id).subscribe(
+      response => {
+        const diaChi = response.result.content[0];
+        // console.log("Địa chỉ:",diaChi);
+        this.tenNguoiNhan = diaChi.khackHang.ten;
+        this.soNha = diaChi.soNha;
+        this.duong = diaChi.duong;
+        this.selectedTinhThanhName = diaChi.tinhThanh;
+        this.selectedQuanHuyenName = diaChi.quanHuyen;
+        this.selectedPhuongXaName = diaChi.phuongXa;
+        this.emailNguoiNhan = diaChi.khackHang.email;
+        this.sdtNguoiNhan = diaChi.khackHang.sdt;
+        this.loadDetailDiaChi();
+      }
+    )
+  }
+  loadDetailDiaChi(): void {
+    // console.log(this.provinces);
+    const province = this.provinces.find(p => p.ProvinceName === this.selectedTinhThanhName);
 
+    this.selectedTinhThanh = province ? province.ProvinceID : null;
+
+    if (this.selectedTinhThanh) {
+      this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+        (data: any) => {
+          this.districts = data['data']; // Hoặc districtResponse nếu không có thuộc tính `data`
+
+          const district = this.districts.find(d => d.DistrictName === this.selectedQuanHuyenName);
+          this.selectedQuanHuyen = district ? district.DistrictID : null;
+
+          if (this.selectedQuanHuyen) {
+            this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+              (data: any) => {
+                // Đảm bảo `wardResponse` chứa danh sách phường/xã
+                this.wards = data['data']; // Hoặc wardResponse nếu không có thuộc tính `data`
+
+                const ward = this.wards.find(w => w.WardName === this.selectedPhuongXaName);
+                this.selectedPhuongXa = ward ? ward.WardCode : null;
+              }
+            );
+          }
+        }
+      );
+    }
+  }
   // Xử lý khi chọn tỉnh/thành
   onTinhThanhChange(event: any): void {
     const provinceId = Number(event.target.value);
@@ -766,7 +862,7 @@ export class GioHangComponent implements OnInit {
       this.selectedTinhThanhName = selectedProvince.ProvinceName;
     }
 
-    console.log('Selected Tỉnh Thành:', this.selectedTinhThanhName);  // Kiểm tra tên tỉnh thành
+    // console.log('Selected Tỉnh Thành:', this.selectedTinhThanhName);  // Kiểm tra tên tỉnh thành
 
     this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
       (data: any) => {
@@ -798,7 +894,7 @@ export class GioHangComponent implements OnInit {
       this.selectedQuanHuyenName = selectedDistrict.DistrictName;
     }
 
-    console.log('Selected Quận Huyện:', this.selectedQuanHuyenName);  // Kiểm tra tên quận huyện đã chọn
+    // console.log('Selected Quận Huyện:', this.selectedQuanHuyenName);  // Kiểm tra tên quận huyện đã chọn
 
     this.giaoHangNhanhService.getWards(districtId).subscribe(
       (data: any) => {
@@ -828,7 +924,7 @@ export class GioHangComponent implements OnInit {
       this.selectedPhuongXaName = selectedWard.WardName;
     }
 
-    console.log('Selected Phường Xã:', this.selectedPhuongXaName);  // Kiểm tra tên phường xã đã chọn
+    // console.log('Selected Phường Xã:', this.selectedPhuongXaName);  // Kiểm tra tên phường xã đã chọn
 
     this.calculateShippingFee();  // Ví dụ tính phí vận chuyển
   }
@@ -854,11 +950,11 @@ export class GioHangComponent implements OnInit {
         cod_failed_amount: null,
         coupon: null
       };
-      console.log('Shipping Fee Data:', shippingFeeData);  // Kiểm tra dữ liệu gửi đi
+      // console.log('Shipping Fee Data:', shippingFeeData);  // Kiểm tra dữ liệu gửi đi
 
       this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
         response => {
-          console.log('Phản hồi API:', response);
+          // console.log('Phản hồi API:', response);
           this.phiVanChuyen = response.data?.total || 0;
         },
         error => {
@@ -880,23 +976,23 @@ export class GioHangComponent implements OnInit {
   //
   onAddressChange(event: any): void {
     const selectedAddressId = event.target.value;
-    console.log('Selected Address ID:', selectedAddressId);
+    // console.log('Selected Address ID:', selectedAddressId);
 
     const selectedAddress = this.diaChis.find(item => item.id === Number(selectedAddressId));
-    console.log('Selected Address:', selectedAddress);
+    // console.log('Selected Address:', selectedAddress);
 
     if (selectedAddress) {
       const provinceName = selectedAddress.tinhThanh;
-      console.log('Province Name:', provinceName); // Kiểm tra giá trị của provinceName
+      // console.log('Province Name:', provinceName); // Kiểm tra giá trị của provinceName
       const districtName = selectedAddress.quanHuyen;
       const wardName = selectedAddress.phuongXa;
 
-      console.log('District Name:', districtName);
-      console.log('Ward Name:', wardName);
+      // console.log('District Name:', districtName);
+      // console.log('Ward Name:', wardName);
 
       const province = this.giaoHangNhanhService.getProvinceIdByName(provinceName);
       province.subscribe(id => {
-        console.log('ID Tỉnh: ', id); // Kiểm tra giá trị id trả về
+        // console.log('ID Tỉnh: ', id); // Kiểm tra giá trị id trả về
         if (id) {
           console.log('Tìm thấy tỉnh thành');
         } else {
@@ -938,7 +1034,7 @@ export class GioHangComponent implements OnInit {
 
   // Hàm tra cứu ID tỉnh từ tên tỉnh
   getProvince(name: string): any {
-    console.log('Received Province name:', name);  // In giá trị name nhận vào
+    // console.log('Received Province name:', name);  // In giá trị name nhận vào
 
     if (!name || typeof name !== 'string') {
       console.log('Province name is invalid or not a string:', name);
@@ -957,7 +1053,7 @@ export class GioHangComponent implements OnInit {
 
   // Hàm tra cứu ID quận từ tên quận
   getDistrict(province: any, districtName: string): any {
-    console.log('Received District name:', districtName);  // In giá trị districtName nhận vào
+    // console.log('Received District name:', districtName);  // In giá trị districtName nhận vào
 
     if (!districtName || typeof districtName !== 'string') {
       console.log('District name is invalid or not a string:', districtName);
@@ -975,7 +1071,7 @@ export class GioHangComponent implements OnInit {
 
   // Hàm tra cứu ID phường từ tên phường
   getWard(district: any, wardName: string): any {
-    console.log('Received Ward name:', wardName);  // In giá trị wardName nhận vào
+    // console.log('Received Ward name:', wardName);  // In giá trị wardName nhận vào
 
     if (!wardName || typeof wardName !== 'string') {
       console.log('Ward name is invalid or not a string:', wardName);

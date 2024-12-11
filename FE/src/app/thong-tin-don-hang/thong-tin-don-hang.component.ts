@@ -42,7 +42,7 @@ export class ThongTinDonHangComponent implements OnInit {
   phuongXa: string = '';
   quanHuyen: string = '';
   tinhThanh: string = '';
-  giaTriGiam:number=0;
+  giaTriGiam: number = 0;
   constructor(
     private banHangService: BanHangService,
     private authServie: AuthService,
@@ -88,6 +88,21 @@ export class ThongTinDonHangComponent implements OnInit {
     this.detailChiTietHoaDon(this.id);
     this.getIdThongTinDonHang(this.id);
   }
+  addNote() {
+    const note = window.prompt('Nhập ghi chú:', '');  // 'Nhập ghi chú:' là thông điệp hiển thị trong prompt, còn '' là giá trị mặc định.
+
+    if (note !== null) {
+      // Người dùng đã nhập ghi chú
+      console.log('Ghi chú:', note);
+      // Gọi API hoặc thực hiện hành động khác với ghi chú
+      this.banHangService.addNote(this.id, note).subscribe(response => {
+        this.showSuccessMessage('Thêm ghi chú thành công!');
+      });
+    } else {
+      // Người dùng đã hủy bỏ
+      console.log('Người dùng đã hủy bỏ việc nhập ghi chú');
+    }
+  }
   //================= chi tiết thông tin đơn hàng==================
   getIdThongTinDonHang(id: number): void {
     this.banHangService.getDetailHoaDonCho(id).subscribe(
@@ -115,30 +130,33 @@ export class ThongTinDonHangComponent implements OnInit {
       }
     )
   }
-  showdiaChi(){
-    const [soNha,duong,phuongXa,quanHuyen,tinhThanh] = this.diaChiNhanHang.split(",").map(part=>part.trim());
-        this.soNha = soNha;
-        this.duong = duong;
-        const privince = this.provinces.find(p=>p.ProvinceName===tinhThanh);
-        this.selectedTinhThanh = privince ? privince.ProvinceID : null;
-        if(this.selectedTinhThanh){
-            this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
-                data => {
-                    this.districts = data['data'];
-                    const district = this.districts.find(d=> d.DistrictName===quanHuyen);
-                    this.selectedQuanHuyen = district ? district.DistrictID : null;
-                    if(this.selectedQuanHuyen){
-                        this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
-                            data=>{
-                                this.wards = data['data'];
-                                const ward = this.wards.find(w=>w.WardName===phuongXa);
-                                this.selectedPhuongXa = ward ? ward.WardCode : null;
-                            }
-                        );
-                    }
-                }
+  showdiaChi() {
+    const [soNha, duong, phuongXa, quanHuyen, tinhThanh] = this.diaChiNhanHang.split(",").map(part => part.trim());
+    this.soNha = soNha;
+    this.duong = duong;
+    this.tinhThanh = tinhThanh;
+    this.quanHuyen = quanHuyen;
+    this.phuongXa = phuongXa;
+    const privince = this.provinces.find(p => p.ProvinceName === tinhThanh);
+    this.selectedTinhThanh = privince ? privince.ProvinceID : null;
+    if (this.selectedTinhThanh) {
+      this.giaoHangNhanhService.getDistricts(Number(this.selectedTinhThanh)).subscribe(
+        data => {
+          this.districts = data['data'];
+          const district = this.districts.find(d => d.DistrictName === quanHuyen);
+          this.selectedQuanHuyen = district ? district.DistrictID : null;
+          if (this.selectedQuanHuyen) {
+            this.giaoHangNhanhService.getWards(Number(this.selectedQuanHuyen)).subscribe(
+              data => {
+                this.wards = data['data'];
+                const ward = this.wards.find(w => w.WardName === phuongXa);
+                this.selectedPhuongXa = ward ? ward.WardCode : null;
+              }
             );
+          }
         }
+      );
+    }
   }
   updateTrangThaiHoaDon(id: number): void {
     if (this.diaChiNhanHang == null && this.trangThaiHoaDon == 'đã xác nhận' && this.idGiaoHang === 1) {
@@ -146,7 +164,7 @@ export class ThongTinDonHangComponent implements OnInit {
     } else {
       this.banHangService.updateTrangThaiHoaDon(id).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật thành công!');
+          this.showSuccessMessage('Cập nhật thành công!');
           this.getIdThongTinDonHang(this.hoaDonChoId);
         }
       )
@@ -196,11 +214,11 @@ export class ThongTinDonHangComponent implements OnInit {
     if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
       this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
         response => {
-          this.showSuccessMessage('xóa thành công!');
+          this.showSuccessMessage('Xóa thành công!');
           this.getIdThongTinDonHang(this.hoaDonChoId);
         },
         error => {
-          this.showErrorMessage('xóa sản phẩm thất bại!');
+          this.showErrorMessage('Xóa sản phẩm thất bại!');
           console.log('lỗi xóa hóa đơn chi tiết', error);
         }
       )
@@ -225,11 +243,11 @@ export class ThongTinDonHangComponent implements OnInit {
   }
 
   removeHoaDon(idHoaDon: number): void {
-    if (confirm('bạn có chắc chắn muốn hủy hóa đơn này không?')) {
+    if (confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
       this.banHangService.removeHoaDon(idHoaDon).subscribe(
         response => {
           this.showSuccessMessage('Hủy hóa đơn thành công');
-          this.detailChiTietHoaDon(this.id);
+          this.getIdThongTinDonHang(this.id);
         },
         this.handleError
       );
@@ -257,6 +275,7 @@ export class ThongTinDonHangComponent implements OnInit {
   }
   //=======cập nhật địa chỉ giao hàng=============
   submitAddress() {
+    console.log('thông tin',this.phuongXa , this.quanHuyen , this.tinhThanh);
     if (this.hoTenNguoiNhan && this.soDienThoai && this.soNha && this.duong && this.phuongXa && this.quanHuyen && this.tinhThanh) {
       this.diaChiNhanHang = `${this.soNha}, ${this.duong}, ${this.phuongXa}, ${this.quanHuyen}, ${this.tinhThanh}`;
 
@@ -272,7 +291,7 @@ export class ThongTinDonHangComponent implements OnInit {
       // Gọi API để cập nhật địa chỉ nhận hàng
       this.banHangService.updateDiaChiNhanHang(this.id, hoaDon).subscribe(
         response => {
-          this.showSuccessMessage('cập nhật địa chỉ thành công');
+          this.showSuccessMessage('Cập nhật địa chỉ thành công');
           this.editDiaChi = false;
           this.getIdThongTinDonHang(this.id);
         },
@@ -302,7 +321,6 @@ export class ThongTinDonHangComponent implements OnInit {
     const provinceId = event.target.value;
     this.selectedTinhThanh = provinceId;  // Lưu ID tỉnh/thành
     this.tinhThanh = this.provinces.find(p => p.ProvinceID === Number(provinceId))?.ProvinceName || '';  // Gán tên tỉnh/thành
-
     this.giaoHangNhanhService.getDistricts(provinceId).subscribe(
       data => {
         this.districts = data['data'];  // Gán dữ liệu vào 'districts'

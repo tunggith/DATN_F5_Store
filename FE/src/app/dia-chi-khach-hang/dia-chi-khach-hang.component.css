@@ -1,257 +1,294 @@
 .popup {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9;
-    /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+  /* Đảm bảo popup hiển thị trên tất cả các phần tử khác */
 }
 .content{
-    background-color: #ffff;
-    width: 70%;
-    justify-content: center;
-    padding: 20px;
-    overflow-x: auto;
-    border-radius: 10px;
+  background-color: #ffff;
+  width: 70%;
+  justify-content: center;
+  padding: 20px;
+  overflow-x: auto;
+  border-radius: 10px;
 }
 .close {
-    cursor: pointer;
-    position: absolute;
-    top: 23px;
-    right:245px;
-    font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 23px;
+  right:245px;
+  font-size: 24px;
 }
 .pagination button{
-    background-color: #fff;
-    border: 0px;
-    justify-content: center;
+  background-color: #fff;
+  border: 0px;
+  justify-content: center;
 
 }
 /* Custom radio buttons */
 .form-check-radio {
-    /* appearance: none; */
-    border: 1px solid #d9534f;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  /* appearance: none; */
+  border: 1px solid #d9534f;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .form-check-radio:checked {
-    background-color: #d9534f;
-    border-color: #d9534f;
+  background-color: #d9534f;
+  border-color: #d9534f;
 }
 
 /* Tạo khoảng cách giữa các nút */
 button {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .alert {
-    border-radius: 8px;
+  border-radius: 8px;
 }
 .table-responsive{
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .material-icons {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 /* CSS chung cho tất cả các nút */
 .btn-submit {
-    background-color: #003366;
-    /* Màu nền chính */
-    color: white;
-    /* Màu chữ */
-    padding: 10px 20px;
-    /* Đệm cho nút */
-    border: none;
-    /* Bỏ đường viền */
-    border-radius: 5px;
-    /* Bo tròn góc */
-    cursor: pointer;
-    /* Hiển thị dấu trỏ tay khi hover */
-    font-size: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
-    /* Hiệu ứng chuyển màu khi hover */
+  background-color: #003366;
+  /* Màu nền chính */
+  color: white;
+  /* Màu chữ */
+  padding: 10px 20px;
+  /* Đệm cho nút */
+  border: none;
+  /* Bỏ đường viền */
+  border-radius: 5px;
+  /* Bo tròn góc */
+  cursor: pointer;
+  /* Hiển thị dấu trỏ tay khi hover */
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  /* Hiệu ứng chuyển màu khi hover */
 }
 
 /* Hiệu ứng khi hover lên nút */
 .btn-submit:hover {
-    background-color: #b9a817;
-    /* Màu nền khi hover */
+  background-color: #b9a817;
+  /* Màu nền khi hover */
 }
 
 /* Icon trong nút */
 .btn-submit i {
-    margin-right: 5px;
-    /* Khoảng cách giữa icon và text */
-    font-size: 18px;
+  margin-right: 5px;
+  /* Khoảng cách giữa icon và text */
+  font-size: 18px;
 }
 
 /* Hiệu ứng riêng cho nút "Cập Nhật Địa Chỉ Khách Hàng" khi bị disabled */
 button[disabled] {
-    background-color: #b9a817;
-    /* Màu nền cho nút bị disable */
-    cursor: not-allowed;
-    /* Đổi con trỏ chuột khi bị disable */
+  background-color: #b9a817;
+  /* Màu nền cho nút bị disable */
+  cursor: not-allowed;
+  /* Đổi con trỏ chuột khi bị disable */
 }
 /* Tùy chọn cho phần refresh icon */
 .btn-submit i:hover {
-    color: #f1f1f1;
-    /* Màu icon khi hover */
+  color: #f1f1f1;
+  /* Màu icon khi hover */
 }
 /* Định dạng cho select */
 .custom-select {
-    /* display: block; */
+  /* display: block; */
+  width: 100%;
+  /* Đặt chiều rộng cho select */
+  padding: 10px;
+  /* Khoảng đệm bên trong */
+  font-size: 16px;
+  /* Kích thước chữ */
+  line-height: 1.5;
+  /* Khoảng cách giữa các dòng */
+  color: #495057;
+  /* Màu chữ */
+  background-color: #fff;
+  /* Màu nền trắng */
+  background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23495057' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  border: 1px solid #ced4da;
+  /* Đặt viền cho select */
+  border-radius: 4px;
+  /* Bo tròn góc */
+  transition: border-color 0.2s, box-shadow 0.2s;
+  /* Hiệu ứng khi focus */
+  appearance: none;
+  /* Ẩn mũi tên mặc định của select */
+}
+
+/* Định dạng cho select khi được focus */
+.custom-select:focus {
+  border-color: #00197b;
+  /* Thay đổi màu viền khi focus */
+  box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
+  /* Bóng khi focus */
+  outline: none;
+  /* Xóa outline mặc định */
+}
+
+/* Định dạng cho select khi hover */
+.custom-select:hover {
+  border-color: #00197b;
+  /* Thay đổi màu viền khi hover */
+}
+
+/* Định dạng cho select khi disabled */
+.custom-select:disabled {
+  background-color: #e9ecef;
+  /* Màu nền cho select khi bị khóa */
+}
+
+/* Định dạng thẻ select */
+.form-select {
+  appearance: none;
+  /* Bỏ mặc định style */
+  -webkit-appearance: none;
+  /* Bỏ mặc định style trên Safari */
+  -moz-appearance: none;
+  /* Bỏ mặc định style trên Firefox */
+  background-color: #ffffff;
+  /* Màu nền trắng */
+  border: 1px solid #ced4da;
+  /* Đường viền xám nhạt */
+  border-radius: 5px;
+  /* Bo góc cho thẻ */
+  padding: 10px;
+  /* Khoảng cách bên trong */
+  font-size: 16px;
+  /* Kích thước chữ */
+  transition: border-color 0.3s, box-shadow 0.3s;
+  /* Hiệu ứng chuyển đổi */
+  width: 100%;
+  /* Đặt chiều rộng là 100% của container */
+  max-width: 400px;
+  /* Đặt chiều rộng tối đa, có thể thay đổi theo nhu cầu */
+  height: 42px;
+}
+
+/* Hiệu ứng khi hover và focus */
+.form-select:hover,
+.form-select:focus {
+  border-color: #00197b;
+  /* Đổi màu viền khi hover hoặc focus */
+  box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
+  /* Hiệu ứng shadow */
+  outline: none;
+  /* Bỏ outline mặc định */
+}
+
+/* Định dạng cho placeholder */
+.form-select option {
+  color: #999;
+  /* Màu cho placeholder */
+}
+
+/* Định dạng cho các lựa chọn */
+.form-select option:not(:first-child) {
+  color: #333;
+  /* Màu cho các lựa chọn */
+}
+
+/* Tùy chọn cho select có icon */
+.select-wrapper {
+  position: relative;
+  /* Để chứa icon */
+}
+
+.select-wrapper::after {
+  content: '\25BC';
+  /* Mũi tên xuống */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  /* Không cho phép click vào icon */
+  color: #ced4da;
+  /* Màu của mũi tên */
+}
+  /* Định dạng cho nhãn */
+  .form-label {
+      font-weight: bold;
+      /* Chữ đậm */
+      margin-bottom: 5px;
+      /* Khoảng cách dưới nhãn */
+      color: #333;
+      /* Màu chữ */
+    }
+    .btn.dark-blue {
+      background-color: #002244; /* Màu xanh thẫm */
+      color: white; /* Màu chữ trắng */
+      border: none; /* Không có viền */
+      padding: 10px 15px; /* Thêm padding để nút trông đẹp hơn */
+      border-radius: 5px; /* Bo góc cho nút */
+      cursor: pointer; /* Đổi con trỏ khi hover */
+  }
+  
+  .btn.dark-blue:hover {
+      background-color: #001A30; /* Màu xanh thẫm hơn khi hover */
+  }
+  .table {
     width: 100%;
-    /* Đặt chiều rộng cho select */
-    padding: 10px;
-    /* Khoảng đệm bên trong */
-    font-size: 16px;
-    /* Kích thước chữ */
-    line-height: 1.5;
-    /* Khoảng cách giữa các dòng */
-    color: #495057;
-    /* Màu chữ */
-    background-color: #fff;
-    /* Màu nền trắng */
-    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23495057' viewBox='0 0 24 24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-    border: 1px solid #ced4da;
-    /* Đặt viền cho select */
-    border-radius: 4px;
-    /* Bo tròn góc */
-    transition: border-color 0.2s, box-shadow 0.2s;
-    /* Hiệu ứng khi focus */
-    appearance: none;
-    /* Ẩn mũi tên mặc định của select */
-  }
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #3a3297;
+    border-radius: 12px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure all data is visible */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  /* Định dạng cho select khi được focus */
-  .custom-select:focus {
-    border-color: #00197b;
-    /* Thay đổi màu viền khi focus */
-    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.25);
-    /* Bóng khi focus */
-    outline: none;
-    /* Xóa outline mặc định */
-  }
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
 
-  /* Định dạng cho select khi hover */
-  .custom-select:hover {
-    border-color: #00197b;
-    /* Thay đổi màu viền khi hover */
-  }
-
-  /* Định dạng cho select khi disabled */
-  .custom-select:disabled {
-    background-color: #e9ecef;
-    /* Màu nền cho select khi bị khóa */
-  }
-
-  /* Định dạng thẻ select */
-  .form-select {
-    appearance: none;
-    /* Bỏ mặc định style */
-    -webkit-appearance: none;
-    /* Bỏ mặc định style trên Safari */
-    -moz-appearance: none;
-    /* Bỏ mặc định style trên Firefox */
-    background-color: #ffffff;
-    /* Màu nền trắng */
-    border: 1px solid #ced4da;
-    /* Đường viền xám nhạt */
-    border-radius: 5px;
-    /* Bo góc cho thẻ */
-    padding: 10px;
-    /* Khoảng cách bên trong */
-    font-size: 16px;
-    /* Kích thước chữ */
-    transition: border-color 0.3s, box-shadow 0.3s;
-    /* Hiệu ứng chuyển đổi */
-    width: 100%;
-    /* Đặt chiều rộng là 100% của container */
-    max-width: 400px;
-    /* Đặt chiều rộng tối đa, có thể thay đổi theo nhu cầu */
-    height: 42px;
-  }
-
-  /* Hiệu ứng khi hover và focus */
-  .form-select:hover,
-  .form-select:focus {
-    border-color: #00197b;
-    /* Đổi màu viền khi hover hoặc focus */
-    box-shadow: 0 0 5px rgba(6, 3, 184, 0.5);
-    /* Hiệu ứng shadow */
-    outline: none;
-    /* Bỏ outline mặc định */
-  }
-
-  /* Định dạng cho placeholder */
-  .form-select option {
-    color: #999;
-    /* Màu cho placeholder */
-  }
-
-  /* Định dạng cho các lựa chọn */
-  .form-select option:not(:first-child) {
+.table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
     color: #333;
-    /* Màu cho các lựa chọn */
-  }
+}
 
-  /* Tùy chọn cho select có icon */
-  .select-wrapper {
-    position: relative;
-    /* Để chứa icon */
-  }
+.table tr:nth-child(even) {
+    background-color: #fafafa;
+}
 
-  .select-wrapper::after {
-    content: '\25BC';
-    /* Mũi tên xuống */
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    /* Không cho phép click vào icon */
-    color: #ced4da;
-    /* Màu của mũi tên */
-  }
-    /* Định dạng cho nhãn */
-    .form-label {
-        font-weight: bold;
-        /* Chữ đậm */
-        margin-bottom: 5px;
-        /* Khoảng cách dưới nhãn */
-        color: #333;
-        /* Màu chữ */
-      }
-      .btn.dark-blue {
-        background-color: #002244; /* Màu xanh thẫm */
-        color: white; /* Màu chữ trắng */
-        border: none; /* Không có viền */
-        padding: 10px 15px; /* Thêm padding để nút trông đẹp hơn */
-        border-radius: 5px; /* Bo góc cho nút */
-        cursor: pointer; /* Đổi con trỏ khi hover */
-    }
-    
-    .btn.dark-blue:hover {
-        background-color: #001A30; /* Màu xanh thẫm hơn khi hover */
-    }
-    
+.table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-responsive {
+    overflow-y: visible; /* Ensure all data is visible */
+    border-radius: 12px; /* Rounded corners for the responsive container */
+    padding: 10px;
+    margin-bottom: 20px;
+}

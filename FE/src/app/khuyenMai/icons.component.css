@@ -14,7 +14,7 @@ body {
 
 /* Container styles */
 .container {
-  background-color: #ffffff; 
+  background-color: #ffffff;
   max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
@@ -76,11 +76,14 @@ select:focus {
 
 
 .btn-primary {
-  background-color: #003366; /* Màu nền mặc định của btn-primary */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  /* Màu nền mặc định của btn-primary */
 }
 
 .btn-primary:hover {
-  background-color: #003366; /* Màu nền tối hơn khi hover */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  /* Màu nền tối hơn khi hover */
 }
 
 
@@ -107,110 +110,150 @@ select:focus {
 }
 
 .page-link:hover {
-  background-color: #003366;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   color: #0056b3;
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
   .col-md-6 {
-      flex: 0 0 100%;
-      max-width: 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
 }
 
 .btn-icon {
-  width: 50px; /* Chiều rộng của nút */
-  height: 50px; /* Chiều cao của nút */
+  width: 50px;
+  /* Chiều rộng của nút */
+  height: 40px;
+  /* Chiều cao của nút */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0; /* Loại bỏ padding */
-  border-radius: 4px; /* Đường viền nút */
-  background-color:#003366; /* Màu nền nút */
-  color: white; /* Màu chữ nút */
-  border: none; /* Bỏ viền */
-  cursor: pointer; /* Con trỏ khi hover */
+  padding: 0;
+  /* Loại bỏ padding */
+  border-radius: 4px;
+  /* Đường viền nút */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  color: white;
+  /* Màu chữ nút */
+  border: none;
+  /* Bỏ viền */
+  cursor: pointer;
+  /* Con trỏ khi hover */
 }
 
 .btn-icon i {
-  font-size: 35px; /* Kích thước biểu tượng */
+  font-size: 20px;
+  /* Kích thước biểu tượng */
   margin: 0;
 }
 
 
 /* Hiệu ứng hover */
 .btn-icon:hover {
-  opacity: 0.9; /* Giảm độ mờ khi di chuột qua */
+  opacity: 0.9;
+  /* Giảm độ mờ khi di chuột qua */
 }
 
 .pagination-container {
   display: flex;
-  justify-content: center; /* Center the container */
-  margin-top: 1rem; /* Space above the container */
+  justify-content: center;
+  /* Center the container */
+  margin-top: 1rem;
+  /* Space above the container */
 }
 
 .paginationr {
-  display: flex; /* Align buttons in a row */
-  align-items: center; /* Center items vertically */
+  display: flex;
+  /* Align buttons in a row */
+  align-items: center;
+  /* Center items vertically */
 }
-.paginationr button{
+
+.paginationr button {
   border: 0px;
   background-color: #fff;
 }
+
 .pagination button {
-  border: none; /* Remove border */
-  background-color: #ffffff; /* Background color */
-  padding: 10px 15px; /* More horizontal padding for larger click area */
-  border-radius: 5px; /* Round corners */
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transitions */
-  cursor: pointer; /* Pointer cursor on hover */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  border: none;
+  /* Remove border */
+  background-color: #ffffff;
+  /* Background color */
+  padding: 10px 15px;
+  /* More horizontal padding for larger click area */
+  border-radius: 5px;
+  /* Round corners */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  /* Smooth transitions */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Subtle shadow effect */
 }
 
 .pagination button:hover {
-  background-color: #f0f0f0; /* Light grey on hover */
-  transform: scale(1.1); /* Slightly increase size on hover */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+  background-color: #f0f0f0;
+  /* Light grey on hover */
+  transform: scale(1.1);
+  /* Slightly increase size on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Enhanced shadow on hover */
 }
 
 .pagination button i {
-  font-size: 24px; /* Icon size */
-  color: #333; /* Icon color */
-  transition: color 0.3s, transform 0.3s; /* Smooth color transition */
+  font-size: 24px;
+  /* Icon size */
+  color: #333;
+  /* Icon color */
+  transition: color 0.3s, transform 0.3s;
+  /* Smooth color transition */
 }
 
 .pagination button:hover i {
-  color: #007bff; /* Change icon color on hover */
-  transform: translateY(-2px); /* Slightly move up on hover for effect */
+  color: #007bff;
+  /* Change icon color on hover */
+  transform: translateY(-2px);
+  /* Slightly move up on hover for effect */
 }
 
 .current-page {
-  margin: 0 15px; /* Spacing around the current page text */
-  font-size: 16px; /* Font size for the current page indicator */
-  color: #555; /* Text color */
+  margin: 0 15px;
+  /* Spacing around the current page text */
+  font-size: 16px;
+  /* Font size for the current page indicator */
+  color: #555;
+  /* Text color */
 }
 
 .pagination button:disabled {
-  background-color: #c0c0c0; /* Background color for disabled button */
-  cursor: not-allowed; /* Not-allowed cursor for disabled button */
-  box-shadow: none; /* Remove shadow for disabled state */
+  background-color: #c0c0c0;
+  /* Background color for disabled button */
+  cursor: not-allowed;
+  /* Not-allowed cursor for disabled button */
+  box-shadow: none;
+  /* Remove shadow for disabled state */
 }
 
 .pagination button:disabled i {
-  color: #666; /* Change icon color for disabled state */
+  color: #666;
+  /* Change icon color for disabled state */
 }
 
 
 .table-responsive2 {
-  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
-  
- 
+
+
 }
 
 .table-responsive2 {
@@ -219,40 +262,53 @@ select:focus {
   border-radius: 8px;
   padding: 10px;
 }
+
 .table-responsive2 {
   margin-bottom: 20px;
 }
 
 
-th,td{
+th,
+td {
   white-space: nowrap;
 }
-.table thead{
-  background-color: #003366;
-    color: #ffff;
-    font-weight: bold;
+
+.table thead {
+  color: #ffff;
+  font-weight: bold;
 }
 
 table-striped tbody tr:nth-of-type(odd) {
-  background-color: #003366; /* Light background for better contrast */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  /* Light background for better contrast */
 }
 
-.card-body{
-  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+.card-body {
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
   table-layout: auto;
 }
+
 .button-container {
-  display: flex; /* Sử dụng Flexbox để sắp xếp các nút trên cùng một hàng */
-  flex-wrap: nowrap; /* Ngăn không cho các nút xuống dòng */
-  gap: 10px; /* Khoảng cách giữa các nút */
+  display: flex;
+  /* Sử dụng Flexbox để sắp xếp các nút trên cùng một hàng */
+  flex-wrap: nowrap;
+  /* Ngăn không cho các nút xuống dòng */
+  gap: 10px;
+  /* Khoảng cách giữa các nút */
 }
+
 .btn-icon:hover {
-  background-color: #003366; /* Màu nền khi hover */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  /* Màu nền khi hover */
 }
+
 
 
 .modal-overlay {
@@ -261,7 +317,8 @@ table-striped tbody tr:nth-of-type(odd) {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+  background: rgba(0, 0, 0, 0.6);
+  /* Nền tối mờ */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -273,8 +330,8 @@ table-striped tbody tr:nth-of-type(odd) {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 500px;
-  width: 100%;
+  width: 120%;
+  height: 70%;
 }
 
 /* Đảm bảo nút nằm ở giữa */
@@ -285,33 +342,41 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 
 .btn {
-  margin: 0 5px;                /* Thêm khoảng cách giữa các nút */
-  padding: 10px 15px;           /* Thêm khoảng cách bên trong cho nút */
-  border: none;                 /* Bỏ đường viền */
-  border-radius: 5px;          /* Bo góc cho nút */
-  background-color: #003366;   /* Màu nền của nút */
-  color: white;                 /* Màu chữ của nút */
-  cursor: pointer;              /* Thay đổi con trỏ khi di chuột vào nút */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi di chuột */
+  margin: 0 5px;
+  /* Thêm khoảng cách giữa các nút */
+  padding: 10px 15px;
+  /* Thêm khoảng cách bên trong cho nút */
+  border: none;
+  /* Bỏ đường viền */
+  border-radius: 5px;
+  /* Bo góc cho nút */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  /* Màu nền của nút */
+  color: white;
+  /* Màu chữ của nút */
+  cursor: pointer;
+  /* Thay đổi con trỏ khi di chuột vào nút */
+  transition: background-color 0.3s;
+  /* Hiệu ứng chuyển màu khi di chuột */
 }
 
 /* Nút "Thêm" - màu xanh lá */
 .btn-add {
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 }
 
 .btn-add:hover {
-  background-color: #004166;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Nút "Xóa" - màu đỏ */
 .btn-remove {
-  background-color: #003366;
+  background: #fff
 }
 
-.btn-remove:hover {
-  background-color: #004166;
-}
+/* .btn-remove:hover {
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+} */
 
 
 
@@ -333,9 +398,9 @@ table-striped tbody tr:nth-of-type(odd) {
 
 /* CSS khi hover vào link */
 .page-link:hover {
-  background-color: #ffcc00;
+  background-color: #888;
   color: #003366;
-  border-color: #ffcc00;
+  border:none;
 }
 
 /* CSS cho trạng thái "disabled" */
@@ -349,7 +414,7 @@ table-striped tbody tr:nth-of-type(odd) {
 /* CSS cho trang hiện tại */
 .page-item.disabled .page-link span {
   color: #ffffff;
-  background-color: #003366;
+  /* background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); */
   border-color: #003366;
   cursor: default;
   border-radius: 8px;
@@ -358,13 +423,13 @@ table-striped tbody tr:nth-of-type(odd) {
 
 /* CSS cho trạng thái khi active */
 .page-item.active .page-link {
-  background-color: #003366;
+  /* background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); */
   color: #ffffff;
   border-color: #003366;
   cursor: default;
 }
 
-.fa fa-eye{
+.fa fa-eye {
   text-align: center;
 }
 
@@ -374,42 +439,46 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 
 .d-flex.justify-content-between .btn {
-  margin-left: 0.5rem; /* Thêm khoảng cách giữa các nút */
+  margin-left: 0.5rem;
+  /* Thêm khoảng cách giữa các nút */
 }
 
 /* Căn chỉnh bảng và khoảng cách để phù hợp */
 .table-responsive2 {
   margin-top: 1rem;
 }
+
 .table-title {
   text-align: left;
   font-size: 1.25rem;
   font-weight: bold;
   padding: 1rem;
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 
 }
+
 .close-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-
+  top: 1px;
+  right: 11px;
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #888;
+  background-color: #fff;
   transition: color 0.2s ease;
+  z-index: 10;
 }
 
 .table thead th {
   font-size: 0.95rem;
   font-weight: 500;
-  color: white;
+  color: rgb(0, 0, 0);
   border-bottom-width: 1px;
 }
 
-.buttonv1{
-text-align: center;
+.buttonv1 {
+  text-align: center;
+  cursor: pointer;
 }
 
 
@@ -421,16 +490,22 @@ text-align: center;
 
 /* Nền modal */
 .modal-content {
-  background-color: #fff; /* Màu nền trắng */
-  border-radius: 8px; /* Bo tròn các góc */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
+  background-color: #fff;
+  /* Màu nền trắng */
+  border-radius: 8px;
+  /* Bo tròn các góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Tạo hiệu ứng bóng cho modal */
   padding: 20px;
+  width: 50%;
+  height: 85%;
 }
 
 /* Tiêu đề modal */
 .modal-header h4 {
   font-weight: bold;
-  color: #333; /* Màu tiêu đề */
+  color: #333;
+  /* Màu tiêu đề */
 }
 
 /* Nhấn mạnh các nhãn */
@@ -443,9 +518,11 @@ text-align: center;
 /* Cải thiện các input fields */
 .modal-content input,
 .modal-content select {
-  border: 1px solid #ddd; /* Đường viền nhẹ */
+  border: 1px solid #ddd;
+  /* Đường viền nhẹ */
   padding: 8px;
-  border-radius: 4px; /* Bo tròn các góc của input */
+  border-radius: 4px;
+  /* Bo tròn các góc của input */
   width: 100%;
   box-sizing: border-box;
 }
@@ -455,13 +532,13 @@ text-align: center;
   color: red;
   margin-top: 0.5rem;
   font-size: 0.875rem;
- 
+
 }
 
 /* Cải thiện nút submit */
 .modal-content button[type="submit"] {
-  background-color: #003366; /* Màu xanh cho nút submit */
-  color: white;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  color: #ddd;
   border: none;
   padding: 12px;
   font-size: 1rem;
@@ -471,13 +548,12 @@ text-align: center;
 }
 
 .modal-content button[type="submit"]:hover {
-  background-color:  #004366; /* Màu khi hover */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 }
 
 /* Cải thiện nút hủy */
 .modal-content button[type="button"] {
-  background-color: #6c757d; /* Màu xám cho nút hủy */
-  color: white;
+  color: #888;
   border: none;
   padding: 12px;
   font-size: 1rem;
@@ -487,7 +563,8 @@ text-align: center;
 }
 
 .modal-content button[type="button"]:hover {
-  background-color: #5a6268; /* Màu khi hover */
+  color: #5a6268;
+  /* Màu khi hover */
 }
 
 /* Chỉnh sửa giao diện form khi có lỗi */
@@ -502,7 +579,7 @@ text-align: center;
   margin-bottom: 20px;
 }
 
-.hehe{
+.hehe {
   width: 400px;
 }
 
@@ -512,6 +589,7 @@ text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
+
 .modal-content {
   background-color: #fff;
   padding: 20px;
@@ -525,11 +603,13 @@ text-align: center;
   padding: 0;
   box-sizing: border-box;
 }
+
 @media (min-width: 576px) {
   .modal-content {
-      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
   }
 }
+
 .modal-content {
   position: relative;
   display: flex;
@@ -543,3 +623,42 @@ text-align: center;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.5);
   outline: 0;
 }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 12px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensure all data is visible */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.table-responsive {
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
+}
+/* End of Selection */

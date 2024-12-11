@@ -26,6 +26,9 @@ public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer>
 
     @Query("SELECT p FROM VoucherEntity p WHERE p.trangThai = ?1")
     Page<VoucherEntity> findByTrangThai(String trangThai, Pageable pageable);
+    @Query("SELECT v " +
+            "FROM VoucherEntity v " +
+            "WHERE v.trangThai = :trangThai ORDER BY v.giaTriVoucher ASC")
     List<VoucherEntity> getByTrangThai(String trangThai);
 
     @Query("SELECT p FROM VoucherEntity p WHERE p.trangThai = ?1 ORDER BY p.id DESC")

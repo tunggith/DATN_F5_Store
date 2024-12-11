@@ -246,7 +246,7 @@
 
 
 .btn-submit, .btn-update, .btn-delete {
-  background-color: #003366; /* Màu nền chính */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); /* Màu nền chính */
   color: #fff; /* Màu chữ */
   border: none;
   padding: 10px 20px;
@@ -257,10 +257,29 @@
 }
 
 .btn-submit:hover, .btn-update:hover, .btn-delete:hover {
-  background-color: #ffcc00; /* Màu nền khi hover */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%); /* Màu nền khi hover */
 }
 
 .search-container{
   border: 1px black;
   text-align: center;
+}
+
+.order-details {
+  margin-top: 20px;
+  padding: 15px;
+  /*border: 1px solid #ccc;*/
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.order-details div {
+  margin-bottom: 10px;
+}
+
+.order-details strong {
+  color: #333;
+}
+.pos_page_inner{
+  padding: 10px;
 }

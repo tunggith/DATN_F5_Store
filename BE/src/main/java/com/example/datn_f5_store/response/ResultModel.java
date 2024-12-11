@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class ResultModel<T> {
     private com.example.datn_f5_store.response.PagingModel pagination;
     private T content;
+
 }
 

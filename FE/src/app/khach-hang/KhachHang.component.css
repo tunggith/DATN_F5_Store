@@ -26,16 +26,11 @@ body {
 
 /* Định dạng cho header của card */
 .card-header {
-  background-color: #003366;
-  /* Màu nền cho header */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: white;
-  /* Màu chữ trắng */
   padding: 15px 20px;
-  /* Padding cho header */
   border-top-left-radius: 8px;
-  /* Bo tròn góc trái trên */
   border-top-right-radius: 8px;
-  /* Bo tròn góc phải trên */
 }
 
 /* Định dạng cho tiêu đề trong card */
@@ -251,10 +246,7 @@ body {
   font-size: 17px;
 }
 
-.pagination button i:hover {
-  font-size: 25px;
-}
-
+/* Removed hover effect for pagination */
 .form-check-radio {
   margin-right: 17px;
   /* Thay đổi giá trị 10px theo ý muốn để tạo khoảng cách */
@@ -285,9 +277,10 @@ body {
   /* Hiển thị con trỏ chuột dạng tay khi di chuột qua nút */
 }
 
-.btn-submit:hover {
-  background-color: #ffcc00;
-  /* Màu nền khi di chuột qua nút */
+.btn-submit:hover,
+.btn-submit:active {
+  background-color: #184e7c;
+  /* Màu nền khi di chuột qua nút hoặc nhấn nút */
 }
 
 .btn-submit i {
@@ -323,7 +316,7 @@ body {
 
 /* Hiệu ứng khi focus vào input */
 .search-input:focus {
-  border-color: #007bff;
+  border-color: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   /* Đổi màu border khi focus */
   outline: none;
   /* Xóa outline mặc định */
@@ -350,9 +343,10 @@ body {
 }
 
 /* Hiệu ứng khi hover vào nút */
-.search-button:hover {
-  background-color: #0056b3;
-  /* Màu nền khi hover */
+.search-button:hover,
+.search-button:active {
+  background-color: #184e7c;
+  /* Màu nền khi hover hoặc nhấn nút */
 }
 
 /* Responsive */
@@ -387,8 +381,8 @@ body {
 }
 
 .table thead {
-  background-color: #03009a;
-  color: #ffff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  color: #f0f0f0;
   font-weight: bold;
 }
 
@@ -484,19 +478,14 @@ input[type="file"] {
 }
 
 .btn-dark-blue {
-  background-color: #003366;
-  /* Màu xanh thẫm */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: white;
-  /* Màu chữ trắng */
   border: none;
-  /* Không có đường viền */
 }
 
 .btn-dark-blue:hover {
-  background-color: #ffcc00;
-  /* Màu nền tối hơn khi hover */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   color: white;
-  /* Màu chữ vẫn trắng khi hover */
 }
 
 .error-message {
@@ -504,4 +493,42 @@ input[type="file"] {
   /* Màu sắc cho thông báo lỗi */
   font-size: 0.9em;
   /* Kích thước chữ nhỏ hơn một chút */
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 12px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensure all data is visible */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.table-responsive {
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
 }

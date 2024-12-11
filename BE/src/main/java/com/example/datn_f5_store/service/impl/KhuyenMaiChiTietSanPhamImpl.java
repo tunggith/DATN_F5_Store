@@ -17,9 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import  com.example.datn_f5_store.response.ResultModel;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -95,12 +98,8 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
             } else if (khuyenMaiChiTietSanPham.getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
             } else {
-                if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND")) {
-                    chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() + khuyenMai.getGiaTriKhuyenMai());
-                } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                    double giaTriGiam = ((double) khuyenMai.getGiaTriKhuyenMai() / 100);
-                    chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() / (1 - giaTriGiam));
-                }
+                chiTietSanPham.setDonGia(chiTietSanPham.getDonGiaBanDau());
+                chiTietSanPham.setCheckKm(false);
                 chiTietSanPhamRepository.save(chiTietSanPham);  // Cập nhật lại giá trong DB
                 iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaiChiTietSanPham.getId());
             }
@@ -114,10 +113,14 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
 
     // hàm thêm khuyến mãi vào sản phẩm
     @Override
+    @Transactional
     public DataResponse createKhuyenMaictsp(KhuyenMaiChiTietSanPhamRequest khuyenMaiChiTietSanPhamRequest) {
+
         // Lấy ra Khuyến mãi và Sản Phầm Chi tiết theo id
         KhuyenMaiEntity khuyenMai = khuyenMaiRepository.findById(khuyenMaiChiTietSanPhamRequest.getKhuyenMai().getId()).orElseThrow(() -> new RuntimeException("Khuyến mãi không tồn tại"));
+
         ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(khuyenMaiChiTietSanPhamRequest.getChiTietSanPham().getId()).orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại"));
+
         Optional<KhuyenMaiChiTietSanPham> checkSpct = iKhuyenMaiChiTietSanPhamRepository.findFirstByChiTietSanPham(chiTietSanPham);
         KhuyenMaiChiTietSanPham khuyenMaiChiTietSanPham = new KhuyenMaiChiTietSanPham();
         try {
@@ -144,10 +147,12 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, "Sản phẩm "+ chiTietSanPham.getMa() +" đã hết, vui lòng chọn sản phẩm khác"));
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Sắp diễn ra")){
-                khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
+                khuyenMaiRepository.decrementSoLuong(khuyenMai.getId());
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Chưa áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
+                chiTietSanPham.setCheckKm(true);
+                chiTietSanPhamRepository.save(chiTietSanPham);
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
@@ -159,11 +164,13 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 } else if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                     chiTietSanPham.setDonGia(chiTietSanPham.getDonGia() - khuyenMai.getGiaTriKhuyenMai());
                 }
+                chiTietSanPham.setCheckKm(true);
                 chiTietSanPhamRepository.save(chiTietSanPham);
-                khuyenMai.setSoLuong(khuyenMai.getSoLuong() - 1);
+                khuyenMaiRepository.decrementSoLuong(khuyenMai.getId());
                 khuyenMaiRepository.save(khuyenMai);
                 khuyenMaiChiTietSanPham.setTrangThai("Đang áp dụng");
                 khuyenMaiChiTietSanPham.setKhuyenMai(khuyenMai);
+
                 khuyenMaiChiTietSanPham.setChiTietSanPham(chiTietSanPham);
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
@@ -173,9 +180,13 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
         }
     }
 
+    @Override
     @Scheduled(cron = "0 0 12 * * ?")
     public void upDateTrangThaiKhuyenMaiCtSp() {
         try {
+
+
+            List<Integer> updatedProductIds = new ArrayList<>();
             // Khai báo thời gian hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now(ZoneId.systemDefault());
 
@@ -194,41 +205,36 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                     } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
                         khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() - khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
                     }
-
                     khuyenMaictsp.setTrangThai("Đang áp dụng");
+
                     iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaictsp);
                     khuyenMaiRepository.save(khuyenMaictsp.getKhuyenMai());
-                    khuyenMaictsp.setTrangThai("Đang diễn ra");
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                 }
 
 
                 // Kiểm tra nếu có Khuyến mãi nào có Thời gian kết thúc nhỏ hơn so với thời gian hiện tại
                 if (thoiGianKetThuc != null && thoiGianKetThuc.isBefore(currentDateTime)) {
-                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
-                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
-                    }
+                    khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGiaBanDau());
+                    khuyenMaictsp.getChiTietSanPham().setCheckKm(false);
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
                 if (khuyenMaictsp.getKhuyenMai().getTrangThai().equalsIgnoreCase("Đã kết thúc")) {
-                    if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("VND")) {
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() + khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai());
-                    } else if (khuyenMaictsp.getKhuyenMai().getKieuKhuyenMai().equalsIgnoreCase("%")) {
-                        double giaTriGiam = ((double) khuyenMaictsp.getKhuyenMai().getGiaTriKhuyenMai() / 100);
-                        khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGia() / (1 - giaTriGiam));
-                    }
+                    khuyenMaictsp.getChiTietSanPham().setDonGia(khuyenMaictsp.getChiTietSanPham().getDonGiaBanDau());
+                    khuyenMaictsp.getChiTietSanPham().setCheckKm(false);
+                    updatedProductIds.add(khuyenMaictsp.getChiTietSanPham().getId());
                     chiTietSanPhamRepository.save(khuyenMaictsp.getChiTietSanPham());
                     iKhuyenMaiChiTietSanPhamRepository.deleteById(khuyenMaictsp.getId());
                 }
+
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
 

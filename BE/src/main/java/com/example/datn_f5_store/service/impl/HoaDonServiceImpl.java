@@ -12,6 +12,7 @@ import com.example.datn_f5_store.entity.LichSuHoaDonEntity;
 import com.example.datn_f5_store.entity.NhanVienEntity;
 import com.example.datn_f5_store.entity.PhuongThucThanhToanEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
+import com.example.datn_f5_store.jwt.JwtUtil;
 import com.example.datn_f5_store.repository.IChiTietHoaDonRepository;
 import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.repository.IHoaDonRepository;
@@ -65,6 +66,8 @@ public class HoaDonServiceImpl implements IHoaDonService {
     private IChiTietSanPhamRepository chiTietSanPhamRepository;
     @Autowired
     private ILichSuHoaDonRepository lichSuHoaDonRepository;
+    @Autowired
+    private JwtUtil jwtUtil;
 
 
     @Override
@@ -98,7 +101,10 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse updateDiaChiNhanHang(Integer id, HoaDonRequest request) {
+    public DataResponse updateDiaChiNhanHang(Integer id, HoaDonRequest request, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
         // Kiểm tra ID có null không, nếu null ném ra IllegalArgumentException
         if (id == null) {
             throw new IllegalArgumentException("ID không được để trống");
@@ -127,6 +133,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
         // Lưu hóa đơn đã cập nhật
         hoaDonRepository.save(hoaDon);
+        LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
+        LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
+        lichSuHoaDon.setHoaDon(hoaDon);
+        lichSuHoaDon.setNhanVien(nhanVien);
+        lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
+        lichSuHoaDon.setTrangThaiMoi("Cập nhật địa chỉ");
+        lichSuHoaDon.setThoiGianThucHien(new Date());
+        lichSuHoaDon.setLoaiThayDoi("Cập nhật địa chỉ");
+        lichSuHoaDonRepository.save(lichSuHoaDon);
         return new DataResponse(true, new ResultModel<>(null, "Cập nhật thành công!"));
     }
 
@@ -169,29 +184,41 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse updateHoaDon(Integer id, Double tongTienUpdate, Integer idNhanVien) {
+    public DataResponse updateHoaDon(Integer id, Double tongTienUpdate, Integer idNhanVien, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
         HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại!"));
-        hoaDon.setTongTienSauVoucher(tongTienUpdate);
-        hoaDonRepository.save(hoaDon);
+        if (hoaDon.getVoucher() != null) {
+            hoaDon.setTongTienSauVoucher(tongTienUpdate - hoaDon.getGiaTriGiam());
+            hoaDonRepository.save(hoaDon);
+        } else {
+            hoaDon.setTongTienSauVoucher(tongTienUpdate);
+            hoaDonRepository.save(hoaDon);
+        }
         LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
         LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
         lichSuHoaDon.setHoaDon(hoaDon);
-        NhanVienEntity nhanVien = nhanVienRepository.findById(idNhanVien).orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại!"));
-        lichSuHoaDon.setNhanVien(nhanVien);
+//        NhanVienEntity nhanVien = nhanVienRepository.findById(idNhanVien).orElseThrow(() -> new RuntimeException("Nhân viên không tồn tại!"));
+        if (nhanVien != null) {
+            lichSuHoaDon.setNhanVien(nhanVien);
+        } else {
+            lichSuHoaDon.setNhanVien(null);
+        }
         lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
         lichSuHoaDon.setTrangThaiMoi("Cập nhật sản phẩm");
         lichSuHoaDon.setThoiGianThucHien(new Date());
         lichSuHoaDon.setLoaiThayDoi("Cập nhật sản phầm");
         lichSuHoaDonRepository.save(lichSuHoaDon);
-        this.huyUpdateHoaDon(id);
+//        this.huyUpdateHoaDon(id);
         return new DataResponse(true, new ResultModel<>(null, "Cập nhật thành công!"));
     }
 
     @Override
     public DataResponse huyUpdateHoaDon(Integer id) {
         HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElseThrow(() -> new RuntimeException("Hóa đơn không tồn tại!"));
-        VoucherEntity voucher = voucherRepository.findById(hoaDon.getVoucher().getId()).orElseThrow(() -> new RuntimeException("Voucher không tồn tại!"));
-        if (voucher != null) {
+//        VoucherEntity voucher = voucherRepository.findById(hoaDon.getVoucher().getId()).orElseThrow(() -> new RuntimeException("Voucher không tồn tại!"));
+        if (hoaDon.getVoucher() != null) {
             double tongTienBanDau = hoaDon.getTongTienSauVoucher() + hoaDon.getGiaTriGiam();
             hoaDon.setTongTienBanDau(tongTienBanDau);
         } else {
@@ -319,7 +346,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 lichSuHoaDon.setTrangThaiCu(null);
                 lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
                 lichSuHoaDon.setThoiGianThucHien(hoaDon.getThoiGianTao());
-                lichSuHoaDon.setLoaiThayDoi("tạo hóa đơn");
+                lichSuHoaDon.setLoaiThayDoi("Tạo hóa đơn");
                 // Lưu lịch sử hóa đơn vào cơ sở dữ liệu
                 lichSuHoaDonRepository.save(lichSuHoaDon);
 
@@ -337,7 +364,10 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
 
     @Override
-    public DataResponse update(HoaDonRequest request, Integer id) {
+    public DataResponse update(HoaDonRequest request, Integer id, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
         if (this.isNullHoaDon(request)) {
             HoaDonEntity hoaDon = hoaDonRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Hoá đơn không tồn tại"));
@@ -375,15 +405,15 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 }
             }
 
-            request.setTongTienSauVoucher(request.getTongTienBanDau());
+//            request.setTongTienSauVoucher(request.getTongTienBanDau());
             if (request.getTongTienSauVoucher() == 0) {
                 throw new RuntimeException("Không thể thanh toán hóa đơn 0đ!");
             }
 
             if (request.getHinhThucThanhToan() == 0) {
-                if (request.getIdThanhToan()==1){
+                if (request.getGiaoHang() == 0) {
                     request.setTrangThai("Hoàn thành");
-                }else {
+                } else {
                     request.setTrangThai("Đã xác nhận");
                 }
             } else {
@@ -406,7 +436,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
                 LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
                 LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
                 lichSuHoaDon.setHoaDon(hoaDon);
-                lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
+                lichSuHoaDon.setNhanVien(nhanVien);
                 lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
                 lichSuHoaDon.setTrangThaiMoi(request.getTrangThai());
                 lichSuHoaDon.setThoiGianThucHien(new Date());
@@ -429,18 +459,23 @@ public class HoaDonServiceImpl implements IHoaDonService {
 
 
     @Override
-    public DataResponse huyHoaDon(Integer id) {
+    public DataResponse huyHoaDon(Integer id, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
         HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
         if (hoaDon == null) {
             return new DataResponse(false, new ResultModel<>(null, "hóa đơn không tồn tại"));
         }
-        List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
-        if (chiTietHoaDon != null) {
-            for (ChiTietHoaDonEntity x : chiTietHoaDon) {
-                ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(x.getChiTietSanPham().getId()).orElse(null);
-                if (chiTietSanPham != null) {
-                    chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + x.getSoLuong());
-                    chiTietSanPhamRepository.save(chiTietSanPham);
+        if (hoaDon.getHinhThucThanhToan() != 1 || hoaDon.getThanhToan().getId() != 1) {
+            List<ChiTietHoaDonEntity> chiTietHoaDon = chiTietHoaDonRepository.getChiTietHoaDonEntityByHoaDon(hoaDon);
+            if (chiTietHoaDon != null) {
+                for (ChiTietHoaDonEntity x : chiTietHoaDon) {
+                    ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(x.getChiTietSanPham().getId()).orElse(null);
+                    if (chiTietSanPham != null) {
+                        chiTietSanPham.setSoLuong(chiTietSanPham.getSoLuong() + x.getSoLuong());
+                        chiTietSanPhamRepository.save(chiTietSanPham);
+                    }
                 }
             }
         }
@@ -450,7 +485,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
             LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
             LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
             lichSuHoaDon.setHoaDon(hoaDon);
-            lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
+            lichSuHoaDon.setNhanVien(nhanVien);
             lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
             lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
             lichSuHoaDon.setThoiGianThucHien(new Date());
@@ -638,7 +673,13 @@ public class HoaDonServiceImpl implements IHoaDonService {
     }
 
     @Override
-    public DataResponse updateTrangThaiHoaDon(Integer id) {
+    public DataResponse updateTrangThaiHoaDon(Integer id, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
+        if (nhanVien == null) {
+            throw new NoSuchElementException("Nhân viên không tồn tại");
+        }
         // Tìm hóa đơn theo ID
         HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
 
@@ -691,7 +732,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
             // Tạo lịch sử hóa đơn mới
             LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
             lichSuHoaDon.setHoaDon(hoaDon);
-            lichSuHoaDon.setNhanVien(hoaDon.getNhanVien());
+            lichSuHoaDon.setNhanVien(nhanVien);
             lichSuHoaDon.setTrangThaiCu(lastHistory.getTrangThaiMoi()); // Sử dụng trạng thái cũ từ lịch sử cuối cùng
             lichSuHoaDon.setTrangThaiMoi(hoaDon.getTrangThai());
             lichSuHoaDon.setThoiGianThucHien(new Date());
@@ -750,6 +791,26 @@ public class HoaDonServiceImpl implements IHoaDonService {
         }
     }
 
+    @Override
+    public DataResponse updateNote(Integer id, String ghiChu, String authorizationHeader) {
+        String token = authorizationHeader.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        NhanVienEntity nhanVien = nhanVienRepository.findByUsername(username);
+        HoaDonEntity hoaDon = hoaDonRepository.findById(id).orElse(null);
+        hoaDon.setGhiChu(ghiChu);
+        hoaDonRepository.save(hoaDon);
+        LichSuHoaDonEntity lichSuOld = lichSuHoaDonRepository.findTop1ByHoaDonOrderByThoiGianThucHienDesc(hoaDon);
+        LichSuHoaDonEntity lichSuHoaDon = new LichSuHoaDonEntity();
+        lichSuHoaDon.setHoaDon(hoaDon);
+        lichSuHoaDon.setNhanVien(nhanVien);
+        lichSuHoaDon.setTrangThaiCu(lichSuOld.getTrangThaiMoi());
+        lichSuHoaDon.setTrangThaiMoi("Cập nhật ghi chú");
+        lichSuHoaDon.setThoiGianThucHien(new Date());
+        lichSuHoaDon.setLoaiThayDoi("Cập nhật ghi chú");
+        lichSuHoaDonRepository.save(lichSuHoaDon);
+        return new DataResponse(true, new ResultModel<>(null, "update ghi chú thành công"));
+    }
+
     private Boolean isNullHoaDon(HoaDonRequest request) {
         if (request.getIdNhanVien() == null) {
             return new DataResponse(false, new ResultModel<>(null, "nhân viên không được null")).isStatus();
@@ -782,7 +843,7 @@ public class HoaDonServiceImpl implements IHoaDonService {
         entity.setSdtNguoiNhan(request.getSdtNguoiNhan());
         entity.setEmailNguoiNhan(request.getEmailNguoiNhan());
         entity.setDiaChiNhanHang(request.getDiaChiNhanHang());
-        entity.setNgayNhanDuKien(request.getNgayNhanDuKien());
+        entity.setNgayNhanDuKien(new Date());
         entity.setThoiGianTao(request.getThoiGianTao());
         entity.setGhiChu(request.getGhiChu());
         entity.setGiaoHang(request.getGiaoHang());

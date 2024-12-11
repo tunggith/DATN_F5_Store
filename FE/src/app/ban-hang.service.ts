@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { not } from 'ajv/dist/compile/codegen';
 
 @Injectable({
   providedIn: 'root'
@@ -140,5 +141,8 @@ export class BanHangService {
   }
   vnPay(amount:number):Observable<any>{
     return this.http.get(`${this.vnPayUrl}/createPay?amount=${amount}`);
+  }
+  addNote(id:number,note:string):Observable<any>{
+    return this.http.put(`${this.hoaDonUrl}/note/${id}?ghiChu=${note}`,{});
   }
 }

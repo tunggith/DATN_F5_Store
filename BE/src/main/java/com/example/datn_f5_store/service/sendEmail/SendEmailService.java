@@ -48,7 +48,7 @@ public class SendEmailService {
             message.setSubject(subject);
             String body = "Kính gửi: "+toEmail+" ,\n" +
                     "\n" +
-                    "Chúng tôi xin chan thành cảm ơn bạn vì đã tin tưởng mua hàng tại F5-store chúng tôi. Dưới đây là thông tin mã đơn hàng của bạn:\n" +
+                    "Chúng tôi xin chân thành cảm ơn bạn vì đã tin tưởng mua hàng tại F5-store chúng tôi. Dưới đây là thông tin mã đơn hàng của bạn:\n" +
                     "\n" +
                     "Mã Đơn hàng: "+maHoaDon+" \n" +
                     "Bạn có thể truy cập vào trang web của chúng tôi để tra cứu mã đơn hàng.\n" +

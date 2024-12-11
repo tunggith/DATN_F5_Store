@@ -1,18 +1,27 @@
 package com.example.datn_f5_store.service.impl;
 
+import com.example.datn_f5_store.dto.ChiTietSanPhamDto;
 import com.example.datn_f5_store.entity.AnhChiTietSanPham;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import com.example.datn_f5_store.repository.IAnhChiTietSanPhamRepository;
+import com.example.datn_f5_store.repository.IChiTietSanPhamRepository;
 import com.example.datn_f5_store.service.ISanPhamClientservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class SanPhamClientImpl implements ISanPhamClientservice {
 
     @Autowired
     private IAnhChiTietSanPhamRepository repoAnh;
+    @Autowired
+    private IChiTietSanPhamRepository chiTietSanPhamRepository;
     @Override
     public Page<AnhChiTietSanPham> getSanPham(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -50,6 +59,22 @@ public class SanPhamClientImpl implements ISanPhamClientservice {
                 "Đang hoạt động",
                 pageable
         );
+    }
+
+    @Override
+    public ChiTietSanPhamEntity getSoLuong(Integer id) {
+        ChiTietSanPhamEntity entity = chiTietSanPhamRepository.findById(id).orElseThrow();
+        return entity;
+    }
+
+    @Override
+    public List<ChiTietSanPhamDto> getListChiTietSanPham() {
+        List<ChiTietSanPhamEntity> entities = chiTietSanPhamRepository.findAll();
+        return entities.stream().map(entity->new ChiTietSanPhamDto(
+                entity.getId(),
+                entity.getMa(),
+                entity.getSoLuong()
+        )).collect(Collectors.toList());
     }
 
 

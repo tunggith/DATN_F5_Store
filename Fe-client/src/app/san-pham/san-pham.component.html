@@ -179,7 +179,7 @@
                       <div class="single_product">
                         <div class="product_thumb">
                           <!-- Hiển thị ảnh sản phẩm -->
-                          <a href="single-product.html">
+                          <a (click)="openPopup(product.chiTietSanPham.sanPham.id)">
                             <img [src]="product.urlAnh || 'assets/img/product/default.jpg'" alt="Sản phẩm">
                           </a>
                           <div class="img_icone" *ngIf="product.mauSac">
@@ -195,9 +195,12 @@
                         </div>
                         <div class="product_content">
                           <!-- Hiển thị tên và giá sản phẩm -->
+                          <span class="product_price_sales" *ngIf="product.chiTietSanPham.checkKm===true">{{
+                            product.chiTietSanPham.donGiaBanDau | number }} VND</span>
                           <span class="product_price">{{ product.chiTietSanPham.donGia | number }} VND</span>
                           <h3 class="product_title">
-                            <a href="single-product.html">{{ product.chiTietSanPham.sanPham.ten }}</a>
+                            <a (click)="openPopup(product.chiTietSanPham.sanPham.id)">{{
+                              product.chiTietSanPham.sanPham.ten }}-{{ product.chiTietSanPham.sanPham.gioiTinh.ten }}</a>
                           </h3>
                         </div>
                         <!-- <div class="product_info">
@@ -278,6 +281,7 @@
         <p>
           <strong>Giá:</strong>
           <span class="price">{{ formatTien(donGia) }} VNĐ</span>
+          <span class="price-sale" *ngIf="checkKm===true">{{ formatTien(donGiaDau) }} VND</span>
         </p>
 
         <div class="options">

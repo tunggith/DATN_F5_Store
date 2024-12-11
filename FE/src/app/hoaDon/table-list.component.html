@@ -8,11 +8,7 @@
                     <tr>
                         <th>Mã hóa đơn</th>
                         <th>Tên sản phẩm</th>
-                        <th>Xuất xứ</th>
-                        <th>Thương hiệu</th>
                         <th>Giới tính</th>
-                        <th>Màu sắc</th>
-                        <th>Size</th>
                         <th>Đơn giá</th>
                         <th>Số lượng mua</th>
                     </tr>
@@ -20,13 +16,10 @@
                 <tbody>
                     <tr *ngFor="let chiTiet of hoaDonChiTiet; let j = index">
                         <td>{{ chiTiet.hoaDon.ma }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.sanPham.xuatXu.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.sanPham.thuongHieu.ten }}</td>
+                        <td>{{ chiTiet.chiTietSanPham.sanPham.ten }} - {{ chiTiet.chiTietSanPham.sanPham.thuongHieu.ten
+                            }} - {{ chiTiet.chiTietSanPham.mauSac.ten }} - {{ chiTiet.chiTietSanPham.size.ten }}</td>
                         <td>{{ chiTiet.chiTietSanPham.sanPham.gioiTinh.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.mauSac.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.size.ten }}</td>
-                        <td>{{ chiTiet.chiTietSanPham.donGia | currency: 'VND' }}</td>
+                        <td>{{ chiTiet.chiTietSanPham.donGia | number:'1.0-0' }} VND</td>
                         <td>{{ chiTiet.soLuong }}</td>
                     </tr>
                 </tbody>

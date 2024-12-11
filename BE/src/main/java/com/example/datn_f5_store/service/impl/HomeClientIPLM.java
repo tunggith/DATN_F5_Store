@@ -80,12 +80,12 @@ public class HomeClientIPLM implements IHomeClientService {
         List<AnhChiTietSanPham> anhCTSP = new ArrayList<>();
 
         results.forEach(record -> {
-            System.out.println("ID_CHI_TIET_SAN_PHAM: " + record[0]);
+//            System.out.println("ID_CHI_TIET_SAN_PHAM: " + record[0]);
             // Chuyển đổi record[0] sang Integer và tìm ảnh bằng ID chi tiết sản phẩm
             anhCTSP.addAll(anhRepo.findByIdIn(List.of(Long.parseLong(record[0].toString()))));
         });
 
-        System.out.printf("list anh chi tiết sản phẩm "+anhCTSP+toString());
+//        System.out.printf("list anh chi tiết sản phẩm "+anhCTSP+toString());
 
         // Chuyển đổi dữ liệu từ Object[] sang Map để dễ dàng trả về JSON
         return results.stream().map(record -> {

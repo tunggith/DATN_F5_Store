@@ -27,7 +27,7 @@ export class BanHangComponent implements OnInit {
   giaTriGiam: number = 0;
   tongTienSauVoucher: number = 0;
   tenKhachHang: string = '';
-  tienKhachDua: number = 0;
+  tienKhachDua: number | null = null;
   tienTraLai: number = 0;
   tienKhachDuaInvalid: boolean = false;
   voucher: any[] = [];
@@ -44,6 +44,7 @@ export class BanHangComponent implements OnInit {
   popupHd: boolean = false;
   popupCho: boolean = false;
   popupSanPham: boolean = false;
+  popupScanQr: boolean = false;
   popupQr: boolean = false;
   idKhachHang: number = 1;
   idKhachHanghd: number = 1;
@@ -128,6 +129,14 @@ export class BanHangComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.vnpTransactionStatus = params['vnp_TransactionStatus'];
     });
+    // Theo dõi thay đổi của voucherControl
+    this.voucherControl.valueChanges.subscribe(value => {
+      if (!value) {
+        console.log('Voucher đã bị xóa hoặc không hợp lệ');
+        // Đặt lại các biến liên quan đến voucher
+        this.tongTienSauVoucher = this.tongTienBanDau;// Gọi hàm khi giá trị là null hoặc rỗng
+      }
+    });
   }
   //chuyển tab
   selectTab(tabName: string) {
@@ -147,7 +156,10 @@ export class BanHangComponent implements OnInit {
     this.idGiaoHang = this.icon === 'toggle_on' ? 1 : 0;
     if (this.icon === 'toggle_off') {
       this.resetFormDiaChi();
+      this.phiVanChuyen = 0;
     }
+    this.getShippingFee();
+    this.loadDiaChi(this.idKhachHang);
   }
   getHoaDon(): void {
     this.banHangService.getHoaDon().subscribe(
@@ -176,7 +188,7 @@ export class BanHangComponent implements OnInit {
           this.tongTienBanDau = hoaDonData.tongTienBanDau;
           this.giaTriGiam = hoaDonData.giaTriGiam;
           this.tongTienSauVoucher = hoaDonData.tongTienBanDau;
-          this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
+          // this.tienKhachDua = this.tongTienSauVoucher + this.phiVanChuyen;
           this.tenKhachHang = hoaDonData.khachHang.ten;
           this.hasError = false;  // Có sản phẩm, không có lỗi
         } else {
@@ -201,12 +213,12 @@ export class BanHangComponent implements OnInit {
   }
 
   getTienTraLai(tienKhachDua: number): void {
-    if (isNaN(tienKhachDua) || tienKhachDua <= 0) {
+    if (isNaN(tienKhachDua) || tienKhachDua < 0) {
       this.tienKhachDuaInvalid = true;
       this.tienTraLai = 0;
     } else {
       this.tienKhachDuaInvalid = false;
-      this.tienTraLai = Math.max(0, tienKhachDua - this.tongTienSauVoucher);
+      this.tienTraLai = tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
     }
   }
 
@@ -280,16 +292,27 @@ export class BanHangComponent implements OnInit {
       }
     );
   }
+  removeHoaDon(idHoaDon: number): void {
+    if (confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
+      this.banHangService.removeHoaDon(idHoaDon).subscribe(
+        response => {
+          this.showSuccessMessage('Hủy hóa đơn thành công');
+          this.getHoaDon();
+        },
+        this.handleError
+      );
+    }
+  }
   //==================xóa hóa đơn chi tiết==================
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
-    if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
+    if (confirm('Bạn có chắc muốn xóa sản phẩm này không?')) {
       this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
         response => {
-          this.showSuccessMessage('xóa thành công!');
+          this.showSuccessMessage('Xóa thành công!');
           this.getHoaDon();
         },
         error => {
-          this.showErrorMessage('xóa sản phẩm thất bại!');
+          this.showErrorMessage('Xóa sản phẩm thất bại!');
           console.log('lỗi xóa hóa đơn chi tiết', error);
         }
       )
@@ -338,6 +361,10 @@ export class BanHangComponent implements OnInit {
   openPopupSanPham(): void {
     this.popupSanPham = true;
   }
+  openPopupScanQr(): void {
+    this.popupScanQr = true;
+    console.log('ccos chay');
+  }
   closePopup() {
     this.popup = false;
     this.loadKhachHang();
@@ -354,6 +381,10 @@ export class BanHangComponent implements OnInit {
   }
   closePopupSanPham() {
     this.popupSanPham = false;
+    this.getChiTietHoaDon(this.activeInvoidID);
+  }
+  closePopupScanQr() {
+    this.popupScanQr = false;
     this.getChiTietHoaDon(this.activeInvoidID);
   }
   closePopupQr() {
@@ -410,7 +441,7 @@ export class BanHangComponent implements OnInit {
       tongTienBanDau: this.tongTienBanDau,
       phiShip: this.phiVanChuyen,
       hinhThucThanhToan: 0,
-      tongTienSauVoucher: 0,
+      tongTienSauVoucher: this.tongTienSauVoucher,
       tenNguoiNhan: this.hoTenNguoiNhan,
       sdtNguoiNhan: this.soDienThoai,
       emailNguoiNhan: this.email,
@@ -423,7 +454,8 @@ export class BanHangComponent implements OnInit {
         this.getHoaDon();
         this.getByTrangThai();
         this.getIdThanhToan(1);
-        this.icon = 'toggle_off';
+        // this.icon = 'toggle_off';
+        this.resetForm();
         // Hiển thị hộp thoại xác nhận in hóa đơn
         const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
         if (printConfirm) {
@@ -639,6 +671,7 @@ export class BanHangComponent implements OnInit {
       this.phuongXa = ''; // Nếu không tìm thấy, gán rỗng
     }
   }
+
   getShippingFee() {
     const shippingFeeData = {
       "from_province_id": 201,          // Mã tỉnh gửi hàng
@@ -655,17 +688,18 @@ export class BanHangComponent implements OnInit {
       "cod_failed_amount": null,         // Số tiền thu hộ (nếu có, có thể để null)
       "coupon": null                     // Mã giảm giá (nếu có, có thể để null)
     };
-
-    this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
-      response => {
-        // Xử lý phí vận chuyển ở đây
-        this.phiVanChuyen = response.data.total;
-        this.tienKhachDua = this.tienKhachDua + this.phiVanChuyen;
-      },
-      error => {
-        console.error('Lỗi khi lấy phí vận chuyển:', error);
-      }
-    );
+    if (this.icon == 'toggle_on') {
+      this.giaoHangNhanhService.createShippingOder(shippingFeeData).subscribe(
+        response => {
+          // Xử lý phí vận chuyển ở đây
+          this.phiVanChuyen = response.data.total;
+          // this.tienKhachDua = this.tienKhachDua + this.phiVanChuyen;
+        },
+        error => {
+          console.error('Lỗi khi lấy phí vận chuyển:', error);
+        }
+      );
+    }
   }
 
   //=======cập nhật địa chỉ giao hàng=============
@@ -787,7 +821,8 @@ export class BanHangComponent implements OnInit {
         this.selectedVoucherId = selectedVoucher.id;
         // Tính tổng tiền sau khi áp dụng voucher
         this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
-        this.tienKhachDua = this.tongTienBanDau - finalDiscount;
+        // this.tienKhachDua = this.tongTienBanDau - finalDiscount;
+        this.tienTraLai = this.tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
       } else {
         // Nếu không đạt điều kiện, tổng tiền không thay đổi
         this.tongTienSauVoucher = this.tongTienBanDau;
@@ -797,6 +832,8 @@ export class BanHangComponent implements OnInit {
     } else {
       // Nếu không có voucher được chọn, tổng tiền sau voucher bằng tổng tiền ban đầu
       this.tongTienSauVoucher = this.tongTienBanDau;
+      this.giaTriGiam = 0;
+      this.voucherControl.reset();
     }
   }
   getIdThongTinDonHang(id: number): void {
@@ -849,6 +886,25 @@ export class BanHangComponent implements OnInit {
     this.districts = [];
     this.wards = [];
   }
+  resetForm() {
+    // Đặt lại các giá trị form control
+    this.myControl.reset();
+    this.voucherControl.reset();
+
+    // Đặt lại các biến số liệu
+    this.tongTienBanDau = 0;
+    this.tienKhachDua = null;
+    this.tienKhachDuaInvalid = false;
+    this.phiVanChuyen = 0;
+    this.tongTienSauVoucher = 0;
+    this.tienTraLai = 0;
+
+    // Đặt lại các giá trị mặc định khác
+    this.icon = 'toggle_off';
+    this.popupQr = false;
+
+  }
+
   //=======lấy id nhân viên==========
   getNhanVien(): void {
     this.banHangService.getNhanVien(this.authServie.getUsername()).subscribe(

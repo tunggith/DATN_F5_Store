@@ -7,10 +7,10 @@
                         <h1>Thông tin đơn hàng</h1>
                         <h4>Mã hóa đơn:{{maHoaDonCho}}</h4>
                         <div>
-                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Phí vận chuyển: {{ (phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div>
-                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen-giaTriGiam||0) | number:'1.0-0' }} VNĐ</span>
+                            <span>Tổng tiền phải thanh toán: {{ (tongTien+phiVanChuyen||0) | number:'1.0-0' }} VND</span>
                         </div>
                         <div style="display: flex;">
                             <button *ngIf="trangThaiHoaDon==='Hoàn thành'||trangThaiHoaDon==='Đã xác nhận'&&!isHidden"
@@ -28,13 +28,13 @@
                         <i class="material-icons" style="text-align: center;font-size: 40px;">delete</i>
                         <h3>Hóa đơn đã được hủy</h3>
                     </div>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Chờ xác nhận'||trangThaiHoaDon===null &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Xác nhận</button>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===1 &&!isHidden" class="btn btn-primary"
                         (click)="updateTrangThaiHoaDon(hoaDonChoId)">Giao hàng</button>
-                    <button style="background-color: rgb(244, 25, 25);"
+                    <button style="background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);"
                         *ngIf="trangThaiHoaDon==='Đã xác nhận'&&idGiaoHang===0 ||trangThaiHoaDon==='Đang giao hàng' &&!isHidden"
                         class="btn btn-primary" (click)="updateTrangThaiHoaDon(hoaDonChoId)">Hoàn thành</button>
                     <div class="rollback"><span (click)="rollback()">Quay lại</span></div>
@@ -66,6 +66,9 @@
                                         </button>
                                         <button (click)="openEditDiaChi()" title="Sửa địa chỉ">
                                             <div class="material-icons">edit_location_alt</div>
+                                        </button>
+                                        <button (click)="addNote()" title="Ghi chú">
+                                            <div class="material-icons">edit_note</div>
                                         </button>
                                     </div>
                                 </div>
@@ -136,7 +139,7 @@
                                             (click)="increaseQuantityhd(cthd.chiTietSanPham?.id)">add</i></button>
                                 </div>
                             </td>
-                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VNĐ</td>
+                            <td>{{cthd.giaSpctHienTai | number:'1.0-0' }} VND</td>
                             <td><button [disabled]="detailHoaDon.length === 1" (click)="removeHoaDonChiTiet(cthd.id)"
                                     class="select-invoice"><i class="material-icons">delete_forever</i></button>
                             </td>

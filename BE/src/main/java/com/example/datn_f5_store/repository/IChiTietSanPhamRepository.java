@@ -28,7 +28,10 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
-            ctsp.trangThai
+            ctsp.trangThai,
+            ctsp.checkKm,
+            ctsp.donGiaBanDau,
+            ctsp.qrCode
         ) 
         from ChiTietSanPhamEntity ctsp
     """)
@@ -47,8 +50,10 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
-            ctsp.trangThai
-           
+            ctsp.trangThai,
+            ctsp.checkKm,
+            ctsp.donGiaBanDau,
+            ctsp.qrCode
         ) 
         from ChiTietSanPhamEntity ctsp
     """)
@@ -64,7 +69,10 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
-            ctsp.trangThai
+            ctsp.trangThai,
+            ctsp.checkKm,
+            ctsp.donGiaBanDau,
+            ctsp.qrCode
         ) 
         from ChiTietSanPhamEntity ctsp 
         where ctsp.sanPham.id = :id
@@ -96,12 +104,14 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             ctsp.sanPham,
             ctsp.mauSac,
             ctsp.size,
-
             ctsp.ma,
             ctsp.moTa,
             ctsp.donGia,
             ctsp.soLuong,
-            ctsp.trangThai
+            ctsp.trangThai,
+            ctsp.checkKm,
+            ctsp.donGiaBanDau,
+            ctsp.qrCode
         ) 
         from ChiTietSanPhamEntity ctsp 
         where lower(ctsp.moTa) like lower(concat('%', :keyword, '%')) 
@@ -119,7 +129,10 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
         ctsp.moTa,
         ctsp.donGia,
         ctsp.soLuong,
-        ctsp.trangThai
+        ctsp.trangThai,
+        ctsp.checkKm,
+        ctsp.donGiaBanDau,
+        ctsp.qrCode
     ) 
     from ChiTietSanPhamEntity ctsp 
     where ctsp.sanPham.id = :sanPhamId 
@@ -158,7 +171,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             "AND (:size IS NULL OR ctsp.size.id = :size) " +
             "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
             "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
-            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh) order by ctsp.id desc ")
     Page<ChiTietSanPhamEntity> findByTrangThaiAndSanPhamTrangThai(
             @Param("chiTietSanPham") String chiTietSanPham,
             @Param("sanPham") String sanPham,
@@ -176,7 +189,7 @@ public interface IChiTietSanPhamRepository extends JpaRepository<ChiTietSanPhamE
             "AND (:size IS NULL OR ctsp.size.id = :size) " +
             "AND (:thuongHieu IS NULL OR ctsp.sanPham.thuongHieu.id = :thuongHieu) " +
             "AND (:xuatXu IS NULL OR ctsp.sanPham.xuatXu.id = :xuatXu) " +
-            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh)")
+            "AND (:gioiTinh IS NULL OR ctsp.sanPham.gioiTinh.id = :gioiTinh) order by ctsp.id desc ")
     Page<ChiTietSanPhamEntity> getByTrangThai(
             @Param("trangThai") String trangThai,
             @Param("sanPhamTrangThai") String sanPhamTrangThai,

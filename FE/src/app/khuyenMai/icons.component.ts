@@ -6,7 +6,7 @@ import { SevricesanphamService } from '../sanpham/sevricesanpham.service';
 import { KhuyenMaiSanPhamChiTietService } from '../khuyen-mai-san-pham-chi-tiet/khuyen-mai-san-pham-chi-tiet.service';
 import { DataResponse } from '../models/data-response.model';
 import Swal from 'sweetalert2';
-import * as moment from 'moment-timezone';
+
 
 @Component({
   selector: 'app-khuyen-mai',
@@ -15,17 +15,15 @@ import * as moment from 'moment-timezone';
 })
 export class IconsComponent implements OnInit {
 
-  convertToLocalTime(dateString: string): string {
-    return moment(dateString).tz('Asia/Ho_Chi_Minh').format('DD/MM/YYYY HH:mm'); // Thay đổi múi giờ tùy thuộc vào địa phương
-  }
+  
   role:string='';
-  isAddedMap: { [key: number]: boolean } = {};
-
+ 
   isFormVisible: boolean = false;
  
   khuyenMais: any[] = [];
   khuyenMaiChiTietSanPhams : any[] = [];
   searchForm: FormGroup;
+ 
   
   
   currentKhuyenMai: any = {
@@ -55,12 +53,10 @@ export class IconsComponent implements OnInit {
   pageSp: number = 0; 
   totalPages: 0;
   totalPageSp: 0;
-
-  isAddingPromotionToProduct = false;
   selectedKhuyenMai: any;
   selectedProductIds: number[] = [];
   products: any[] = [];
-  trangThai: string = ''; // Biến để lưu trạng thái chọn
+
 
 
 
@@ -95,6 +91,10 @@ export class IconsComponent implements OnInit {
     maxPrice: number = null; // Giá tối đa để lọc
     selectedPrice: number = null; // Giá tối thiểu để lọc
     filteredChiTietSanPhamList2: any[] = []; // Danh sách lọc kết quả
+    selectedSizes: number[] = [];
+    selectedMauSacs: number[] = [];
+    isValidSelection: boolean = false;
+
   
 
 // Biến để lưu tên sản phẩm đã chọn
@@ -228,8 +228,10 @@ createKhuyenMai() {
             confirmButton: 'custom-confirm-button'
           }
         });
+        this.addPromotionToProducts(response.result.id);
         this.resetForm();
-        this.loadKhuyenMais();
+        this.loadKhuyenMais();       
+             
       } else {
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
@@ -261,7 +263,6 @@ createKhuyenMai() {
   editKhuyenMai(): void {
     // Chuyển đổi thoiGianBatDau và thoiGianKetThuc sang UTC
     const { thoiGianBatDau, thoiGianKetThuc, ...khuyenMaiData } = this.currentKhuyenMai;
-  
     this.currentKhuyenMai.thoiGianBatDau = thoiGianBatDau;
     this.currentKhuyenMai.thoiGianKetThuc = thoiGianKetThuc;
   
@@ -281,6 +282,8 @@ createKhuyenMai() {
               confirmButton: 'custom-confirm-button'
             }
           });
+          this.addPromotionToProducts(response.result.id);
+          console.log('Id sửa :',response.result.id);
           this.resetForm();
           this.loadKhuyenMais();
         } else {
@@ -349,8 +352,7 @@ createKhuyenMai() {
                 this.filteredChiTietSanPhamList = chiTietSanPhamList.map(item => item.chiTietSanPham);
                 this.filteredChiTietSanPhamList.forEach(id => {
                   console.log('id can doi : ',id.id);
-                  this.isAddedMap[id.id] = false;    
-                  this.saveIsAddedMapToLocalStorage();       
+                  id.id.checkKm = false;      
                 });    
                 this.loadKhuyenMais();
                 this.getSanPhamPhanTrang(this.pageSp);
@@ -523,48 +525,6 @@ goToPage(pageNumber: number): void {
 }
 
 
-addKhuyenMaiSanPham(chiTietSanPham: any, event: any) {
-  console.log('Đã vào đây để thêm khuyến mãi');
-
-  if (!this.currentKhuyenMai || !this.currentKhuyenMai.id) {
-    this.showSwalError('Vui lòng chọn khuyến mãi');
-    return;
-  }
-
-  const formData = {
-    khuyenMai: { id: this.currentKhuyenMai.id },
-    chiTietSanPham: { id: chiTietSanPham.id }
-  };
-  console.log('Dữ liệu thêm:', formData);
-
-  this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(formData).subscribe(
-    (response) => {
-      console.log('Response thêm sản phẩm:', response);
-      if (response.status) {
-        this.showSwalSuccess(response.result.content);
-        this.loadKhuyenMais();
-
-        // Cập nhật trạng thái isAdded cho sản phẩm cụ thể
-        this.isAddedMap[chiTietSanPham.id] = true;
-        this.saveIsAddedMapToLocalStorage();
-
-        this.sanPhamService.getChiTietSanPhamById(chiTietSanPham.id).subscribe(
-          (response: any) => {
-            this.idSanPhamNe = response.result.content.sanPham.id;
-            this.openChiTietModal(this.idSanPhamNe);
-            console.log('ID sản phẩm tìm lại:', this.idSanPhamNe);
-          }
-        );
-      } else {
-        this.showSwalError(response.result.content);
-      }
-    },
-    (error) => {
-      console.error('Error thêm sản phẩm:', error);
-      this.showSwalError('Lỗi thêm khuyến mãi cho sản phẩm, vui lòng thử lại');
-    }
-  );
-}
 
 removeKhuyenMaiSanPham(chiTietSanPham: any) {
   console.log('Đã vào đây để xóa khuyến mãi');
@@ -576,10 +536,7 @@ removeKhuyenMaiSanPham(chiTietSanPham: any) {
         this.showSwalSuccess(response.result.content);
         this.loadKhuyenMais();
 
-        // Cập nhật trạng thái isAdded cho sản phẩm cụ thể
-        this.isAddedMap[chiTietSanPham.id] = false;
-        this.saveIsAddedMapToLocalStorage();
-
+      
         this.sanPhamService.getChiTietSanPhamById(chiTietSanPham.id).subscribe(
           (response: any) => {
             this.idSanPhamNe = response.result.content.sanPham.id;
@@ -597,20 +554,6 @@ removeKhuyenMaiSanPham(chiTietSanPham: any) {
     }
   );
 }
-
-saveIsAddedMapToLocalStorage() {
-  localStorage.setItem('isAddedMap', JSON.stringify(this.isAddedMap));
-}
-
-loadIsAddedMapFromLocalStorage() {
-  const savedMap = localStorage.getItem('isAddedMap');
-  if (savedMap) {
-    this.isAddedMap = JSON.parse(savedMap);
-  } else {
-    this.isAddedMap = {};
-  }
-}
-
 
 
 
@@ -661,7 +604,6 @@ openChiTietModal(sanPhamId: number) {
 
   this.isChiTietModalOpen = true; // Mở modal
 
-  this.loadIsAddedMapFromLocalStorage();
 
   this.selectSanPhamChiTiet(sanPhamId);
   
@@ -673,6 +615,10 @@ openChiTietModal(sanPhamId: number) {
 
 closeChiTietModal() {
   this.isChiTietModalOpen = false;
+}
+
+close(){
+  this.selectedProductIds = [];
 }
 
 viewProductDetails(idSanPham: number) {
@@ -720,6 +666,10 @@ viewProductDetails(idSanPham: number) {
       response => {
         if (response && response.content) {
           this.filteredChiTietSanPhamList = response.content; // Cập nhật danh sách đã lọc
+          console.log('hehehhe: ', this.filteredChiTietSanPhamList);
+          this.filteredChiTietSanPhamList.forEach(chiTiet => {
+            console.log('checkKM: ', chiTiet.checkKm);
+          });
           this.totalPagesChiTiet = response.totalPages; // Cập nhật tổng số trang
         } else {
           console.warn('Không có dữ liệu chi tiết sản phẩm nào được trả về.');
@@ -974,13 +924,6 @@ getChiTietSanPhamPhanTrang(idSanPham: number, page: number = 0) {
   
   
   
-  selectedSizes: number[] = [];
-  selectedMauSacs: number[] = [];
-
-
-
-  isValidSelection: boolean = false;
-
   checkValidSelection() {
       this.isValidSelection = this.selectedSizes.length > 0 && this.selectedMauSacs.length > 0;
   }
@@ -1059,5 +1002,53 @@ validateYear2(value: string): void {
     this.currentKhuyenMai.thoiGianKetThuc = ''; // Reset giá trị nếu không hợp lệ
   }
 }
+
+
+onCheckboxChange(event: Event, productId: number): void {
+  const checkbox = event.target as HTMLInputElement;
+  if (checkbox.checked) {
+    this.selectedProductIds.push(productId);
+    console.log('id các sản phẩm được chọn',this.selectedProductIds);
+  } else {
+    this.selectedProductIds = this.selectedProductIds.filter(id => id !== productId);
+  }
+}
+
+
+addPromotionToProducts(promotionId: number): void {
+  // Loại bỏ các `productId` trùng lặp trong danh sách
+  const uniqueProductIds = Array.from(new Set(this.selectedProductIds));
+
+  uniqueProductIds.forEach((productId, index) => {
+    const request = {
+      khuyenMai: { id: promotionId },
+      chiTietSanPham: { id: productId }
+    };
+
+    console.log(`Gửi yêu cầu thêm khuyến mãi cho sản phẩm ID ${productId}:`, request);
+
+    // Gọi API cho từng sản phẩm
+    this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request)
+      .subscribe({
+        next: () => {
+          console.log(`Sản phẩm ID ${productId} đã được thêm khuyến mãi thành công.`);
+        },
+        error: (error) => {
+          console.error(`Lỗi khi thêm khuyến mãi cho sản phẩm ID ${productId}:`, error);
+        },
+        complete: () => {
+          console.log(`Xử lý hoàn tất cho sản phẩm ID ${productId}`);
+        }
+      });
+  });
+
+  // Reset form hoặc cập nhật giao diện nếu cần
+  this.resetForm();
+  this.loadKhuyenMais();
+}
+
+
+
+
 
 }

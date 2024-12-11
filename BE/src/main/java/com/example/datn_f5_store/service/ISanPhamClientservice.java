@@ -1,8 +1,12 @@
 package com.example.datn_f5_store.service;
 
+import com.example.datn_f5_store.dto.ChiTietSanPhamDto;
 import com.example.datn_f5_store.entity.AnhChiTietSanPham;
+import com.example.datn_f5_store.entity.ChiTietSanPhamEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface ISanPhamClientservice {
     Page<AnhChiTietSanPham> getSanPham(int page, int size);
@@ -30,5 +34,6 @@ public interface ISanPhamClientservice {
             Integer kichThuoc,
             Pageable pageable
     );
-
+    ChiTietSanPhamEntity getSoLuong(Integer id);
+    List<ChiTietSanPhamDto> getListChiTietSanPham();
 }

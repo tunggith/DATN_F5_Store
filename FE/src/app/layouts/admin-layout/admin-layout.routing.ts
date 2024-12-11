@@ -15,11 +15,12 @@ import { LoiQuyenComponent } from 'app/loi-quyen/loi-quyen.component';
 import { PopupSanPhamComponent } from 'app/popup-san-pham/popup-san-pham.component';
 import { ThongTinDonHangComponent } from 'app/thong-tin-don-hang/thong-tin-don-hang.component';
 import { PopupQrComponent } from 'app/popup-qr/popup-qr.component';
+import { QrScannerComponent } from 'app/qr-scanner/qr-scanner.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'ban-hang', component: BanHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'san-pham', component: SanphamComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
-  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
+  { path: 'thong-ke', component: ThongkeComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'khuyen-mai', component: IconsComponent, canActivate: [authGuard], data: { expectedRole: ['admin', 'user'] } },
   { path: 'nhan-vien', component: NhanVienComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },
   { path: 'khach-hang', component: KhachHangComponent, canActivate: [authGuard], data: { expectedRole: ['admin'] } },

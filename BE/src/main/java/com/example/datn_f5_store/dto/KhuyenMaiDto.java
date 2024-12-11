@@ -32,7 +32,7 @@ public class KhuyenMaiDto {
 
     private LocalDateTime thoiGianBatDau;
     private LocalDateTime thoiGianKetThuc;
-    private Date thoiGianTao;
+    private LocalDateTime thoiGianTao;
     private Date thoiGianSua;
     private String nguoiTao;
     private String nguoiSua;

@@ -1,135 +1,184 @@
 .voucher-management-container {
-    padding: 20px;
-    background-color: #f8f9fa; /* Màu nền nhẹ nhàng */
-    border-radius: 10px; /* Bo góc cho toàn bộ container */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
-  }
-  
-  h2 {
-    color: #003366; /* Màu chữ tiêu đề */
-    text-align: center; /* Canh giữa tiêu đề */
-    margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
-  }
-  
-  .search-form, .voucher-form {
-    background-color: #ffffff; /* Màu nền trắng cho form */
-    border-radius: 10px; /* Bo góc cho form */
-    padding: 20px; /* Khoảng cách bên trong */
-    margin-bottom: 20px; /* Khoảng cách giữa các form */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho form */
-  }
-  
-  .input-field, .input-select, .input-textarea {
-    width: 100%;
-    padding: 10px; /* Khoảng cách bên trong */
-    margin: 10px 0; /* Khoảng cách giữa các trường */
-    border: 1px solid #ced4da; /* Bo viền cho các trường nhập */
-    border-radius: 5px; /* Bo góc cho các trường nhập */
-    transition: border-color 0.3s; /* Hiệu ứng chuyển màu viền */
-  }
-  
-  .input-field:focus, .input-select:focus, .input-textarea:focus {
-    border-color: #007bff; /* Màu viền khi focus */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Đổ bóng khi focus */
-  }
-  
-  .btn-submit {
-    background-color: #003366; /* Màu nền cho nút */
-    color: white; /* Màu chữ */
-    border: none; /* Không có viền */
-    border-radius: 5px; /* Bo góc cho nút */
-    padding: 10px 15px; /* Khoảng cách bên trong nút */
-    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển màu */
+  padding: 20px;
+  background-color: #f8f9fa;
+  /* Màu nền nhẹ nhàng */
+  border-radius: 10px;
+  /* Bo góc cho toàn bộ container */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Đổ bóng cho container */
+}
+
+h2 {
+  color: #003366;
+  /* Màu chữ tiêu đề */
+  text-align: center;
+  /* Canh giữa tiêu đề */
+  margin-bottom: 20px;
+  /* Khoảng cách dưới tiêu đề */
+}
+
+.search-form,
+.voucher-form {
+  background-color: #ffffff;
+  /* Màu nền trắng cho form */
+  border-radius: 10px;
+  /* Bo góc cho form */
+  padding: 20px;
+  /* Khoảng cách bên trong */
+  margin-bottom: 20px;
+  /* Khoảng cách giữa các form */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Đổ bóng cho form */
+}
+
+.input-field,
+.input-select,
+.input-textarea {
+  width: 100%;
+  padding: 10px;
+  /* Khoảng cách bên trong */
+  margin: 10px 0;
+  /* Khoảng cách giữa các trường */
+  border: 1px solid #ced4da;
+  /* Bo viền cho các trường nhập */
+  border-radius: 5px;
+  /* Bo góc cho các trường nhập */
+  transition: border-color 0.3s;
+  /* Hiệu ứng chuyển màu viền */
+}
+
+.input-field:focus,
+.input-select:focus,
+.input-textarea:focus {
+  border-color: #007bff;
+  /* Màu viền khi focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  /* Đổ bóng khi focus */
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: background-color 0.3s;
 }
 
 .btn-submit:hover {
-    background-color: #003366(0, 123, 255, 0.8); /* Làm đậm màu nền khi hover */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
-  button {
-    background-color: transparent; /* Nền trong suốt */
-    border: none; /* Không có viền */
-    color: #007bff; /* Màu chữ */
-    cursor: pointer; /* Con trỏ khi hover */
-    transition: color 0.3s; /* Hiệu ứng chuyển màu chữ */
-  }
-  
-  button:hover {
-    color: white; /* Màu chữ khi hover */
-  }
-  .hidden {
-    display: none; 
-  }
-  .container {
-    background-color: #f8f9fa; 
-  }
-  
-  .border {
-    border: 1px solid #dee2e6; 
-    border-radius: 0.25rem; 
-    background-color: white; 
-  }
-  
-  .border h4 {
-    color: #003366; 
-  }
-  
-  .btn {
-    border-radius: 0.25rem; 
-  }
-  
-  
-  .alert {
-    margin-bottom: 20px; 
-  }
-  .table td {
-    vertical-align: middle; /* Canh giữa nội dung trong ô */
-  }
-  
-  .table .btn {
-    display: inline-block; /* Hiển thị nút dưới dạng inline-block */
-    width: 100%; /* Đặt chiều rộng nút thành 100% để đảm bảo tất cả các nút có chiều rộng bằng nhau */
-    margin: 5px 0; /* Thêm khoảng cách giữa các nút */
-    padding: 10px; /* Thêm padding cho nút */
-    font-size: 14px; /* Kích thước chữ trong nút */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi di chuột */
-  }
-  .table-bordered {
-    border: 1px solid #dee2e6;
-  }
-  
+button {
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+button:hover {
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+.container {
+  background-color: #f8f9fa;
+}
+
+.border {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  background-color: white;
+}
+
+.border h4 {
+  color: #003366;
+}
 
 .btn {
-    margin: 0 5px;                /* Thêm khoảng cách giữa các nút */
-    padding: 10px 15px;           /* Thêm khoảng cách bên trong cho nút */
-    border: none;                 /* Bỏ đường viền */
-    border-radius: 5px;          /* Bo góc cho nút */
-    background-color: #003366;   /* Màu nền của nút */
-    color: white;                 /* Màu chữ của nút */
-    cursor: pointer;              /* Thay đổi con trỏ khi di chuột vào nút */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển màu khi di chuột */
+  border-radius: 0.25rem;
+}
+
+
+.alert {
+  margin-bottom: 20px;
+}
+
+.table td {
+  vertical-align: middle;
+  /* Canh giữa nội dung trong ô */
+}
+
+.table .btn {
+  display: inline-block;
+  /* Hiển thị nút dưới dạng inline-block */
+  width: 100%;
+  /* Đặt chiều rộng nút thành 100% để đảm bảo tất cả các nút có chiều rộng bằng nhau */
+  margin: 5px 0;
+  /* Thêm khoảng cách giữa các nút */
+  padding: 10px;
+  /* Thêm padding cho nút */
+  font-size: 14px;
+  /* Kích thước chữ trong nút */
+  transition: background-color 0.3s;
+  /* Hiệu ứng chuyển màu nền khi di chuột */
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+
+.btn {
+  margin: 0 5px;
+  /* Thêm khoảng cách giữa các nút */
+  padding: 10px 15px;
+  /* Thêm khoảng cách bên trong cho nút */
+  border: none;
+  /* Bỏ đường viền */
+  border-radius: 5px;
+  /* Bo góc cho nút */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  /* Màu nền của nút */
+  color: white;
+  /* Màu chữ của nút */
+  cursor: pointer;
+  /* Thay đổi con trỏ khi di chuột vào nút */
+  transition: background-color 0.3s;
+  /* Hiệu ứng chuyển màu khi di chuột */
 }
 
 .btn:hover {
-  background-color: #003366(0, 123, 255, 0.8); /* Màu nền khi di chuột vào nút */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  /* Màu nền khi di chuột vào nút */
 }
 
 .btn:disabled {
-    background-color: #ccc;       /* Màu nền cho nút bị vô hiệu hóa */
-    cursor: not-allowed;          /* Thay đổi con trỏ khi nút bị vô hiệu hóa */
+  background-color: #ccc;
+  /* Màu nền cho nút bị vô hiệu hóa */
+  cursor: not-allowed;
+  /* Thay đổi con trỏ khi nút bị vô hiệu hóa */
 }
 
 .error-message {
-  color: #ff0000; /* Red color for error */
+  color: #ff0000;
+  /* Red color for error */
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  
+
 }
 
 
-.btn-edit, .btn-update {
-  background-color: #003366; /* Màu nền chính */
-  color: #fff; /* Màu chữ */
+.btn-edit,
+.btn-update {
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  /* Màu nền chính */
+  color: #fff;
+  /* Màu chữ */
   border: none;
   padding: 10px 15px;
   border-radius: 5px;
@@ -139,80 +188,154 @@
 }
 
 /* Darken the background color on hover */
-.btn-edit:hover, .btn-update:hover {
-  background-color: #003366(0, 123, 255, 0.8); /* Darken the original color by reducing opacity */
+.btn-edit:hover,
+.btn-update:hover {
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  /* Darken the original color by reducing opacity */
 }
 
 .btn-update:hover {
-  background-color: #003366(0, 123, 255, 0.8);
-  color: #fff; /* Darken the original yellow color */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
+  color: #fff;
+  /* Darken the original yellow color */
 }
 
-.btn-edit i, .btn-update i {
-  margin-right: 5px; /* Space between icon and text */
+.btn-edit i,
+.btn-update i {
+  margin-right: 5px;
+  /* Space between icon and text */
 }
 
-.table thead{
-  background-color: #003366;
-    color: white;
-    font-weight: bold;
+.table thead {
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  color: white;
+  font-weight: bold;
 }
+
 .table-responsive {
-  overflow-x: auto; /* Cho phép cuộn ngang nếu bảng quá lớn */
-  -webkit-overflow-scrolling: touch; /* Hỗ trợ cuộn mượt trên thiết bị di động */
+  overflow-x: auto;
+  /* Cho phép cuộn ngang nếu bảng quá lớn */
+  -webkit-overflow-scrolling: touch;
+  /* Hỗ trợ cuộn mượt trên thiết bị di động */
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Bảng chiếm toàn bộ chiều ngang của container */
-  table-layout: auto; /* Bo góc */
+  width: 100%;
+  /* Bảng chiếm toàn bộ chiều ngang của container */
+  table-layout: auto;
+  /* Bo góc */
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
 }
 
 table-striped tbody tr:nth-of-type(odd) {
-  background-color: #f8f9fa; /* Light background for better contrast */
+  background-color: #f8f9fa;
+  /* Light background for better contrast */
 }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 12px; /* Rounded corners for the table */
+  overflow: hidden; /* Ensure all data is visible */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.table tr:hover {
+  background-color: #f0f0f0;
+}
+
+.table-responsive {
+  overflow-y: visible; /* Ensure all data is visible */
+  border-radius: 12px; /* Rounded corners for the responsive container */
+  padding: 10px;
+  margin-bottom: 20px;
+}
+/* End of Selection */
 
 .pagination-container {
   display: flex;
-  justify-content: center; /* Căn giữa cho container */
-  margin-top: 1rem; /* Khoảng cách trên cho container */
+  justify-content: center;
+  /* Căn giữa cho container */
+  margin-top: 1rem;
+  /* Khoảng cách trên cho container */
 }
 
 .pagination {
-  display: flex; /* Ensures the buttons are aligned in a row */
-  justify-content: center; /* Center the pagination */
-  margin-top: 20px; /* Space above the pagination */
+  display: flex;
+  /* Ensures the buttons are aligned in a row */
+  justify-content: center;
+  /* Center the pagination */
+  margin-top: 20px;
+  /* Space above the pagination */
 }
 
 .pagination button {
-  border: none; /* Remove border */
-  background-color: #ffffff; /* Background color */
-  padding: 10px; /* Add padding for better click area */
-  border-radius: 5px; /* Round corners for a softer look */
-  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+  border: none;
+  /* Remove border */
+  background-color: #ffffff;
+  /* Background color */
+  padding: 10px;
+  /* Add padding for better click area */
+  border-radius: 5px;
+  /* Round corners for a softer look */
+  transition: background-color 0.3s, transform 0.3s;
+  /* Smooth transitions */
 }
 
 .pagination button:hover {
-  background-color: #f0f0f0; /* Light grey on hover */
-  transform: scale(1.1); /* Slightly increase size on hover */
+  background-color: #f0f0f0;
+  /* Light grey on hover */
+  transform: scale(1.1);
+  /* Slightly increase size on hover */
 }
 
 .pagination button i {
-  font-size: 24px; /* Increase icon size */
-  color: #333; /* Icon color */
-  transition: color 0.3s; /* Smooth color transition */
+  font-size: 24px;
+  /* Increase icon size */
+  color: #333;
+  /* Icon color */
+  transition: color 0.3s;
+  /* Smooth color transition */
 }
 
 .pagination button:hover i {
-  color: #007bff; /* Change icon color on hover */
-  font-size: 27px; /* Increase size further on hover */
+  color: #000000;
+  /* Change icon color on hover */
+  font-size: 27px;
+  /* Increase size further on hover */
 }
 
 .pagination button:disabled {
-  background-color: #c0c0c0; /* Background color for disabled button */
-  cursor: not-allowed; /* Not-allowed cursor for disabled button */
+  background-color: #c0c0c0;
+  /* Background color for disabled button */
+  cursor: not-allowed;
+  /* Not-allowed cursor for disabled button */
 }
 
 .pagination button:disabled i {
-  color: #666; /* Change icon color for disabled state */
+  color: #666;
+  /* Change icon color for disabled state */
 }
 
 
@@ -224,16 +347,20 @@ table-striped tbody tr:nth-of-type(odd) {
 
 /* Nền modal */
 .modal-content {
-  background-color: #fff; /* Màu nền trắng */
-  border-radius: 8px; /* Bo tròn các góc */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng bóng cho modal */
+  background-color: #fff;
+  /* Màu nền trắng */
+  border-radius: 8px;
+  /* Bo tròn các góc */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Tạo hiệu ứng bóng cho modal */
   padding: 20px;
 }
 
 /* Tiêu đề modal */
 .modal-header h4 {
   font-weight: bold;
-  color: #333; /* Màu tiêu đề */
+  color: #333;
+  /* Màu tiêu đề */
 }
 
 /* Nhấn mạnh các nhãn */
@@ -246,9 +373,11 @@ table-striped tbody tr:nth-of-type(odd) {
 /* Cải thiện các input fields */
 .modal-content input,
 .modal-content select {
-  border: 1px solid #ddd; /* Đường viền nhẹ */
+  border: 1px solid #ddd;
+  /* Đường viền nhẹ */
   padding: 8px;
-  border-radius: 4px; /* Bo tròn các góc của input */
+  border-radius: 4px;
+  /* Bo tròn các góc của input */
   width: 100%;
   box-sizing: border-box;
 }
@@ -258,12 +387,13 @@ table-striped tbody tr:nth-of-type(odd) {
   color: red;
   margin-top: 0.5rem;
   font-size: 0.875rem;
- 
+
 }
 
 /* Cải thiện nút submit */
 .modal-content button[type="submit"] {
-  background-color: #003366; /* Màu xanh cho nút submit */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+  /* Màu xanh cho nút submit */
   color: white;
   border: none;
   padding: 12px;
@@ -274,13 +404,15 @@ table-striped tbody tr:nth-of-type(odd) {
 }
 
 .modal-content button[type="submit"]:hover {
-  background-color: #004366; /* Màu khi hover */
+  background-color: #004366;
+  /* Màu khi hover */
 }
 
 /* Cải thiện nút hủy */
 .modal-content button[type="button"] {
-  background-color: #6c757d; /* Màu xám cho nút hủy */
-  color: white;
+  /* Màu xám cho nút hủy */
+  background-color: #fff;
+  color: #888;
   border: none;
   padding: 12px;
   font-size: 1rem;
@@ -289,9 +421,10 @@ table-striped tbody tr:nth-of-type(odd) {
   transition: background-color 0.3s ease;
 }
 
-.modal-content button[type="button"]:hover {
-  background-color: #5a6268; /* Màu khi hover */
-}
+// .modal-content button[type="button"]:hover {
+//   background-color: #5a6268;
+//   /* Màu khi hover */
+// }
 
 /* Chỉnh sửa giao diện form khi có lỗi */
 
@@ -307,21 +440,10 @@ table-striped tbody tr:nth-of-type(odd) {
 
 .button-container {
   display: flex;
-  justify-content: flex-end; /* Căn nút sang bên phải */
-  align-items: center; /* Căn nút theo chiều dọc */
+  justify-content: flex-end;
+  /* Căn nút sang bên phải */
+  align-items: center;
+  /* Căn nút theo chiều dọc */
   margin-bottom: -50rem;
   padding-bottom: -50rem;
 }
-
-
-
-
-
-
-
-
- 
-  
-  
-  
-  

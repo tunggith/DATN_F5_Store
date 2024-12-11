@@ -113,12 +113,13 @@
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th, .table td {
   padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
 }
 
 .table th {
@@ -133,7 +134,7 @@
 
 /* Nút hành động trong bảng */
 .btn-action {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -144,12 +145,12 @@
 }
 
 .btn-action:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Nút chính trong modal */
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 10px 16px;
@@ -160,7 +161,7 @@
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Định dạng form trong modal */
@@ -280,12 +281,13 @@
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th, .table td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
   font-size: 14px;
 }
 
@@ -315,7 +317,7 @@
 
 /* Định dạng các nút hành động trong bảng */
 .btn-action {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
   padding: 6px 10px;
@@ -326,7 +328,7 @@
 }
 
 .btn-action:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 /* Nút điều hướng trang */
@@ -457,7 +459,7 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   border-color: #007bff;
   padding: 8px 16px;
   border-radius: 4px;
@@ -466,14 +468,14 @@
 }
 
 .btn-primary:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   border-color: #004085;
 }
 
 /* Áp dụng cho tất cả các button */
 button {
   color: #fff; /* Màu chữ mặc định */
-  background-color:#004085 ; /* Màu nền trong suốt */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); /* Màu nền trong suốt */
   border: none; /* Loại bỏ đường viền */
   outline: none; /* Loại bỏ outline khi focus */
   cursor: pointer; /* Thay đổi con trỏ khi hover */
@@ -482,13 +484,12 @@ button {
 
 /* Hiệu ứng hover cho tất cả các button */
 button:hover {
-  background-color: #133352;
-  color: #ffcc00;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   transform: scale(1);  
 }
 
 .card-s{
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
 
 }
@@ -504,10 +505,10 @@ button:hover {
   color: #003366; /* Màu chữ mặc định */
 }
 
-/* CSS cho phần header của thẻ */
+/* CSS cho phần header của th */
 .card-header {
   padding: 16px;
-  background-color: #003366; /* Màu nền xanh đậm */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border-top-left-radius: 12px; /* Bo góc trên trái */
   border-top-right-radius: 12px; /* Bo góc trên phải */
@@ -521,7 +522,7 @@ button:hover {
 .card:hover {
   transform: translateY(-5px); /* Nâng thẻ lên khi hover */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn */
-  background-color: #003366; /* Đổi màu nền thành xanh đậm */
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
   color:#fff; /* Đổi màu chữ thành vàng */
 }
 
@@ -569,9 +570,9 @@ button:hover {
 
 /* CSS khi hover vào link */
 .page-link:hover {
-  background-color: #ffcc00;
+  background-color: #acacac;
   color: #003366;
-  border-color: #ffcc00;
+  border: none;
 }
 
 /* CSS cho trạng thái "disabled" */
@@ -585,7 +586,7 @@ button:hover {
 /* CSS cho trang hiện tại */
 .page-item.disabled .page-link span {
   color: #ffffff;
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   border-color: #003366;
   cursor: default;
   border-radius: 8px;
@@ -594,7 +595,7 @@ button:hover {
 
 /* CSS cho trạng thái khi active */
 .page-item.active .page-link {
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #ffffff;
   border-color: #003366;
   cursor: default;
@@ -606,6 +607,9 @@ button:hover {
 .upload-container {
   display: inline-block;
   position: relative;
+  text-align: center;
+  justify-items: center;
+  justify-content: center;
 }
 
 /* Ẩn input file gốc */
@@ -628,6 +632,7 @@ button:hover {
   cursor: pointer;
   transition: all 0.3s ease; /* Hiệu ứng chuyển động tổng quát */
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 /* Hiệu ứng khi di chuột vào nút */
@@ -675,9 +680,7 @@ button:hover {
 }
 
 .fa-eye:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   transform: scale(1.5);      /* Phóng to khi hover */
 }
 
@@ -689,9 +692,7 @@ button:hover {
 }
 
 .fa-edit:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   margin-right: 10px;
   transform: scale(1.5);      /* Phóng to khi hover */
   
@@ -706,54 +707,42 @@ button:hover {
 }
 
 .fa-image:hover{
-  color: #a7a400;
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   margin-right: 10px;
   transform: scale(1.5);      /* Phóng to khi hover */
   
 }
 /* CSS chung cho các radio button */
+/* Start of Selection */
 .form-check-input[type="radio"] {
   appearance: none;
   border: 2px solid #ccc;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   position: relative;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
+  margin-right: 5px; /* Closer to label */
 }
 
 /* Hiển thị dấu chấm khi được chọn */
-.form-check-input[type="radio"] {
-  appearance: none; /* Loại bỏ giao diện mặc định */
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-/* Thay đổi màu viền khi được chọn */
 .form-check-input[type="radio"]:checked {
   border-color: #007bff;
+  background-color: #007bff; /* Fill color when checked */
 }
 
 /* Thêm màu nền nhạt khi hover hoặc focus */
 .form-check-input[type="radio"]:hover,
 .form-check-input[type="radio"]:focus {
-  background-color: #0b5da4;
+  background-color: rgba(11, 93, 164, 0.2);
   border-color: #007bff;
 }
 
 /* Tùy chỉnh label để dễ nhận biết khi radio được chọn */
 .form-check-label {
-  margin-left: 8px;
+  margin-left: 0; /* Align closer to radio */
   font-weight: normal;
   color: #333;
 }
@@ -762,6 +751,7 @@ button:hover {
   font-weight: bold;
   color: #007bff;
 }
+/* End of Selection */
 
 
 
@@ -775,9 +765,19 @@ button:hover {
 
 /* Radio buttons căn ngang hàng */
 .form-check {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  margin-right: 15px;
+  margin-bottom: 0.2rem; /* Adjusts the space between each radio button and label pair */
+}
+
+.form-check-inline {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem; /* Space between inline radio buttons */
+}
+
+.form-check input[type="radio"] {
+  margin-right: 0.5rem; /* Space between the radio button and its label */
 }
 
 /* Common modal overlay styles */
@@ -827,7 +827,7 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border-bottom: 1px solid #dee2e6;
 }
@@ -853,6 +853,7 @@ button:hover {
   display: flex;
   justify-content: flex-end;
   gap: 0.5rem;
+  /* width: 50px; */
 }
 
 /* Close button styling */
@@ -884,6 +885,7 @@ button:hover {
 
 /* Modal buttons */
 .btn {
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: 500;
@@ -891,13 +893,13 @@ button:hover {
 }
 
 .btn-primary {
-  background-color: #003366;
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
   border: none;
 }
 
 .btn-primary:hover {
-  background-color: #004d99;
+  background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 .btn-secondary {
@@ -919,13 +921,14 @@ button:hover {
   width: 100%;
   margin-bottom: 1rem;
   background-color: transparent;
+  border: 1px solid #ddd; /* Đường viền cho toàn bộ bảng */
 }
 
 .table th,
 .table td {
   padding: 0.75rem;
   vertical-align: middle;
-  border-top: 1px solid #dee2e6;
+  border: 1px solid #ddd; /* Đường viền cho các ô */
 }
 
 /* Form group spacing */
@@ -967,7 +970,7 @@ button:hover {
 }
 
 #chiTietModal .modal-header {
-  background-color: #003366; /* Consistent header color */
+  background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
   color: #fff;
 }
 

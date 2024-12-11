@@ -180,7 +180,7 @@
 .san-pham-popup span {
     padding: 5px;
     width: 150px;
-    background-color: rgb(18, 16, 128);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     color: #fff;
     height: 30px;
     border-radius: 5%;
@@ -188,10 +188,15 @@
 
 .san-pham-popup span:hover {
     cursor: pointer;
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
-
+.payment button{
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
+    margin-right: 5px;margin-top: -3px;
+    width: 96%;height: 40px;
+}
 .payment button:hover {
-    background-color: rgb(13, 21, 107);
+    background: linear-gradient(135deg, #184e7c 0%, #2083a3 100%);
 }
 
 .profile-pay {
@@ -227,7 +232,7 @@
     color: #ffff;
     height: 30px;
     border: none;
-    background-color: rgb(244, 25, 25);
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
     border-radius: 5%;
     margin-left: 10px;
 }
@@ -256,7 +261,7 @@
 
 .card-header {
     display: flex;
-    background-color: #003366;
+    background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%);
 }
 
 .card-title {
@@ -345,44 +350,128 @@ datalist {
     padding: 10px;
 }
 
-.danh-sach-hoa-don .row .table {
-    margin: 10px;
+
+
+.table-container {
+    padding: 5px;
+    overflow-x: auto;
+    /* Kích hoạt cuộn ngang */
+    white-space: nowrap;
+    /* Giữ nội dung trên cùng một dòng */
+    max-width: 100%; /* Đảm bảo chiều rộng không vượt quá màn hình */
+    max-height: 100%; /* Giới hạn chiều cao để tránh bị đè */
+}
+
+.table-container table {
+    width: 100%;
+    /* Đảm bảo bảng luôn chiếm đầy đủ không gian */
+    min-width: 100%;
+    /* Đặt chiều rộng tối thiểu nếu cần */
+}
+.table-container .pagination{
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+}
+/* Tùy chỉnh thanh cuộn */
+.table-container::-webkit-scrollbar {
+    width: 6px;
+    /* Độ rộng của thanh cuộn dọc */
+    height: 6px;
+    /* Độ cao của thanh cuộn ngang */
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #a3a3a3;
+    /* Màu của thanh cuộn */
+    border-radius: 3px;
+    /* Góc bo tròn của thanh cuộn */
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #878585;
+    /* Màu khi hover lên thanh cuộn */
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Màu nền của track thanh cuộn */
 }
 
 .button-select {
     font-size: 15px;
     color: #ffff;
     text-align: center;
+    font-weight: bold; /* Chữ đậm hiển thị rõ ràng */
+    width: 120px;
+    text-align: center;
+    height: 35px;
 }
 
+/* Start of Selection */
 .button-select .choXacNhan {
     background-color: green;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: center; /* Căn giữa theo chiều ngang */
 }
 
 .button-select .daXacNhan {
     background-color: #9f84c4;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .dangGiaoHang {
     background-color: red;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .hoanThanh {
     background-color: rgb(192, 59, 10);
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .button-select .daHuy {
     background-color: orange;
-    border-radius: 20%;
+    border-radius: 5px;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+/* End of Selection */
 
 .button-select:hover {
     cursor: pointer;
-    font-size: 20px;
 }
 
 .chiTietHoaDon,
@@ -393,12 +482,10 @@ datalist {
 
 .chiTietHoaDon i:hover {
     cursor: pointer;
-    font-size: 30px;
 }
 
 .lichSuHoaDon i:hover {
     cursor: pointer;
-    font-size: 30px;
 }
 
 .form_address {
@@ -424,6 +511,7 @@ datalist {
 .example-full-width {
     width: 100%;
 }
+
 
 /* Media Queries cho màn hình điện thoại */
 @media (max-width: 768px) {
@@ -463,4 +551,41 @@ datalist {
         width: 100%;
         margin-top: 10px;
     }
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: 12px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensure all data is visible */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+.table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.table-responsive {
+    overflow-y: visible; /* Ensure all data is visible */
+    border-radius: 12px; /* Rounded corners for the responsive container */
+    padding: 10px;
+    margin-bottom: 20px;
 }

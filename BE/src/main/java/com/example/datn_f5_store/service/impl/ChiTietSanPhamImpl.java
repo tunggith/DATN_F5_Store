@@ -14,6 +14,11 @@ import com.example.datn_f5_store.repository.IMauSacRepository;
 import com.example.datn_f5_store.repository.ISanPhamRepository;
 import com.example.datn_f5_store.repository.ISizeRepository;
 import com.example.datn_f5_store.request.ChiTietSanphamRequest;
+import com.example.datn_f5_store.utils.QrCodeUtil;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +30,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +53,8 @@ public class ChiTietSanPhamImpl {
     @Autowired
     IAnhChiTietSanPhamRepository repo_anh;
 
+    @Autowired
+    QrCodeUtil qrCodeUtil;
 
     public ResponseEntity<?> getallPhanTrang(
             Integer currentPage
@@ -68,7 +79,6 @@ public class ChiTietSanPhamImpl {
         // Trả về kết quả phân trang gồm cả nội dung và thông tin phân trang
         return pageResult;
     }
-
 
 
     public ResponseEntity<?> saveChiTietSanPham(ChiTietSanphamRequest ctspRequet, BindingResult result) {
@@ -112,10 +122,15 @@ public class ChiTietSanPhamImpl {
         chiTietSanPham.setSanPham(sanPham);
         chiTietSanPham.setMauSac(mauSac);
         chiTietSanPham.setSize(size);
+        chiTietSanPham.setDonGiaBanDau(ctspRequet.getDonGia());
+        chiTietSanPham.setCheckKm(false);
 
         // Lưu chi tiết sản phẩm
-        repo_ctsp.save(chiTietSanPham);
+        ChiTietSanPhamEntity chiTietSanPhamResult = repo_ctsp.save(chiTietSanPham);
 
+        String qrCode = this.generateQrCode(chiTietSanPhamResult.getId().toString());
+        chiTietSanPhamResult.setQrCode(qrCode);
+        repo_ctsp.save(chiTietSanPhamResult);
         // Trả về thông báo thành công kèm theo HTTP 201 Created
         return ResponseEntity.status(201).body("Lưu chi tiết sản phẩm thành công!");
     }
@@ -151,6 +166,8 @@ public class ChiTietSanPhamImpl {
         chiTietSanPham.setSanPham(sanPham);
         chiTietSanPham.setMauSac(mauSac);
         chiTietSanPham.setSize(size);
+        chiTietSanPham.setDonGiaBanDau(ctspRequest.getDonGia());
+        chiTietSanPham.setCheckKm(false);
 
         // Lưu cập nhật chi tiết sản phẩm
         repo_ctsp.save(chiTietSanPham);
@@ -176,11 +193,11 @@ public class ChiTietSanPhamImpl {
     }
 
 
-
     public Page<ChiTietSanPhamReponse> getByTrangThaiSanPhamAndTrangThai(
             int page, int size, String keyword,
-            String mauSac,String sizeSpct,String thuongHieu,
+            String mauSac, String sizeSpct, String thuongHieu,
             String xuatXu, String gioiTinh) {
+        this.updateTrangThai();
         Pageable pageable = PageRequest.of(page, size);
         Page<ChiTietSanPhamEntity> chiTietSanPham;
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -218,13 +235,16 @@ public class ChiTietSanPhamImpl {
                 entity.getMoTa(),
                 entity.getDonGia(),
                 entity.getSoLuong(),
-                entity.getTrangThai()
+                entity.getTrangThai(),
+                entity.getCheckKm(),
+                entity.getDonGiaBanDau(),
+                entity.getQrCode()
         ));
     }
 
     public Page<ChiTietSanPhamEntity> getAllPhanTrangKm(int currentPage, int pageSize) {
         Pageable pageable = PageRequest.of(currentPage, pageSize);
-        return repo_ctsp.findAll(  pageable);
+        return repo_ctsp.findAll(pageable);
     }
 
     public ChiTietSanPhamEntity getChiTietSanPhamById(Integer id) {
@@ -232,10 +252,10 @@ public class ChiTietSanPhamImpl {
     }
 
 
-
     public boolean isDuplicate(Long idSanPham, Long idMauSac, Long idSize) {
         return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeId(idSanPham, idMauSac, idSize);
     }
+
     public boolean isDuplicateChiTietSanPham(Long sanPhamId, Long mauSacId, Long sizeId, Long chiTietSanPhamId) {
         return repo_ctsp.existsBySanPhamIdAndMauSacIdAndSizeIdAndNotId(sanPhamId, mauSacId, sizeId, chiTietSanPhamId);
     }
@@ -259,8 +279,8 @@ public class ChiTietSanPhamImpl {
      * Thêm danh sách ảnh cho tất cả các Spct của một sản phẩm theo màu sắc.
      *
      * @param idSanPham ID sản phẩm
-     * @param idMauSac ID màu sắc
-     * @param urls Danh sách URL ảnh
+     * @param idMauSac  ID màu sắc
+     * @param urls      Danh sách URL ảnh
      */
     @Transactional
     public void addImagesByProductAndColor(Integer idSanPham, Integer idMauSac, List<String> urls) {
@@ -282,5 +302,50 @@ public class ChiTietSanPhamImpl {
         }
     }
 
+    public static String generateQrCode(String data) {
+        StringBuilder result = new StringBuilder();
+        if (!data.isEmpty()) {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+            try {
+                QRCodeWriter writer = new QRCodeWriter();
+                BitMatrix bitMatrix = writer.encode(data, BarcodeFormat.QR_CODE, 300, 300);
+
+                BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+                ImageIO.write(bufferedImage, "png", os);
+                result.append("data:image/png;base64,");
+                result.append(new String(Base64.getEncoder().encode(os.toByteArray())));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result.toString();
+    }
+
+    private String updateTrangThai() {
+        // Lấy tất cả các sản phẩm chi tiết
+        List<ChiTietSanPhamEntity> listChiTietSanPham = repo_ctsp.findAll();
+
+        // Duyệt qua danh sách và cập nhật trạng thái dựa trên số lượng tồn
+        listChiTietSanPham.forEach(entity -> {
+            if (entity.getSoLuong() > 0) {
+                // Nếu số lượng tồn > 0, trạng thái là "Còn hàng"
+                if (!entity.getTrangThai().equals("Còn hàng")) {
+                    entity.setTrangThai("Còn hàng");
+                }
+            } else {
+                // Nếu số lượng tồn <= 0, trạng thái là "Hết hàng"
+                if (!entity.getTrangThai().equals("Hết hàng")) {
+                    entity.setTrangThai("Hết hàng");
+                }
+            }
+        });
+
+        // Lưu lại toàn bộ danh sách đã cập nhật
+        repo_ctsp.saveAll(listChiTietSanPham);
+
+        // Trả về thông báo thành công
+        return "Cập nhật trạng thái thành công!";
+    }
 
 }

@@ -4,6 +4,8 @@ import com.example.datn_f5_store.dto.KhuyenMaiDto;
 import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.request.KhuyenMaiRequest;
+import com.example.datn_f5_store.response.DataResponse2;
+import com.example.datn_f5_store.service.KhuyenMaiChiTietSanPhamService;
 import com.example.datn_f5_store.service.KhuyenMaiService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.persistence.EntityNotFoundException;
@@ -30,12 +32,18 @@ import com.example.datn_f5_store.response.ResultModel;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/khuyen-mai")
 public class KhuyenMaiController {
     @Autowired
     KhuyenMaiService khuyenMaiService;
+
+    @Autowired
+    KhuyenMaiChiTietSanPhamService khuyenMaiChiTietSanPhamService;
 
     @GetMapping("/getAll")
     private ResponseEntity<Object> getAll(@Parameter(name = "page") @RequestParam(defaultValue = "0") Integer page,
@@ -43,8 +51,11 @@ public class KhuyenMaiController {
         DataResponse dataResponse = new com.example.datn_f5_store.response.DataResponse(); // Tạo đối tượng phản hồi dữ liệu
         dataResponse.setStatus(true); // Đặt trạng thái phản hồi là thành công
         var responseList = khuyenMaiService.getAll(page, size); // Lấy danh sách Khuyen mai với phân trang
+
+        khuyenMaiChiTietSanPhamService.upDateTrangThaiKhuyenMaiCtSp();
         // ham tự động cập nhập trạng thái Khuyến mãi khi hết hạn
         khuyenMaiService.CapNhapTrangThaiKhuyenMaiDhh();
+
         dataResponse.setResult(new ResultModel<>(null, responseList)); // Đặt kết quả vào response
         return ResponseEntity.ok(dataResponse);
     }
@@ -93,7 +104,7 @@ public class KhuyenMaiController {
     @PostMapping("/create")
     public ResponseEntity<?> createKhuyenMai(@RequestBody KhuyenMaiRequest khuyenMai) {
         try {
-            DataResponse savedKhuyenMai = khuyenMaiService.create(khuyenMai);
+            DataResponse2 savedKhuyenMai = khuyenMaiService.create(khuyenMai);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedKhuyenMai);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -174,5 +185,8 @@ public class KhuyenMaiController {
                                     ) {
         return new ResponseEntity<>(khuyenMaiService.CapNhapTrangThaiKhuyenMai(id), HttpStatus.OK);
     }
+
+
+
 
 }

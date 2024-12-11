@@ -47,4 +47,10 @@ public class ChiTietSanPhamEntity {
     private Integer soLuong;
     @Column(name = ConfigContanst.ChiTietSanPham.TRANG_THAI)
     private String trangThai;
+    @Column(name = ConfigContanst.ChiTietSanPham.TRANG_THAI_KHUYEN_MAI)
+    private Boolean checkKm;
+    @Column(name = ConfigContanst.ChiTietSanPham.DON_GIA_BAN_DAU)
+    private Double donGiaBanDau;
+    @Column(name = ConfigContanst.ChiTietSanPham.QR_CODE)
+    private String qrCode;
 }

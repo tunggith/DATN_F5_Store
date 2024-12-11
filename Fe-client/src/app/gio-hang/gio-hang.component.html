@@ -19,7 +19,7 @@
             <span class="material-icons" (click)="themSanPham(gioHang.chiTietSanPham?.id)">add</span>
           </div>
           <div class="gia">
-            <h3>{{ (gioHang.chiTietSanPham?.donGia * gioHang.soLuong) | number:'1.0-0' }}</h3> VNĐ
+            <h3>{{ (gioHang.chiTietSanPham?.donGia * gioHang.soLuong) | number:'1.0-0' }}</h3> VND
             <span class="material-icons" (click)="remove(gioHang.id)">delete</span>
           </div>
         </div>
@@ -43,7 +43,7 @@
           <select id="voucherSelect" (change)="onChangeVoucher($event)">
             <option value="">--Chọn Voucher</option>
             <option *ngFor="let item of voucher" [value]="item.id">
-              {{ item.ten }}
+              {{ item.ten }} - Tối đa {{ item.giaTriGiamToiDa | number:'1.0-0'}} VND
             </option>
           </select>
         </div>
@@ -138,7 +138,7 @@
             <option value="2">Chuyển khoản</option>
           </select>
         </div>
-        <div>
+        <div style="text-align: right;">
           <button (click)="tienHanhXuLy()">Đặt hàng</button>
         </div>
       </div>

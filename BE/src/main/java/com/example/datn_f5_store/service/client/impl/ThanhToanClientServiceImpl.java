@@ -36,6 +36,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -67,19 +68,50 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
     private SendEmailService sendEmailService;
 
     @Override
-    public DataResponse luuGioHang(Integer id,List<ChiTietGioHangLocalRequest> requests) {
+    public DataResponse luuGioHang(Integer id, List<ChiTietGioHangLocalRequest> requests) {
         try {
+            // Lấy giỏ hàng của khách hàng
             GioHangEntity gioHangEntity = gioHangRepository.findByKhachHang_Id(id);
-            // Chuyển đổi từ DTO (ChiTietGioHangRequest) sang Entity (ChiTietGioHangEntity)
+            if (gioHangEntity == null) {
+                return new DataResponse(false, new ResultModel<>(null, "Giỏ hàng không tồn tại!"));
+            }
+
+            // Lấy danh sách chi tiết giỏ hàng hiện tại
+            List<ChiTietGioHangEntity> existingItems = chiTietGioHangRepository.findByGioHang_Id(gioHangEntity.getId());
+
+            // Chuyển đổi từ requests sang danh sách ChiTietGioHangEntity
             List<ChiTietGioHangEntity> chiTietGioHangEntities = requests.stream().map(request -> {
-                ChiTietGioHangEntity entity = new ChiTietGioHangEntity();
-                ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
-                entity.setGioHang(gioHangEntity);
-                entity.setChiTietSanPham(chiTietSanPham);
-                entity.setSoLuong(request.getSoLuong());
-                entity.setTrangThai(request.getTrangThai());
-                return entity;
-            }).collect(Collectors.toList());
+                        // Tìm chi tiết sản phẩm
+                        ChiTietSanPhamEntity chiTietSanPham = chiTietSanPhamRepository.findById(request.getIdChiTietSanPham()).orElse(null);
+                        if (chiTietSanPham == null) {
+                            return null; // Bỏ qua nếu sản phẩm không tồn tại
+                        }
+
+                        // Lấy số lượng sản phẩm thực tế từ kho
+                        int soLuongThucTe = chiTietSanPham.getSoLuong(); // Giả định rằng trường `soLuongTon` là số lượng tồn kho
+
+                        // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ hàng
+                        ChiTietGioHangEntity existingItem = existingItems.stream()
+                                .filter(item -> item.getChiTietSanPham().getId().equals(request.getIdChiTietSanPham()))
+                                .findFirst()
+                                .orElse(null);
+
+                        if (existingItem != null) {
+                            // Cộng dồn số lượng nếu tồn tại
+                            int soLuongMoi = existingItem.getSoLuong() + request.getSoLuong();
+                            existingItem.setSoLuong(Math.min(soLuongMoi, soLuongThucTe)); // Không vượt quá số lượng thực tế
+                            return existingItem;
+                        } else {
+                            // Tạo mới nếu chưa tồn tại
+                            ChiTietGioHangEntity newItem = new ChiTietGioHangEntity();
+                            newItem.setGioHang(gioHangEntity);
+                            newItem.setChiTietSanPham(chiTietSanPham);
+                            newItem.setSoLuong(Math.min(request.getSoLuong(), soLuongThucTe)); // Không vượt quá số lượng thực tế
+                            newItem.setTrangThai(request.getTrangThai());
+                            return newItem;
+                        }
+                    }).filter(Objects::nonNull) // Loại bỏ các phần tử null
+                    .collect(Collectors.toList());
 
             // Lưu danh sách vào cơ sở dữ liệu
             List<ChiTietGioHangEntity> savedEntities = chiTietGioHangRepository.saveAll(chiTietGioHangEntities);
@@ -89,9 +121,10 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
         } catch (Exception e) {
             e.printStackTrace();
             // Trả về phản hồi thất bại
-            return new DataResponse(true, new ResultModel<>(null, "thất bại!"));
+            return new DataResponse(false, new ResultModel<>(null, "Thất bại!"));
         }
     }
+
 
     @Override
     @Transactional
@@ -198,7 +231,7 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             if (thanhToanRequest.getHoaDonRequest().getIdVoucher() != null) {
                 VoucherEntity voucher = voucherRepository.findById(thanhToanRequest.getHoaDonRequest().getIdVoucher()).orElse(null);
                 hoaDon.setVoucher(voucher);
-                voucher.setSoLuong(voucher.getSoLuong()-1);
+                voucher.setSoLuong(voucher.getSoLuong() - 1);
                 voucherRepository.save(voucher);
             }
             PhuongThucThanhToanEntity thanhToan = thanhToanRepository.findById(thanhToanRequest.getHoaDonRequest().getIdThanhToan()).orElse(null);
@@ -216,10 +249,10 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             hoaDon.setThoiGianTao(new Date());
             hoaDon.setGiaoHang(thanhToanRequest.getHoaDonRequest().getGiaoHang());
             hoaDon.setGhiChu(thanhToanRequest.getHoaDonRequest().getGhiChu());
-            if(thanhToanRequest.getHoaDonRequest().getIdThanhToan()==1){
-                hoaDon.setTrangThai("Đã xác nhận");
-            }else {
+            if (thanhToanRequest.getHoaDonRequest().getIdThanhToan() == 1) {
                 hoaDon.setTrangThai("Chờ xác nhận");
+            } else {
+                hoaDon.setTrangThai("Đã xác nhận");
             }
             hoaDon.setGiaTriGiam(thanhToanRequest.getHoaDonRequest().getGiaTriGiam());
             HoaDonEntity hoaDon1 = hoaDonRepository.save(hoaDon);
@@ -241,6 +274,9 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
                     ChiTietSanPhamEntity chiTietSanPham = chiTiet.getChiTietSanPham();
                     if (chiTietSanPham != null) {
                         int soLuongConLai = chiTietSanPham.getSoLuong() - chiTiet.getSoLuong();
+                        if (soLuongConLai < 0) {
+                            throw new RuntimeException("Số lượng sản phẩm không đủ vui lòng liên hệ với Chăm sóc khách hàng để được hỗ trợ!");
+                        }
                         chiTietSanPham.setSoLuong(soLuongConLai);
                         chiTietSanPhamRepository.save(chiTietSanPham);  // Lưu lại đối tượng đã cập nhật
                     }
@@ -266,6 +302,8 @@ public class ThanhToanClientServiceImpl implements ThanhToanClientService {
             sendEmailService.sendSimpleEmailCamOn(emailNguoiNhan, maHoaDon);
 
             return new DataResponse(true, new ResultModel<>(null, "Xử lý giỏ hàng và thanh toán thành công!"));
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return new DataResponse(false, new ResultModel<>(null, "Xử lý giỏ hàng hoặc thanh toán thất bại!"));

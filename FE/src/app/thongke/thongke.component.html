@@ -1,45 +1,48 @@
 <div class="container-fluid" style="padding: 20px; font-family: 'Roboto', sans-serif; background-color: #f4f6f9;">
   <!-- Khối chứa tiêu đề -->
-  <div class="header" style="text-align: center; margin-bottom: 30px;">
+  <!-- <div class="header" style="text-align: center; margin-bottom: 30px;">
     <h2 style="font-weight: bold; font-size: 2rem; color: #0066cc;">Thống kê doanh thu</h2>
-  </div>
+  </div> -->
 
   
     
   <!-- Khối tổng doanh thu -->
-  <div class="row" style="margin-top: 30px; justify-content: center;">
-    <div class="col-md-8">
-      <div class="card" style="background-color: #f7f7f7; padding: 30px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
-        <div class="row">
-           <!-- Cột 1: Tổng doanh thu -->
-           <div class="col-md-4">
-            <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
-              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Doanh thu ngày hôm nay </h4>
-              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ DoanhthuHienTai | number }} VNĐ
-              </p>
-            </div>
-          </div>
+  <div class="row" style="margin-top: 30px;">
+    <div class="col-md-4">
+      <div class="card" style="background-color: #f7f7f7; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
+        <div class="revenue-box" style="padding: 10px; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); border-radius: 10px;">
+          <h4 style="font-weight: bold; font-size: 1.2rem; color: #000000; padding: 8px; border-radius: 5px;">
+            <i class="fa fa-money" style="margin-right: 5px;"></i>Doanh thu ngày hôm nay
+          </h4>
+          <p style="font-size: 1.3rem; font-weight: bold; margin-top: 8px; color: #ffffff;">
+            {{ DoanhthuHienTai | number }} VND
+          </p>
+        </div>
+      </div>
+    </div>
 
-          <!-- Cột 2: Tổng doanh thu -->
-          <div class="col-md-4">
-            <div class="revenue-box" style="padding: 15px; border-right: 1px solid #e0e0e0;">
-              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">Tổng doanh thu {{titler}} {{ viewType === 'day' ? 'ngày' : (viewType === 'month' ? 'tháng' : (viewType === 'quarter' ? 'quý' : 'Năm')) }}</h4>
-              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ totalDoanhThu | number }} VNĐ
-              </p>
-            </div>
-          </div>
+    <div class="col-md-4">
+      <div class="card" style="background-color: #f7f7f7; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
+        <div class="revenue-box" style="padding: 10px; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); border-radius: 10px;">
+          <h4 style="font-weight: bold; font-size: 1.2rem; color: #000000; padding: 8px; border-radius: 5px;">
+            <i class="fa fa-money" style="margin-right: 5px;"></i>Tổng doanh thu {{titler}} {{ viewType === 'day' ? 'ngày' : (viewType === 'month' ? 'tháng' : (viewType === 'quarter' ? 'quý' : 'Năm')) }}
+          </h4>
+          <p style="font-size: 1.3rem; font-weight: bold; margin-top: 8px; color: #ffffff;">
+            {{ totalDoanhThu | number }} VND
+          </p>
+        </div>
+      </div>
+    </div>
 
-          <!-- Cột 2: Mục có doanh thu cao nhất -->
-          <div class="col-md-4">
-            <div class="revenue-box" style="padding: 15px;">
-              <h4 style="font-weight: bold; font-size: 1.4rem; color: #0066cc;">{{ viewType === 'day' ? 'Ngày' : (viewType === 'month' ? 'Tháng' : (viewType === 'quarter' ? 'Quý' : 'Năm')) }} có doanh thu cao nhất</h4>
-              <p style="font-size: 1.5rem; font-weight: bold; margin-top: 10px; color: #333;">
-                {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VNĐ
-              </p>
-            </div>
-          </div>
+    <div class="col-md-4">
+      <div class="card" style="background-color: #f7f7f7; padding: 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: center;">
+        <div class="revenue-box" style="padding: 10px; background: linear-gradient(135deg, #3a6f9e 0%, #4fb0d1 100%); border-radius: 10px;">
+          <h4 style="font-weight: bold; font-size: 1.2rem; color: #000000; padding: 8px; border-radius: 5px;">
+            <i class="fa fa-money" style="margin-right: 5px;"></i>{{ viewType === 'day' ? 'Ngày' : (viewType === 'month' ? 'Tháng' : (viewType === 'quarter' ? 'Quý' : 'Năm')) }} có doanh thu cao nhất
+          </h4>
+          <p style="font-size: 1.3rem; font-weight: bold; margin-top: 8px; color: #ffffff;">
+            {{ highestRevenueLabel }}: {{ highestRevenueAmount | number }} VND
+          </p>
         </div>
       </div>
     </div>
@@ -67,8 +70,12 @@
         <div *ngIf="viewType === 'month' || viewType === 'quarter'" style="margin-bottom: 20px;">
           <label for="yearInput" style="font-size: 1rem; color: #555;">Nhập năm:</label>
           <input type="number" id="yearInput" [(ngModel)]="selectedYear" placeholder="Nhập năm" class="form-control form-control-sm" style="border-radius: 8px;" />
-          <button (click)="loadDoanhThu()" *ngIf="viewType === 'month'" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">Xem theo tháng</button>
-          <button (click)="loadDoanhThuTheoQuy()" *ngIf="viewType === 'quarter'" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">Xem theo quý</button>
+          <button (click)="loadDoanhThu()" *ngIf="viewType === 'month'" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">
+            <i class="fa fa-bar-chart" style="margin-right: 5px;"></i>Xem theo tháng
+          </button>
+          <button (click)="loadDoanhThuTheoQuy()" *ngIf="viewType === 'quarter'" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">
+            <i class="fa fa-bar-chart" style="margin-right: 5px;"></i>Xem theo quý
+          </button>
         </div>
 
         <div *ngIf="viewType === 'year'" style="margin-bottom: 20px;">
@@ -76,7 +83,9 @@
           <input type="number" id="startYearInput" [(ngModel)]="startYear" placeholder="Nhập năm bắt đầu" class="form-control form-control-sm" style="border-radius: 8px;" />
           <label for="endYearInput" style="margin-top: 10px; font-size: 1rem; color: #555;">Năm kết thúc:</label>
           <input type="number" id="endYearInput" [(ngModel)]="endYear" placeholder="Nhập năm kết thúc" class="form-control form-control-sm" style="margin-top: 10px; border-radius: 8px;" />
-          <button (click)="loadDoanhThuTheoNam()" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">Xem theo năm</button>
+          <button (click)="loadDoanhThuTheoNam()" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">
+            <i class="fa fa-bar-chart" style="margin-right: 5px;"></i>Xem theo năm
+          </button>
         </div>
 
         <div *ngIf="viewType === 'day'" style="margin-bottom: 20px;">
@@ -84,11 +93,13 @@
           <input   type="date" id="startDate" [(ngModel)]="selectedStartDate" class="form-control form-control-sm" style="border-radius: 8px;" />
           <label for="endDate" style="margin-top: 10px; font-size: 1rem; color: #555;">Ngày kết thúc:</label>
           <input type="date" id="endDate" [(ngModel)]="selectedEndDate" class="form-control form-control-sm" style="margin-top: 10px; border-radius: 8px;" />
-          <button (click)="loadDoanhThuTheoNgay()" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">Xem theo ngày</button>
+          <button (click)="loadDoanhThuTheoNgay()" class="btn btn-primary btn-sm" style="margin-top: 15px; border-radius: 8px;">
+            <i class="fa fa-bar-chart" style="margin-right: 5px;"></i>Xem theo ngày
+          </button>
         </div>
 
         <!-- Dropdown chọn kiểu biểu đồ -->
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 2px;">
           <label for="chartType" style="font-size: 1rem; color: #555;">Chọn kiểu biểu đồ:</label>
           <select id="chartType" [(ngModel)]="selectedChartType" class="form-control form-control-sm" style="margin-top: 8px; border-radius: 8px;">
             <option value="line">Biểu đồ đường</option>
@@ -109,17 +120,17 @@
         <div *ngIf="topSanPham.length > 0">
           <table class="table table-hover table-striped" style="margin-top: 15px;">
             <thead style="background-color: #f8f9fa;">
-              <tr>
-                <th scope="col">#</th>
+              <tr style="text-align: center; font-weight: bold;">
+                <th scope="col">STT</th>
                 <th scope="col">Tên sản phẩm</th>
                 <th scope="col">Số lượng đã bán</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let sp of topSanPham; let i = index">
-                <th scope="row">{{ i + 1 }}</th>
-                <td>{{ sp.tenSP }}</td>
-                <td>{{ sp.soluotduocban }}</td>
+                <th scope="row" style="text-align: center;">{{ i + 1 }}</th>
+                <td style="text-align: center;">{{ sp.tenSP }}</td>
+                <td style="text-align: center;">{{ sp.soluotduocban }}</td>
               </tr>
             </tbody>
           </table>
@@ -136,7 +147,7 @@
   <!-- Khối biểu đồ -->
   <div class="row" style="margin-bottom: 30px;">
     <div class="col-md-12">
-      <div class="card" style="padding: 25px; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+      <div class="card" style="padding: 25px; background-color: #ffffff; border-radius: 15px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);margin-top: -25px;">
         <canvas baseChart
                 [datasets]="lineChartData"
                 [labels]="lineChartLabels"

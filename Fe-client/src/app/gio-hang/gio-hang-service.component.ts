@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 
 
 @Injectable({
@@ -54,5 +54,14 @@ export class GioHangService {
   }
   vnPay(amount: number): Observable<any> {
     return this.http.get(`${this.vnPayUrl}/createPay?amount=${amount}`);
+  }
+  getSoLuong(id:number):Observable<any>{
+    return this.http.get(`${this.API_URL}/get-so-luong/${id}`);
+  }
+  getListSoLuong():Observable<any>{
+    return this.http.get(`${this.API_URL}/get-list-chi-tiet`);
+  }
+  getDiaChi(id:string):Observable<any>{
+    return this.http.get(`${this.API_URL}/get-all-dia-chi/${id}`);
   }
 }
