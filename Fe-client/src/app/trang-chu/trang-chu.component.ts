@@ -34,9 +34,9 @@ export class TrangChuComponent implements OnInit {
   donGia: Number = 0;
   selectedProductId: number = 0;
   sliderImages = [
-    'https://imgur.com/owuXyW7.jpg',
-    'https://imgur.com/mkWZrwI.jpg',
-    'https://imgur.com/yFD2QA4.jpg'
+    '../assets/img/banner/banner15.png',
+    '../assets/img/banner/banner13.jpg',
+    '../assets/img/banner/banner14.jpg'
   ];
 
   constructor(private trangChuService: TrangChuServiceComponent, private gioHangService: GioHangService) { }

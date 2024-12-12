@@ -136,6 +136,7 @@
 /* 2.2 header middel css here*/
 .logo {
 	padding-left: 30px;
+	padding-bottom: 15px;
 }
 .header_right_info {
 	display: -webkit-box;
@@ -469,7 +470,7 @@
 	padding-right: 0;
 }
 .pos_home_section {
-	padding-top: 35px;
+	padding-top: 10px;
 	padding-left: 20px;
 	padding-right: 20px;
 }

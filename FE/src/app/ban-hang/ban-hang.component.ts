@@ -213,6 +213,9 @@ export class BanHangComponent implements OnInit {
   }
 
   getTienTraLai(tienKhachDua: number): void {
+    if(this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+      this.tienKhachDuaInvalid = true;
+    }
     if (isNaN(tienKhachDua) || tienKhachDua < 0) {
       this.tienKhachDuaInvalid = true;
       this.tienTraLai = 0;
@@ -411,7 +414,10 @@ export class BanHangComponent implements OnInit {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
-
+    if(isNaN(this.tienKhachDua)||this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+      this.showErrorMessage('Số tiền khách đưa không hợp lệ!');
+      return;
+    }
     // Nếu idGiaoHang là 1 thì mới gọi submitAddress và kiểm tra địa chỉ
     if (this.idGiaoHang === 1) {
       this.submitAddress();
