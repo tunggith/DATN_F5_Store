@@ -415,26 +415,29 @@
               <option *ngFor="let size of sizes" [value]="size.id">{{ size.ten }}</option>
             </select>
           </div>
-            <!-- check nếu  
-checkKm = false  thì k cho sửa giá -->
-<!-- 
-            <div class="mb-3" *ngIf="checkKm === false">
+            <!-- check  nếu km true thì k cho sửa đơn giá  -->
+            <div class="mb-3">
               <label for="donGia" class="form-label">Đơn giá</label>
-              <input type="number" id="donGia" class="form-control" formControlName="donGia" min="0" required>
+              <input type="text" 
+                   id="donGia" 
+                   class="form-control" 
+                   formControlName="donGia"
+                   [readonly]="checkKm"
+                   [ngClass]="{'bg-light': checkKm}"
+                   (input)="formatCurrency($event)"
+                   (blur)="formatCurrency($event)"
+                   (focus)="onFocus($event)"
+                   [title]="checkKm ? 'Không thể sửa đơn giá khi sản phẩm đang có khuyến mãi' : ''">
+              <small class="text-danger" *ngIf="checkKm">
+                Không thể sửa đơn giá khi sản phẩm đang có khuyến mãi
+              </small>
               <div *ngIf="chiTietSanPhamForm.get('donGia').invalid && (chiTietSanPhamForm.get('donGia').dirty || chiTietSanPhamForm.get('donGia').touched)" class="text-danger">  
                 <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.required">Đơn giá là bắt buộc.</small>
                 <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.min">Đơn giá phải là số không âm.</small>
+                <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.max">Đơn giá quá lớn .</small>
               </div>
-            </div> -->
-
-          <!-- <div class="mb-3">
-            <label for="donGia" class="form-label">Đơn giá</label>
-            <input type="number" id="donGia" class="form-control" formControlName="donGia" min="0" required>
-            <div *ngIf="chiTietSanPhamForm.get('donGia').invalid && (chiTietSanPhamForm.get('donGia').dirty || chiTietSanPhamForm.get('donGia').touched)" class="text-danger">
-              <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.required">Đơn giá là bắt buộc.</small>
-              <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.min">Đơn giá phải là số không âm.</small>
             </div>
-          </div> -->
+         
 
           <div class="form-group">
             <label for="moTa">Mô tả</label>
@@ -443,10 +446,13 @@ checkKm = false  thì k cho sửa giá -->
 
           <div class="mb-3">
             <label for="soLuong" class="form-label">Số lượng</label>
-            <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
+            <input 
+            type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
             <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
               <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
               <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+              <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.max">Số lượng quá lớn khô.</small>
+
             </div>
           </div>
 
@@ -566,7 +572,7 @@ checkKm = false  thì k cho sửa giá -->
                   </li>
                 </ul>
               </nav>
-
+                
 
             </div>
           </div>
@@ -594,13 +600,17 @@ checkKm = false  thì k cho sửa giá -->
             <form [formGroup]="chiTietSanPhamForm">
               <div class="form-group">
                 <label for="donGia">Đơn giá</label>
-                <input type="number" id="donGia" class="form-control" formControlName="donGia"
+                <input 
+                 type="text" id="donGia" class="form-control" formControlName="donGia"
+                 (input)="formatCurrency($event)"
+                 (blur)="formatCurrency($event)"
                   placeholder="Nhập đơn giá" min="0" required>
                 <div
                   *ngIf="chiTietSanPhamForm.get('donGia')?.invalid && (chiTietSanPhamForm.get('donGia')?.dirty || chiTietSanPhamForm.get('donGia')?.touched)"
                   class="text-danger">
                   <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.required">Đơn giá là bắt buộc.</small>
                   <small *ngIf="chiTietSanPhamForm.get('donGia')?.errors?.min">Đơn giá phải là số không âm.</small>
+                  <small *ngIf="chiTietSanPhamForm.get('donGia').errors?.max">Đơn giá quá lớn không phù hợp .</small>
                 </div>
               </div>
 
@@ -612,6 +622,7 @@ checkKm = false  thì k cho sửa giá -->
                   class="text-danger">
                   <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
                   <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
+                  <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.max">số lượng quá lớn không phù hợp.</small>
                 </div>
               </div>
               <div class="form-group">

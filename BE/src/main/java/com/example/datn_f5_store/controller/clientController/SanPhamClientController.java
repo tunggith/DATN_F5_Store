@@ -93,7 +93,7 @@ public class SanPhamClientController {
     @GetMapping("/getSanPhamPhanTrang")
     public ResponseEntity<Page<AnhChiTietSanPham>> getSanPham(
             @RequestParam(value = "page" ,defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "9") int size) {
         if (page < 0) {
             page = 0; // Đảm bảo page luôn bắt đầu từ 0
         }
@@ -126,7 +126,7 @@ public class SanPhamClientController {
             @RequestParam(value = "mauSac", required = false) Integer mauSac,
             @RequestParam(value = "kichThuoc", required = false) Integer kichThuoc,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "size", defaultValue = "9") int size
     ) {
         // Tạo đối tượng Pageable từ page và size
         Pageable pageable = PageRequest.of(page, size);

@@ -251,13 +251,20 @@
                             </form>
                         </div>
                         <div>
-                            <div>
-                                <span><strong>Tiền khách đưa:</strong> </span>
-                                <input type="text" class="cash-client" [(ngModel)]="tienKhachDua"
-                                    (focus)="tienKhachDua === 0 ? tienKhachDua = null : null"
-                                    (input)="getTienTraLai(tienKhachDua)"
-                                    [ngClass]="{'error-border':tienKhachDua !== null && tienKhachDua < tongTienSauVoucher+phiVanChuyen || tienKhachDuaInvalid}">
-                            </div>
+                            <div >
+                                <span><strong>Tiền khách đưa</strong></span>
+                                <input type="text" 
+                                       class="form-control" 
+                                       [(ngModel)]="tienKhachDua"
+                                       (input)="formatCurrency($event)"
+                                       (blur)="formatCurrency($event)"
+                                       (focus)="onFocus($event)"
+                                       [attr.maxlength]="15"
+                                       [class.is-invalid]="tienKhachDuaInvalid">
+                                <div class="invalid-feedback" *ngIf="tienKhachDuaInvalid">
+                                  Số tiền khách đưa phải lớn hơn hoặc bằng tổng tiền thanh toán
+                                </div>
+                              </div>
                             <div *ngIf="tienKhachDua !== null &&tienKhachDua < tongTienSauVoucher+phiVanChuyen">
                                 <span class="error-text"><strong>Số tiền khách đưa không đủ!</strong></span>
                             </div>

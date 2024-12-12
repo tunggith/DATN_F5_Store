@@ -19,16 +19,14 @@ export class SevricesanphamService {
 
   // Hàm để tạo hoặc cập nhật sản phẩm
   createOrUpdateSanPham(sanPhamData: any): Observable<any> {
-    console.log('Service method called with data:', sanPhamData); // Debug log
-    
     if (sanPhamData.id && sanPhamData.id !== 0) {
-        console.log('Updating product with ID:', sanPhamData.id); // Debug log
-        const url = `${this.apiUrl}/san-pham/update/${sanPhamData.id}`;
-        return this.http.put<any>(url, sanPhamData);
+      // Nếu có ID, thực hiện cập nhật
+      const url = `${this.apiUrl}/san-pham/update/${sanPhamData.id}`;
+      return this.http.put<any>(url, sanPhamData); // PUT request để cập nhật sản phẩm
     } else {
-        console.log('Creating new product'); // Debug log
-        const url = `${this.apiUrl}/san-pham/create`;
-        return this.http.post<any>(url, sanPhamData);
+      // Nếu không có ID hoặc ID bằng 0, thực hiện tạo mới
+      const url = `${this.apiUrl}/san-pham/create`;
+      return this.http.post<any>(url, sanPhamData); // POST request để tạo sản phẩm
     }
   }
 

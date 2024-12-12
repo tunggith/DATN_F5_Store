@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SevricesanphamService } from './sevricesanpham.service'; // Import service
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { response } from 'express';
 import { forkJoin } from 'rxjs';
@@ -95,10 +95,12 @@ export class SanphamComponent implements OnInit {
     this.chiTietSanPhamForm = this.fb.group({
       idMauSac: ['', Validators.required],
       idSize: ['', Validators.required],
-      donGia: ['', [Validators.required, Validators.min(0)]],
-      soLuong: [0, Validators.required],
+      donGia: ['', [
+        Validators.required,
+        this.numericValidator()
+      ]],
+      soLuong: [0, [Validators.required , Validators.max(100000000)]],//10,000,000
       moTa: [''],
-      checkKm: false,
       trangThai: ['Còn hàng', Validators.required]
     });
 
@@ -112,7 +114,7 @@ export class SanphamComponent implements OnInit {
     this.attributeForm = this.fb.group({
       type: ['', Validators.required],  // Validator kiểm tra loại thuộc tính phải được chọn
       ma: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểẾẾỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếềểễệỉịọỏốồổỗộớờởỡợụủứừễếềểễệỉịọỏốồổỗộớờởỡợụủứừựỳỵỷỹ ]*$')]],    // Validator kiểm tra mã thuộc tính phải không được để trống
-      ten: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểẾẾỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếềểễệỉịọỏốồổỗộớờởỡợụủứừễếềểễệỉịọỏốồổỗộớờởỡợụủứừựỳỵỷỹ ]*$')]]
+      ten: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểẾẾỀỂỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếềểễệỉịọỏốồổỗộớờởỡợụủứừựếềểễệỉịọỏốồổỗộớờởỡợụủứừựỳỵỷỹ ]*$')]]
 
     });
 
@@ -617,6 +619,7 @@ export class SanphamComponent implements OnInit {
   // Hàm xử lý khi submit form chi tiết sản phẩm
   onSubmitUpdateChiTietSanPham() {
     // Kiểm tra xem form có hợp lệ không
+    console.log('this.chiTietSanPhamForm',this.chiTietSanPhamForm)
     if (this.chiTietSanPhamForm.valid) {
       const sanPhamId = this.selectedSanPhamId;
       const mauSacId = this.chiTietSanPhamForm.value.idMauSac;
@@ -650,6 +653,9 @@ export class SanphamComponent implements OnInit {
             // nếu số lượng  > 0 thì trạng thái là Còn Hàng
             if (updatedChiTietSanPhamData.soLuong > 0) {
               updatedChiTietSanPhamData.trangThai = 'Còn hàng';
+            }
+            if (updatedChiTietSanPhamData.soLuong <= 0) {
+              updatedChiTietSanPhamData.trangThai = 'Hết hàng';
             }
 
             if(updatedChiTietSanPhamData.donGia < 0 || updatedChiTietSanPhamData.soLuong < 0){
@@ -1514,7 +1520,7 @@ export class SanphamComponent implements OnInit {
     });
   }
 
-
+   checkKm : boolean = false 
    maChitietsanpham: string = '';
    selectedSanPhamChitietId: number = 0;
   // Method to open the add/update detail modal
@@ -1526,7 +1532,8 @@ export class SanphamComponent implements OnInit {
       (response: any) => {
         if (response && response.result && response.result.content) {
           const chiTietSanPham = response.result.content;
-
+          this.checkKm = chiTietSanPham.checkKm
+          console.log("km sản phẩm ", this.checkKm)
           // Điền dữ liệu chi tiết sản phẩm vào form
           this.chiTietSanPhamForm.patchValue({
             ma: chiTietSanPham.ma, // Patch mã chi tiết
@@ -1565,9 +1572,63 @@ export class SanphamComponent implements OnInit {
 }
 
 // Add this method to the SanphamComponent class
-
-
-
- 
+formatCurrency(event: any) {
+  let value = event.target.value;
   
+  // Xóa tất cả các ký tự không phải số
+  value = value.replace(/[^\d]/g, '');
+  
+  // Chuyển thành số
+  const number = Number(value);
+  
+  // Nếu là số hợp lệ thì format
+  if (!isNaN(number)) {
+    // Format số với dấu phân cách hàng nghìn
+    const formattedValue = number.toLocaleString('vi-VN');
+    
+    // Cập nhật giá trị trong form
+    this.chiTietSanPhamForm.patchValue({
+      donGia: formattedValue
+    }, { emitEvent: false });
+    
+    // Cập nhật giá trị hiển thị
+    event.target.value = formattedValue;
+  }
+}
+
+onFocus(event: any) {
+  // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
+  let value = event.target.value;
+  value = value.replace(/[^\d]/g, '');
+  event.target.value = value;
+}
+
+private numericValidator(): ValidatorFn{
+  return (control: AbstractControl): ValidationErrors | null => {
+    // Nếu không có giá trị, không validate (để Validators.required xử lý)
+    if (!control.value) {
+      return null;
+    }
+
+    // Xóa tất cả dấu phân cách để lấy số nguyên
+    const numericValue = Number(control.value.toString().replace(/[^\d]/g, ''));
+
+    // Kiểm tra có phải là số hợp lệ không
+    if (isNaN(numericValue)) {
+      return { 'numeric': true };
+    }
+
+    // Kiểm tra giá trị tối thiểu
+    if (numericValue < 0) {
+      return { 'min': true };
+    }
+
+    // Kiểm tra giá trị tối đa
+    if (numericValue > 1000000000) {
+      return { 'max': true };
+    }
+
+    return null;
+  };
+}
 } 

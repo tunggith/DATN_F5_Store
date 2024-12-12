@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'app/auth.service';
 import { BanHangService } from 'app/ban-hang.service';
@@ -213,6 +213,9 @@ export class BanHangComponent implements OnInit {
   }
 
   getTienTraLai(tienKhachDua: number): void {
+    if(this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+      this.tienKhachDuaInvalid = true;
+    }
     if (isNaN(tienKhachDua) || tienKhachDua < 0) {
       this.tienKhachDuaInvalid = true;
       this.tienTraLai = 0;
@@ -403,7 +406,7 @@ export class BanHangComponent implements OnInit {
   //==================Thanh toán hóa đơn==================
 
   thanhtoanHoaDon(idHoaDon: number): void {
-    const isConfirmed = window.confirm("Bạn có chắc chắn muốn thanh toán hóa đơn này không?");
+    const isConfirmed = window.confirm("Bạn có chắc chắn mu���n thanh toán hóa đơn này không?");
     if (!isConfirmed) {
       return; // Nếu người dùng nhấn "Cancel", dừng lại
     }
@@ -411,7 +414,10 @@ export class BanHangComponent implements OnInit {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
-
+    if(isNaN(this.tienKhachDua)||this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+      this.showErrorMessage('Số tiền khách đưa không hợp lệ!');
+      return;
+    }
     // Nếu idGiaoHang là 1 thì mới gọi submitAddress và kiểm tra địa chỉ
     if (this.idGiaoHang === 1) {
       this.submitAddress();
@@ -920,5 +926,95 @@ export class BanHangComponent implements OnInit {
 
   sanitizeSoDienThoai(value: string): string {
     return value.replace(/[^0-9]/g, '');
+ 
+  }
+
+
+  private maxPaymentValidator(tongTien: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+  
+      // Xóa dấu phân cách để lấy số nguyên
+      const numericValue = Number(control.value.toString().replace(/[^\d]/g, ''));
+  
+      // Kiểm tra có phải là số hợp lệ không
+      if (isNaN(numericValue)) {
+        return { 'numeric': true };
+      }
+  
+      // Kiểm tra giá trị tối thiểu phải bằng tổng tiền
+      if (numericValue < tongTien) {
+        return { 'minPayment': true };
+      }
+  
+      // Kiểm tra giá trị tối đa không được vượt quá tổng tiền + 50tr
+      if (numericValue > (tongTien + 50000000)) {
+        return { 'maxPayment': true };
+      }
+  
+      return null;
+    };
+  }
+
+  formatCurrency(event: any) {
+    let value = event.target.value;
+    
+    // Xóa tất cả các ký tự không phải số
+    value = value.replace(/[^\d]/g, '');
+    
+    // Chuyển thành số
+    const number = Number(value);
+    
+    // Lấy tổng tiền phải trả
+    const tongTien = this.tongTienSauVoucher || 0;
+    const maxAllowed = tongTien + 50000000;
+
+    if (!isNaN(number)) {
+      // Kiểm tra giới hạn
+      if (number > maxAllowed) {
+        // Nếu vượt quá, set lại giá trị bằng giá trị tối đa cho phép
+        const formattedMax = maxAllowed.toLocaleString('vi-VN');
+        this.tienKhachDua = maxAllowed;
+        event.target.value = formattedMax;
+
+        // Hiển thị thông báo cho người dùng
+        Swal.fire({
+          icon: 'warning',
+          title: 'Vượt quá giới hạn',
+          text: `Số tiền quá lớn không hợp lệ`,
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+      } else {
+        // Format số với dấu phân cách hàng nghìn
+        const formattedValue = number.toLocaleString('vi-VN');
+        this.tienKhachDua = number;
+        event.target.value = formattedValue;
+      }
+      
+      // Tính tiền thừa sau khi cập nhật tiền khách đưa
+      this.tinhTienThua();
+    }
+  }
+
+  onFocus(event: any) {
+    // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
+    let value = event.target.value;
+    value = value.replace(/[^\d]/g, '');
+    event.target.value = value;
+  }
+
+  // Cập nhật lại phương thức tinhTienThua()
+  tinhTienThua() {
+    if (this.tienKhachDua && this.tongTienSauVoucher) {
+      this.tienTraLai = this.tienKhachDua - this.tongTienSauVoucher;
+    } else {
+      this.tienTraLai = 0;
+    }
   }
 }
+
