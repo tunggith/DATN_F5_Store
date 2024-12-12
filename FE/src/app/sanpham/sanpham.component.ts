@@ -98,6 +98,7 @@ export class SanphamComponent implements OnInit {
       donGia: ['', [Validators.required, Validators.min(0)]],
       soLuong: [0, Validators.required],
       moTa: [''],
+      checkKm: false,
       trangThai: ['Còn hàng', Validators.required]
     });
 
