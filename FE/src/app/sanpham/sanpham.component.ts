@@ -643,8 +643,13 @@ export class SanphamComponent implements OnInit {
               donGia: parseFloat(this.chiTietSanPhamForm.value.donGia) || 0, // Giá trị mặc định là 0
               soLuong: parseInt(this.chiTietSanPhamForm.value.soLuong, 10) || 0, // Giá trị mặc định là 0
               moTa: this.chiTietSanPhamForm.value.moTa,
-              trangThai: this.chiTietSanPhamForm.value.trangThai || 'active' // Giá trị mặc định nếu chưa có
+              trangThai: this.chiTietSanPhamForm.value.trangThai || 'Còn hàng' // Giá trị mặc định nếu chưa có
             };
+
+            // nếu số lượng  > 0 thì trạng thái là Còn Hàng
+            if (updatedChiTietSanPhamData.soLuong > 0) {
+              updatedChiTietSanPhamData.trangThai = 'Còn hàng';
+            }
 
             if(updatedChiTietSanPhamData.donGia < 0 || updatedChiTietSanPhamData.soLuong < 0){
               Swal.fire('Lỗi', 'Giá trị không được nhỏ hơn 0!', 'error');
