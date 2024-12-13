@@ -870,6 +870,7 @@ export class BanHangComponent implements OnInit {
   }
 
   resetHoaDonData(): void {
+    this.selectedVoucherId = null;
     this.tongTienBanDau = 0;
     this.tongTienSauVoucher = 0;
     this.tenKhachHang = '';
