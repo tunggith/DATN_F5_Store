@@ -110,14 +110,10 @@ public class PdfExportService {
             int nam = calendar.get(Calendar.YEAR);
             String maHoaDon = hoaDon.getMa();
             double tongTien = 0;
-            if (hoaDon.getGiaoHang() == 0 && hoaDon.getVoucher() == null) {
+            if (hoaDon.getGiaoHang() == 0) {
                 tongTien = hoaDon.getTongTienSauVoucher();
-            } else if (hoaDon.getGiaoHang() != 0 && hoaDon.getVoucher() == null) {
+            } else if (hoaDon.getGiaoHang() != 0) {
                 tongTien = hoaDon.getTongTienSauVoucher() + hoaDon.getPhiShip();
-            } else if (hoaDon.getGiaoHang() == 0 && hoaDon.getVoucher() != null) {
-                tongTien = hoaDon.getTongTienSauVoucher() - hoaDon.getGiaTriGiam();
-            } else {
-                tongTien = hoaDon.getTongTienSauVoucher() + hoaDon.getPhiShip() - hoaDon.getGiaTriGiam();
             }
             String tenNhanVien = "";
             String email = "";

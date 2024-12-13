@@ -188,7 +188,7 @@
                                         <select class="form-control" id="quanHuyen" [(ngModel)]="selectedQuanHuyen"
                                             name="quanHuyen" (change)="onQuanHuyenChange($event)"
                                             (blur)="selectedQuanHuyen ? null : showErrorMessage('Vui lòng chọn quận/huyện')">
-                                            <option value="">Chọn quận/huyện</option>
+                                            <option *ngIf="selectedQuanHuyen===null" value="">Chọn quận/huyện</option>
                                             <option *ngFor="let quan of districts" [value]="quan.DistrictID">{{
                                                 quan.DistrictName }}
                                             </option>
@@ -202,7 +202,7 @@
                                         <select class="form-control" id="phuongXa" [(ngModel)]="selectedPhuongXa"
                                             name="phuongXa" (change)="onPhuongXaChange($event)"
                                             (blur)="selectedPhuongXa ? null : showErrorMessage('Vui lòng chọn phường/xã')">
-                                            <option value="">Chọn phường/xã</option>
+                                            <option *ngIf="selectedPhuongXa===null" value="">Chọn phường/xã</option>
                                             <option *ngFor="let phuong of wards" [value]="phuong.WardCode">{{
                                                 phuong.WardName }}
                                             </option>

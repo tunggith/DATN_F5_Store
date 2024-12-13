@@ -132,9 +132,16 @@ export class BanHangComponent implements OnInit {
     // Theo dõi thay đổi của voucherControl
     this.voucherControl.valueChanges.subscribe(value => {
       if (!value) {
-        console.log('Voucher đã bị xóa hoặc không hợp lệ');
         // Đặt lại các biến liên quan đến voucher
         this.tongTienSauVoucher = this.tongTienBanDau;// Gọi hàm khi giá trị là null hoặc rỗng
+      }
+    });
+    this.myControl.valueChanges.subscribe(value => {
+      if (!value) {
+        this.resetFormDiaChi();
+        this.phiVanChuyen = 0;
+        this.idKhachHang = 1;
+        this.myControl.reset(); // Đặt lại thông tin khách hàng khi giá trị input bị xóa
       }
     });
   }
@@ -213,7 +220,7 @@ export class BanHangComponent implements OnInit {
   }
 
   getTienTraLai(tienKhachDua: number): void {
-    if(this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+    if (this.tienKhachDua > (this.tongTienSauVoucher + this.phiVanChuyen) + 10000000) {
       this.tienKhachDuaInvalid = true;
     }
     if (isNaN(tienKhachDua) || tienKhachDua < 0) {
@@ -221,7 +228,7 @@ export class BanHangComponent implements OnInit {
       this.tienTraLai = 0;
     } else {
       this.tienKhachDuaInvalid = false;
-      this.tienTraLai = tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
+      this.tienTraLai = tienKhachDua - (this.tongTienSauVoucher + this.phiVanChuyen);
     }
   }
 
@@ -406,7 +413,7 @@ export class BanHangComponent implements OnInit {
   //==================Thanh toán hóa đơn==================
 
   thanhtoanHoaDon(idHoaDon: number): void {
-    const isConfirmed = window.confirm("Bạn có chắc chắn mu���n thanh toán hóa đơn này không?");
+    const isConfirmed = window.confirm("Bạn có chắc chắn muuốn thanh toán hóa đơn này không?");
     if (!isConfirmed) {
       return; // Nếu người dùng nhấn "Cancel", dừng lại
     }
@@ -414,7 +421,7 @@ export class BanHangComponent implements OnInit {
       this.showErrorMessage('Số tiền khách đưa không đủ!');
       return;
     }
-    if(isNaN(this.tienKhachDua)||this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
+    if (isNaN(this.tienKhachDua) || this.tienKhachDua > (this.tongTienSauVoucher + this.phiVanChuyen) + 10000000) {
       this.showErrorMessage('Số tiền khách đưa không hợp lệ!');
       return;
     }
@@ -462,6 +469,7 @@ export class BanHangComponent implements OnInit {
         this.getIdThanhToan(1);
         // this.icon = 'toggle_off';
         this.resetForm();
+        this.resetHoaDonData();
         // Hiển thị hộp thoại xác nhận in hóa đơn
         const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
         if (printConfirm) {
@@ -523,6 +531,7 @@ export class BanHangComponent implements OnInit {
                   // Tìm phường/xã tương ứng
                   const ward = this.wards.find(w => w.WardName === this.phuongXa);
                   this.selectedPhuongXa = ward ? ward.WardCode : null;
+                  console.log('Tên phường xã',this.selectedPhuongXa);
                   this.getShippingFee();
                 },
                 error => {
@@ -774,7 +783,6 @@ export class BanHangComponent implements OnInit {
   }
   onOptionSelected(event: any) {
     const selectedTen = event.option.value; // Lấy giá trị 'ten' từ lựa chọn
-
     // Tìm khách hàng tương ứng từ danh sách options dựa trên 'ten'
     const selectedKhachHang = this.options.find(option => option.ten === selectedTen);
 
@@ -782,6 +790,9 @@ export class BanHangComponent implements OnInit {
       this.idKhachHang = selectedKhachHang.id; // Gán id cho idKhachHang
       this.tenKhachHang = selectedKhachHang.ten;
       this.loadDiaChi(this.idKhachHang);
+    } else {
+      this.idKhachHang = 1;
+      this.myControl.reset();
     }
   }
   //========load voucher===========
@@ -828,7 +839,7 @@ export class BanHangComponent implements OnInit {
         // Tính tổng tiền sau khi áp dụng voucher
         this.tongTienSauVoucher = this.tongTienBanDau - finalDiscount;
         // this.tienKhachDua = this.tongTienBanDau - finalDiscount;
-        this.tienTraLai = this.tienKhachDua - (this.tongTienSauVoucher+this.phiVanChuyen);
+        this.tienTraLai = this.tienKhachDua - (this.tongTienSauVoucher + this.phiVanChuyen);
       } else {
         // Nếu không đạt điều kiện, tổng tiền không thay đổi
         this.tongTienSauVoucher = this.tongTienBanDau;
@@ -904,7 +915,9 @@ export class BanHangComponent implements OnInit {
     this.phiVanChuyen = 0;
     this.tongTienSauVoucher = 0;
     this.tienTraLai = 0;
-
+    this.selectedTinhThanh = '';
+    this.selectedQuanHuyen = '';
+    this.selectedPhuongXa = '';
     // Đặt lại các giá trị mặc định khác
     this.icon = 'toggle_off';
     this.popupQr = false;
@@ -926,7 +939,7 @@ export class BanHangComponent implements OnInit {
 
   sanitizeSoDienThoai(value: string): string {
     return value.replace(/[^0-9]/g, '');
- 
+
   }
 
 
@@ -935,38 +948,38 @@ export class BanHangComponent implements OnInit {
       if (!control.value) {
         return null;
       }
-  
+
       // Xóa dấu phân cách để lấy số nguyên
       const numericValue = Number(control.value.toString().replace(/[^\d]/g, ''));
-  
+
       // Kiểm tra có phải là số hợp lệ không
       if (isNaN(numericValue)) {
         return { 'numeric': true };
       }
-  
+
       // Kiểm tra giá trị tối thiểu phải bằng tổng tiền
       if (numericValue < tongTien) {
         return { 'minPayment': true };
       }
-  
+
       // Kiểm tra giá trị tối đa không được vượt quá tổng tiền + 50tr
       if (numericValue > (tongTien + 50000000)) {
         return { 'maxPayment': true };
       }
-  
+
       return null;
     };
   }
 
   formatCurrency(event: any) {
     let value = event.target.value;
-    
+
     // Xóa tất cả các ký tự không phải số
     value = value.replace(/[^\d]/g, '');
-    
+
     // Chuyển thành số
     const number = Number(value);
-    
+
     // Lấy tổng tiền phải trả
     const tongTien = this.tongTienSauVoucher || 0;
     const maxAllowed = tongTien + 50000000;
@@ -995,7 +1008,7 @@ export class BanHangComponent implements OnInit {
         this.tienKhachDua = number;
         event.target.value = formattedValue;
       }
-      
+
       // Tính tiền thừa sau khi cập nhật tiền khách đưa
       this.tinhTienThua();
     }
