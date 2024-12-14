@@ -254,19 +254,21 @@
                             <div >
                                 <span><strong>Tiền khách đưa</strong></span>
                                 <input type="text" 
-                                       class="form-control" 
-                                       [(ngModel)]="tienKhachDua"
-                                       (input)="formatCurrency($event)"
-                                       (blur)="formatCurrency($event)"
-                                       (focus)="onFocus($event)"
-                                       [attr.maxlength]="15"
-                                       [class.is-invalid]="tienKhachDuaInvalid">
+                                        class="form-control" 
+                                        [(ngModel)]="tienKhachDua"
+                                        (input)="onInput($event)"
+                                        [attr.maxlength]="15"
+                                        [class.is-invalid]="tienKhachDuaInvalid"
+                                        placeholder="Nhập số tiền">
+
                                 <div class="invalid-feedback" *ngIf="tienKhachDuaInvalid">
                                   Số tiền khách đưa phải lớn hơn hoặc bằng tổng tiền thanh toán
                                 </div>
                               </div>
-                            <div *ngIf="tienKhachDua !== null &&tienKhachDua < tongTienSauVoucher+phiVanChuyen">
-                                <span class="error-text"><strong>Số tiền khách đưa không đủ!</strong></span>
+                              <div *ngIf="tienKhachDua !== null && tienKhachDua < tongTienSauVoucher+phiVanChuyen">
+                                <span class="error-text">
+                                    <strong>Số tiền khách đưa không đủ! Còn thiếu: {{(tongTienSauVoucher+phiVanChuyen-tienKhachDua)|number:'1.0-0'}} VND</strong>
+                                </span>
                             </div>
                             <div *ngIf="tienKhachDuaInvalid">
                                 <span class="error-text"><strong>Dữ liệu không hợp lệ!</strong></span>
@@ -282,7 +284,11 @@
                             <span><strong>Tổng tiền phải thanh toán: {{(tongTienSauVoucher+phiVanChuyen||0) |number:'1.0-0' }} VND</strong></span>
                         </div>
                         <div>
-                            <span><strong>Tiền trả lại: {{(this.tienKhachDua-tongTienSauVoucher-phiVanChuyen-giaTriGiam)|number:'1.0-0' }} VND</strong></span>
+                            <span>
+                                <strong>
+                                    Tiền trả lại: {{tienthua(0, this.tienKhachDua-tongTienSauVoucher-phiVanChuyen-giaTriGiam)|number:'1.0-0'}} VND
+                                </strong>
+                            </span>
                         </div>
                         <div style="width: 92%;margin-left: 11px;height: 52px;">
                             <select class="form-select" (change)="getIdThanhToan($event.target.value)"

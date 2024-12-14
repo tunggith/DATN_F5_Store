@@ -23,7 +23,7 @@ export class SanPhamComponent implements OnInit {
   totalElements: number = 0; // Tổng số sản phẩm
   // Khai báo page và size trước
   page: number = 0;
-  size: number = 10;
+  size: number = 9;
   idCTSP: number = 0;
 
   // khai báo biến chọn màu
@@ -73,7 +73,7 @@ export class SanPhamComponent implements OnInit {
         console.log('Danh sách Xuất Xứ đã tải:', this.xuatXuList);
       },
       (error) => {
-        console.error('Lỗi khi tải danh sách Xuất Xứ:', error);
+        console.error('Lỗi khi tải danh sách Xu��t Xứ:', error);
       }
     );
   }
@@ -639,16 +639,19 @@ export class SanPhamComponent implements OnInit {
     this.quantity = 0
     this.isPopupVisible = true;
     this.selectedProductId = productId; // Gán id sản phẩm được chọn
-    console.log('ID sản phẩm:', productId); // Hiển thị id sản phẩm trên console (kiểm tra)
-    // Thực hiện logic khác tại đây nếu cần
+    console.log('ID s��n phẩm:', productId);
 
+    // Thêm setTimeout để đảm bảo dữ liệu đã được tải
     setTimeout(() => {
-      if (this.mauSacList.length >= 0) {
-        this.selectedColor = this.mauSacList[0]; // Chọn màu đầu tiên
+      // Tự động chọn màu sắc đầu tiên
+      if (this.mauSacListsp.length > 0) {
+        this.selectedColor = this.mauSacListsp[0];
         console.log('Màu sắc mặc định:', this.selectedColor);
       }
-      if (this.sizeList.length >= 0) {
-        this.selectedSize = this.sizeList[0]; // Chọn kích thước đầu tiên
+      
+      // Tự động chọn kích thước đầu tiên
+      if (this.sizeListSp.length > 0) {
+        this.selectedSize = this.sizeListSp[0];
         console.log('Kích thước mặc định:', this.selectedSize);
       }
 

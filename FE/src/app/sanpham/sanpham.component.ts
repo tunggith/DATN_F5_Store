@@ -87,6 +87,7 @@ export class SanphamComponent implements OnInit {
       thuongHieu: ['', Validators.required],
       gioiTinh: ['', Validators.required],
       trangThai: ['đang hoạt động', Validators.required]
+      
     });
 
     const maSanPham = this.generateMaSanPham();
@@ -95,19 +96,19 @@ export class SanphamComponent implements OnInit {
     this.chiTietSanPhamForm = this.fb.group({
       idMauSac: ['', Validators.required],
       idSize: ['', Validators.required],
-      donGia: ['', [
-        Validators.required,
-        this.numericValidator()
-      ]],
+      donGia: [0, [Validators.required , Validators.max(1000000000)]],
       soLuong: [0, [Validators.required , Validators.max(100000000)]],//10,000,000
       moTa: [''],
       trangThai: ['Còn hàng', Validators.required]
     });
-
+    this.chiTietSanPhamForm.valueChanges.subscribe(() => {
+      this.checkValidSelection();
+    });
     // Kiểm tra trạng thái form
     this.chiTietSanPhamForm.valueChanges.subscribe(value => {
       console.log('Form Value:', value);
       console.log('Form Valid:', this.chiTietSanPhamForm.valid);
+      this.checkValidSelection();
     });
 
 
@@ -840,7 +841,29 @@ export class SanphamComponent implements OnInit {
   isValidSelection: boolean = false;
 
   checkValidSelection() {
-    this.isValidSelection = this.selectedSizes.length > 0 && this.selectedMauSacs.length > 0;
+    // Kiểm tra đã chọn size và màu chưa
+    const hasSelectedSizes = this.selectedSizes.length > 0;
+    const hasSelectedColors = this.selectedMauSacs.length > 0;
+  
+    // Kiểm tra các trường input trong form
+    const donGiaValid = this.chiTietSanPhamForm.get('donGia').valid;
+    const soLuongValid = this.chiTietSanPhamForm.get('soLuong').valid;
+  
+    // Form hợp lệ khi đã chọn size, màu và các trường input hợp lệ
+    this.isValidSelection = hasSelectedSizes && 
+                           hasSelectedColors && 
+                           donGiaValid &&
+                           soLuongValid;
+  
+    // Debug
+    console.log({
+      hasSelectedSizes,
+      hasSelectedColors, 
+      donGiaValid,
+      soLuongValid,
+      formStatus: this.chiTietSanPhamForm.status,
+      result: this.isValidSelection
+    });
   }
 
 
@@ -911,7 +934,7 @@ export class SanphamComponent implements OnInit {
         const ma = this.generateMaspct(mauSacId, sizeId);
         const soLuong = this.chiTietSanPhamForm.value.soLuong || 0;
         const trangThai = soLuong === 0 ? 'Hết hàng' : (this.chiTietSanPhamForm.value.trangThai || 'Còn hàng');
-
+        
         chiTietSanPhamData.push({
           idSanPham: this.selectedSanPhamId,
           ma: ma,

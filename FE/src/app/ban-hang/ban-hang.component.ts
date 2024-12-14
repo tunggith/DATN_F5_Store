@@ -296,30 +296,74 @@ export class BanHangComponent implements OnInit {
     );
   }
   removeHoaDon(idHoaDon: number): void {
-    if (confirm('Bạn có chắc chắn muốn hủy hóa đơn này không?')) {
-      this.banHangService.removeHoaDon(idHoaDon).subscribe(
-        response => {
-          this.showSuccessMessage('Hủy hóa đơn thành công');
-          this.getHoaDon();
-        },
-        this.handleError
-      );
-    }
-  }
+    Swal.fire({
+      title: 'Xác nhận hủy',
+      text: 'Bạn có chắc chắn muốn hủy hóa đơn này không?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#48A0C6',
+      cancelButtonColor: '#48A0C6',
+      confirmButtonText: 'Xác nhận hủy',
+      cancelButtonText: 'Không'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.banHangService.removeHoaDon(idHoaDon).subscribe(
+          response => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công',
+              text: 'Hủy hóa đơn thành công',
+              timer: 1500,
+              showConfirmButton: false
+            });
+            this.getHoaDon();
+          },
+          error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi',
+              text: 'Có lỗi xảy ra khi hủy hóa đơn'
+            });
+          }
+        );
+      }
+    });
+   }
   //==================xóa hóa đơn chi tiết==================
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
-    if (confirm('Bạn có chắc muốn xóa sản phẩm này không?')) {
-      this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
-        response => {
-          this.showSuccessMessage('Xóa thành công!');
-          this.getHoaDon();
-        },
-        error => {
-          this.showErrorMessage('Xóa sản phẩm thất bại!');
-          console.log('lỗi xóa hóa đơn chi tiết', error);
-        }
-      )
-    }
+    Swal.fire({
+      title: 'Xác nhận xóa',
+      text: 'Bạn có chắc muốn xóa sản phẩm này không?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#48A0C6',
+      cancelButtonColor: '#48A0C6',
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy'
+     }).then((result) => {
+      if (result.isConfirmed) {
+        this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
+          response => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công',
+              text: 'Xóa sản phẩm thành công!',
+              timer: 1500,
+              showConfirmButton: false
+            });
+            this.getHoaDon();
+          },
+          error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi',
+              text: 'Xóa sản phẩm thất bại!'
+            });
+            console.log('lỗi xóa hóa đơn chi tiết', error);
+          }
+        );
+      }
+     });
   }
   getHoaDonTrangThai() {
     this.banHangService.getTrangThaiCho().subscribe(
@@ -406,33 +450,55 @@ export class BanHangComponent implements OnInit {
   //==================Thanh toán hóa đơn==================
 
   thanhtoanHoaDon(idHoaDon: number): void {
-    const isConfirmed = window.confirm("Bạn có chắc chắn mu���n thanh toán hóa đơn này không?");
-    if (!isConfirmed) {
-      return; // Nếu người dùng nhấn "Cancel", dừng lại
-    }
+    // Kiểm tra tiền khách đưa trước khi hiện confirm
     if (this.tienKhachDua < this.tongTienSauVoucher) {
-      this.showErrorMessage('Số tiền khách đưa không đủ!');
+      Swal.fire({
+        icon: 'error',
+        title: 'Lỗi',
+        text: 'Số tiền khách đưa không đủ!',
+      });
       return;
     }
-    if(isNaN(this.tienKhachDua)||this.tienKhachDua>(this.tongTienSauVoucher+this.phiVanChuyen)+10000000){
-      this.showErrorMessage('Số tiền khách đưa không hợp lệ!');
+   
+    if (isNaN(this.tienKhachDua) || this.tienKhachDua > (this.tongTienSauVoucher + this.phiVanChuyen + 10000000)) {
+      Swal.fire({
+        icon: 'error', 
+        title: 'Lỗi',
+        text: 'Số tiền khách đưa không hợp lệ!'
+      });
       return;
     }
-    // Nếu idGiaoHang là 1 thì mới gọi submitAddress và kiểm tra địa chỉ
+   
+    // Kiểm tra địa chỉ nếu là giao hàng
     if (this.idGiaoHang === 1) {
       this.submitAddress();
-
       if (this.diaChiNhanHang === null || this.diaChiNhanHang === '') {
-        return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
+        return;
       }
     }
-    if (this.idThanhToan == 2) {
-      this.openPopupQr();
-      this.activeInvoidID = idHoaDon;
-    } else {
-      this.thanhtoanHoaDonSauCk(idHoaDon);
-    }
-  }
+   
+    // Hiển thị xác nhận thanh toán
+    Swal.fire({
+      title: 'Xác nhận thanh toán',
+      text: 'Bạn có chắc chắn muốn thanh toán hóa đơn này không?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#48A0C6',
+      cancelButtonColor: '#48A0C6',
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Xử lý thanh toán sau khi xác nhận
+        if (this.idThanhToan == 2) {
+          this.openPopupQr();
+          this.activeInvoidID = idHoaDon;
+        } else {
+          this.thanhtoanHoaDonSauCk(idHoaDon);
+        }
+      }
+    });
+   }
   confirmQr(): void {
     this.closePopupQr();
     this.thanhtoanHoaDonSauCk(this.activeInvoidID);
@@ -463,11 +529,24 @@ export class BanHangComponent implements OnInit {
         // this.icon = 'toggle_off';
         this.resetForm();
         // Hiển thị hộp thoại xác nhận in hóa đơn
-        const printConfirm = window.confirm("Bạn có muốn in hóa đơn không?");
-        if (printConfirm) {
-          this.downloadPdf(idHoaDon);
-          this.router.navigate(['/ban-hang']);
-        }
+        Swal.fire({
+          title: 'In hóa đơn',
+          text: 'Bạn có muốn in hóa đơn không?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#48A0C6', 
+          cancelButtonColor: '#48A0C6',
+          confirmButtonText: 'In',
+          cancelButtonText: 'Không'
+         }).then((result) => {
+          if (result.isConfirmed) {
+            this.downloadPdf(idHoaDon);
+            this.router.navigate(['/ban-hang']);
+          } else {
+            // Nếu không in thì chỉ chuyển trang
+            this.router.navigate(['/ban-hang']); 
+          }
+         });
       },
       error => {
         this.handleError(error); // Xử lý lỗi nếu có
@@ -958,7 +1037,7 @@ export class BanHangComponent implements OnInit {
     };
   }
 
-  formatCurrency(event: any) {
+  onInput(event: any) {
     let value = event.target.value;
     
     // Xóa tất cả các ký tự không phải số
@@ -967,19 +1046,18 @@ export class BanHangComponent implements OnInit {
     // Chuyển thành số
     const number = Number(value);
     
-    // Lấy tổng tiền phải trả
-    const tongTien = this.tongTienSauVoucher || 0;
-    const maxAllowed = tongTien + 50000000;
-
+    // Nếu là số hợp lệ thì format
     if (!isNaN(number)) {
+      // Format số với dấu phân cách hàng nghìn
+      const formattedValue = number.toLocaleString('vi-VN');
+      event.target.value = formattedValue;
+      this.tienKhachDua = number;
+  
       // Kiểm tra giới hạn
+      const tongTien = this.tongTienSauVoucher || 0;
+      const maxAllowed = tongTien + 10000000;
+      
       if (number > maxAllowed) {
-        // Nếu vượt quá, set lại giá trị bằng giá trị tối đa cho phép
-        const formattedMax = maxAllowed.toLocaleString('vi-VN');
-        this.tienKhachDua = maxAllowed;
-        event.target.value = formattedMax;
-
-        // Hiển thị thông báo cho người dùng
         Swal.fire({
           icon: 'warning',
           title: 'Vượt quá giới hạn',
@@ -989,24 +1067,19 @@ export class BanHangComponent implements OnInit {
           showConfirmButton: false,
           timer: 3000
         });
-      } else {
-        // Format số với dấu phân cách hàng nghìn
-        const formattedValue = number.toLocaleString('vi-VN');
-        this.tienKhachDua = number;
-        event.target.value = formattedValue;
       }
-      
-      // Tính tiền thừa sau khi cập nhật tiền khách đưa
+  
+      // Tính tiền thừa
       this.tinhTienThua();
     }
   }
 
-  onFocus(event: any) {
-    // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
-    let value = event.target.value;
-    value = value.replace(/[^\d]/g, '');
-    event.target.value = value;
-  }
+    onFocus(event: any) {
+      // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
+      let value = event.target.value;
+      value = value.replace(/[^\d]/g, '');
+      event.target.value = value;
+    }
 
   // Cập nhật lại phương thức tinhTienThua()
   tinhTienThua() {
@@ -1015,6 +1088,10 @@ export class BanHangComponent implements OnInit {
     } else {
       this.tienTraLai = 0;
     }
+  }
+
+  tienthua(a: number, b: number): number {
+    return Math.max(a, b);
   }
 }
 

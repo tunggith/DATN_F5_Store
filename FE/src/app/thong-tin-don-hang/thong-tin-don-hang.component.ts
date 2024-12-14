@@ -211,19 +211,40 @@ export class ThongTinDonHangComponent implements OnInit {
     )
   }
   removeHoaDonChiTiet(idHoaDonChiTiet: number) {
-    if (confirm('bạn có chắc muốn xóa sản phẩm này không?')) {
-      this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
-        response => {
-          this.showSuccessMessage('Xóa thành công!');
-          this.getIdThongTinDonHang(this.hoaDonChoId);
-        },
-        error => {
-          this.showErrorMessage('Xóa sản phẩm thất bại!');
-          console.log('lỗi xóa hóa đơn chi tiết', error);
-        }
-      )
-    }
-  }
+    Swal.fire({
+      title: 'Xác nhận xóa',
+      text: 'Bạn có chắc muốn xóa sản phẩm này không?', 
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#48A0C6',
+      cancelButtonColor: '#48A0C6',
+      confirmButtonText: 'Xác nhận',
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.banHangService.removeHoaDonChiTiet(idHoaDonChiTiet).subscribe(
+          response => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành công',
+              text: 'Xóa sản phẩm thành công!',
+              timer: 1500,
+              showConfirmButton: false
+            });
+            this.getIdThongTinDonHang(this.hoaDonChoId);
+          },
+          error => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Lỗi',
+              text: 'Xóa sản phẩm thất bại!'
+            });
+            console.log('lỗi xóa hóa đơn chi tiết', error);
+          }
+        );
+      }
+    });
+   }
   //==============export hóa đơn=================
   downloadPdf(id: number) { // ID của PDF bạn muốn tải về
     this.banHangService.downloadPdf(id).subscribe(blob => {
