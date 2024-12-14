@@ -1,4 +1,4 @@
-import { Component, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit,ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { KhuyenMaiService } from './khuyen-mai.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./icons.component.css']
 })
 export class IconsComponent implements OnInit {
-
+  @ViewChild('myModal') myModal!: ElementRef;
   
   role:string='';
  
@@ -230,7 +230,16 @@ createKhuyenMai() {
         });
         this.addPromotionToProducts(response.result.id);
         this.resetForm();
-        this.loadKhuyenMais();       
+        this.loadKhuyenMais();  
+         // Đóng modal
+         const modalElement = this.myModal.nativeElement;
+         modalElement.classList.remove('show');
+         modalElement.style.display = 'none';
+
+         // Xóa lớp `modal-backdrop` và `modal-open`
+         const backdrops = document.querySelectorAll('.modal-backdrop');
+         backdrops.forEach((backdrop) => backdrop.remove());
+         document.body.classList.remove('modal-open');
              
       } else {
         Swal.fire({
@@ -286,6 +295,15 @@ createKhuyenMai() {
           console.log('Id sửa :',response.result.id);
           this.resetForm();
           this.loadKhuyenMais();
+            // Đóng modal
+          const modalElement = this.myModal.nativeElement;
+          modalElement.classList.remove('show');
+          modalElement.style.display = 'none';
+
+          // Xóa lớp `modal-backdrop` và `modal-open`
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach((backdrop) => backdrop.remove());
+          document.body.classList.remove('modal-open');
         } else {
           Swal.fire({
             title: 'F5 Store xin thông báo : ',
@@ -619,6 +637,7 @@ closeChiTietModal() {
 
 close(){
   this.selectedProductIds = [];
+  this.resetForm();
 }
 
 viewProductDetails(idSanPham: number) {

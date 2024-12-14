@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild, ElementRef} from '@angular/core';
 import { VoucherService } from './voucher.service';
 import { debounceTime } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -14,7 +14,7 @@ import { AbstractControl, ValidationErrors } from '@angular/forms';
   styleUrls: ['./voucher.component.scss']
 })
 export class VoucherComponent implements OnInit {
-
+ @ViewChild('myModal') myModal!: ElementRef;
   
   role:string='';
   vouchers: any[] = [];
@@ -91,6 +91,15 @@ export class VoucherComponent implements OnInit {
         });
       this.getAllVouchers();
       this.resetForm();
+        // Đóng modal
+        const modalElement = this.myModal.nativeElement;
+        modalElement.classList.remove('show');
+        modalElement.style.display = 'none';
+
+        // Xóa lớp `modal-backdrop` và `modal-open`
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach((backdrop) => backdrop.remove());
+        document.body.classList.remove('modal-open');
       }else{
         Swal.fire({
           title: 'F5 Store xin thông báo : ',
@@ -129,7 +138,7 @@ export class VoucherComponent implements OnInit {
     } else {
         this.createVoucher(voucherData);
     }
-    console.log( voucherData.thoiGianBatDau,  voucherData.thoiGianKetThuc);
+    
 }
 
 updateVoucher(voucherData: any): void {
@@ -142,7 +151,7 @@ updateVoucher(voucherData: any): void {
 
                 Swal.fire({
                     title: 'F5 Store xin thông báo:',
-                    text: 'Cập nhật voucher thành công!',
+                    text: response.result.content,
                     icon: 'success',
                     confirmButtonText: 'OK',
                     customClass: {
@@ -153,6 +162,15 @@ updateVoucher(voucherData: any): void {
                 // Load lại danh sách voucher và reset form
                 this.getAllVouchers();
                 this.resetForm();
+                  // Đóng modal
+                const modalElement = this.myModal.nativeElement;
+                modalElement.classList.remove('show');
+                modalElement.style.display = 'none';
+
+                // Xóa lớp `modal-backdrop` và `modal-open`
+                const backdrops = document.querySelectorAll('.modal-backdrop');
+                backdrops.forEach((backdrop) => backdrop.remove());
+                document.body.classList.remove('modal-open');
             } else {
                 Swal.fire({
                     title: 'F5 Store xin thông báo:',
