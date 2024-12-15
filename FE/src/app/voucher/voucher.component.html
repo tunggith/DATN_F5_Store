@@ -53,7 +53,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <button type="button" (click)="close()" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -66,7 +66,8 @@
                       <label for="ma">Mã voucher</label>
                       <input type="text" id="ma" class="form-control" required formControlName="ma"
                         [ngClass]="{'error-message': voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)}"
-                        pattern="^[A-Za-z0-9]+$" />
+                        pattern="^[A-Za-z0-9]+$" 
+                        [readonly]="isEditing"/>
                     </div>
                     <div
                       *ngIf="voucherForm.get('ma').invalid && (voucherForm.get('ma').touched || voucherForm.get('ma').dirty)"
@@ -79,7 +80,8 @@
                       <label for="ten">Tên voucher</label>
                       <input type="text" id="ten" class="form-control" required formControlName="ten"
                         [ngClass]="{'error-message': voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)}"
-                        pattern="^[A-Za-z0-9àáảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựđĐ%. ]+$" />
+                        pattern="^[A-Za-z0-9àáảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựđĐ%. ]+$"
+                        [readonly]="isEditing" />
                     </div>
                     <div
                       *ngIf="voucherForm.get('ten').invalid && (voucherForm.get('ten').touched || voucherForm.get('ten').dirty)"
@@ -90,7 +92,8 @@
                   <div class="col-md-4">
                     <div class="form-group">
                       <label for="kieuGiamGia">Kiểu giảm giá</label>
-                      <select id="kieuGiamGia" class="form-control" required formControlName="kieuGiamGia">
+                      <select id="kieuGiamGia" class="form-control" required formControlName="kieuGiamGia" 
+                      [attr.disabled]="isEditing">
                         <option value="VND">VND</option>
                         <option value="%">%</option>
                       </select>
@@ -123,7 +126,8 @@
                       <input type="number" id="giaTriVoucher" class="form-control" required
                         formControlName="giaTriVoucher"
                         [ngClass]="{'error-message': voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)}"
-                        min="0" max="99999999" />
+                        min="0" max="99999999" 
+                        [readonly]="isEditing"/>
                     </div>
                     <div
                       *ngIf="voucherForm.get('giaTriVoucher').invalid && (voucherForm.get('giaTriVoucher').touched || voucherForm.get('giaTriVoucher').dirty)"

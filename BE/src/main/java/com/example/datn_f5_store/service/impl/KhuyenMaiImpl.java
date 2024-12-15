@@ -123,6 +123,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
                 if (!checkTrungMaKhuyenmai(khuyenMaiRequest.getMa())) {
+                    if(!checkTrungTenKhuyenmai(khuyenMaiRequest.getTen())){
                     String ma = khuyenMaiRequest.getMa();
                     if (ma == null || ma.isEmpty()) {
                         return new DataResponse2(false, new ResultModel2<>( "Mã không được để trống",null));
@@ -168,7 +169,9 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
                     return new DataResponse2(true, new ResultModel2<>("Thêm Khuyến mãi thành công",khuyenMaiEntity.getId()));
 
-
+                    }else {
+                        return new DataResponse2(false, new ResultModel2<>( "Tên Khuyến mãi đã tồn tại!",null));
+                    }
                 } else {
                     return new DataResponse2(false, new ResultModel2<>( "Mã Khuyến mãi đã tồn tại!",null));
                 }
@@ -192,6 +195,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
 
         try {
             if (checkKhuyenMai(khuyenMaiRequest)) {
+
                 if (khuyenMaiRequest.getKieuKhuyenMai().equalsIgnoreCase("%") && khuyenMaiRequest.getGiaTriKhuyenMai() > 100) {
                     return new DataResponse2(false, new ResultModel2<>( "Giá trị giảm % chỉ được tối đa là 100",null));
                 }
@@ -210,7 +214,7 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
                 }
 
                 // Update voucher properties
-                khuyenmai.setTen(khuyenMaiRequest.getTen());
+                khuyenmai.setTen((khuyenMaiRequest.getTen()));
                 khuyenmai.setGiaTriKhuyenMai(khuyenMaiRequest.getGiaTriKhuyenMai());
                 khuyenmai.setKieuKhuyenMai(khuyenMaiRequest.getKieuKhuyenMai());
                 khuyenmai.setThoiGianBatDau(thoiGianBatDau);
@@ -299,6 +303,13 @@ public class KhuyenMaiImpl implements KhuyenMaiService {
         KhuyenMaiEntity existingKhuyenMai = khuyenMaiRepository.findByMa(ma);
         if (existingKhuyenMai != null) {
             return existingKhuyenMai.getMa().equals(ma);
+        }
+        return false;
+    }
+    public boolean checkTrungTenKhuyenmai(String ma) {
+        KhuyenMaiEntity existingKhuyenMai = khuyenMaiRepository.findByTen(ma);
+        if (existingKhuyenMai != null) {
+            return existingKhuyenMai.getTen().equals(ma);
         }
         return false;
     }

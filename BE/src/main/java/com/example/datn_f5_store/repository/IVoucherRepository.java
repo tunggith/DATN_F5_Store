@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface IVoucherRepository extends JpaRepository<VoucherEntity,Integer> {
     boolean existsByMa(String ma);
+
+    VoucherEntity findByTen(String ten);
     Page<VoucherEntity> getByTenContainingOrMaContaining(String ten, String ma, Pageable pageable);
 
     @Query("SELECT k FROM VoucherEntity k WHERE k.thoiGianBatDau >= :ngayBatDau AND k.thoiGianKetThuc <= :ngayKetThuc")

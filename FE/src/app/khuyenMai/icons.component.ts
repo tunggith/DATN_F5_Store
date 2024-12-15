@@ -1047,21 +1047,31 @@ addPromotionToProducts(promotionId: number): void {
     console.log(`Gửi yêu cầu thêm khuyến mãi cho sản phẩm ID ${productId}:`, request);
 
     // Gọi API cho từng sản phẩm
-    this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request)
-      .subscribe({
-        next: () => {
+      this.khuyenMaiSanPhamChiTietService.createKhuyenMaiChiTietSanPham(request).subscribe(
+        (response) => {
+          if(response.status){
           console.log(`Sản phẩm ID ${productId} đã được thêm khuyến mãi thành công.`);
+          console.log(response);
+          this.loadKhuyenMais();
+          }else{
+            Swal.fire({
+              title: 'F5 Store xin thông báo : ',
+              text: response.result.content,
+              icon: 'error',
+              confirmButtonText: 'OK',
+              customClass: {
+                confirmButton: 'custom-confirm-button',
+                popup: 'custom-swal-popup'
+              }
+            });
+          }
         },
-        error: (error) => {
-          console.error(`Lỗi khi thêm khuyến mãi cho sản phẩm ID ${productId}:`, error);
-        },
-        complete: () => {
-          console.log(`Xử lý hoàn tất cho sản phẩm ID ${productId}`);
+        (error) => {
+          console.error('Lỗi khi lấy danh sách kích thước:', error);
         }
-      });
+      );
   });
-
-  // Reset form hoặc cập nhật giao diện nếu cần
+  
   this.resetForm();
   this.loadKhuyenMais();
 }
