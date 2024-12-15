@@ -1060,11 +1060,12 @@ export class IconsComponent implements OnInit {
             });
           },
           error: (error) => {
-            console.error(`Lỗi khi thêm khuyến mãi cho sản phẩm ID ${productId}:`, error);
+            // this.selectedProductIds = null;
+            console.error(error);
             Swal.fire({
-              title: 'F5 Store xin thông báo : ',
-              text: error.result.content,
               icon: 'error',
+              title: 'Thất bại!',
+              text: error.error,
               showConfirmButton: false,
               timer: 1500
             });
