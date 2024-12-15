@@ -418,7 +418,7 @@
             <!-- check  nếu km true thì k cho sửa đơn giá  -->
             <div class="mb-3">
               <label for="donGia" class="form-label">Đơn giá</label>
-              <input type="text" 
+              <input type="number" 
                    id="donGia" 
                    class="form-control" 
                    formControlName="donGia"
@@ -601,9 +601,8 @@
               <div class="form-group">
                 <label for="donGia">Đơn giá</label>
                 <input 
-                 type="text" id="donGia" class="form-control" formControlName="donGia"
-                 (input)="formatCurrency($event)"
-                 (blur)="formatCurrency($event)"
+                 type="number" id="donGia" class="form-control" formControlName="donGia"
+                
                   placeholder="Nhập đơn giá" min="0" required>
                 <div
                   *ngIf="chiTietSanPhamForm.get('donGia')?.invalid && (chiTietSanPhamForm.get('donGia')?.dirty || chiTietSanPhamForm.get('donGia')?.touched)"
@@ -616,13 +615,13 @@
 
               <div class="mb-3">
                 <label for="soLuong" class="form-label">Số lượng</label>
-                <input type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
-                <div
-                  *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)"
-                  class="text-danger">
+                <input 
+                type="number" id="soLuong" class="form-control" formControlName="soLuong" min="0" required>
+                <div *ngIf="chiTietSanPhamForm.get('soLuong').invalid && (chiTietSanPhamForm.get('soLuong').dirty || chiTietSanPhamForm.get('soLuong').touched)" class="text-danger">
                   <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.required">Số lượng là bắt buộc.</small>
                   <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.min">Số lượng phải là số không âm.</small>
-                  <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.max">số lượng quá lớn không phù hợp.</small>
+                  <small *ngIf="chiTietSanPhamForm.get('soLuong').errors?.max">Số lượng quá lớn khô.</small>
+    
                 </div>
               </div>
               <div class="form-group">
@@ -672,8 +671,11 @@
           </div>
           <div class="modal-footer">
             <!-- <button type="button"  (click)="resetChiTietSanPhamForm()" data-dismiss="modal">Đóng</button> -->
-            <button [disabled]="!isValidSelection" (click)="renderChiTietSanPham()" class="btn ">Lưu Chi Tiết Sản
-              Phẩm</button>
+            <button [disabled]="!isValidSelection" 
+            (click)="renderChiTietSanPham()" 
+            class="btn">
+            Lưu Chi Tiết Sản Phẩm
+           </button>
           </div>
         </div>
       </div>
