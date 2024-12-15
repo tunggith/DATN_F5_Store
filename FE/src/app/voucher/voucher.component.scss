@@ -447,3 +447,8 @@ table-striped tbody tr:nth-of-type(odd) {
   margin-bottom: -50rem;
   padding-bottom: -50rem;
 }
+
+select.locked {
+  pointer-events: none;
+  background-color: #f0f0f0;
+}

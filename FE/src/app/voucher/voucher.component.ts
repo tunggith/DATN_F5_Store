@@ -207,6 +207,7 @@ editVoucher(voucher: any): void {
 
     // Kích hoạt lại trường nếu đã vô hiệu hóa trước đó
     this.voucherForm.get('thoiGianBatDau').enable();
+    
 
     // Format lại ngày trước khi patch vào form
     voucher.thoiGianBatDau = voucher.thoiGianBatDau;
@@ -218,7 +219,7 @@ editVoucher(voucher: any): void {
     this.voucherForm.patchValue({
         ...voucher
     });
-
+  
 }
 
 
@@ -378,6 +379,8 @@ searchVouchers(values: any): void {
   close(){
     this.isEditing = false;
     this.resetForm();
+
   }
+
 
 }
