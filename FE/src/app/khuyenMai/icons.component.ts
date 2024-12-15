@@ -603,7 +603,7 @@ export class IconsComponent implements OnInit {
   }
 
 
-  // sản phẩm 
+  // sản phẩm
 
   loaddata() {
     this.getSanPhamPhanTrang(this.pageSanPham);

@@ -1,6 +1,7 @@
 package com.example.datn_f5_store.service.impl;
 
 import com.example.datn_f5_store.dto.VoucherDto;
+import com.example.datn_f5_store.entity.KhuyenMaiEntity;
 import com.example.datn_f5_store.entity.VoucherEntity;
 import com.example.datn_f5_store.exceptions.DataNotFoundException;
 import com.example.datn_f5_store.repository.IVoucherRepository;
@@ -67,6 +68,9 @@ public class VoucherServicelmpl implements VoucherService {
             if (CheckVoucher(voucher)) {
                 // Kiểm tra trùng mã voucher
                 if (checkTrungMaVoucher(voucher.getMa())) {
+                    if (!checkTrungTenVoucher(voucher.getTen())){
+
+
                     // Kiểm tra điều kiện cho giảm giá
                     if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 100) {
                         return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
@@ -111,6 +115,8 @@ public class VoucherServicelmpl implements VoucherService {
                     iVoucherRepository.save(voucher1);
                     return new DataResponse(true, new ResultModel<>(null, "Thêm Voucher thành công"));
                 }
+                    return new DataResponse(false, new ResultModel<>(null, "Tên Voucher đã tồn tại"));
+                }
                 return new DataResponse(false, new ResultModel<>(null, "Mã Voucher đã tồn tại"));
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
@@ -130,50 +136,51 @@ public class VoucherServicelmpl implements VoucherService {
 
         try {
             if (CheckVoucher(voucher)) {
-                if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 100) {
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
-                }
+                    if (voucher.getKieuGiamGia().equalsIgnoreCase("%") && voucher.getGiaTriVoucher() > 100) {
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị giảm % chỉ được tối đa là 100"));
+                    }
 
-                LocalDateTime thoiGianBatDau = voucher.getThoiGianBatDau();
-                LocalDateTime thoiGianKetThuc = voucher.getThoiGianKetThuc();
+                    LocalDateTime thoiGianBatDau = voucher.getThoiGianBatDau();
+                    LocalDateTime thoiGianKetThuc = voucher.getThoiGianKetThuc();
 
-                if (thoiGianBatDau == null) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
-                }
-                if (thoiGianKetThuc == null) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
-                }
-                if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
-                    return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
-                }
-                if(voucher.getGiaTriVoucher() > voucher.getGiaTriHoaDonToiThieu()){
-                    return new DataResponse(false, new ResultModel<>(null, "Giá trị hóa đơn tối thiểu không được nhỏ hơn giá trị voucher"));
-                }
+                    if (thoiGianBatDau == null) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian Bắt đầu không được để trống"));
+                    }
+                    if (thoiGianKetThuc == null) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian Kết thúc không được để trống"));
+                    }
+                    if (thoiGianBatDau.isAfter(thoiGianKetThuc)) {
+                        return new DataResponse(false, new ResultModel<>(null, "Thời gian kết thúc không được diễn ra trước thời gian bắt đầu"));
+                    }
+                    if (voucher.getGiaTriVoucher() > voucher.getGiaTriHoaDonToiThieu()) {
+                        return new DataResponse(false, new ResultModel<>(null, "Giá trị hóa đơn tối thiểu không được nhỏ hơn giá trị voucher"));
+                    }
 
-                // Update voucher properties
-                voucher1.setTen(voucher.getTen());
-                voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
-                voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
-                voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
-                voucher1.setThoiGianBatDau(thoiGianBatDau);
-                voucher1.setThoiGianKetThuc(thoiGianKetThuc);
-                voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
-                voucher1.setSoLuong(voucher.getSoLuong());
-                voucher1.setThoiGianSua(Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant()));
-                voucher1.setNguoiSua("ADMIN");
-                voucher1.setMoTa(voucher.getMoTa());
+                    // Update voucher properties
+                    voucher1.setTen(voucher.getTen());
+                    voucher1.setGiaTriVoucher(voucher.getGiaTriVoucher());
+                    voucher1.setGiaTriGiamToiDa(voucher.getGiaTriGiamToiDa());
+                    voucher1.setKieuGiamGia(voucher.getKieuGiamGia());
+                    voucher1.setThoiGianBatDau(thoiGianBatDau);
+                    voucher1.setThoiGianKetThuc(thoiGianKetThuc);
+                    voucher1.setGiaTriHoaDonToiThieu(voucher.getGiaTriHoaDonToiThieu());
+                    voucher1.setSoLuong(voucher.getSoLuong());
+                    voucher1.setThoiGianSua(Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant()));
+                    voucher1.setNguoiSua("ADMIN");
+                    voucher1.setMoTa(voucher.getMoTa());
 
-                // Check status based on date and time
-                if (thoiGianKetThuc.isBefore(currentDateTime)) {
-                    voucher1.setTrangThai("Đã kết thúc");
-                } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
-                    voucher1.setTrangThai("Đang diễn ra");
-                } else {
-                    voucher1.setTrangThai("Sắp diễn ra");
-                }
+                    // Check status based on date and time
+                    if (thoiGianKetThuc.isBefore(currentDateTime)) {
+                        voucher1.setTrangThai("Đã kết thúc");
+                    } else if (thoiGianBatDau.isBefore(currentDateTime) && thoiGianKetThuc.isAfter(currentDateTime)) {
+                        voucher1.setTrangThai("Đang diễn ra");
+                    } else {
+                        voucher1.setTrangThai("Sắp diễn ra");
+                    }
 
-                iVoucherRepository.save(voucher1);
-                return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
+                    iVoucherRepository.save(voucher1);
+                    return new DataResponse(true, new ResultModel<>(null, "Sửa Voucher thành công"));
+
             }
             return new DataResponse(false, new ResultModel<>(null, "Các trường dữ liệu không được để trống hoặc giá trị phải > 0"));
         } catch (Exception e) {
@@ -239,6 +246,14 @@ public class VoucherServicelmpl implements VoucherService {
             return false;
         }
         return true;
+    }
+
+    public boolean checkTrungTenVoucher(String ma) {
+        VoucherEntity existingVoucher = iVoucherRepository.findByTen(ma);
+        if (existingVoucher != null) {
+            return existingVoucher.getTen().equals(ma);
+        }
+        return false;
     }
 
 

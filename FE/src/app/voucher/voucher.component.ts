@@ -25,6 +25,7 @@ export class VoucherComponent implements OnInit {
   currentVoucher: any = null;
   totalPages: number = 0;  // Để lưu voucher hiện tại đang sửa
   isFormVisible: boolean = false;
+  isEditing = false;
 
   constructor(
     private voucherService: VoucherService,
@@ -48,7 +49,7 @@ export class VoucherComponent implements OnInit {
     this.voucherForm = this.fb.group({
       ma: ['', [Validators.required, Validators.pattern('^[A-Za-z0-9]+$')]],
       ten: ['', Validators.required],
-      kieuGiamGia: ['VND', Validators.required],
+      kieuGiamGia: ['VND',Validators.required],
       soLuong: [0, [Validators.required, Validators.min(0)]],
       giaTriVoucher: [0, [Validators.required, Validators.min(0)]],
       giaTriGiamToiDa: [0, [Validators.required, Validators.min(0)]],
@@ -201,6 +202,8 @@ updateVoucher(voucherData: any): void {
 
 editVoucher(voucher: any): void {
     this.currentVoucher = voucher;
+    this.isEditing = true;
+    console.log('trang thai sua : ',this.isEditing);
 
     // Kích hoạt lại trường nếu đã vô hiệu hóa trước đó
     this.voucherForm.get('thoiGianBatDau').enable();
@@ -216,8 +219,6 @@ editVoucher(voucher: any): void {
         ...voucher
     });
 
-
-    console.log('Giá trị form sau khi patch:', this.voucherForm.value);
 }
 
 
@@ -372,6 +373,11 @@ searchVouchers(values: any): void {
       return { yearTooSmall: true }; // Trả về lỗi nếu năm nhỏ hơn 1950
     }
     return null; // Không có lỗi
+  }
+
+  close(){
+    this.isEditing = false;
+    this.resetForm();
   }
 
 }
