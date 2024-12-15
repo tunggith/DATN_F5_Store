@@ -272,7 +272,7 @@
               <td style="border: 1px solid #ddd;white-space: nowrap;text-align: center;">{{ voucher.thoiGianBatDau | date: 'dd/MM/yyyy HH:mm' }}</td>
               <td style="border: 1px solid #ddd;white-space: nowrap;text-align: center;">{{ voucher.thoiGianKetThuc | date: 'dd/MM/yyyy HH:mm' }}</td>
               <td style="border: 1px solid #ddd;white-space: nowrap;">{{ voucher.moTa }}</td>
-              <td [ngStyle]="{'color': voucher.trangThai === 'Đang diễn ra' ? 'green' : 'danger', 'font-weight': 'bold'}" style="border: 1px solid #ddd;white-space: nowrap;">{{ voucher.trangThai }}</td>
+              <td [ngStyle]="{'color': voucher.trangThai === 'Đang diễn ra' ? 'green' : 'red', 'font-weight': 'bold'}" style="border: 1px solid #ddd;white-space: nowrap;">{{ voucher.trangThai }}</td>
               <td style="border: 1px solid #ddd;">
                 <div style="display: flex; justify-content: space-between;">
                   <div>

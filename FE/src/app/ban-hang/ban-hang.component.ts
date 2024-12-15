@@ -457,10 +457,7 @@ export class BanHangComponent implements OnInit {
   //==================Thanh toán hóa đơn==================
 
   thanhtoanHoaDon(idHoaDon: number): void {
-    const isConfirmed = window.confirm("Bạn có chắc chắn muuốn thanh toán hóa đơn này không?");
-    if (!isConfirmed) {
-      return; // Nếu người dùng nhấn "Cancel", dừng lại
-    }
+    // Kiểm tra số tiền khách đưa
     if (this.tienKhachDua < this.tongTienSauVoucher) {
       Swal.fire({
         icon: 'error',
@@ -470,6 +467,7 @@ export class BanHangComponent implements OnInit {
       return;
     }
 
+    // Kiểm tra tính hợp lệ của số tiền khách đưa
     if (isNaN(this.tienKhachDua) || this.tienKhachDua > (this.tongTienSauVoucher + this.phiVanChuyen + 10000000)) {
       Swal.fire({
         icon: 'error',
@@ -483,7 +481,12 @@ export class BanHangComponent implements OnInit {
     if (this.idGiaoHang === 1) {
       this.submitAddress();
       if (this.diaChiNhanHang === null || this.diaChiNhanHang === '') {
-        return; // Ngừng lại nếu địa chỉ nhận hàng không hợp lệ
+        Swal.fire({
+          icon: 'warning',
+          title: 'Cảnh báo',
+          text: 'Vui lòng nhập địa chỉ nhận hàng!'
+        });
+        return;
       }
     }
 
@@ -493,8 +496,8 @@ export class BanHangComponent implements OnInit {
       text: 'Bạn có chắc chắn muốn thanh toán hóa đơn này không?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#48A0C6',
-      cancelButtonColor: '#48A0C6',
+      confirmButtonColor: '#4892B9',
+      cancelButtonColor: '#d33',
       confirmButtonText: 'Xác nhận',
       cancelButtonText: 'Hủy'
     }).then((result) => {
@@ -508,7 +511,7 @@ export class BanHangComponent implements OnInit {
         }
       }
     });
-   }
+}
   confirmQr(): void {
     this.closePopupQr();
     this.thanhtoanHoaDonSauCk(this.activeInvoidID);
@@ -1056,33 +1059,30 @@ export class BanHangComponent implements OnInit {
 
   onInput(event: any) {
     let value = event.target.value;
-
-    // Xóa tất cả các ký tự không phải số
+  
+    // Xóa tất cả các ký tự không phải số, bao gồm dấu chấm
     value = value.replace(/[^\d]/g, '');
-
+    
     // Chuyển thành số
     const number = Number(value);
-
+  
     // Lấy tổng tiền phải trả
     const tongTien = this.tongTienSauVoucher || 0;
     const maxAllowed = tongTien + 50000000;
-
+  
     if (!isNaN(number)) {
       // Format số với dấu phân cách hàng nghìn
       const formattedValue = number.toLocaleString('vi-VN');
       event.target.value = formattedValue;
       this.tienKhachDua = number;
-
+  
       // Kiểm tra giới hạn
-      const tongTien = this.tongTienSauVoucher || 0;
       const maxAllowed = tongTien + 10000000;
-
+  
       if (number > maxAllowed) {
         // Nếu vượt quá, set lại giá trị bằng giá trị tối đa cho phép
-        const formattedMax = maxAllowed.toLocaleString('vi-VN');
         this.tienKhachDua = maxAllowed;
-        event.target.value = formattedMax;
-
+  
         // Hiển thị thông báo cho người dùng
         Swal.fire({
           icon: 'warning',
@@ -1093,25 +1093,20 @@ export class BanHangComponent implements OnInit {
           showConfirmButton: false,
           timer: 3000
         });
-      } else {
-        // Format số với dấu phân cách hàng nghìn
-        const formattedValue = number.toLocaleString('vi-VN');
-        this.tienKhachDua = number;
-        event.target.value = formattedValue;
       }
-
+  
       // Tính tiền thừa sau khi cập nhật tiền khách đưa
       this.tinhTienThua();
     }
   }
-
-    onFocus(event: any) {
-      // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
-      let value = event.target.value;
-      value = value.replace(/[^\d]/g, '');
-      event.target.value = value;
-    }
-
+  
+  onFocus(event: any) {
+    // Khi focus vào input, xóa các dấu phân cách để người dùng có thể nhập
+    let value = event.target.value;
+    value = value.replace(/[^\d]/g, '');
+    event.target.value = value;
+  }
+  
   // Cập nhật lại phương thức tinhTienThua()
   tinhTienThua() {
     if (this.tienKhachDua && this.tongTienSauVoucher) {
@@ -1120,7 +1115,7 @@ export class BanHangComponent implements OnInit {
       this.tienTraLai = 0;
     }
   }
-
+  
   tienthua(a: number, b: number): number {
     return Math.max(a, b);
   }
