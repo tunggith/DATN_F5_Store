@@ -129,10 +129,10 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 return new DataResponse(false, new ResultModel<>(null, chiTietSanPham.getMa() +" đã có khuyến mãi, không thể thêm khuyến mãi khác")); // nếu sản phẩm đã có khuyến mãi rồi, thông báo lỗi
             }
             if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("VND") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
-                return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
+                throw new RuntimeException("Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này");
             }
             if (khuyenMai.getKieuKhuyenMai().equalsIgnoreCase("%") &&  chiTietSanPham.getDonGia() < khuyenMai.getGiaTriKhuyenMai()) {
-                return new DataResponse(false, new ResultModel<>(null, "Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này"));
+                throw new RuntimeException("Xin lỗi, Khuyến mãi không áp dụng cho sản phẩm này");
             }
             if(khuyenMai.getTrangThai().equalsIgnoreCase("Đã kết thúc")){
                 return new DataResponse(false, new ResultModel<>(null, "Mã khuyến mãi "+ khuyenMai.getMa() +" đã kết thúc, không thể áp dụng"));
@@ -175,8 +175,10 @@ public class KhuyenMaiChiTietSanPhamImpl implements KhuyenMaiChiTietSanPhamServi
                 iKhuyenMaiChiTietSanPhamRepository.save(khuyenMaiChiTietSanPham);
             }
             return new DataResponse(true, new ResultModel<>(null, "Thêm Khuyến mãi cho " + chiTietSanPham.getMa() + " thành công!!"));
+        }catch (RuntimeException e){
+            throw e;
         }catch (Exception e){
-            return new DataResponse(false, new ResultModel<>(null, "Lỗi Thêm Khuyến mãi cho sản phẩm là :" + e));
+            throw e;
         }
     }
 

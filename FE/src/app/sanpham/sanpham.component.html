@@ -424,9 +424,6 @@
                    formControlName="donGia"
                    [readonly]="checkKm"
                    [ngClass]="{'bg-light': checkKm}"
-                   (input)="formatCurrency($event)"
-                   (blur)="formatCurrency($event)"
-                   (focus)="onFocus($event)"
                    [title]="checkKm ? 'Không thể sửa đơn giá khi sản phẩm đang có khuyến mãi' : ''">
               <small class="text-danger" *ngIf="checkKm">
                 Không thể sửa đơn giá khi sản phẩm đang có khuyến mãi
