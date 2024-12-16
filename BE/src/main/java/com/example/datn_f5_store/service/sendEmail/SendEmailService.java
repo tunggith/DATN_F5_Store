@@ -18,19 +18,23 @@ public class SendEmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("f5storefall24@gmail.com");
             message.setTo(toEmail);
-            String subject = "Thông báo cấp tài khoản đăng nhập tại F5-store";
+            String subject = "Chào mừng bạn đã đến với F5-Store – Nơi mua sắm lý tưởng của bạn!";
             message.setSubject(subject);
-            String body = "Kính gửi: "+toEmail+" ,\n" +
+            String body = "Xin chào: "+toEmail+" ,\n" +
                     "\n" +
-                    "Chúng tôi xin thông báo rằng tài khoản của bạn đã được tạo thành công. Dưới đây là thông tin tài khoản của bạn:\n" +
+                    "Chúc mừng bạn đã đăng ký thành công tài khoản tại F5-Store"+
+                    "\n"+
+                    "Chúng tôi rất vui khi bạn đã tin tưởng và lựa chọn F5-Store làm điểm đến mua sắm của mình. \n" +
+                    "Và đây là tài khoản và mật khẩu của bạn."+
                     "\n" +
-                    "username: "+username+" \n" +
+                    "Tài khoản: "+username+" \n" +
                     "Mật khẩu: "+password+"\n" +
                     "Vui lòng đăng nhập vào hệ thống và thay đổi mật khẩu của bạn ngay khi có thể. Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi qua địa chỉ email này.\n" +
                     "\n" +
                     "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!\n" +
                     "\n" +
-                    "Trân trọng!\n";
+                    "Thân mến!\n"+
+                    "Đội Ngũ F5-Store";
             message.setText(body);
             mailSender.send(message);
             return new DataResponse(true, new ResultModel<>(null,"Send email successfully"));
@@ -55,7 +59,8 @@ public class SendEmailService {
                     "\n" +
                     "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!\n" +
                     "\n" +
-                    "Trân trọng!\n";
+                    "Thân mến!\n"
+                    +"Đội ngũ F5-store";
             message.setText(body);
             mailSender.send(message);
             return new DataResponse(true, new ResultModel<>(null,"Send email successfully"));
